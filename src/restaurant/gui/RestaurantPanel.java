@@ -169,26 +169,30 @@ public class RestaurantPanel extends JPanel implements KeyListener {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      */
+	public void createCustomer(String name){
+		CustomerAgent c = null;
+		if(stringIsDouble(name) && Double.valueOf(name) >= 0){
+			c = new CustomerAgent(name, Double.valueOf(name));
+		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
+				|| name.equalsIgnoreCase("ditch") || name.equalsIgnoreCase("cheap")){
+			c = new CustomerAgent(name, NO_CASH);   			
+		}else{
+			c = new CustomerAgent(name, CUSTOMER_DEFAULT_CASH);
+		}	
+		CustomerGui g = new CustomerGui(c, gui);
+
+		gui.insideAnimationPanel.addGui(g);// dw
+		c.setHost(host);
+		c.setCashier(cashier);
+		c.setGui(g);
+		customers.add(c);
+		c.startThread();
+	}
+	
     public void addPerson(String type, String name) {
 
     	if (type.equals("Customers")) {
-    		CustomerAgent c = null;
-    		if(stringIsDouble(name) && Double.valueOf(name) >= 0){
-    			c = new CustomerAgent(name, Double.valueOf(name));
-    		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
-    				|| name.equalsIgnoreCase("ditch") || name.equalsIgnoreCase("cheap")){
-    			c = new CustomerAgent(name, NO_CASH);   			
-    		}else{
-    			c = new CustomerAgent(name, CUSTOMER_DEFAULT_CASH);
-    		}	
-    		CustomerGui g = new CustomerGui(c, gui);
-
-    		gui.insideAnimationPanel.addGui(g);// dw
-    		c.setHost(host);
-    		c.setCashier(cashier);
-    		c.setGui(g);
-    		customers.add(c);
-    		c.startThread();
+    		createCustomer(name);
     	}
     	
     	if (type.equals("Waiters")) {
