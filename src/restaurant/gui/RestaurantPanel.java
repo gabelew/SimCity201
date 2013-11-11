@@ -47,7 +47,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     private JPanel restLabel = new JPanel();
     //private ListPanel customerPanel = new ListPanel(this, "Customers");
 
-   // private ListPanel waitersPanel = new ListPanel(this, "Waiters");
+    private RestaurantListPanel waitersPanel = new RestaurantListPanel(this, "Waiters");
     private RestaurantListPanel tablesPanel = new RestaurantListPanel(this, "Tables");
     
     private JPanel group = new JPanel();
@@ -82,16 +82,16 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 
       //  group.add(customerPanel);
 
-        initRestLabel();
-        add(restLabel);
+        //initRestLabel();
+        //add(restLabel);
         //add(group);
-        //add(waitersPanel);
+        add(waitersPanel);
         add(tablesPanel);
         createWaiter("w1");
         createWaiter("w2");
 
         //customerPanel.getTypeNameHere().addKeyListener(this);
-        //waitersPanel.getTypeNameHere().addKeyListener(this);
+        waitersPanel.getTypeNameHere().addKeyListener(this);
     }
 
     /**

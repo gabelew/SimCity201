@@ -11,7 +11,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 /**
  * Main GUI class.
  * Contains the main frame and subsequent panels
@@ -112,6 +115,15 @@ public class SimCityGui extends JFrame implements ActionListener {
         bottomPanel.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
         bottomPanel.setVisible(true);
     	
+
+    	Map<String, Integer> grillMap = new HashMap<String, Integer>();
+    	grillMap.put("a", 1);
+    	grillMap.put("b", 2);
+    	grillMap.put("c", 3);
+    	grillMap.put("d", 4);
+    	grillMap.put("e", 5);
+    	
+
     }
     /**
      * updateInfoPanel() takes the given customer (or, for v3, Host) object and
