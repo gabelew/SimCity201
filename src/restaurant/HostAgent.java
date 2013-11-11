@@ -336,7 +336,6 @@ print("ooiret");
 	//utilities
 
 	public void addNewTable() {
-		print("dsfdss");
 		tables.add(new Table(NTABLES++));
 	}
 	

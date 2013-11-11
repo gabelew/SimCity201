@@ -318,14 +318,14 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public void addTable() {
     	tables.add(new Table(xDEFAULT_NEW_TABLE_POSITION, yDEFAULT_NEW_TABLE_POSITION));
     	insideAnimationPanel.addNewTable();
-    	//restPanel.getHost().addNewTable();
+    	restPanel.getHost().addNewTable();
 		
 	}
 	public void addTable(int x, int y) {
 		
     	tables.add(new Table( x, y));
     	insideAnimationPanel.addNewTable();
-    	//restPanel.getHost().addNewTable();
+    	restPanel.getHost().addNewTable();
 		
 	}
 
