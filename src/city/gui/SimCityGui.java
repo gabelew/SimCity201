@@ -181,16 +181,58 @@ public class SimCityGui extends JFrame implements ActionListener {
         restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
 	}
     private void addDefaultBuildings(){
-    	buildings.add(new BuildingIcon(97,88,"house"));
-    	animationPanel.addNewBuilding();
-    	buildings.add(new BuildingIcon(97+40*18,88,"restaurant"));
-    	animationPanel.addNewBuilding();
-    	buildings.add(new BuildingIcon(97,88+80*1,"apartment"));
-    	animationPanel.addNewBuilding();
-    	buildings.add(new BuildingIcon(97,88+80*2,"bank2"));
-    	animationPanel.addNewBuilding();
-    	buildings.add(new BuildingIcon(97,88+80*3,"market"));
-    	animationPanel.addNewBuilding();
+    	for(int j =0; j<4;j++){
+	    	for(int i = 0; i<19;i++){
+	    		if(i < 5){
+	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"house"));
+	    			animationPanel.addNewBuilding();
+	        	}else if(i < 7){
+	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"apartment"));
+	    			animationPanel.addNewBuilding();
+	        	}else if(i < 8){
+	        		if(j < 2){
+		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"restaurant"));
+		    			animationPanel.addNewBuilding();
+	    			}else if(j<3){
+		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"market"));
+		    			animationPanel.addNewBuilding();
+	    			}
+	    			else{
+		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"restaurant"));
+		    			animationPanel.addNewBuilding();
+	    			}
+	        	}else if(i<9){
+	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"bank2"));
+	    			animationPanel.addNewBuilding();
+	        	}else if(i<10){
+	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"market"));
+	    			animationPanel.addNewBuilding();
+	        	}else if(i<11){
+	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"bank2"));
+	    			animationPanel.addNewBuilding();
+	        	}else if(i<12){
+	        		if(j < 2){
+		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"restaurant"));
+		    			animationPanel.addNewBuilding();
+	    			}else if(j<3){
+		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"market"));
+		    			animationPanel.addNewBuilding();
+	    			}
+	    			else{
+		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"apartment"));
+		    			animationPanel.addNewBuilding();
+	    			}
+	        	}else if(i<14){
+	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"apartment"));
+	    			animationPanel.addNewBuilding();
+	        	}
+	        	else{
+	        		buildings.add(new BuildingIcon(97+40*i,88+80*j,"house"));
+	            	animationPanel.addNewBuilding();		
+	        	}
+	    	}
+    	}
+    	
     }
 	public int getTablesXCoord(int i){
     	return tables.get(i).getX();
