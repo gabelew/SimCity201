@@ -73,4 +73,11 @@ public class MockCustomer extends Mock implements Customer {
 	public void msgHereIsYourFood() {
 		log.add(new LoggedEvent("Received msgHereIsYourFood from waiter."));
 	}
+	
+	public void msgWaitForOpenTable() {
+	}
+	
+	public void msgTableIsReady() {
+	}
+	
 }
