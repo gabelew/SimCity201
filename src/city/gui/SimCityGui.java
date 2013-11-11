@@ -159,7 +159,7 @@ public class SimCityGui extends JFrame implements ActionListener {
      */ 
     public void setCustomerEnabled(CustomerAgent c) {
     	
-    	//restPanel.setCustomerEnabled(c);
+    	infoPanel.setCustomerEnabled(c);
     	//find customer in list
     	/*for(CustomerAgent currentPerson:customersList)
     	{
