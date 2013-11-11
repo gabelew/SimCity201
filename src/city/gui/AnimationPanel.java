@@ -106,37 +106,37 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         
         //draw the streets
         g2.setColor(Color.black);
-        	g2.fillRect(60, 50, 30, 320);			//right
-        	g2.fillRect(802+60, 50, 30, 320);		//left
+        	g2.fillRect(20, 30, 30, 320);			//right
+        	g2.fillRect(802+20, 30, 30, 320);		//left
         	for(int i=0; i<5;i++){
-        		g2.fillRect(60, 50+80*(i), 832, 30);
+        		g2.fillRect(20, 30+80*(i), 832, 30);
         	}
         	
         //draw center divider
         g2.setColor(Color.yellow);
         	for(int i = 0 ; i<32;i++){
-        		g2.fillRect(60+14, 50+14+i*10, 2, 5);		//right
-        		g2.fillRect(802+60+14, 50+14+i*10, 2, 5);	//left
+        		g2.fillRect(20+14, 30+14+i*10, 2, 5);		//right
+        		g2.fillRect(802+20+14, 30+14+i*10, 2, 5);	//left
         	}
         	for(int i=0; i<5;i++){
         		for(int j = 0; j < 80;j++){
-        			g2.fillRect(60+14+j*10, 50+80*(i)+14, 5, 2);	
+        			g2.fillRect(20+14+j*10, 30+80*(i)+14, 5, 2);	
         		}
         	}
        	//draw the side walk
         g2.setColor(Color.gray);
-	        g2.fillRect(60-7, 50, 7, 320+30);			//right
-	        g2.fillRect(802+60+30, 50, 7, 320+30);		//left
+	        g2.fillRect(20-7, 30, 7, 320+30);			//right
+	        g2.fillRect(802+20+30, 30, 7, 320+30);		//left
 	        for(int i=0; i<4;i++){
-	           	g2.fillRect(60+30, 50+30+80*i, 7, 44);			//right
-	           	g2.fillRect(802+60-7, 50+30+80*i, 7, 44);		//left
+	           	g2.fillRect(20+30, 30+30+80*i, 7, 44);			//right
+	           	g2.fillRect(802+20-7, 30+30+80*i, 7, 44);		//left
 	        }
 	        for(int i=0; i<5;i++){
-	        	g2.fillRect(60+30, 50+80*(i)-7, 832-30*2, 7);
-	        	g2.fillRect(60+30, 50+80*(i)+30, 832-30*2, 7);
+	        	g2.fillRect(20+30, 30+80*(i)-7, 832-30*2, 7);
+	        	g2.fillRect(20+30, 30+80*(i)+30, 832-30*2, 7);
 	        }
-	    	g2.fillRect(60-7, 50+80*(0)-7, 832+14, 7);
-	    	g2.fillRect(60-7, 50+80*(4)+30, 832+14, 7);   
+	    	g2.fillRect(20-7, 30+80*(0)-7, 832+14, 7);
+	    	g2.fillRect(20-7, 30+80*(4)+30, 832+14, 7);   
 			
         //Here is the buildings
         for(int i = ZERO; i<NBUILDINGS; i++){
@@ -144,11 +144,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         }
 
         //draw the city wall
-        g2.setColor(Color.black);
-        g2.fillRect(ZERO, ZERO, WINDOWX, 5);
-        g2.fillRect(ZERO, ZERO, 5, WINDOWY);
-        g2.fillRect(WINDOWX-5, ZERO, 5, WINDOWY);
-        g2.fillRect(ZERO, WINDOWY-15, WINDOWX, 5);
+        //g2.setColor(Color.black);
+        //g2.fillRect(ZERO, ZERO, WINDOWX, 5);
+        //g2.fillRect(ZERO, ZERO, 5, WINDOWY);
+        //g2.fillRect(WINDOWX-5, ZERO, 5, WINDOWY);
+        //g2.fillRect(ZERO, WINDOWY-15, WINDOWX, 5);
         
     }
 /*

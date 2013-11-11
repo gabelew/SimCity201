@@ -42,11 +42,11 @@ public class SimCityGui extends JFrame implements ActionListener {
     private List<Table> tables = new ArrayList<Table>();
     private List<BuildingIcon> buildings = new ArrayList<BuildingIcon>();
 
-    private JPanel bottomPanel = new JPanel();
+    private JFrame bottomPanel = new JFrame();
     private JPanel topPanel = new JPanel();
 
-    static final int FRAMEX = 1175;
-    static final int FRAMEY = 950;
+    static final int FRAMEX = 1100;
+    static final int FRAMEY = 467;
     static final int WINDOWX = 225;
     static final int OFFSETPOS = 50;
     static final int NROWS = 1;
@@ -100,7 +100,11 @@ public class SimCityGui extends JFrame implements ActionListener {
         topPanel.add(infoPanel, BorderLayout.WEST);
         bottomPanel.add(insideAnimationPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.CENTER);
-        add(bottomPanel, BorderLayout.SOUTH);
+        //add(bottomPanel, BorderLayout.SOUTH);
+        bottomPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        bottomPanel.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY+50);
+        bottomPanel.setVisible(true);
+    	
     }
     /**
      * updateInfoPanel() takes the given customer (or, for v3, Host) object and
@@ -184,50 +188,50 @@ public class SimCityGui extends JFrame implements ActionListener {
     	for(int j =0; j<4;j++){
 	    	for(int i = 0; i<19;i++){
 	    		if(i < 5){
-	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"house"));
+	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"house"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i < 7){
-	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"apartment"));
+	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"apartment"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i < 8){
 	        		if(j < 2){
-		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"restaurant"));
+		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"restaurant"));
 		    			animationPanel.addNewBuilding();
 	    			}else if(j<3){
-		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"market"));
+		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"market"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	    			else{
-		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"restaurant"));
+		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"restaurant"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	        	}else if(i<9){
-	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"bank2"));
+	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"bank2"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i<10){
-	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"market"));
+	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"market"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i<11){
-	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"bank2"));
+	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"bank2"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i<12){
 	        		if(j < 2){
-		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"restaurant"));
+		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"restaurant"));
 		    			animationPanel.addNewBuilding();
 	    			}else if(j<3){
-		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"market"));
+		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"market"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	    			else{
-		    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"apartment"));
+		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"apartment"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	        	}else if(i<14){
-	    			buildings.add(new BuildingIcon(97+40*i,88+80*j,"apartment"));
+	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"apartment"));
 	    			animationPanel.addNewBuilding();
 	        	}
 	        	else{
-	        		buildings.add(new BuildingIcon(97+40*i,88+80*j,"house"));
+	        		buildings.add(new BuildingIcon(57+40*i,68+80*j,"house"));
 	            	animationPanel.addNewBuilding();		
 	        	}
 	    	}
