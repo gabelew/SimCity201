@@ -93,7 +93,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
     	setLayout(new BorderLayout());
     	bottomPanel.setLayout(new BorderLayout());
-    	topPanel.setLayout(new BorderLayout());
+    	topPanel.setLayout(new BorderLayout(5,0));
         
         Dimension restDim = new Dimension(WINDOWX, (int) (REST_PANEL_Y));
         restPanel.setPreferredSize(restDim);

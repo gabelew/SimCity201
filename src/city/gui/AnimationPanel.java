@@ -19,7 +19,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	private static final long serialVersionUID = 1L;
 
     private static int NBUILDINGS = 0;
-	private final int WINDOWX = 945;
+	private final int WINDOWX = 865;
     private final int WINDOWY = 467;
     private static int timeIncrementer = 0;
     
@@ -103,14 +103,14 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //draw grass
         Color color = new Color(0x219622);
         g2.setColor(color);
-        g2.fillRect(5, 0, WINDOWX, WINDOWY );
+        g2.fillRect(0, 0, WINDOWX, WINDOWY );
         
         //draw the streets
         g2.setColor(Color.black);
         	g2.fillRect(20, 0, 30, 400);			//right
         	g2.fillRect(802+20, 0, 30, 400);		//left
         	for(int i=0; i<5;i++){
-        		g2.fillRect(20, 30+80*(i), 832, 30);
+        		g2.fillRect(0, 30+80*(i), WINDOWX, 30);
         	}
         	
         //draw center divider
@@ -119,33 +119,39 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	    		g2.fillRect(20+14, i*10, 2, 5);		//right
 	    		g2.fillRect(802+20+14, i*10, 2, 5);	//left
 	    	}
-	    	for(int i = 0 ; i<32;i++){
-	    	}
         	for(int i=0; i<5;i++){
-        		for(int j = 0; j < 81;j++){
-        			g2.fillRect(20+14+j*10, 30+80*(i)+14, 5, 2);	
+        		for(int j = 0; j < 87;j++){
+        			g2.fillRect(j*10, 30+80*(i)+14, 5, 2);	
         		}
         	}
         	
        	//draw the side walk
         g2.setColor(Color.gray);
-	        g2.fillRect(20-7, 0, 7, 400);			//right
+	       // g2.fillRect(20-7, 0, 7, 400);			//right
 	        g2.fillRect(20+30, 0, 7, 30);			
+	        g2.fillRect(20-7, 0, 7, 30);			
 	        g2.fillRect(20+30, 380, 7, 20);			
-	        g2.fillRect(802+20+30, 0, 7, 400);		//left
+	        g2.fillRect(20-7, 380, 7, 20);			
+	       // g2.fillRect(802+20+30, 0, 7, 400);		//left
 	        g2.fillRect(802+20-7, 0, 7, 30);			
-	        g2.fillRect(802+20-7, 380, 7, 20);			
+	        g2.fillRect(802+20-7, 380, 7, 20);		
+	        g2.fillRect(802+20+30, 0, 7, 30);			
+	        g2.fillRect(802+20+30, 380, 7, 20);		
 	        for(int i=0; i<4;i++){
 	           	g2.fillRect(20+30, 30+30+80*i, 7, 44);			//right
 	           	g2.fillRect(802+20-7, 30+30+80*i, 7, 44);		//left
+	           	g2.fillRect(20-7, 30+30+80*i, 7, 44);			//right
+	           	g2.fillRect(802+20+30, 30+30+80*i, 7, 44);		//left
 	        }
 	        for(int i=0; i<5;i++){
 	        	g2.fillRect(20+30, 30+80*(i)-7, 832-30*2, 7);
 	        	g2.fillRect(20+30, 30+80*(i)+30, 832-30*2, 7);
+	        	g2.fillRect(0, 30+80*(i)-7, 20, 7);
+	        	g2.fillRect(0, 30+80*(i)+30, 20, 7);
+	        	g2.fillRect(832+20, 30+80*(i)-7, 20, 7);
+	        	g2.fillRect(832+20, 30+80*(i)+30, 20, 7);
 	        }
-	    	//g2.fillRect(20+30, 30+80*(0)-7, 832+7-30, 7);
-	    	//g2.fillRect(20-7, 30+80*(4)+30, 832+14, 7);   
-			
+
         //Here is the buildings
         for(int i = ZERO; i<NBUILDINGS; i++){
         	g.drawImage(simCityGui.getBuildingImg(i), simCityGui.getBuildingXCoord(i), simCityGui.getBuildingYCoord(i), null);
