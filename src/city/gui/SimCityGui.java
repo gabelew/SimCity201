@@ -345,4 +345,9 @@ public class SimCityGui extends JFrame implements ActionListener {
 		restPanel.setWaiterUnbreakable(name);
 	}
 
+	public void newHour() {
+		
+		System.out.println("30seconds");		
+	}
+
 }

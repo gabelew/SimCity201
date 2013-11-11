@@ -21,6 +21,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private static int NBUILDINGS = 0;
 	private final int WINDOWX = 945;
     private final int WINDOWY = 467;
+    private static int timeIncrementer = 0;
     
     static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  
@@ -87,6 +88,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	}
 
     public void paintComponent(Graphics g) {
+    	timeIncrementer++;
+    	if(timeIncrementer == 1500){
+    		timeIncrementer = 0;
+    		simCityGui.newHour();
+    	}
         Graphics2D g2 = (Graphics2D)g;
 
         //Clear the screen by painting a rectangle the size of the frame
