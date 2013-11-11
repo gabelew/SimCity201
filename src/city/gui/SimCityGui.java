@@ -387,8 +387,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}
 			hour = 0;
 		}
-		
-		System.out.println("30seconds");		
+			
 	}
 
 }
