@@ -67,7 +67,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     static final int yPLATINGTABLE_OFFSET = 60;
     static final int NPLATING_TABLES = 4;
     static final int NRESTSEATS = 16;
-
+	static final int THIRTYSECONDS = 1500;
+	
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
 	public AnimationPanel(SimCityGui gui){
@@ -86,10 +87,10 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	public void actionPerformed(ActionEvent e) {
 		repaint();  //Will have paintComponent called
 	}
-
+	
     public void paintComponent(Graphics g) {
     	timeIncrementer++;
-    	if(timeIncrementer == 1500){
+    	if(timeIncrementer == THIRTYSECONDS){
     		timeIncrementer = 0;
     		simCityGui.newHour();
     	}
@@ -102,11 +103,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //draw grass
         Color color = new Color(0x219622);
         g2.setColor(color);
-        g2.fillRect(5, 5, WINDOWX-10, WINDOWY-20 );
+        g2.fillRect(5, 0, WINDOWX, WINDOWY );
         
         //draw the streets
         g2.setColor(Color.black);
-        	g2.fillRect(20, 30, 30, 320);			//right
+        	g2.fillRect(20, 0, 30, 350);			//right
         	g2.fillRect(802+20, 30, 30, 320);		//left
         	for(int i=0; i<5;i++){
         		g2.fillRect(20, 30+80*(i), 832, 30);
@@ -114,18 +115,22 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         	
         //draw center divider
         g2.setColor(Color.yellow);
-        	for(int i = 0 ; i<32;i++){
-        		g2.fillRect(20+14, 30+14+i*10, 2, 5);		//right
-        		g2.fillRect(802+20+14, 30+14+i*10, 2, 5);	//left
-        	}
+	    	for(int i = 0 ; i<37;i++){
+	    		g2.fillRect(20+14, i*10, 2, 5);		//right
+	    	}
+	    	for(int i = 0 ; i<32;i++){
+	    		g2.fillRect(802+20+14, 30+14+i*10, 2, 5);	//left
+	    	}
         	for(int i=0; i<5;i++){
-        		for(int j = 0; j < 80;j++){
+        		for(int j = 0; j < 81;j++){
         			g2.fillRect(20+14+j*10, 30+80*(i)+14, 5, 2);	
         		}
         	}
+        	
        	//draw the side walk
         g2.setColor(Color.gray);
-	        g2.fillRect(20-7, 30, 7, 320+30);			//right
+	        g2.fillRect(20-7, 0, 7, 350+30);			//right
+	        g2.fillRect(20+30, 0, 7, 30);			
 	        g2.fillRect(802+20+30, 30, 7, 320+30);		//left
 	        for(int i=0; i<4;i++){
 	           	g2.fillRect(20+30, 30+30+80*i, 7, 44);			//right
@@ -135,21 +140,13 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        	g2.fillRect(20+30, 30+80*(i)-7, 832-30*2, 7);
 	        	g2.fillRect(20+30, 30+80*(i)+30, 832-30*2, 7);
 	        }
-	    	g2.fillRect(20-7, 30+80*(0)-7, 832+14, 7);
+	    	g2.fillRect(20+30, 30+80*(0)-7, 832+7-30, 7);
 	    	g2.fillRect(20-7, 30+80*(4)+30, 832+14, 7);   
 			
         //Here is the buildings
         for(int i = ZERO; i<NBUILDINGS; i++){
         	g.drawImage(simCityGui.getBuildingImg(i), simCityGui.getBuildingXCoord(i), simCityGui.getBuildingYCoord(i), null);
-        }
-
-        //draw the city wall
-        //g2.setColor(Color.black);
-        //g2.fillRect(ZERO, ZERO, WINDOWX, 5);
-        //g2.fillRect(ZERO, ZERO, 5, WINDOWY);
-        //g2.fillRect(WINDOWX-5, ZERO, 5, WINDOWY);
-        //g2.fillRect(ZERO, WINDOWY-15, WINDOWX, 5);
-        
+        }        
     }
 /*
     public void addGui(CustomerGui gui) {

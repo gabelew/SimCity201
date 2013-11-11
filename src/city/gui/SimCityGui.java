@@ -46,7 +46,8 @@ public class SimCityGui extends JFrame implements ActionListener {
     private JPanel topPanel = new JPanel();
 
     static final int FRAMEX = 1100;
-    static final int FRAMEY = 467;
+    static final int FRAMEY = 430;
+    static final int INSIDE_BUILDING_FRAME_Y = 517;
     static final int WINDOWX = 225;
     static final int OFFSETPOS = 50;
     static final int NROWS = 1;
@@ -64,6 +65,12 @@ public class SimCityGui extends JFrame implements ActionListener {
 	static final int STARTING_TABLES_X = 200;
 	static final int STARTING_TABLE1_Y = 35;
 	static final int STARTING_TABLE_Y_SPACING = 90;
+	static final int BUILDING_ROWS = 4;
+	static final int BUILDING_COLUMNS = 19;
+    static final int BUILDING_START_X = 57;
+    static final int BUILDING_START_Y = 68;
+    static final int BUILDING_OFFSET_X = 40;
+    static final int BUILDING_OFFSET_Y = 80;
 	
 	
 	static final int xBUILDING_IMG_POINT_OFFSET = 1;
@@ -102,7 +109,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         add(topPanel, BorderLayout.CENTER);
         //add(bottomPanel, BorderLayout.SOUTH);
         bottomPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        bottomPanel.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY+50);
+        bottomPanel.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
         bottomPanel.setVisible(true);
     	
     }
@@ -152,7 +159,7 @@ public class SimCityGui extends JFrame implements ActionListener {
      */ 
     public void setCustomerEnabled(CustomerAgent c) {
     	
-    	//restPanel.setCustomerEnabled(c);
+    	infoPanel.setCustomerEnabled(c);
     	//find customer in list
     	/*for(CustomerAgent currentPerson:customersList)
     	{
@@ -184,54 +191,55 @@ public class SimCityGui extends JFrame implements ActionListener {
         restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
         restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
 	}
+
     private void addDefaultBuildings(){
-    	for(int j =0; j<4;j++){
-	    	for(int i = 0; i<19;i++){
+    	for(int j =0; j<BUILDING_ROWS;j++){
+	    	for(int i = 0; i<BUILDING_COLUMNS;i++){
 	    		if(i < 5){
-	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"house"));
+	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i < 7){
-	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"apartment"));
+	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i < 8){
 	        		if(j < 2){
-		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"restaurant"));
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant"));
 		    			animationPanel.addNewBuilding();
 	    			}else if(j<3){
-		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"market"));
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	    			else{
-		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"restaurant"));
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	        	}else if(i<9){
-	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"bank2"));
+	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"bank2"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i<10){
-	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"market"));
+	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i<11){
-	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"bank2"));
+	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"bank2"));
 	    			animationPanel.addNewBuilding();
 	        	}else if(i<12){
 	        		if(j < 2){
-		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"restaurant"));
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant"));
 		    			animationPanel.addNewBuilding();
 	    			}else if(j<3){
-		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"market"));
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	    			else{
-		    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"apartment"));
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
 		    			animationPanel.addNewBuilding();
 	    			}
 	        	}else if(i<14){
-	    			buildings.add(new BuildingIcon(57+40*i,68+80*j,"apartment"));
+	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
 	    			animationPanel.addNewBuilding();
 	        	}
 	        	else{
-	        		buildings.add(new BuildingIcon(57+40*i,68+80*j,"house"));
+	        		buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house"));
 	            	animationPanel.addNewBuilding();		
 	        	}
 	    	}
