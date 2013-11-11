@@ -44,10 +44,14 @@ public class SimCityGui extends JFrame implements ActionListener {
     private JPanel APanel = new JPanel();
     private List<Table> tables = new ArrayList<Table>();
     private List<BuildingIcon> buildings = new ArrayList<BuildingIcon>();
-
+    
     private JFrame bottomPanel = new JFrame();
     private JPanel topPanel = new JPanel();
 
+    private int hour;
+    private String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"};
+    private String dayOfWeek = daysOfWeek[0];
+    
     static final int FRAMEX = 1100;
     static final int FRAMEY = 430;
     static final int INSIDE_BUILDING_FRAME_Y = 517;
@@ -370,6 +374,19 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 
 	public void newHour() {
+		hour++;
+		if(hour == 24){
+			for(int i = daysOfWeek.length; i>0;i--){
+				if(dayOfWeek.equalsIgnoreCase(daysOfWeek[i-1])){
+					if(i!=7){
+						dayOfWeek = daysOfWeek[i];
+					}else{
+						dayOfWeek = daysOfWeek[0];
+					}
+				}
+			}
+			hour = 0;
+		}
 		
 		System.out.println("30seconds");		
 	}
