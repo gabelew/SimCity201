@@ -1,10 +1,16 @@
 ﻿package city;
 
-public class PersonAgent
+import java.sql.Time;
+import java.util.*;
+
+import agent.Agent;
+import city.roles.*;
+
+public class PersonAgent extends Agent
 {
 	private List<Role> roles = new ArrayList<Role>();
 	//hacked in upon creation
-	private List<Restaurant> restaurants = new ArrayList<Restaurant>(); 
+	//private List<MyRestaurant> restaurants = new ArrayList<Restaurant>(); 
 	
 	
 	        enum state { };
@@ -35,12 +41,12 @@ public class PersonAgent
 	        {
 	if( r.isActive() )
 	{
-	        r.PickAndExecuteAnAction();
+	        r.pickAndExecuteAnAction();
 	        return true;
 	}
 	}
 	return false;
 	}
-	catch(CurrentModificationException e){ return false; }
+	catch(ConcurrentModificationException e){ return false; }
 	}
 }

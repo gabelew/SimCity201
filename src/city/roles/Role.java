@@ -1,5 +1,7 @@
 ﻿package city.roles;
 
+import city.PersonAgent;
+
 public abstract class Role 
 {
 	PersonAgent myPerson; 
