@@ -3,6 +3,8 @@ package restaurant.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import city.gui.SimCityGui;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
-public class AnimationPanel extends JPanel implements ActionListener, MouseListener {
+public class RestaurantAnimationPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
     private static int NTABLES = 0;
@@ -23,7 +25,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	private Table clickedTable = null;
 	private int clickedTableMouseXOffset;
 	private int clickedTableMouseYOffset;
-	private final int WINDOWX = 500;
+	private final int WINDOWX = 934;
     private final int WINDOWY = 467;
     
     static final int TIMERDELAY = 20;
@@ -72,7 +74,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     static final int NRESTSEATS = 16;
 
     private List<Gui> guis = new ArrayList<Gui>();
-    private RestaurantGui restGui;
+    private SimCityGui simCityGui;
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
 	private BufferedImage chairImg = null;
@@ -83,8 +85,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	private BufferedImage grillRightImg = null;
 	private BufferedImage platingTableImg = null;
 
-	public AnimationPanel(RestaurantGui gui){
-		this.restGui = gui;
+	public RestaurantAnimationPanel(SimCityGui simCityGui){
+		this.simCityGui = simCityGui;
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -152,7 +154,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
         //Here is the chairs
         for(int i = ZERO; i<NTABLES; i++){
-        	g.drawImage(chairImg, restGui.getTablesXCoord(i) + xCHAIR_OFFSET, restGui.getTablesYCoord(i) + yCHAIR_OFFSET, null);
+        	g.drawImage(chairImg, simCityGui.getTablesXCoord(i) + xCHAIR_OFFSET, simCityGui.getTablesYCoord(i) + yCHAIR_OFFSET, null);
         }
         for(int i = ZERO; i<NWAITSEATS/NWAITSEATS_ROWS; i++){
         	for(int j = ZERO; j < NWAITSEATS/NWAITSEATS_COLUMNS; j++ )
@@ -214,7 +216,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //Here is the table
         g2.setColor(Color.ORANGE);
         for(int i = ZERO; i<NTABLES; i++){
-        	g.drawImage(tableImg, restGui.getTablesXCoord(i), restGui.getTablesYCoord(i), null);
+        	g.drawImage(tableImg, simCityGui.getTablesXCoord(i), simCityGui.getTablesYCoord(i), null);
         }
         
 
@@ -269,7 +271,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	@Override
 	public void mousePressed(MouseEvent me) {
 		//get table
-		clickedTable = restGui.getTableAt(me.getPoint());
+		clickedTable = simCityGui.getTableAt(me.getPoint());
 
 		if(clickedTable != null && clickedTable.getState() == Table.TableState.Movable)
 		{
@@ -297,7 +299,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 			if(xTABLE_AREA <= placeTableHere.x && xTABLE_AREA + xTABLE_AREA_WIDTH - xTABLE_WIDTH >= placeTableHere.x 
 				&& yTABLE_AREA <= placeTableHere.y && yTABLE_AREA + yTABLE_AREA_WIDTH - yTABLE_WIDTH >= placeTableHere.y
-				&& restGui.notOnExistingTable(clickedTable, placeTableHere)){
+				&& simCityGui.notOnExistingTable(clickedTable, placeTableHere)){
 				clickedTable.changePos(placeTableHere);
 			}
 

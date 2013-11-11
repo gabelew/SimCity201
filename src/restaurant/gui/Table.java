@@ -10,7 +10,7 @@ public class Table {
 	private TableState state = TableState.Movable;
 	
 	
-	Table(int x,int y){
+	public Table(int x,int y){
 		xPos = x;
 		yPos = y;
 	}

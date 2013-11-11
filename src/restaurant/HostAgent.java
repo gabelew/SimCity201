@@ -2,9 +2,10 @@ package restaurant;
 
 import agent.Agent;
 import restaurant.gui.HostGui;
-import restaurant.gui.RestaurantGui;
 
 import java.util.*;
+
+import city.gui.SimCityGui;
 
 /**
  * Restaurant Host Agent
@@ -31,7 +32,7 @@ public class HostAgent extends Agent {
 	private String name;
 
 	public HostGui hostGui = null;
-	private RestaurantGui restGui = null;
+	private SimCityGui restGui = null;
 
 	public enum cState {waiting, waitingAndTold, eating, done};
 	public enum wState {idle, working, askedForBreak}; 
@@ -84,7 +85,6 @@ public class HostAgent extends Agent {
 
 	// Messages
 	public void msgReadyToWork(WaiterAgent w) {
-		
 		/*** Prevents waiter from being added twice ***/
 		boolean addWaiter = true;
 		synchronized(waiters){
@@ -104,7 +104,7 @@ public class HostAgent extends Agent {
 	}
 	
 	public void msgIWantToEat(CustomerAgent cust) {
-		
+print("ooiret");
 		/*** Prevents customer from being added twice ***/
 		boolean addCustomer = true;
 		synchronized(customers){
@@ -336,12 +336,13 @@ public class HostAgent extends Agent {
 	//utilities
 
 	public void addNewTable() {
+		print("dsfdss");
 		tables.add(new Table(NTABLES++));
 	}
 	
-	public void setGui(HostGui gui, RestaurantGui rGui) {
+	public void setGui(HostGui gui, SimCityGui gui2) {
 		hostGui = gui;
-		restGui = rGui;
+		restGui = gui2;
 	}
 
 	public HostGui getGui() {

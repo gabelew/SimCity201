@@ -4,7 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
+import city.gui.SimCityGui;
 import restaurant.CashierAgent;
 
 public class CashierGui implements Gui  {
@@ -12,7 +15,7 @@ public class CashierGui implements Gui  {
 	private CashierAgent agent = null;
 	private boolean isPresent = true;
 	private BufferedImage cashierImg = null;
-	RestaurantGui gui;
+	SimCityGui gui;
 
 	static final int xSTART_POSITION = 57;
 	static final int ySTART_POSITION = 258;   

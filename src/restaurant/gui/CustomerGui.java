@@ -16,6 +16,8 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.gui.SimCityGui;
+
 public class CustomerGui implements Gui{
 
 	private CustomerAgent agent = null;
@@ -26,7 +28,7 @@ public class CustomerGui implements Gui{
 	private static BufferedImage customerImg = null;
 	private static BufferedImage customerSittingImg = null;
 	//private HostAgent host;
-	RestaurantGui gui;
+	SimCityGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -60,7 +62,7 @@ public class CustomerGui implements Gui{
     static final int WAITINGSEATS_Y_GAP = 30;
     
 
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(CustomerAgent c, SimCityGui gui){ //HostAgent m) {
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");

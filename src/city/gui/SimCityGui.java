@@ -1,6 +1,9 @@
 package city.gui;
 
 import restaurant.CustomerAgent;
+import restaurant.gui.RestaurantAnimationPanel;
+import restaurant.gui.RestaurantPanel;
+import restaurant.gui.Table;
 
 import javax.swing.*;
 
@@ -20,14 +23,15 @@ public class SimCityGui extends JFrame implements ActionListener {
      * and the animation frame, (in variable animationFrame within gui)
      */
 	AnimationPanel animationPanel = new AnimationPanel(this);
-	InsideAnimationPanel insideAnimationPanel = new InsideAnimationPanel(this);
+	public RestaurantAnimationPanel insideAnimationPanel = new RestaurantAnimationPanel(this);
 	
     /* restPanel holds 2 panels
      * 1) the staff listing, menu, and lists of current customers all constructed
      *    in RestaurantPanel()
      * 2) the infoPanel about the clicked Customer (created just below)
      */    
-    private InfoPanel restPanel = new InfoPanel(this);
+    RestaurantPanel restPanel = new RestaurantPanel(this);
+    private InfoPanel infoPanel = new InfoPanel(this);
     
     /* infoPanel holds information about the clicked customer, if there is one*/
    // private JPanel infoPanel;
@@ -41,7 +45,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private JPanel bottomPanel = new JPanel();
     private JPanel topPanel = new JPanel();
 
-    static final int FRAMEX = 950;
+    static final int FRAMEX = 1175;
     static final int FRAMEY = 950;
     static final int WINDOWX = 225;
     static final int OFFSETPOS = 50;
@@ -81,6 +85,9 @@ public class SimCityGui extends JFrame implements ActionListener {
         restPanel.setPreferredSize(restDim);
         restPanel.setMinimumSize(restDim);
         restPanel.setMaximumSize(restDim);
+        infoPanel.setPreferredSize(restDim);
+        infoPanel.setMinimumSize(restDim);
+        infoPanel.setMaximumSize(restDim);
 
         APanel.add(restPanel);
         
@@ -90,6 +97,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         bottomPanel.add(APanel, BorderLayout.WEST);
 
         topPanel.add(animationPanel, BorderLayout.CENTER);
+        topPanel.add(infoPanel, BorderLayout.WEST);
         bottomPanel.add(insideAnimationPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -159,7 +167,7 @@ public class SimCityGui extends JFrame implements ActionListener {
      */
     public static void main(String[] args) {
         SimCityGui gui = new SimCityGui();
-        gui.setTitle("csci201 Restaurant");
+        gui.setTitle("csci201 SimCity");
         gui.setVisible(true);
         gui.setResizable(false);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -175,7 +183,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private void addDefaultBuildings(){
     	buildings.add(new BuildingIcon(97,88,"house"));
     	animationPanel.addNewBuilding();
-    	buildings.add(new BuildingIcon(97+40*1,88,"restaurant"));
+    	buildings.add(new BuildingIcon(97+40*18,88,"restaurant"));
     	animationPanel.addNewBuilding();
     	buildings.add(new BuildingIcon(97,88+80*1,"apartment"));
     	animationPanel.addNewBuilding();

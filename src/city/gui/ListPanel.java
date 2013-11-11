@@ -1,6 +1,9 @@
 package city.gui;
 
 import javax.swing.*;
+
+import restaurant.gui.RestaurantPanel;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -47,11 +50,11 @@ public class ListPanel extends JPanel implements ActionListener {
     /**
      * Constructor for ListPanel.  Sets up all the gui
      *
-     * @param rp   reference to the restaurant panel
+     * @param infoPanel   reference to the restaurant panel
      * @param type indicates if this is for customers or waiters
      */
-    public ListPanel(InfoPanel rp, String type) {
-        restPanel = rp;
+    public ListPanel(InfoPanel infoPanel, String type) {
+        restPanel = infoPanel;
         this.type = type;
 
         setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
@@ -132,7 +135,7 @@ public class ListPanel extends JPanel implements ActionListener {
             	addPerson(getTypeNameHere().getText());
             }
             if(type == "Tables"){
-            	//addPerson("Table " + ++tableCounter);	
+            	addPerson("Table " + ++tableCounter);	
             }
             
             getTypeNameHere().setText(null);
@@ -153,24 +156,24 @@ public class ListPanel extends JPanel implements ActionListener {
 	                {
 	                	if(type == "Customers")
 	                	{
-	                		//restPanel.setHungry(type, temp.stateCB.getName());
+	                		restPanel.setHungry(type, temp.stateCB.getName());
 	                		temp.stateCB.setEnabled(false);
 	                	}
-	                	if(type == "Waiters")
+	                	/*if(type == "Waiters")
 	                	{
 	                		if(temp.stateCB.getText() == "Working?" || temp.stateCB.getText() == "Back To Work?")
 	                		{
 	                			temp.stateCB.setText("Break?");
 	                        	temp.stateCB.setEnabled(true);
 	                        	temp.stateCB.setSelected(false);
-	                			//restPanel.setWorking(type, temp.stateCB.getName());
+	                			restPanel.setWorking(type, temp.stateCB.getName());
 	                		}
 	                		else{
 	                        	temp.stateCB.setEnabled(false);
 	                        	temp.stateCB.setSelected(true);
-	                			//restPanel.askBreak(temp.stateCB.getName());
+	                			restPanel.askBreak(temp.stateCB.getName());
 	                		}
-	                	}
+	                	}*/
 	                    
 	                }
 	            }
@@ -262,11 +265,11 @@ public class ListPanel extends JPanel implements ActionListener {
             
             if(type != "Tables")
             {
-            	//restPanel.addPerson(type, name, setStateCB.isSelected());//puts customer or waiter on list
+            	restPanel.addPerson(type, name, setStateCB.isSelected());//puts customer or waiter on list
             }
             if(type == "Tables")
             {
-            	//restPanel.addTable();//puts customer or waiter on list
+            	restPanel.addTable();//puts customer or waiter on list
             }
             
             validate();

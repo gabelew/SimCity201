@@ -6,6 +6,7 @@ import restaurant.CustomerAgent;
 import restaurant.HostAgent;
 import restaurant.MarketAgent;
 import restaurant.WaiterAgent;
+import restaurant.gui.CustomerGui;
 
 import javax.swing.*;
 
@@ -43,10 +44,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
 
     private JPanel restLabel = new JPanel();
-    //private ListPanel customerPanel = new ListPanel(this, "Customers");
+    private ListPanel customerPanel = new ListPanel(this, "Customers");
 
     //private ListPanel waitersPanel = new ListPanel(this, "Waiters");
-    private ListPanel tablesPanel = new ListPanel(this, "Tables");
+    //private ListPanel tablesPanel = new ListPanel(this, "Tables");
     
     private JPanel group = new JPanel();
 
@@ -78,16 +79,16 @@ public class InfoPanel extends JPanel implements KeyListener {
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
 
-//        group.add(customerPanel);
+        add(customerPanel);
 
-        initRestLabel();
-        add(restLabel);
+        //initRestLabel();
+        //add(restLabel);
         //add(group);
       //  add(waitersPanel);
-        add(tablesPanel);
+        //add(tablesPanel);
         
 
-    //    customerPanel.getTypeNameHere().addKeyListener(this);
+        customerPanel.getTypeNameHere().addKeyListener(this);
     //    waitersPanel.getTypeNameHere().addKeyListener(this);
     }
 
@@ -129,7 +130,7 @@ public class InfoPanel extends JPanel implements KeyListener {
             }
         }
     }*/
-    /*
+    
     public void setHungry(String type, String name) {
 
         if (type.equals("Customers")) {
@@ -141,7 +142,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         }
     }
     
-    public void setWorking(String type, String name) {
+/*    public void setWorking(String type, String name) {
 
         if (type.equals("Waiters")) {
 
@@ -166,7 +167,7 @@ public class InfoPanel extends JPanel implements KeyListener {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      */
-    /*public void addPerson(String type, String name) {
+    public void addPerson(String type, String name) {
 
     	if (type.equals("Customers")) {
     		CustomerAgent c = null;
@@ -180,15 +181,15 @@ public class InfoPanel extends JPanel implements KeyListener {
     		}	
     		CustomerGui g = new CustomerGui(c, gui);
 
-    		gui.animationPanel.addGui(g);// dw
-    		c.setHost(host);
-    		c.setCashier(cashier);
+    		gui.insideAnimationPanel.addGui(g);// dw
+    		c.setHost(gui.restPanel.host);
+    		c.setCashier(gui.restPanel.cashier);
     		c.setGui(g);
     		customers.add(c);
     		c.startThread();
     	}
     	
-    	if (type.equals("Waiters")) {
+    /*	if (type.equals("Waiters")) {
     		WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
@@ -199,7 +200,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		w.setCook(cook);
     		waiters.add(w);
     		w.startThread();
-    	}
+    	}*/
     }
     public void addPerson(String type, String name, Boolean isHungry) {
 
@@ -215,9 +216,9 @@ public class InfoPanel extends JPanel implements KeyListener {
     		}
     		CustomerGui g = new CustomerGui(c, gui);
 
-    		gui.animationPanel.addGui(g);// dw
-    		c.setHost(host);
-    		c.setCashier(cashier);
+    		gui.insideAnimationPanel.addGui(g);// dw
+    		c.setHost(gui.restPanel.host);
+    		c.setCashier(gui.restPanel.cashier);
     		c.setGui(g);
     		
     		if(isHungry)
@@ -227,7 +228,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		c.startThread();
     	}
     	
-    	if (type.equals("Waiters")) {
+    	/*if (type.equals("Waiters")) {
     		WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
@@ -242,13 +243,13 @@ public class InfoPanel extends JPanel implements KeyListener {
     		
     		waiters.add(w);
     		w.startThread();
-    	}
+    	}*/
 
     }
     public void setCustomerEnabled(CustomerAgent c){
     	customerPanel.setCustomerEnabled(c.getName());
     }
-
+/*
 	public void setTableEnabled(int tableNumber){
 		tablesPanel.setTableEnabled(tableNumber);
 	}
@@ -266,7 +267,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 	
     public void pauseAgents()
     {
-    	if(tablesPanel.getPauseButtonLabel() == "Pause")
+    	/*if(tablesPanel.getPauseButtonLabel() == "Pause")
     	{
     	 for (CustomerAgent temp: customers)
     	 {
@@ -303,19 +304,19 @@ public class InfoPanel extends JPanel implements KeyListener {
     	 //cashier.resumeAgent();
     	}
     	 tablesPanel.changePauseButton();     
-    }
+    */}
 /*
 	public HostAgent getHost() {
 		return host;
 	}*/
 
-	public ListPanel getTablesPanel() {
+/*	public ListPanel getTablesPanel() {
 		return tablesPanel;
 	}
 
 	public void setTablesPanel(ListPanel tablesPanel) {
 		this.tablesPanel = tablesPanel;
-	}
+	}*/
 
 	public void setWaiterOnBreak(String name) {
 		//waitersPanel.setWaiterOnBreak(name);

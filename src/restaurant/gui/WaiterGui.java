@@ -13,6 +13,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.gui.SimCityGui;
 import restaurant.CustomerAgent;
 import restaurant.WaiterAgent;
 
@@ -21,7 +22,7 @@ public class WaiterGui implements Gui {
 	private WaiterAgent agent = null;
 	private boolean isPresent = false;
 	private static BufferedImage waiterImg = null;
-	RestaurantGui gui;
+	SimCityGui gui;
 
 	private enum Command {noCommand, GoToHost, GoToTable, GoToKitchen, GoToCashier, GoToRestArea};
 	private Command command=Command.noCommand;
@@ -67,7 +68,7 @@ public class WaiterGui implements Gui {
     static final int xWAITING_OVERFLOW_POS = 335;
     static final int yWAITING_OVERFLOW_POS = 465;
     
-	public WaiterGui(WaiterAgent w, RestaurantGui gui) {
+	public WaiterGui(WaiterAgent w, SimCityGui gui) {
 		try {
 		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
 		} catch (IOException e) {

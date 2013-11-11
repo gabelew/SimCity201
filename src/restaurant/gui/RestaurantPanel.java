@@ -9,6 +9,8 @@ import restaurant.WaiterAgent;
 
 import javax.swing.*;
 
+import city.gui.SimCityGui;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -31,11 +33,11 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	private static final double NO_CASH = 0.0;
 	
     //Host, cook, waiters and customers
-    private HostAgent host = new HostAgent("Sarah");
+    public HostAgent host = new HostAgent("Sarah");
     private HostGui hostGui = new HostGui(host);
     private CookAgent cook = new CookAgent("David");
     private CookGui cookGui = new CookGui(cook);
-    private CashierAgent cashier = new CashierAgent("Gabe");
+    public CashierAgent cashier = new CashierAgent("Gabe");
     private CashierGui cashierGui = new CashierGui(cashier);
 
     private Vector<MarketAgent> markets = new Vector<MarketAgent>();
@@ -43,16 +45,16 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
 
     private JPanel restLabel = new JPanel();
-    private ListPanel customerPanel = new ListPanel(this, "Customers");
+    //private ListPanel customerPanel = new ListPanel(this, "Customers");
 
-    private ListPanel waitersPanel = new ListPanel(this, "Waiters");
-    private ListPanel tablesPanel = new ListPanel(this, "Tables");
+   // private ListPanel waitersPanel = new ListPanel(this, "Waiters");
+    private RestaurantListPanel tablesPanel = new RestaurantListPanel(this, "Tables");
     
     private JPanel group = new JPanel();
 
-    private RestaurantGui gui; //reference to main gui
+    private SimCityGui gui; //reference to main gui
 
-    public RestaurantPanel(RestaurantGui gui) {
+    public RestaurantPanel(SimCityGui gui) {
 
         markets.add(new MarketAgent("Vons Market"));
         markets.add(new MarketAgent("Sprouts Market"));
@@ -68,9 +70,9 @@ public class RestaurantPanel extends JPanel implements KeyListener {
         	m.startThread();
         }
         
-        gui.animationPanel.addGui(hostGui);
-        gui.animationPanel.addGui(cashierGui);
-        gui.animationPanel.addGui(cookGui);
+        gui.insideAnimationPanel.addGui(hostGui);
+        gui.insideAnimationPanel.addGui(cashierGui);
+        gui.insideAnimationPanel.addGui(cookGui);
         host.startThread();
         cashier.startThread();
         cook.startThread();
@@ -78,17 +80,18 @@ public class RestaurantPanel extends JPanel implements KeyListener {
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
 
-        group.add(customerPanel);
+      //  group.add(customerPanel);
 
         initRestLabel();
         add(restLabel);
-        add(group);
-        add(waitersPanel);
+        //add(group);
+        //add(waitersPanel);
         add(tablesPanel);
-        
+        createWaiter("w1");
+        createWaiter("w2");
 
-        customerPanel.getTypeNameHere().addKeyListener(this);
-        waitersPanel.getTypeNameHere().addKeyListener(this);
+        //customerPanel.getTypeNameHere().addKeyListener(this);
+        //waitersPanel.getTypeNameHere().addKeyListener(this);
     }
 
     /**
@@ -180,7 +183,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		}	
     		CustomerGui g = new CustomerGui(c, gui);
 
-    		gui.animationPanel.addGui(g);// dw
+    		gui.insideAnimationPanel.addGui(g);// dw
     		c.setHost(host);
     		c.setCashier(cashier);
     		c.setGui(g);
@@ -192,7 +195,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
-    		gui.animationPanel.addGui(g);// dw
+    		gui.insideAnimationPanel.addGui(g);// dw
     		w.setHost(host);
     		w.setCashier(cashier);
     		w.setGui(g);
@@ -200,6 +203,22 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		waiters.add(w);
     		w.startThread();
     	}
+    }
+    public void createWaiter(String name){
+
+		WaiterAgent w = new WaiterAgent(name);	
+		WaiterGui g = new WaiterGui(w, gui);
+
+		gui.insideAnimationPanel.addGui(g);// dw
+		w.setHost(host);
+		w.setCashier(cashier);
+		w.setGui(g);
+		w.setCook(cook);
+	
+		w.getGui().setWorking();
+		
+		waiters.add(w);
+		w.startThread();
     }
     public void addPerson(String type, String name, Boolean isHungry) {
 
@@ -215,7 +234,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		}
     		CustomerGui g = new CustomerGui(c, gui);
 
-    		gui.animationPanel.addGui(g);// dw
+    		gui.insideAnimationPanel.addGui(g);// dw
     		c.setHost(host);
     		c.setCashier(cashier);
     		c.setGui(g);
@@ -231,7 +250,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
-    		gui.animationPanel.addGui(g);// dw
+    		gui.insideAnimationPanel.addGui(g);// dw
     		w.setHost(host);
     		w.setCashier(cashier);
     		w.setGui(g);
@@ -246,7 +265,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 
     }
     public void setCustomerEnabled(CustomerAgent c){
-    	customerPanel.setCustomerEnabled(c.getName());
+    //	customerPanel.setCustomerEnabled(c.getName());
     }
 
 	public void setTableEnabled(int tableNumber){
@@ -309,29 +328,29 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		return host;
 	}
 
-	public ListPanel getTablesPanel() {
+	public RestaurantListPanel getTablesPanel() {
 		return tablesPanel;
 	}
 
-	public void setTablesPanel(ListPanel tablesPanel) {
+	public void setTablesPanel(RestaurantListPanel tablesPanel) {
 		this.tablesPanel = tablesPanel;
 	}
 
 	public void setWaiterOnBreak(String name) {
-		waitersPanel.setWaiterOnBreak(name);
+		//waitersPanel.setWaiterOnBreak(name);
 	}
 
 	public void setWaiterCantBreak(String name) {
-		waitersPanel.setWaiterCantBreak(name);
+		//waitersPanel.setWaiterCantBreak(name);
 		
 	}
 
 	public void setWaiterBreakable(String name) {
-		waitersPanel.setWaiterBreakable(name);
+		//waitersPanel.setWaiterBreakable(name);
 		
 	}
 	public void setWaiterUnbreakable(String name) {
-		waitersPanel.setWaiterUnbreakable(name);
+		//waitersPanel.setWaiterUnbreakable(name);
 		
 	}
 

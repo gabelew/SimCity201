@@ -14,6 +14,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.gui.SimCityGui;
 import restaurant.CookAgent;
 import restaurant.CookAgent.Order;
 import restaurant.WaiterAgent;
@@ -23,7 +24,7 @@ public class CookGui implements Gui  {
 	private CookAgent agent = null;
 	private boolean isPresent = true;
 	private BufferedImage cookImg = null;
-	RestaurantGui gui;
+	SimCityGui gui;
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
 	public static List<Semaphore> grillingSpots = new ArrayList<Semaphore>();
 	public static List<Semaphore> counterSpots = new ArrayList<Semaphore>();

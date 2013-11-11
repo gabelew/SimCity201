@@ -69,45 +69,15 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
-	private BufferedImage kitchenCounterImg = null;
-	private BufferedImage tableImg = null;
-	private BufferedImage chairImg = null;
-	private BufferedImage hostStandImg = null;
-	private BufferedImage registerImg = null;
-	private BufferedImage fidgeImg = null;
-	private BufferedImage grillLeftImg = null;
-	private BufferedImage grillRightImg = null;
-	private BufferedImage platingTableImg = null;
-
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
 		
-		try {
-			StringBuilder path = new StringBuilder("imgs/");
-		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
-		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
-		    chairImg = ImageIO.read(new File(path.toString() + "customer_chair_v1.png"));
-		    hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
-		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
-		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
-		    grillLeftImg = ImageIO.read(new File(path.toString() + "grill.png"));
-		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
-		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
-		} catch (IOException e) {
-		}
-		
-    	setSize(WINDOWX, WINDOWY);
+		setSize(WINDOWX, WINDOWY);
         setVisible(true);
  
     	Timer timer = new Timer(TIMERDELAY, this );
     	timer.start();	
-		
-/*    	for(int i = 0; i < NWAITSEATS; i++){
-			CustomerGui.waitingSeats.add(new Semaphore(1,true));
-		}
-    	for(int i = 0; i < NRESTSEATS; i++){
-			WaiterGui.waitingSeats.add(new Semaphore(1,true));
-		}*/
+
         addMouseListener(this);	
 		
 	}
@@ -131,16 +101,16 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //draw the streets
         g2.setColor(Color.black);
         	g2.fillRect(60, 50, 30, 320);			//right
-        	g2.fillRect(798+60, 50, 30, 320);		//left
+        	g2.fillRect(802+60, 50, 30, 320);		//left
         	for(int i=0; i<5;i++){
-        		g2.fillRect(60, 50+80*(i), 828, 30);
+        		g2.fillRect(60, 50+80*(i), 832, 30);
         	}
         	
         //draw center divider
         g2.setColor(Color.yellow);
         	for(int i = 0 ; i<32;i++){
         		g2.fillRect(60+14, 50+14+i*10, 2, 5);		//right
-        		g2.fillRect(798+60+14, 50+14+i*10, 2, 5);	//left
+        		g2.fillRect(802+60+14, 50+14+i*10, 2, 5);	//left
         	}
         	for(int i=0; i<5;i++){
         		for(int j = 0; j < 80;j++){
@@ -150,17 +120,17 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
        	//draw the side walk
         g2.setColor(Color.gray);
 	        g2.fillRect(60-7, 50, 7, 320+30);			//right
-	        g2.fillRect(798+60+30, 50, 7, 320+30);		//left
+	        g2.fillRect(802+60+30, 50, 7, 320+30);		//left
 	        for(int i=0; i<4;i++){
 	           	g2.fillRect(60+30, 50+30+80*i, 7, 44);			//right
-	           	g2.fillRect(798+60-7, 50+30+80*i, 7, 44);		//left
+	           	g2.fillRect(802+60-7, 50+30+80*i, 7, 44);		//left
 	        }
 	        for(int i=0; i<5;i++){
-	        	g2.fillRect(60+30, 50+80*(i)-7, 828-30*2, 7);
-	        	g2.fillRect(60+30, 50+80*(i)+30, 828-30*2, 7);
+	        	g2.fillRect(60+30, 50+80*(i)-7, 832-30*2, 7);
+	        	g2.fillRect(60+30, 50+80*(i)+30, 832-30*2, 7);
 	        }
-	    	g2.fillRect(60-7, 50+80*(0)-7, 828+14, 7);
-	    	g2.fillRect(60-7, 50+80*(4)+30, 828+14, 7);   
+	    	g2.fillRect(60-7, 50+80*(0)-7, 832+14, 7);
+	    	g2.fillRect(60-7, 50+80*(4)+30, 832+14, 7);   
 			
         //Here is the buildings
         for(int i = ZERO; i<NBUILDINGS; i++){

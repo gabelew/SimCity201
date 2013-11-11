@@ -18,7 +18,7 @@ public class RestaurantGui extends JFrame implements ActionListener {
 	/* The GUI had two frames, the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
-	AnimationPanel animationPanel = new AnimationPanel(this);
+	RestaurantAnimationPanel animationPanel = new RestaurantAnimationPanel(this);
 	
     /* restPanel holds 2 panels
      * 1) the staff listing, menu, and lists of current customers all constructed
