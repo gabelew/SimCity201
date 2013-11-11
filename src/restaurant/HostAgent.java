@@ -2,6 +2,7 @@ package restaurant;
 
 import agent.Agent;
 import restaurant.gui.HostGui;
+import restaurant.interfaces.Customer;
 
 import java.util.*;
 
@@ -40,10 +41,10 @@ public class HostAgent extends Agent {
 	static final int ZERO = 0;
 	
 	private class MyCustomer{
-		private CustomerAgent c;
+		private Customer c;
 		private cState state;
 		
-		MyCustomer(CustomerAgent nc, cState s){
+		MyCustomer(Customer nc, cState s){
 			c = nc;
 			setState(s);
 		}
@@ -103,7 +104,7 @@ public class HostAgent extends Agent {
 		stateChanged();
 	}
 	
-	public void msgIWantToEat(CustomerAgent cust) {
+	public void msgIWantToEat(Customer cust) {
 print("ooiret");
 		/*** Prevents customer from being added twice ***/
 		boolean addCustomer = true;
@@ -122,7 +123,7 @@ print("ooiret");
 		stateChanged();
 	}
 
-	public void msgLeavingRestaurant(CustomerAgent cust) {
+	public void msgLeavingRestaurant(Customer cust) {
 		print("\t\t msgLeavingRestaurant");
 		MyCustomer deleteC = null;
 		
@@ -349,14 +350,14 @@ print("ooiret");
 	}
 
 	private class Table {
-		private CustomerAgent occupiedBy;
+		private Customer occupiedBy;
 		private int tableNumber;
 
 		Table(int tableNumber) {
 			this.tableNumber = tableNumber;
 		}
 
-		void setOccupant(CustomerAgent cust) {
+		void setOccupant(Customer cust) {
 			occupiedBy = cust;
 		}
 
@@ -364,7 +365,7 @@ print("ooiret");
 			occupiedBy = null;
 		}
 
-		CustomerAgent getOccupant() {
+		Customer getOccupant() {
 			return occupiedBy;
 		}
 		int getTableNumber(){

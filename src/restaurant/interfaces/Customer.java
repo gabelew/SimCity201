@@ -34,6 +34,8 @@ public interface Customer {
 	public abstract void msgWhatWouldYouLike();
 	public abstract void msgOutOfOrder(String c);
 	public abstract void msgHereIsYourFood();
+	public abstract void msgWaitForOpenTable();
+	public abstract void msgTableIsReady();
 	public abstract String getName();
 	
 
