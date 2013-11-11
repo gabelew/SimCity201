@@ -49,8 +49,8 @@ public class WaiterAgent extends Agent implements Waiter{
 		}
 	}
 	public class MenuItem{
-		String item;
-		double cost;
+		public String item;
+		public double cost;
 		MenuItem(String i, double d){
 			item = i;
 			cost = d;

@@ -16,7 +16,7 @@ public abstract class Role
 	}
 	
 	//players can send you Person messages.
-	private void stateChanged()
+	public void stateChanged()
 	{
 		this.active = true;
 		myPerson.stateChanged();
@@ -24,5 +24,20 @@ public abstract class Role
 	public boolean isActive() {
 	        return active;
 	}
+	
+    /**
+     * The simulated action code
+     */
+    protected void Do(String msg) {
+        print(msg);
+    }
+
+    /**
+     * Print message
+     */
+    protected void print(String msg) {
+        print(msg);
+    }
+	
 	public abstract boolean pickAndExecuteAnAction();
 }

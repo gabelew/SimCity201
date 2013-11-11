@@ -56,11 +56,11 @@ public class CashierAgent extends Agent implements Cashier{
 	}
 	public enum BillState {requested, payed};
 	
-	static final double SALAD_COST = 4.99;
-	static final double STEAK_COST = 15.99;
-	static final double CHICKEN_COST = 10.99;
-	static final double BURGER_COST = 8.99;
-	static final double COOKIE_COST = 3.99;	
+	public static final double SALAD_COST = 4.99;
+	public static final double STEAK_COST = 15.99;
+	public static final double CHICKEN_COST = 10.99;
+	public static final double BURGER_COST = 8.99;
+	public static final double COOKIE_COST = 3.99;	
 	
 	public CashierAgent(String n){
 		super();
