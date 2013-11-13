@@ -37,10 +37,10 @@ public class PersonGui implements Gui{
 		}
 		
 		agent = c;
-		xPos = 50;
-		yPos = 100;
-		xDestination = 100;
-		yDestination = 100;
+		xPos = 75;
+		yPos = 103;
+		xDestination = 75;
+		yDestination = 103;
         
 		this.gui = gui;
 		
@@ -53,8 +53,7 @@ public class PersonGui implements Gui{
 			xPos++;
 		else if (xPos > xDestination)
 			xPos--;
-
-		if (yPos < yDestination)
+		else if (yPos < yDestination)
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;

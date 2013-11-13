@@ -25,7 +25,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private static int NBUILDINGS = 0;
 	private final int WINDOWX = 865;
     private final int WINDOWY = 467;
-    private static int timeIncrementer = 1400;
+    private static int timeIncrementer = 0;
     
     static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  
@@ -72,7 +72,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     static final int NPLATING_TABLES = 4;
     static final int NRESTSEATS = 16;
 	static final int THIRTYSECONDS = 1500;
-	
+	static final int SIDEWALK_WIDTH = 12;
+	static final int STREET_WIDTH = 20;
+    static final int VERT_STREET_X_START = 25;
+    
+    int VERT_STREET_Y_START = 35;
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
 	public AnimationPanel(SimCityGui gui){
@@ -89,15 +93,17 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		repaint();  //Will have paintComponent called
-	}
-	
-    public void paintComponent(Graphics g) {
-    	timeIncrementer++;
+		if(e.getSource().toString().contains("Timer"))
+			timeIncrementer++;
     	if(timeIncrementer == THIRTYSECONDS){
     		timeIncrementer = 0;
     		simCityGui.newHour();
     	}
+		repaint();  //Will have paintComponent called
+	}
+	
+    public void paintComponent(Graphics g) {
+
         Graphics2D g2 = (Graphics2D)g;
 
         //Clear the screen by painting a rectangle the size of the frame
@@ -109,51 +115,40 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         g2.setColor(color);
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
         
+        
         //draw the streets
         g2.setColor(Color.black);
-        	g2.fillRect(20, 0, 30, 400);			//right
-        	g2.fillRect(802+20, 0, 30, 400);		//left
+        	g2.fillRect(VERT_STREET_X_START, 0, STREET_WIDTH, 400);			//right
+        	g2.fillRect(802+VERT_STREET_X_START, 0, STREET_WIDTH, 400);		//left
         	for(int i=0; i<5;i++){
-        		g2.fillRect(0, 30+80*(i), WINDOWX, 30);
-        	}
-        	
-        //draw center divider
-        g2.setColor(Color.yellow);
-	    	for(int i = 0 ; i<40;i++){
-	    		g2.fillRect(20+14, i*10, 2, 5);		//right
-	    		g2.fillRect(802+20+14, i*10, 2, 5);	//left
-	    	}
-        	for(int i=0; i<5;i++){
-        		for(int j = 0; j < 87;j++){
-        			g2.fillRect(j*10, 30+80*(i)+14, 5, 2);	
-        		}
+        		g2.fillRect(0, VERT_STREET_Y_START+80*(i), WINDOWX, STREET_WIDTH);
         	}
         	
        	//draw the side walk
         g2.setColor(Color.gray);
-	       // g2.fillRect(20-7, 0, 7, 400);			//right
-	        g2.fillRect(20+30, 0, 7, 30);			
-	        g2.fillRect(20-7, 0, 7, 30);			
-	        g2.fillRect(20+30, 380, 7, 20);			
-	        g2.fillRect(20-7, 380, 7, 20);			
-	       // g2.fillRect(802+20+30, 0, 7, 400);		//left
-	        g2.fillRect(802+20-7, 0, 7, 30);			
-	        g2.fillRect(802+20-7, 380, 7, 20);		
-	        g2.fillRect(802+20+30, 0, 7, 30);			
-	        g2.fillRect(802+20+30, 380, 7, 20);		
+	       // g2.fillRect(20-SIDEWALK_WIDTH, 0, SIDEWALK_WIDTH, 400);			//right
+	        g2.fillRect(15+30, 0, SIDEWALK_WIDTH, 35);			
+	        g2.fillRect(25-SIDEWALK_WIDTH, 0, SIDEWALK_WIDTH, 35);			
+	        g2.fillRect(15+30, 375, SIDEWALK_WIDTH, 35);			
+	        g2.fillRect(25-SIDEWALK_WIDTH, 375, SIDEWALK_WIDTH, 35);			
+	       // g2.fillRect(802+20+30, 0, SIDEWALK_WIDTH, 400);		//left
+	        g2.fillRect(802+25-SIDEWALK_WIDTH, 0, SIDEWALK_WIDTH, 35);			
+	        g2.fillRect(802+25-SIDEWALK_WIDTH, 375, SIDEWALK_WIDTH, 35);		
+	        g2.fillRect(802+15+30, 0, SIDEWALK_WIDTH, 35);			
+	        g2.fillRect(802+15+30, 375, SIDEWALK_WIDTH, 35);		
 	        for(int i=0; i<4;i++){
-	           	g2.fillRect(20+30, 30+30+80*i, 7, 44);			//right
-	           	g2.fillRect(802+20-7, 30+30+80*i, 7, 44);		//left
-	           	g2.fillRect(20-7, 30+30+80*i, 7, 44);			//right
-	           	g2.fillRect(802+20+30, 30+30+80*i, 7, 44);		//left
+	           	g2.fillRect(15+30, 25+30+80*i, SIDEWALK_WIDTH, 60);			//right
+	           	g2.fillRect(802+25-SIDEWALK_WIDTH, 25+30+80*i, SIDEWALK_WIDTH, 60);		//left
+	           	g2.fillRect(25-SIDEWALK_WIDTH, 25+30+80*i, SIDEWALK_WIDTH, 60);			//right
+	           	g2.fillRect(802+15+30, 25+30+80*i, SIDEWALK_WIDTH, 60);		//left
 	        }
 	        for(int i=0; i<5;i++){
-	        	g2.fillRect(20+30, 30+80*(i)-7, 832-30*2, 7);
-	        	g2.fillRect(20+30, 30+80*(i)+30, 832-30*2, 7);
-	        	g2.fillRect(0, 30+80*(i)-7, 20, 7);
-	        	g2.fillRect(0, 30+80*(i)+30, 20, 7);
-	        	g2.fillRect(832+20, 30+80*(i)-7, 20, 7);
-	        	g2.fillRect(832+20, 30+80*(i)+30, 20, 7);
+	        	g2.fillRect(20+30, 35+80*(i)-SIDEWALK_WIDTH, 832-30*2, SIDEWALK_WIDTH);
+	        	g2.fillRect(20+30, 25+80*(i)+30, 832-30*2, SIDEWALK_WIDTH);
+	        	g2.fillRect(0, 35+80*(i)-SIDEWALK_WIDTH, 20, SIDEWALK_WIDTH);
+	        	g2.fillRect(0, 25+80*(i)+30, 20, SIDEWALK_WIDTH);
+	        	g2.fillRect(802+30+20, 35+80*(i)-SIDEWALK_WIDTH, 20, SIDEWALK_WIDTH);
+	        	g2.fillRect(802+30+20, 25+80*(i)+30, 20, SIDEWALK_WIDTH);
 	        }
 
 	        
@@ -204,7 +199,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 				{
 					//set building active state
 					clickedBuilding.activateBuilding();
-					System.out.println("asd");
+					//simCityGui.switchT
 				}
 				
 				clickedBuilding = null;

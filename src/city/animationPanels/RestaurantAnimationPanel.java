@@ -1,8 +1,14 @@
-package restaurant.gui;
+package city.animationPanels;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import restaurant.gui.CashierGui;
+import restaurant.gui.CookGui;
+import restaurant.gui.CustomerGui;
+import restaurant.gui.HostGui;
+import restaurant.gui.Table;
+import restaurant.gui.WaiterGui;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 
@@ -18,7 +24,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
-public class RestaurantAnimationPanel extends JPanel implements ActionListener, MouseListener {
+public class RestaurantAnimationPanel extends insideBuildingPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
     private static int NTABLES = 0;
@@ -28,7 +34,8 @@ public class RestaurantAnimationPanel extends JPanel implements ActionListener, 
 	private int clickedTableMouseYOffset;
 	private final int WINDOWX = 934;
     private final int WINDOWY = 467;
-    
+	public boolean isVisible = true;
+	
     static final int TIMERDELAY = 10;
     static final int xREST_POSITION = 350;  
     static final int yREST_POSITION = 400; 
@@ -135,9 +142,15 @@ public class RestaurantAnimationPanel extends JPanel implements ActionListener, 
     }*/
 
 	public void actionPerformed(ActionEvent e) {
-		repaint();  //Will have paintComponent called
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
+		if(isVisible)
+			repaint();  //Will have paintComponent called
 	}
-
+	
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
 
@@ -171,11 +184,7 @@ public class RestaurantAnimationPanel extends JPanel implements ActionListener, 
 		g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
 		g.drawImage(fidgeImg, xCOOK_POSITION+xFIDGE_OFFSET, yCOOK_POSITION+yFIDGE_OFFSET, null);
 		
-		for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
+
 
         for(Gui gui : guis) {
         	if(!(gui instanceof CustomerGui || gui instanceof WaiterGui))

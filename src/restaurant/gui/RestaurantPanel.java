@@ -72,9 +72,9 @@ public class RestaurantPanel extends JPanel implements KeyListener {
         	m.startThread();
         }
         
-        gui.insideAnimationPanel.addGui(hostGui);
-        gui.insideAnimationPanel.addGui(cashierGui);
-        gui.insideAnimationPanel.addGui(cookGui);
+        gui.restaurantAnimationPanel.addGui(hostGui);
+        gui.restaurantAnimationPanel.addGui(cashierGui);
+        gui.restaurantAnimationPanel.addGui(cookGui);
         host.startThread();
         cashier.startThread();
         cook.startThread();
@@ -220,7 +220,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
-    		gui.insideAnimationPanel.addGui(g);// dw
+    		gui.restaurantAnimationPanel.addGui(g);// dw
     		w.setHost(host);
     		w.setCashier(cashier);
     		w.setGui(g);
@@ -234,7 +234,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		WaiterAgent w = new WaiterAgent(name);	
 		WaiterGui g = new WaiterGui(w, gui);
 
-		gui.insideAnimationPanel.addGui(g);// dw
+		gui.restaurantAnimationPanel.addGui(g);// dw
 		w.setHost(host);
 		w.setCashier(cashier);
 		w.setGui(g);
@@ -275,7 +275,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
-    		gui.insideAnimationPanel.addGui(g);// dw
+    		gui.restaurantAnimationPanel.addGui(g);// dw
     		w.setHost(host);
     		w.setCashier(cashier);
     		w.setGui(g);
