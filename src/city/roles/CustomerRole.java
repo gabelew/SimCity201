@@ -26,7 +26,6 @@ public class CustomerRole extends Role implements Customer {
 	private String name;
 	private String choice; 				// will hold the customers food choice
 	private MyMenu myMenu;	
-	private int hungerLevel = 5;        // determines length of meal
 	Timer timer = new Timer();
 	private CustomerGui customerGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
@@ -271,13 +270,20 @@ public class CustomerRole extends Role implements Customer {
 		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
-			//no action
+			reactivatePerson();
 			return true;
 		}
 		return false;
 	}
 
+
+
 	// Actions
+	private void reactivatePerson() {
+		print("reactivatePerson");
+		myPerson.msgDoneEatingAtRestaurant();
+		
+	}
 	private void goToRestaurant() {
 		DoGoToRestaurant();
 		host.msgIWantToEat(this);//send our instance, so he can respond to us
@@ -397,6 +403,7 @@ public class CustomerRole extends Role implements Customer {
 		customerGui.doneEatingFood();
 		waiter.msgDoneEatingAndLeaving(this);
 		waiter = null;
+		myPerson.hungerLevel = 0;
 		doGoToCashier();
 		print(cash - check + " = " + cash + " - " + check);
 		
@@ -441,16 +448,6 @@ public class CustomerRole extends Role implements Customer {
 	// Accessors, etc.
 	public String getName() {
 		return name;
-	}
-	
-	public int getHungerLevel() {
-		return hungerLevel;
-	}
-
-	public void setHungerLevel(int hungerLevel) {
-		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
 	}
 
 	public String toString() {

@@ -38,7 +38,7 @@ public class PersonGui implements Gui{
 		
 		agent = c;
 		xPos = 75;
-		yPos = 103;
+		yPos = 103; //103+80*i
 		xDestination = 75;
 		yDestination = 103;
         
@@ -49,14 +49,25 @@ public class PersonGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
-		if (xPos < xDestination)
-			xPos++;
-		else if (xPos > xDestination)
-			xPos--;
-		else if (yPos < yDestination)
-			yPos++;
-		else if (yPos > yDestination)
-			yPos--;
+		if(agent.car==null){
+			if (xPos < xDestination && (yPos - 103)%80==0)
+				xPos++;
+			else if (xPos > xDestination && (yPos - 103)%80==0)
+				xPos--;
+			else if (yPos < yDestination)
+				yPos++;
+			else if (yPos > yDestination)
+				yPos--;
+		}else{
+			if (xPos < xDestination && (yPos - 115)%80==0)
+				xPos++;
+			else if (xPos > xDestination && (yPos - 115)%80==0)
+				xPos--;
+			else if (yPos < yDestination)
+				yPos++;
+			else if (yPos > yDestination)
+				yPos--;
+		}
 
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command == Command.walkToDestination){
@@ -69,7 +80,7 @@ public class PersonGui implements Gui{
 
 	@Override
 	public void draw(Graphics2D g) {
-		if(state == State.driving)
+		if(agent.car != null)
 		{
 			g.drawImage(carImg, xPos, yPos, null);
 		}

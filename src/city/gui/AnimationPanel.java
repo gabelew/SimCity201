@@ -25,7 +25,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private static int NBUILDINGS = 0;
 	private final int WINDOWX = 865;
     private final int WINDOWY = 467;
-    private static int timeIncrementer = 0;
+    private static int timeIncrementer = 1400;
     
     static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  
@@ -114,8 +114,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         Color color = new Color(0x219622);
         g2.setColor(color);
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
-        
-        
+               
         //draw the streets
         g2.setColor(Color.black);
         	g2.fillRect(VERT_STREET_X_START, 0, STREET_WIDTH, 400);			//right

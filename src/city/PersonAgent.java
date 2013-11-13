@@ -34,7 +34,7 @@ public class PersonAgent extends Agent {
 	boolean isManager;
 	
 	private String name;
-	BufferedImage car = null;
+	public BufferedImage car = null;
 	//Bus busLeft;
 	//Bus busRight;
 	MyJob job;
@@ -49,7 +49,7 @@ public class PersonAgent extends Agent {
 	int currentHour;
 	String dayOfWeek;
 	
-	int hungerLevel = 51;
+	public int hungerLevel = 51;
 	double cashOnHand, businessFunds;
 	
 	class MyRestaurant {
@@ -126,7 +126,7 @@ public class PersonAgent extends Agent {
 	public void msgNextHour(int hour, String dayOfWeek) {
 		this.currentHour = hour;
 		this.dayOfWeek = dayOfWeek;
-		this.hungerLevel += 10;
+		this.hungerLevel += 1;
 		/*
 		if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 20 || currentHour <= 11)) ||
 				(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 12 || currentHour <= 3))){
@@ -162,13 +162,14 @@ public class PersonAgent extends Agent {
 			}
 		}
 		
-		if(hungerLevel > 50){
+		if(hungerLevel > 50 && state != State.goingOutToEat && state != State.eating && state != State.goingHomeToEat){
 			boolean inList = false;
 			for(Task t: taskList){
 				if(t == Task.goEatFood)
 					inList = true;
 			}
 			if(!inList){
+				print("\t\t\t\tAHHHHHHHHHHHHHHHHH");
 				taskList.add(Task.goEatFood);
 			}
 		} 
@@ -263,6 +264,19 @@ public class PersonAgent extends Agent {
 		
 		*/
 		stateChanged();
+	}
+	
+	public void msgDoneEatingAtRestaurant() {
+		print("msgDoneEatingAtRestaurant");
+		state = State.doingNothing;
+		for(Task t: taskList){
+			print(t.toString());
+		}
+
+		print(state.toString());
+		
+		stateChanged();
+
 	}
 	
     public boolean pickAndExecuteAnAction() {
@@ -371,16 +385,32 @@ public class PersonAgent extends Agent {
         	
 	        for(Role r : roles) {
 	        	if( r.isActive() ) {
-	        		r.pickAndExecuteAnAction();
-	        		return true;
+	        		boolean tempBool = r.pickAndExecuteAnAction();
+	        		if(tempBool){
+	        			return true;
+	        		}
 	        	}
 	        }
+	        
+	        if(state == State.doingNothing){
+	        	System.out.println("goingHome");
+	        	goHome();
+        	}
 	        
 	        return false;
         } catch(ConcurrentModificationException e){ return false; }
 	}
     
-    //actions
+    private void goHome() {
+		personGui.DoWalkTo(new Point(75,103)); ///CHange to special go home method and remove semaphore
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	//actions
     private void doPayRent(){
     	//bank.msgTransferFunds(this, landlord, "personal","rent");
     }
@@ -447,4 +477,6 @@ public class PersonAgent extends Agent {
 		personGui = g;
 		
 	}
+
+
 }
