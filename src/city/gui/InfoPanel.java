@@ -10,6 +10,8 @@ import restaurant.gui.CustomerGui;
 
 import javax.swing.*;
 
+import city.PersonAgent;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -28,7 +30,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 	private static final int GROUP_NCOLUMNS = 1;
 	private static final int NCOLUMNS = 1;
 	private static final int NROWS = 2;
-	private static final double CUSTOMER_DEFAULT_CASH = 200.00;
+	private static final double PERSONS_DEFAULT_CASH = 200.00;
 	private static final double NO_CASH = 0.0;
 	
     //Host, cook, waiters and customers
@@ -40,11 +42,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     private CashierGui cashierGui = new CashierGui(cashier);
 */
     private Vector<MarketAgent> markets = new Vector<MarketAgent>();
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
+    private Vector<PersonAgent> persons = new Vector<PersonAgent>();
     private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
 
     private JPanel restLabel = new JPanel();
-    private ListPanel customerPanel = new ListPanel(this, "Customers");
+    private ListPanel customerPanel = new ListPanel(this, "Persons");
 
     //private ListPanel waitersPanel = new ListPanel(this, "Waiters");
     //private ListPanel tablesPanel = new ListPanel(this, "Tables");
@@ -133,11 +135,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     
     public void setHungry(String type, String name) {
 
-        if (type.equals("Customers")) {
+        if (type.equals("Persons")) {
 
-            for (CustomerAgent temp: customers){
-                if (temp.getName() == name)
-                	temp.getGui().setHungry();
+            for (PersonAgent temp: persons){
+                if (temp.getName() == name){}
+                	//temp.getGui().setHungry();
             }
         }
     }
@@ -167,65 +169,33 @@ public class InfoPanel extends JPanel implements KeyListener {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      */
-    public void addPerson(String type, String name) {
+       public void addPerson(String type, String name) {
 
-    	if (type.equals("Customers")) {
-    		CustomerAgent c = null;
-    		if(stringIsDouble(name) && Double.valueOf(name) >= 0){
-    			c = new CustomerAgent(name, Double.valueOf(name));
-    		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
-    				|| name.equalsIgnoreCase("ditch") || name.equalsIgnoreCase("cheap")){
-    			c = new CustomerAgent(name, NO_CASH);   			
-    		}else{
-    			c = new CustomerAgent(name, CUSTOMER_DEFAULT_CASH);
-    		}	
-    		CustomerGui g = new CustomerGui(c, gui);
-
-    		gui.insideAnimationPanel.addGui(g);// dw
-    		c.setHost(gui.restPanel.host);
-    		c.setCashier(gui.restPanel.cashier);
-    		c.setGui(g);
-    		customers.add(c);
-    		c.startThread();
-    	}
-    	
-    /*	if (type.equals("Waiters")) {
-    		WaiterAgent w = new WaiterAgent(name);	
-    		WaiterGui g = new WaiterGui(w, gui);
-
-    		gui.animationPanel.addGui(g);// dw
-    		w.setHost(host);
-    		w.setCashier(cashier);
-    		w.setGui(g);
-    		w.setCook(cook);
-    		waiters.add(w);
-    		w.startThread();
-    	}*/
-    }
-    public void addPerson(String type, String name, Boolean isHungry) {
-
-    	if (type.equals("Customers")) {
-    		CustomerAgent c = null;
+    	if (type.equals("Persons")) {
+    		PersonAgent p = null;
     		if(stringIsDouble(name)){
-    			c = new CustomerAgent(name, Double.valueOf(name));
+    			p = new PersonAgent(name, Double.valueOf(name));
     		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
     				|| name.equalsIgnoreCase("ditch") || name.equalsIgnoreCase("broke")){
-    			c = new CustomerAgent(name, NO_CASH);   			
+    			p = new PersonAgent(name, NO_CASH);   			
     		}else{
-    			c = new CustomerAgent(name, CUSTOMER_DEFAULT_CASH);
+    			p = new PersonAgent(name, PERSONS_DEFAULT_CASH);
     		}
-    		CustomerGui g = new CustomerGui(c, gui);
-
-    		gui.insideAnimationPanel.addGui(g);// dw
-    		c.setHost(gui.restPanel.host);
-    		c.setCashier(gui.restPanel.cashier);
-    		c.setGui(g);
+    		PersonGui g = new PersonGui(p, gui);
+    		g.setPresent(true);
+    		gui.animationPanel.addGui(g);// dw
+    		p.setHost(gui.restPanel.host);
+    		p.setCashier(gui.restPanel.cashier);
+    		p.addRestaurant(gui.restPanel.host, gui.restPanel.cashier,new Point(200,100), "hi", "01");
+    		//HostAgent h, Point location, String type, String name
+    		p.setGui(g);
     		
-    		if(isHungry)
-    			c.getGui().setHungry();
+    		//if(isHungry)
+    			//p.getGui().setHungry();
     		
-    		customers.add(c);
-    		c.startThread();
+    		persons.add(p);
+    		p.startThread();
+    		gui.persons.add(p);
     	}
     	
     	/*if (type.equals("Waiters")) {

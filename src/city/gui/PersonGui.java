@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 
 import city.PersonAgent;
 import restaurant.CustomerAgent;
-import restaurant.gui.Gui;
 
 public class PersonGui implements Gui{
 	
@@ -19,7 +18,7 @@ public class PersonGui implements Gui{
 	
 	private static BufferedImage personImg = null;
 	private static BufferedImage carImg = null;
-	SimCityGui gui;
+	public SimCityGui gui;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private enum Command {noCommand, walkToDestination};
@@ -38,10 +37,10 @@ public class PersonGui implements Gui{
 		}
 		
 		agent = c;
-		xPos = 20;
-		yPos = 20;
-		xDestination = 20;
-		yDestination = 20;
+		xPos = 50;
+		yPos = 100;
+		xDestination = 100;
+		yDestination = 100;
         
 		this.gui = gui;
 		
@@ -62,6 +61,7 @@ public class PersonGui implements Gui{
 
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command == Command.walkToDestination){
+				command = Command.noCommand;
 				agent.msgAnimationFinshed();
 			}
 		}
@@ -91,8 +91,8 @@ public class PersonGui implements Gui{
 	}
 
 	public void DoWalkTo(Point destination) {
-		xPos = destination.x;
-		yPos = destination.y;
+		xDestination = destination.x;
+		yDestination = destination.y;
 		command = Command.walkToDestination;
 		
 	}

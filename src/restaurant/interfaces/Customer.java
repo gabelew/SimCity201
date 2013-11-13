@@ -1,6 +1,7 @@
 package restaurant.interfaces;
 
 import restaurant.WaiterAgent.Menu;
+import restaurant.gui.CustomerGui;
 
 /**
  * A sample Customer interface built to unit test a CashierAgent.
@@ -37,6 +38,8 @@ public interface Customer {
 	public abstract void msgWaitForOpenTable();
 	public abstract void msgTableIsReady();
 	public abstract String getName();
+
+	public abstract CustomerGui getGui();
 	
 
 }

@@ -459,6 +459,7 @@ public class CustomerRole extends Role implements Customer {
 
 	public void setGui(CustomerGui g) {
 		customerGui = g;
+		
 	}
 
 	public CustomerGui getGui() {

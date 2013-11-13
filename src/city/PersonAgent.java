@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
+import restaurant.CashierAgent;
 import restaurant.HostAgent;
 import restaurant.gui.CustomerGui;
 import agent.Agent;
@@ -23,6 +24,7 @@ public class PersonAgent extends Agent {
 	private List<Task> taskList = new ArrayList<Task>(); 
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
+	
 
 	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak};
 	enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak };
@@ -53,12 +55,14 @@ public class PersonAgent extends Agent {
 	class MyRestaurant {
 		//Restaurant r; 
 		HostAgent h;
+		CashierAgent c;
 		Point location;
 		String type;
 		String name;
 		CustomerRole cr;
-		MyRestaurant(HostAgent h, Point location, String type, String name) {
+		MyRestaurant(HostAgent h, CashierAgent c, Point location, String type, String name) {
 			this.h = h;
+			this.c = c;
 			this.location = location;
 			this.type = type;
 			this.name = name;
@@ -85,8 +89,10 @@ public class PersonAgent extends Agent {
 		Role role;
 	}
 	enum Shift {day, night}
-	public PersonAgent(String name) {
+	
+	public PersonAgent(String name, double cash) {
 	    this.name = name;
+	    this.cashOnHand = cash;
 	}
 	
 	public void addRole(Role r) {
@@ -94,8 +100,8 @@ public class PersonAgent extends Agent {
         r.setPerson(this);
 	}
 	
-	public void addRestaurant(HostAgent h, Point location, String type, String name) {
-		restaurants.add(new MyRestaurant(h, location, type, name));
+	public void addRestaurant(HostAgent h, CashierAgent c, Point location, String type, String name) {
+		restaurants.add(new MyRestaurant(h, c, location, type, name));
 	}
 	
 	public void setName(String name){
@@ -121,7 +127,7 @@ public class PersonAgent extends Agent {
 		this.currentHour = hour;
 		this.dayOfWeek = dayOfWeek;
 		this.hungerLevel += 10;
-		
+		/*
 		if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 20 || currentHour <= 11)) ||
 				(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 12 || currentHour <= 3))){
 			boolean inList = false;
@@ -132,8 +138,8 @@ public class PersonAgent extends Agent {
 			if(!inList){
 				taskList.add(Task.goToWork);
 			}
-		}
-		
+		}*/
+		print("newhour");
 		if(hour == 23 && isRenter){
 			boolean inList = false;
 			for(Task t: taskList){
@@ -166,6 +172,7 @@ public class PersonAgent extends Agent {
 				taskList.add(Task.goEatFood);
 			}
 		} 
+		stateChanged();
 	}
 	
 	public void msgGoBackToWork(){
@@ -189,6 +196,7 @@ public class PersonAgent extends Agent {
 		if(!inList){
 			taskList.add(Task.onWorkBreak);
 		}
+		stateChanged();
 	}
 	
 	public void msgNoMoreFood(){
@@ -200,6 +208,7 @@ public class PersonAgent extends Agent {
 		if(!inList){
 			taskList.add(Task.goToMarket);
 		}
+		stateChanged();
 	}
 	
 	public void msgGetFoodFromMarket(Map<String,Integer> toOrderFromMarket){
@@ -218,6 +227,7 @@ public class PersonAgent extends Agent {
 		}else{
 			this.toOrderFromMarket = toOrderFromMarket;
 		}
+		stateChanged();
 	}
 	
 	public void msgDepositBusinessCash(){
@@ -229,15 +239,18 @@ public class PersonAgent extends Agent {
 		if(!inList){
 			taskList.add(Task.goToBankNow);
 		}
+		stateChanged();
 	}
 	public void msgReenablePerson(){
 		//gui.setPresent();
 	}
 	public void msgBusIshere(){
 		transportState = TransportState.GettingOnBus;
+		stateChanged();
 	}
 	public void msgAtYourStop(){
 		transportState = TransportState.GettingOffBus;
+		stateChanged();
 	}
 	public void msgDoneWorking(){
 		state = State.doingNothing;
@@ -249,11 +262,10 @@ public class PersonAgent extends Agent {
 		}
 		
 		*/
+		stateChanged();
 	}
 	
     public boolean pickAndExecuteAnAction() {
-
-    	
         try {
         	Task temp = null;
 /*
@@ -342,12 +354,12 @@ public class PersonAgent extends Agent {
 			if(transportState == TransportState.none && state == State.goingToWork){
 				finishGoingToWork();
 				return true;
-			}
+			}*/
 			if(transportState == TransportState.none && state == State.goingOutToEat){
 				finishGoingToRestaurant();
 				return true;
 			}
-			if(transportState == TransportState.none && state == State.goingHomeToEat){
+			/*if(transportState == TransportState.none && state == State.goingHomeToEat){
 				finishGoingToHome();
 				return true;
 			}
@@ -386,6 +398,7 @@ public class PersonAgent extends Agent {
     	location = Location.AtRestaurant;
     	MyRestaurant mr = restaurants.get(0); // hack for first restaurant for now
     	destination = mr.location;
+
     	personGui.DoWalkTo(destination);
 		try {
 			waitingResponse.acquire();
@@ -396,15 +409,41 @@ public class PersonAgent extends Agent {
     	//mr.h.msgIWantToEat(rcr);
     }
     private void finishGoingToRestaurant(){
+    	print("finishGoingToRestaurant");
     	state = State.eating;
     	MyRestaurant mr = restaurants.get(0); // hack for first restaurant for now
-    	CustomerRole role = mr.cr;
+    	CustomerRole role = new CustomerRole(this, name, cashOnHand);
+    	role.setGui(new CustomerGui(role));
     	roles.add(role);
     	role.active = true;
+    	role.setHost(mr.h);
+    	role.setCashier(mr.c);
+    	personGui.gui.insideAnimationPanel.addGui(role.getGui());
+    	role.getGui().setPresent(true);
     	role.gotHungry();
     }
 
 	public void msgAnimationFinshed() {
+    	print("msgAnimationFinshed");
 		waitingResponse.release();	
+	}
+
+	public PersonGui getGui() {
+		return personGui;
+	}
+
+	public void setHost(HostAgent host) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setCashier(CashierAgent cashier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setGui(PersonGui g) {
+		personGui = g;
+		
 	}
 }

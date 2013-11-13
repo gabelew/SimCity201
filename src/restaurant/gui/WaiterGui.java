@@ -13,9 +13,11 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.gui.Gui;
 import city.gui.SimCityGui;
 import restaurant.CustomerAgent;
 import restaurant.WaiterAgent;
+import restaurant.interfaces.Customer;
 
 public class WaiterGui implements Gui {
 
@@ -180,7 +182,7 @@ public class WaiterGui implements Gui {
 	}
 
 	int table = -1;
-	public void DoBringToTable(CustomerAgent c, int t) {
+	public void DoBringToTable(Customer c, int t) {
         c.getGui().msgYourTableIsReady(this);
         table = t;
 	}

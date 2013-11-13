@@ -1,9 +1,6 @@
 package city.gui;
 
 import javax.swing.*;
-
-import restaurant.gui.RestaurantPanel;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -25,11 +22,11 @@ public class ListPanel extends JPanel implements ActionListener {
     private JButton pauseAgentsB = new JButton("Pause");
     private JPanel buttonGroup = new JPanel();
 
-    private InfoPanel restPanel;
+    private InfoPanel infoPanel;
     private String type;
     
     private JTextField typeNameHere = new JTextField();
-    private JCheckBox setStateCB;
+   // private JCheckBox setStateCB;
     //private List<JCheckBox> stateCBList = new ArrayList<JCheckBox>();
     private List<ListItem> listItems = new ArrayList<ListItem>();
     private int tableCounter = 0;
@@ -54,7 +51,7 @@ public class ListPanel extends JPanel implements ActionListener {
      * @param type indicates if this is for customers or waiters
      */
     public ListPanel(InfoPanel infoPanel, String type) {
-        restPanel = infoPanel;
+        this.infoPanel = infoPanel;
         this.type = type;
 
         setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
@@ -67,16 +64,16 @@ public class ListPanel extends JPanel implements ActionListener {
         addListItemView.setMaximumSize(addCustViewSize);      
 
         addListItemView.add(getTypeNameHere(),BorderLayout.CENTER);
-        setStateCB = new JCheckBox();
+    /*    setStateCB = new JCheckBox();
         setStateCB.setVisible(true);
         setStateCB.addActionListener(this);
-        if(type == "Customers")
+        if(type == "Persons")
         	setStateCB.setText("Hungry?");
         else if(type == "Waiters")
         	setStateCB.setText("Working?");
         setStateCB.setSelected(false);
         setStateCB.setEnabled(true);
-        addListItemView.add(setStateCB, BorderLayout.EAST);
+        addListItemView.add(setStateCB, BorderLayout.EAST);*/
         
         
         buttonGroup.setLayout(new BoxLayout(buttonGroup, BoxLayout.X_AXIS));
@@ -102,7 +99,7 @@ public class ListPanel extends JPanel implements ActionListener {
         pauseAgentsB.setMinimumSize(pauseAgentsBSize);
         pauseAgentsB.setMaximumSize(pauseAgentsBSize);
         
-        if(this.type == "Tables")
+        if(this.type == "Persons")
         {
         	buttonGroup.add(pauseAgentsB);
         }
@@ -128,23 +125,23 @@ public class ListPanel extends JPanel implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addPersonB) {
-            if(type == "Customers"){
+            if(type == "Persons"){
             	addPerson(getTypeNameHere().getText());
             }
-            if(type == "Waiters"){
+           /* if(type == "Waiters"){
             	addPerson(getTypeNameHere().getText());
             }
             if(type == "Tables"){
             	addPerson("Table " + ++tableCounter);	
-            }
+            }*/
             
             getTypeNameHere().setText(null);
-            setStateCB.setSelected(false);
+           // setStateCB.setSelected(false);
 
         }
         else if(e.getSource() == pauseAgentsB)
         {
-        	restPanel.pauseAgents();	
+        	infoPanel.pauseAgents();	
         }
         else //if(listItems.contains(e.getSource()))
         {
@@ -154,9 +151,9 @@ public class ListPanel extends JPanel implements ActionListener {
 	        	for (ListItem temp:listItems){
 	                if (e.getSource() == temp.stateCB)
 	                {
-	                	if(type == "Customers")
+	                	if(type == "Persons")
 	                	{
-	                		restPanel.setHungry(type, temp.stateCB.getName());
+	                		infoPanel.setHungry(type, temp.stateCB.getName());
 	                		temp.stateCB.setEnabled(false);
 	                	}
 	                	/*if(type == "Waiters")
@@ -212,7 +209,7 @@ public class ListPanel extends JPanel implements ActionListener {
         	}
             newstateCB.addActionListener(this);
             
-            if(type == "Customers")
+            if(type == "Persons")
             	newstateCB.setText("Hungry?");
             if(type == "Waiters")
             	newstateCB.setText("Working?");
@@ -220,7 +217,7 @@ public class ListPanel extends JPanel implements ActionListener {
             	newstateCB.setText("delete?");
             
             newstateCB.setSelected(false);
-
+/*
             if(type == "Waiters" && setStateCB.isSelected())
             {
             	newstateCB.setText("Break?");
@@ -240,6 +237,7 @@ public class ListPanel extends JPanel implements ActionListener {
             
             addNewCustView.add(newstateCB, BorderLayout.EAST);
 
+            */
             newstateCB.addActionListener(this);
             
             JLabel label = new JLabel(name);
@@ -265,11 +263,11 @@ public class ListPanel extends JPanel implements ActionListener {
             
             if(type != "Tables")
             {
-            	restPanel.addPerson(type, name, setStateCB.isSelected());//puts customer or waiter on list
+            	infoPanel.addPerson(type, name);//puts customer or waiter on list
             }
             if(type == "Tables")
             {
-            	restPanel.addTable();//puts customer or waiter on list
+            	infoPanel.addTable();//puts customer or waiter on list
             }
             
             validate();
@@ -327,7 +325,7 @@ public class ListPanel extends JPanel implements ActionListener {
         addNewCustView.add(label);
         view.add(addNewCustView);
             	
-    	restPanel.addTable(x, y);
+    	infoPanel.addTable(x, y);
     	
     	validate();
     }

@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import city.gui.Gui;
+
 public class HostGui implements Gui {
 
     private HostAgent agent = null;

@@ -1,6 +1,7 @@
 package restaurant.test.mock;
 
 import restaurant.WaiterAgent.Menu;
+import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
@@ -78,6 +79,12 @@ public class MockCustomer extends Mock implements Customer {
 	}
 	
 	public void msgTableIsReady() {
+	}
+
+	@Override
+	public CustomerGui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

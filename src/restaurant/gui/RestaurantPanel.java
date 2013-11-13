@@ -9,6 +9,8 @@ import restaurant.WaiterAgent;
 
 import javax.swing.*;
 
+import city.PersonAgent;
+import city.gui.PersonGui;
 import city.gui.SimCityGui;
 
 import java.awt.*;
@@ -163,14 +165,9 @@ public class RestaurantPanel extends JPanel implements KeyListener {
             	temp.getGui().askBreak();
         }
 	}
-    /**
-     * Adds a customer or waiter to the appropriate list
-     *
-     * @param type indicates whether the person is a customer or waiter (later)
-     * @param name name of person
-     */
+
 	public void createCustomer(String name){
-		CustomerAgent c = null;
+	/*	CustomerAgent c = null;
 		if(stringIsDouble(name) && Double.valueOf(name) >= 0){
 			c = new CustomerAgent(name, Double.valueOf(name));
 		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
@@ -181,14 +178,38 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		}	
 		CustomerGui g = new CustomerGui(c, gui);
 
-		gui.insideAnimationPanel.addGui(g);// dw
+		gui.animationPanel.addGui(g);// dw
 		c.setHost(host);
 		c.setCashier(cashier);
 		c.setGui(g);
 		customers.add(c);
 		c.startThread();
-	}
-	
+	*/}
+/*	public void createPerson(String name){
+		PersonAgent c = null;
+		if(stringIsDouble(name) && Double.valueOf(name) >= 0){
+			c = new PersonAgent(name, Double.valueOf(name));
+		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
+				|| name.equalsIgnoreCase("ditch") || name.equalsIgnoreCase("cheap")){
+			c = new PersonAgent(name, NO_CASH);   			
+		}else{
+			c = new PersonAgent(name, CUSTOMER_DEFAULT_CASH);
+		}	
+		PersonGui g = new PersonGui(c, gui);
+
+		gui.animationPanel.addGui(g);// dw
+		c.setHost(host);
+		c.setCashier(cashier);
+		c.setGui(g);
+		persons.add(c);
+		c.startThread();
+	}*/
+	/**
+     * Adds a customer or waiter to the appropriate list
+     *
+     * @param type indicates whether the person is a customer or waiter (later)
+     * @param name name of person
+     */
     public void addPerson(String type, String name) {
 
     	if (type.equals("Customers")) {
@@ -226,7 +247,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     }
     public void addPerson(String type, String name, Boolean isHungry) {
 
-    	if (type.equals("Customers")) {
+    	/*if (type.equals("Customers")) {
     		CustomerAgent c = null;
     		if(stringIsDouble(name)){
     			c = new CustomerAgent(name, Double.valueOf(name));
@@ -248,7 +269,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		
     		customers.add(c);
     		c.startThread();
-    	}
+    	}*/
     	
     	if (type.equals("Waiters")) {
     		WaiterAgent w = new WaiterAgent(name);	

@@ -16,11 +16,13 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.CustomerRole;
 
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private CustomerRole role = null;
 	private WaiterGui waiterGui = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
@@ -28,7 +30,7 @@ public class CustomerGui implements Gui{
 	private static BufferedImage customerImg = null;
 	private static BufferedImage customerSittingImg = null;
 	//private HostAgent host;
-	SimCityGui gui;
+	//SimCityGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -62,7 +64,7 @@ public class CustomerGui implements Gui{
     static final int WAITINGSEATS_Y_GAP = 30;
     
 
-	public CustomerGui(CustomerAgent c, SimCityGui gui){ //HostAgent m) {
+	public CustomerGui(CustomerRole role){ //HostAgent m) {
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -71,7 +73,7 @@ public class CustomerGui implements Gui{
 		} catch (IOException e) {
 		}
 		
-		agent = c;
+		this.role = role;
 		xPos = CUST_START_POS;
 		yPos = CUST_START_POS;
 		xDestination = xWAITING_AREA;
@@ -83,7 +85,7 @@ public class CustomerGui implements Gui{
         }
         
 		//maitreD = m;
-		this.gui = gui;
+		//this.gui = gui;
 		
 	}
 
@@ -101,7 +103,7 @@ public class CustomerGui implements Gui{
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command==Command.GoToHost && xDestination == xWAITING_AREA && yDestination == yWAITING_AREA)
 			{
-				agent.msgAnimationFinishedDoEnterRestaurant();
+				role.msgAnimationFinishedDoEnterRestaurant();
 				command=Command.noCommand;
 			}
 			else if(command==Command.WaitForSeat){
@@ -116,19 +118,19 @@ public class CustomerGui implements Gui{
 			else if (command==Command.GoToSeat && toldToSeat){ 
 				toldToSeat = false;
 				state = State.sitting;
-				agent.msgAnimationFinishedGoToSeat();
+				role.msgAnimationFinishedGoToSeat();
 				command=Command.noCommand;
 			}
 			else if (command==Command.GoToCashier
 					&& xDestination == xCASHIER_POSITION && yDestination == yCASHIER_POSITION){ 
-				agent.msgAnimationFinishedGoToCashier();
+				role.msgAnimationFinishedGoToCashier();
 				command=Command.noCommand;
 			}
 			else if (command==Command.LeaveRestaurant) {
-				agent.msgAnimationFinishedLeaveRestaurant();
+				role.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
+				//gui.setCustomerEnabled(agent);
 				command=Command.noCommand;
 			}
 		}
@@ -160,7 +162,7 @@ public class CustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		role.gotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {
@@ -225,6 +227,7 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void DoEnterRestaurant() {
+		System.out.println("chad im here");
 		xDestination = xWAITING_AREA;
 		yDestination = yWAITING_AREA;
 		command = Command.GoToHost;

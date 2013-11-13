@@ -3,6 +3,7 @@ package restaurant.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import city.gui.Gui;
 import city.gui.SimCityGui;
 
 import java.awt.*;
@@ -312,4 +313,6 @@ public class RestaurantAnimationPanel extends JPanel implements ActionListener, 
 	public void addNewTable() {
 		NTABLES++;
 	}
+
+	
 }

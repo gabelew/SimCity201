@@ -3,6 +3,10 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import restaurant.gui.CashierGui;
+import restaurant.gui.CustomerGui;
+import restaurant.gui.WaiterGui;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +25,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private static int NBUILDINGS = 0;
 	private final int WINDOWX = 865;
     private final int WINDOWY = 467;
-    private static int timeIncrementer = 0;
+    private static int timeIncrementer = 1400;
     
     static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  
@@ -152,6 +156,20 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        	g2.fillRect(832+20, 30+80*(i)+30, 20, 7);
 	        }
 
+	        
+
+		for(Gui gui : guis) {
+			if (gui.isPresent()) {
+				gui.updatePosition();
+	        }
+	    }
+		
+		for(Gui gui : guis) {
+			if (gui.isPresent()) {
+				gui.draw(g2);
+	        }
+        }
+		
         //Here is the buildings
         for(int i = ZERO; i<NBUILDINGS; i++){
         	g.drawImage(simCityGui.getBuildingImg(i), simCityGui.getBuildingXCoord(i), simCityGui.getBuildingYCoord(i), null);
@@ -209,5 +227,9 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	}
 	public void addNewBuilding() {
 		NBUILDINGS++;
+	}
+
+	public void addGui(PersonGui gui) {
+        guis.add(gui);
 	}
 }

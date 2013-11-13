@@ -7,6 +7,9 @@ import restaurant.gui.Table;
 
 import javax.swing.*;
 
+import city.PersonAgent;
+import agent.Agent;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -25,7 +28,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	/* The GUI had two frames, the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
-	AnimationPanel animationPanel = new AnimationPanel(this);
+	public AnimationPanel animationPanel = new AnimationPanel(this);
 	public RestaurantAnimationPanel insideAnimationPanel = new RestaurantAnimationPanel(this);
 	
     /* restPanel holds 2 panels
@@ -44,6 +47,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private JPanel APanel = new JPanel();
     private List<Table> tables = new ArrayList<Table>();
     private List<BuildingIcon> buildings = new ArrayList<BuildingIcon>();
+    public List<PersonAgent> persons = new ArrayList<PersonAgent>();
     
     private JFrame bottomPanel = new JFrame();
     private JPanel topPanel = new JPanel();
@@ -374,6 +378,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 
 	public void newHour() {
+		System.out.println("30 secs");
 		hour++;
 		if(hour == 24){
 			for(int i = daysOfWeek.length; i>0;i--){
@@ -386,8 +391,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 				}
 			}
 			hour = 0;
-		}
-			
+		}	
+	for(PersonAgent p:persons){
+		p.msgNextHour(hour, dayOfWeek);
 	}
-
+	
+	}
+	
 }

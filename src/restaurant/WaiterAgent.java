@@ -5,6 +5,7 @@ import agent.Agent;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.roles.CustomerRole;
 import restaurant.gui.WaiterGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
@@ -397,7 +398,7 @@ public class WaiterAgent extends Agent implements Waiter{
 		//Same with "table"
 		StringBuilder msg = new StringBuilder("Seating " + customer + " at " + table);
 		print(msg.toString());
-		waiterGui.DoBringToTable((CustomerAgent)customer.c, table); 
+		waiterGui.DoBringToTable(customer.c, table); 
 	}
 	
 	private void doGoToEntrance(){

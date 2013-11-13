@@ -14,6 +14,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.gui.Gui;
 import city.gui.SimCityGui;
 import restaurant.CookAgent;
 import restaurant.CookAgent.Order;
