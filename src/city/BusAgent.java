@@ -40,6 +40,8 @@ public class BusAgent extends Agent{
 				b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
 			}
 		}
+		
+		stateChanged();
 	}
 	
 	public void msgComingAboard(PersonAgent p, Point Destination){
@@ -48,13 +50,27 @@ public class BusAgent extends Agent{
 				b.passengers.add(new MyPassenger(p, StopEvent.dropOff));
 			}
 		}
+		
+		stateChanged();
+	}
+	
+	public void msgAtStop(Point busStop){ //from animation
+		for(MyBusStop b : busStops){
+			if(b.location == busStop){
+				atStop = b;
+			}
+		}	
+		
+		stateChanged();
 	}
 	
 	//Scheduler
 	
 	protected boolean pickAndExecuteAnAction() {
 		
-		
+		if(atStop != null){
+			transferPeople();
+		}
 		
 		
 		return false;
@@ -64,7 +80,9 @@ public class BusAgent extends Agent{
 	
 	//Actions
 	
-	
+	private void transferPeople(){
+		
+	}
 	
 	
 	
