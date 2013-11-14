@@ -70,6 +70,7 @@ public class BusAgent extends Agent{
 		
 		if(atStop != null){
 			transferPeople();
+			return true;
 		}
 		
 		
@@ -81,6 +82,20 @@ public class BusAgent extends Agent{
 	//Actions
 	
 	private void transferPeople(){
+		MyBusStop s = atStop;
+		atStop = null;
+		
+		for(MyPassenger p : s.passengers){
+			if(p.stopEvent == StopEvent.dropOff){
+				p.person.msgAtYourStop();
+			}
+		}	
+		
+		for(MyPassenger p : s.passengers){
+			if(p.stopEvent == StopEvent.pickUp){
+				p.person.msgBusIshere();
+			}
+		}	
 		
 	}
 	
