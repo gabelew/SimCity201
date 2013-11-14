@@ -26,12 +26,26 @@ public class BusAgent extends Agent{
 	enum StopEvent {pickUp, dropOff}
 	MyBusStop atStop = null;
 	
+	
+	BusAgent(){
+
+	}
+	
+	
 	//Messages
 	
 	public void msgWaitingForBus(PersonAgent p, Point busStop){
 		for(MyBusStop b : busStops){
 			if(b.location == busStop){
 				b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
+			}
+		}
+	}
+	
+	public void msgComingAboard(PersonAgent p, Point Destination){
+		for(MyBusStop b : busStops){
+			if(b.location == Destination){
+				b.passengers.add(new MyPassenger(p, StopEvent.dropOff));
 			}
 		}
 	}
