@@ -50,7 +50,7 @@ public class PersonAgent extends Agent {
 	String dayOfWeek;
 	
 	public int hungerLevel = 51;
-	double cashOnHand, businessFunds;
+	public double cashOnHand, businessFunds;
 	
 	class MyRestaurant {
 		//Restaurant r; 
@@ -121,6 +121,10 @@ public class PersonAgent extends Agent {
 	}
 	public void msgTransferCompleted(PersonAgent sender, double amount, String purpose) {
 
+	}
+	
+	public void msgHereIsBalance(double amount, String accountType) {
+		
 	}
 
 	public void msgNextHour(int hour, String dayOfWeek) {
