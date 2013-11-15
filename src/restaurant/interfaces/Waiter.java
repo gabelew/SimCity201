@@ -19,5 +19,7 @@ public interface Waiter {
 	public abstract void msgImReadyToOrder(Customer c);
 	public abstract void msgHereIsMyOrder(Customer c, String choice);
 	public abstract void msgDoneEatingAndLeaving(Customer c);
+	public abstract void msgOutOfOrder(String choice, int table);
+	public abstract void msgOrderIsReady(String choice, int table);
 
 }

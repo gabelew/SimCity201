@@ -43,5 +43,14 @@ public class MockWaiter extends Mock implements Waiter{
 		
 	}
 
+	@Override
+	public void msgOutOfOrder(String choice, int table){
+		log.add(new LoggedEvent("Received msgOutOfOrder from cook."));
+	}
+	
+	@Override 
+	public void msgOrderIsReady(String choice, int table){
+		log.add(new LoggedEvent("Received msgOrderIsReady from cook."));
+	}
 
 }

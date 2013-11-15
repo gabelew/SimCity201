@@ -14,6 +14,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.roles.CookRole.RoleOrder;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import restaurant.CookAgent;
@@ -41,6 +42,7 @@ public class CookGui implements Gui  {
 		FoodIcon food;
 		Point point;
 		Order order;
+		RoleOrder roleOrder;
 		FoodState state;
 		public int cookingSpot = -1;
 		public int pickUpSpot = -1;
@@ -49,6 +51,18 @@ public class CookGui implements Gui  {
 			this.food = f;
 			this.point = p;
 			this.order = o;
+			
+			if(order.choice.equalsIgnoreCase("steak") || order.choice.equalsIgnoreCase("chicken") || order.choice.equalsIgnoreCase("burger")){
+				state = FoodState.PutFoodOnGrill;
+			}else{
+				state = FoodState.PutFoodOnCounter;
+			}
+		}
+		
+		MyFood(FoodIcon f, Point p, RoleOrder o){
+			this.food = f;
+			this.point = p;
+			this.roleOrder = o;
 			
 			if(order.choice.equalsIgnoreCase("steak") || order.choice.equalsIgnoreCase("chicken") || order.choice.equalsIgnoreCase("burger")){
 				state = FoodState.PutFoodOnGrill;
@@ -247,6 +261,24 @@ public class CookGui implements Gui  {
 		}
 		
 	}
+	
+	public void DoCookFood(RoleOrder order) {
+		// Grab food from fidge(already at fidge
+		// if burger,steak,chicken put on grill and set timer
+		// if salad or cookie, put on right
+		if(order.choice.equalsIgnoreCase("steak") || order.choice.equalsIgnoreCase("chicken") || order.choice.equalsIgnoreCase("burger")){
+			foods.add(new MyFood(new FoodIcon(order.choice+"g"), new Point(xFOOD_OFFSET, yFOOD_OFFSET), order));
+			xDestination = xGRILL_POSITION;
+			yDestination = yGRILL_POSITION;
+			command = Command.GoToGrill;
+		}else{
+			foods.add(new MyFood(new FoodIcon(order.choice+"g"), new Point(xFOOD_OFFSET, yFOOD_OFFSET), order));
+			xDestination = xKITCHEN_COUNTER_POSITION;
+			yDestination = yKITCHEN_COUNTER_POSITION;
+			command = Command.GoToCounter;
+		}
+		
+	}
 
 	private void putFoodOnGrill(MyFood f) {
 		for(int i = 0; i < grillingSpots.size(); i++){
@@ -332,12 +364,40 @@ public class CookGui implements Gui  {
 			command = Command.GoToCounter;
 		}
 	}
+	
+	public void DoPlateFood(RoleOrder o){
+		MyFood f = findMyFood(o);
+
+		if(f.order.choice.equalsIgnoreCase("steak") || f.order.choice.equalsIgnoreCase("chicken") || f.order.choice.equalsIgnoreCase("burger")){
+			xDestination = xGRILL_POSITION;
+			yDestination = yGRILL_POSITION;
+			f.state = FoodState.PickUpFromGrill;
+			command = Command.GoToGrill;
+		}else{
+			xDestination = xKITCHEN_COUNTER_POSITION;
+			yDestination = yKITCHEN_COUNTER_POSITION;
+			f.state = FoodState.PickUpFromCounter;
+			command = Command.GoToCounter;
+		}
+	}
 
 	private MyFood findMyFood(Order o) {
 
 		synchronized(foods){
 			for(MyFood f: foods){
 				if(f.order == o){
+					return f;
+				}
+			}
+		}
+		return null;
+	}
+	
+	private MyFood findMyFood(RoleOrder o) {
+
+		synchronized(foods){
+			for(MyFood f: foods){
+				if(f.roleOrder == o){
 					return f;
 				}
 			}
