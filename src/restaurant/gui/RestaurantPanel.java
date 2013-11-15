@@ -58,7 +58,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 
     public RestaurantPanel(SimCityGui gui) {
 
-        markets.add(new MarketAgent("Vons Market"));
+       /* markets.add(new MarketAgent("Vons Market"));
         markets.add(new MarketAgent("Sprouts Market"));
         markets.add(new MarketAgent("CostCo"));
         
@@ -77,7 +77,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
         gui.restaurantAnimationPanel.addGui(cookGui);
         host.startThread();
         cashier.startThread();
-        cook.startThread();
+        cook.startThread();*/
 
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
@@ -212,7 +212,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
      */
     public void addPerson(String type, String name) {
 
-    	if (type.equals("Customers")) {
+    	/*if (type.equals("Customers")) {
     		createCustomer(name);
     	}
     	
@@ -227,11 +227,11 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     		w.setCook(cook);
     		waiters.add(w);
     		w.startThread();
-    	}
+    	}*/
     }
     public void createWaiter(String name){
 
-		WaiterAgent w = new WaiterAgent(name);	
+		/*WaiterAgent w = new WaiterAgent(name);	
 		WaiterGui g = new WaiterGui(w, gui);
 
 		gui.restaurantAnimationPanel.addGui(g);// dw
@@ -243,7 +243,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		w.getGui().setWorking();
 		
 		waiters.add(w);
-		w.startThread();
+		w.startThread();*/
     }
     public void addPerson(String type, String name, Boolean isHungry) {
 
@@ -272,7 +272,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     	}*/
     	
     	if (type.equals("Waiters")) {
-    		WaiterAgent w = new WaiterAgent(name);	
+    	/*	WaiterAgent w = new WaiterAgent(name);	
     		WaiterGui g = new WaiterGui(w, gui);
 
     		gui.restaurantAnimationPanel.addGui(g);// dw
@@ -285,7 +285,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     			w.getGui().setWorking();
     		
     		waiters.add(w);
-    		w.startThread();
+    		w.startThread();*/
     	}
 
     }

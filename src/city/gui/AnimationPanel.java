@@ -22,10 +22,11 @@ import java.util.concurrent.Semaphore;
 public class AnimationPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
-    private static int NBUILDINGS = 0;
 	private final int WINDOWX = 865;
     private final int WINDOWY = 467;
     private static int timeIncrementer = 1400;
+
+    List<BuildingIcon> buildings = new ArrayList<BuildingIcon>();
     
     static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  
@@ -75,7 +76,17 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	static final int SIDEWALK_WIDTH = 12;
 	static final int STREET_WIDTH = 20;
     static final int VERT_STREET_X_START = 25;
-    
+	static final int BUILDING_ROWS = 4;
+	static final int BUILDING_COLUMNS = 19;
+    static final int BUILDING_START_X = 57;
+    static final int BUILDING_START_Y = 68;
+    static final int BUILDING_OFFSET_X = 40;
+    static final int BUILDING_OFFSET_Y = 80;	
+	static final int xBUILDING_IMG_POINT_OFFSET = 1;
+	static final int yBUILDING_IMG_POINT_OFFSET = 1;
+	static final int xBUILDING_IMG_AREA_OFFSET = 35;
+	static final int yBUILDING_IMG_AREA_OFFSET = 33;
+
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
@@ -89,7 +100,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     	timer.start();	
 
         addMouseListener(this);	
-		
+		this.addDefaultBuildings();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -165,34 +176,19 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         }
 		
         //Here is the buildings
-        for(int i = ZERO; i<NBUILDINGS; i++){
-        	g.drawImage(simCityGui.getBuildingImg(i), simCityGui.getBuildingXCoord(i), simCityGui.getBuildingYCoord(i), null);
+        for(int i = ZERO; i<buildings.size(); i++){
+        	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
         }        
     }
-/*
-    public void addGui(CustomerGui gui) {
-        guis.add(gui);
-    }
-
-    public void addGui(CookGui gui) {
-        guis.add(gui);
-    }
     
-    public void addGui(WaiterGui gui) {
+	public void addGui(PersonGui gui) {
         guis.add(gui);
-    }
-
-    public void addGui(HostGui gui) {
-        guis.add(gui);
-    }
-    public void addGui(CashierGui gui) {
-        guis.add(gui);
-    }*/
+	}
     
 	@Override
 	public void mouseClicked(MouseEvent me) {
 		//get Building
-				BuildingIcon clickedBuilding = simCityGui.getBuildingAt(me.getPoint());
+				BuildingIcon clickedBuilding = getBuildingAt(me.getPoint());
 
 				if(clickedBuilding != null)
 				{
@@ -219,11 +215,67 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	@Override
 	public void mouseReleased(MouseEvent me) {
 	}
-	public void addNewBuilding() {
-		NBUILDINGS++;
-	}
 
-	public void addGui(PersonGui gui) {
-        guis.add(gui);
-	}
+	private void addDefaultBuildings(){
+	    	for(int j =0; j<BUILDING_ROWS;j++){
+		    	for(int i = 0; i<BUILDING_COLUMNS;i++){
+		    		if(i < 5){
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house"));
+
+		        	}else if(i < 7){
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
+		        	}else if(i < 8){
+		        		if(j < 2){
+			    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant"));
+		    			}else if(j<3){
+			    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market"));
+		    			}
+		    			else{
+			    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant"));
+		    			}
+		        	}else if(i<9){
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"bank"));
+		        	}else if(i<10){
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market"));
+		        	}else if(i<11){
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"bank"));
+		        	}else if(i<12){
+		        		if(j < 2){
+			    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant"));
+		    			}else if(j<3){
+			    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market"));
+		    			}
+		    			else{
+			    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
+		    			}
+		        	}else if(i<14){
+		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
+		        	}
+		        	else{
+		        		buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house"));
+		        	}
+		    	}
+	    	}
+	    	
+	    }
+		public BuildingIcon getBuildingAt(Point i) {
+			for(BuildingIcon b: buildings)
+			{
+				if(b.getX()+xBUILDING_IMG_POINT_OFFSET <= i.x && b.getX()+xBUILDING_IMG_AREA_OFFSET >= i.x && b.getY()+yBUILDING_IMG_POINT_OFFSET <= i.y && b.getY()+yBUILDING_IMG_AREA_OFFSET >= i.y)
+				{
+					return b;
+				}
+			}
+			return null;
+		}
+		public int getBuildingXCoord(int i){
+	    	return buildings.get(i).getX();
+	    }
+	    public int getBuildingYCoord(int i){
+	    	return buildings.get(i).getY();
+	    }
+	    public BufferedImage getBuildingImg(int i){
+	    	return buildings.get(i).getImg();
+	    }
+
 }

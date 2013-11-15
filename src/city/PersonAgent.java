@@ -442,7 +442,7 @@ public class PersonAgent extends Agent {
     	print("finishGoingToRestaurant");
     	state = State.eating;
     	
-    	MyRestaurant mr = restaurants.get(0); // hack for first restaurant for now
+    	/*MyRestaurant mr = restaurants.get(0); // hack for first restaurant for now
     	CustomerRole role = new CustomerRole(this, name, cashOnHand);
     	role.setGui(new CustomerGui(role));
     	roles.add(role);
@@ -451,7 +451,7 @@ public class PersonAgent extends Agent {
     	role.setCashier(mr.c);
     	personGui.gui.restaurantAnimationPanel.addGui(role.getGui());
     	role.getGui().setPresent(true);
-    	role.gotHungry();
+    	role.gotHungry();*/
     }
 
 	public void msgAnimationFinshed() {

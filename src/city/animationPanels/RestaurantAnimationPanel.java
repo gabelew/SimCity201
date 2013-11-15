@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
-public class RestaurantAnimationPanel extends insideBuildingPanel implements ActionListener, MouseListener {
+public class RestaurantAnimationPanel extends InsideAnimationPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
     private static int NTABLES = 0;
@@ -32,11 +32,8 @@ public class RestaurantAnimationPanel extends insideBuildingPanel implements Act
 	private Table clickedTable = null;
 	private int clickedTableMouseXOffset;
 	private int clickedTableMouseYOffset;
-	private final int WINDOWX = 934;
-    private final int WINDOWY = 467;
 	public boolean isVisible = true;
 	
-    static final int TIMERDELAY = 10;
     static final int xREST_POSITION = 350;  
     static final int yREST_POSITION = 400; 
     static final int xCOOK_POSITION = 340;  
@@ -81,7 +78,6 @@ public class RestaurantAnimationPanel extends insideBuildingPanel implements Act
     static final int NPLATING_TABLES = 4;
     static final int NRESTSEATS = 16;
 
-    private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
@@ -244,25 +240,6 @@ public class RestaurantAnimationPanel extends insideBuildingPanel implements Act
         	}
         }
 
-    }
-
-    public void addGui(CustomerGui gui) {
-        guis.add(gui);
-    }
-
-    public void addGui(CookGui gui) {
-        guis.add(gui);
-    }
-    
-    public void addGui(WaiterGui gui) {
-        guis.add(gui);
-    }
-
-    public void addGui(HostGui gui) {
-        guis.add(gui);
-    }
-    public void addGui(CashierGui gui) {
-        guis.add(gui);
     }
     
 	@Override

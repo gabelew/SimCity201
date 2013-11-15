@@ -184,9 +184,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     		PersonGui g = new PersonGui(p, gui);
     		g.setPresent(true);
     		gui.animationPanel.addGui(g);// dw
-    		p.setHost(gui.restPanel.host);
-    		p.setCashier(gui.restPanel.cashier);
-    		p.addRestaurant(gui.restPanel.host, gui.restPanel.cashier,new Point(75+40*7,86), "hi", "01");
+    		
+    		//p.setHost(gui.restPanel.host);
+    		//p.setCashier(gui.restPanel.cashier);
+    		//p.addRestaurant(gui.restPanel.host, gui.restPanel.cashier,new Point(75+40*7,86), "hi", "01");
+    		
     		//HostAgent h, Point location, String type, String name
     		p.setGui(g);
     		

@@ -7,6 +7,12 @@ import restaurant.gui.Table;
 import javax.swing.*;
 
 import city.PersonAgent;
+import city.animationPanels.ApartmentAnimationPanel;
+import city.animationPanels.BankAnimationPanel;
+import city.animationPanels.HouseAnimationPanel;
+import city.animationPanels.InsideAnimationPanel;
+import city.animationPanels.InsideBuildingPanel;
+import city.animationPanels.MarketAnimationPanel;
 import city.animationPanels.RestaurantAnimationPanel;
 import agent.Agent;
 
@@ -29,29 +35,23 @@ public class SimCityGui extends JFrame implements ActionListener {
      * and the animation frame, (in variable animationFrame within gui)
      */
 	public AnimationPanel animationPanel = new AnimationPanel(this);
-	public RestaurantAnimationPanel restaurantAnimationPanel = new RestaurantAnimationPanel(this);
-	
+    
     /* restPanel holds 2 panels
      * 1) the staff listing, menu, and lists of current customers all constructed
      *    in RestaurantPanel()
      * 2) the infoPanel about the clicked Customer (created just below)
      */    
-    RestaurantPanel restPanel = new RestaurantPanel(this);
+
     private InfoPanel infoPanel = new InfoPanel(this);
-    
-    /* infoPanel holds information about the clicked customer, if there is one*/
-   // private JPanel infoPanel;
-   // private JLabel infoLabel; //part of infoPanel
-    private JCheckBox stateCB;//part of infoLabel
-     
-    private JPanel APanel = new JPanel();
+ 
     private List<Table> tables = new ArrayList<Table>();
-    private List<BuildingIcon> buildings = new ArrayList<BuildingIcon>();
     public List<PersonAgent> persons = new ArrayList<PersonAgent>();
     
-    private JFrame bottomPanel = new JFrame();
+    private JFrame bottomFrame = new JFrame();
     private JPanel topPanel = new JPanel();
-
+    CardLayout cardLayout = new CardLayout();
+    JPanel buildingsPanel = new JPanel();
+    
     private int hour;
     private String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"};
     private String dayOfWeek = daysOfWeek[0];
@@ -76,18 +76,6 @@ public class SimCityGui extends JFrame implements ActionListener {
 	static final int STARTING_TABLES_X = 200;
 	static final int STARTING_TABLE1_Y = 35;
 	static final int STARTING_TABLE_Y_SPACING = 90;
-	static final int BUILDING_ROWS = 4;
-	static final int BUILDING_COLUMNS = 19;
-    static final int BUILDING_START_X = 57;
-    static final int BUILDING_START_Y = 68;
-    static final int BUILDING_OFFSET_X = 40;
-    static final int BUILDING_OFFSET_Y = 80;
-	
-	
-	static final int xBUILDING_IMG_POINT_OFFSET = 1;
-	static final int yBUILDING_IMG_POINT_OFFSET = 1;
-	static final int xBUILDING_IMG_AREA_OFFSET = 35;
-	static final int yBUILDING_IMG_AREA_OFFSET = 33;
     
     /**
      * Constructor for RestaurantGui class.
@@ -96,80 +84,127 @@ public class SimCityGui extends JFrame implements ActionListener {
     public SimCityGui() {
     	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
     	setLayout(new BorderLayout());
-    	bottomPanel.setLayout(new BorderLayout());
     	topPanel.setLayout(new BorderLayout(5,0));
         
-        Dimension restDim = new Dimension(WINDOWX, (int) (REST_PANEL_Y));
-        restPanel.setPreferredSize(restDim);
-        restPanel.setMinimumSize(restDim);
-        restPanel.setMaximumSize(restDim);
-        infoPanel.setPreferredSize(restDim);
-        infoPanel.setMinimumSize(restDim);
-        infoPanel.setMaximumSize(restDim);
-
-        APanel.add(restPanel);
-        
-        stateCB = new JCheckBox();
-        stateCB.setVisible(false);
-        stateCB.addActionListener(this);
-        bottomPanel.add(APanel, BorderLayout.WEST);
+        Dimension infoDim = new Dimension(WINDOWX, (int) (REST_PANEL_Y));
+        infoPanel.setPreferredSize(infoDim);
+        infoPanel.setMinimumSize(infoDim);
+        infoPanel.setMaximumSize(infoDim);
 
         topPanel.add(animationPanel, BorderLayout.CENTER);
         topPanel.add(infoPanel, BorderLayout.WEST);
-        bottomPanel.add(restaurantAnimationPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.CENTER);
-        //add(bottomPanel, BorderLayout.SOUTH);
-        bottomPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        bottomPanel.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
-        bottomPanel.setVisible(true);
-    	
-
-    	Map<String, Integer> grillMap = new HashMap<String, Integer>();
-    	grillMap.put("a", 1);
-    	grillMap.put("b", 2);
-    	grillMap.put("c", 3);
-    	grillMap.put("d", 4);
-    	grillMap.put("e", 5);
-    	
-
+        
+        
+        Dimension buildingsPanelDim = new Dimension(WINDOWX,REST_PANEL_Y);
+        buildingsPanel.setLayout(cardLayout);
+        buildingsPanel.setMaximumSize(buildingsPanelDim);
+        buildingsPanel.setMinimumSize(buildingsPanelDim);
+        buildingsPanel.setPreferredSize(buildingsPanelDim);
+        
+        createDefaultBuildingPanels();
+        
+        
+        bottomFrame.setLayout(new BorderLayout());
+        bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
+        bottomFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        bottomFrame.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
+        bottomFrame.setVisible(true);
     }
-    /**
-     * updateInfoPanel() takes the given customer (or, for v3, Host) object and
-     * changes the information panel to hold that person's info.
-     *
-     * @param person customer (or waiter) object
-     */
-    
-   /* public void updateInfoPanel(Object person) {
-        //stateCB.setVisible(true);
-        //CustomerAgent currentPerson = (CustomerAgent) person;
-    	
-        if (person instanceof CustomerAgent) {
-          //  CustomerAgent customer = (CustomerAgent) person;
-          //  stateCB.setText("Hungry?");
-          //Should checkmark be there? 
-          //  stateCB.setSelected(customer.getGui().isHungry());
-          //Is customer hungry? Hack. Should ask customerGui
-          //  stateCB.setEnabled(!customer.getGui().isHungry());
-          // Hack. Should ask customerGui
-          //  infoLabel.setText(
-          //     "<html><pre>     Name: " + customer.getName() + " </pre></html>");
-        }
-        infoPanel.validate();
-    }*/
-    /**
+
+    private void createDefaultBuildingPanels() {
+    	List<BuildingIcon> buildings = animationPanel.buildings;
+    	System.out.println(buildings.size());
+        for(int i =0; i<buildings.size(); i++){
+        	
+        	BuildingIcon b = buildings.get(i);
+        	
+        	if(b.type.equals("restaurant")){
+            
+        	JPanel APanel = new JPanel();
+            RestaurantPanel restPanel = new RestaurantPanel(this);
+            InsideAnimationPanel restaurantAnimationPanel = new RestaurantAnimationPanel(this);
+        	
+            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+            restPanel.setPreferredSize(restDim);
+            restPanel.setMinimumSize(restDim);
+            restPanel.setMaximumSize(restDim);
+            APanel.add(restPanel);
+
+        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, APanel);
+        	b.setInsideBuildingPanel(bp);
+        	buildingsPanel.add(bp, "" + i);
+        	}else if(b.type.equals("market")){
+                
+            	JPanel APanel = new JPanel();
+                RestaurantPanel restPanel = new RestaurantPanel(this);
+                InsideAnimationPanel marketAnimationPanel = new MarketAnimationPanel(this);
+            	
+                Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+                restPanel.setPreferredSize(restDim);
+                restPanel.setMinimumSize(restDim);
+                restPanel.setMaximumSize(restDim);
+                APanel.add(restPanel);
+
+            	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,marketAnimationPanel, APanel);
+            	b.setInsideBuildingPanel(bp);
+            	buildingsPanel.add(bp, "" + i);
+	    	}else if(b.type.equals("bank")){
+	            
+	        	JPanel APanel = new JPanel();
+	            RestaurantPanel restPanel = new RestaurantPanel(this);
+	            InsideAnimationPanel bankAnimationPanel = new BankAnimationPanel(this);
+	        	
+	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+	            restPanel.setPreferredSize(restDim);
+	            restPanel.setMinimumSize(restDim);
+	            restPanel.setMaximumSize(restDim);
+	            APanel.add(restPanel);
+	
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, APanel);
+	        	b.setInsideBuildingPanel(bp);
+	        	buildingsPanel.add(bp, "" + i);
+			}else if(b.type.equals("house")){
+		        
+		    	JPanel APanel = new JPanel();
+		        RestaurantPanel restPanel = new RestaurantPanel(this);
+		        InsideAnimationPanel houseAnimationPanel = new HouseAnimationPanel(this);
+		    	
+		        Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+		        restPanel.setPreferredSize(restDim);
+		        restPanel.setMinimumSize(restDim);
+		        restPanel.setMaximumSize(restDim);
+		        APanel.add(restPanel);
+		
+		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, APanel);
+		    	b.setInsideBuildingPanel(bp);
+		    	buildingsPanel.add(bp, "" + i);
+			}else if(b.type.equals("apartment")){
+			    
+				JPanel APanel = new JPanel();
+			    RestaurantPanel restPanel = new RestaurantPanel(this);
+			    InsideAnimationPanel apartmentAnimationPanel = new ApartmentAnimationPanel(this);
+				
+			    Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+			    restPanel.setPreferredSize(restDim);
+			    restPanel.setMinimumSize(restDim);
+			    restPanel.setMaximumSize(restDim);
+			    APanel.add(restPanel);
+			
+				InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,apartmentAnimationPanel, APanel);
+				b.setInsideBuildingPanel(bp);
+				buildingsPanel.add(bp, "" + i);
+	        }
+		}
+	}
+
+	/**
      * Action listener method that reacts to the checkbox being clicked;
      * If it's the customer's checkbox, it will make him hungry
      * For v3, it will propose a break for the waiter.
      */
     public void actionPerformed(ActionEvent e) {
-        /*if (e.getSource() == stateCB) {
-            if (currentPerson instanceof CustomerAgent) {
-                CustomerAgent c = (CustomerAgent) currentPerson;
-                c.getGui().setHungry();
-                stateCB.setEnabled(false);
-            }
-        }*/
+
     }
     /**
      * Message sent from a customer gui to enable that customer's
@@ -203,70 +238,15 @@ public class SimCityGui extends JFrame implements ActionListener {
         gui.setResizable(false);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.addDefaultTables();
-        gui.addDefaultBuildings();
     }
     private void addDefaultTables() {
-        restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y);
-        restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING);
-        restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
-        restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
+        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y);
+        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING);
+        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
+        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
 	}
 
-    private void addDefaultBuildings(){
-    	for(int j =0; j<BUILDING_ROWS;j++){
-	    	for(int i = 0; i<BUILDING_COLUMNS;i++){
-	    		if(i < 5){
-	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house", restaurantAnimationPanel));
-	    			animationPanel.addNewBuilding();
-	        	}else if(i < 7){
-	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment", restaurantAnimationPanel));
-	    			animationPanel.addNewBuilding();
-	        	}else if(i < 8){
-	        		if(j < 2){
-		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant", restaurantAnimationPanel));
-		    			animationPanel.addNewBuilding();
-	    			}else if(j<3){
-		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market", restaurantAnimationPanel));
-		    			animationPanel.addNewBuilding();
-	    			}
-	    			else{
-		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant", restaurantAnimationPanel));
-		    			animationPanel.addNewBuilding();
-	    			}
-	        	}else if(i<9){
-	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"bank2", restaurantAnimationPanel));
-	    			animationPanel.addNewBuilding();
-	        	}else if(i<10){
-	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market", restaurantAnimationPanel));
-	    			animationPanel.addNewBuilding();
-	        	}else if(i<11){
-	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"bank2", restaurantAnimationPanel));
-	    			animationPanel.addNewBuilding();
-	        	}else if(i<12){
-	        		if(j < 2){
-		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"restaurant", restaurantAnimationPanel));
-		    			animationPanel.addNewBuilding();
-	    			}else if(j<3){
-		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"market", restaurantAnimationPanel));
-		    			animationPanel.addNewBuilding();
-	    			}
-	    			else{
-		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment", restaurantAnimationPanel));
-		    			animationPanel.addNewBuilding();
-	    			}
-	        	}else if(i<14){
-	    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment", restaurantAnimationPanel));
-	    			animationPanel.addNewBuilding();
-	        	}
-	        	else{
-	        		buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house", restaurantAnimationPanel));
-	            	animationPanel.addNewBuilding();		
-	        	}
-	    	}
-    	}
-    	
-    }
-	public int getTablesXCoord(int i){
+ 	public int getTablesXCoord(int i){
     	return tables.get(i).getX();
     }
     public int getTablesYCoord(int i){
@@ -294,26 +274,6 @@ public class SimCityGui extends JFrame implements ActionListener {
 		}
 		return null;
 	}
-
-	public BuildingIcon getBuildingAt(Point i) {
-		for(BuildingIcon b: buildings)
-		{
-			if(b.getX()+xBUILDING_IMG_POINT_OFFSET <= i.x && b.getX()+xBUILDING_IMG_AREA_OFFSET >= i.x && b.getY()+yBUILDING_IMG_POINT_OFFSET <= i.y && b.getY()+yBUILDING_IMG_AREA_OFFSET >= i.y)
-			{
-				return b;
-			}
-		}
-		return null;
-	}
-	public int getBuildingXCoord(int i){
-    	return buildings.get(i).getX();
-    }
-    public int getBuildingYCoord(int i){
-    	return buildings.get(i).getY();
-    }
-    public BufferedImage getBuildingImg(int i){
-    	return buildings.get(i).getImg();
-    }
 	
 	public Table getTableAtIndex(int i) {
 		if(tables.size() < i){
@@ -349,32 +309,32 @@ public class SimCityGui extends JFrame implements ActionListener {
 
 	public void addTable() {
     	tables.add(new Table(xDEFAULT_NEW_TABLE_POSITION, yDEFAULT_NEW_TABLE_POSITION));
-    	restaurantAnimationPanel.addNewTable();
-    	restPanel.getHost().addNewTable();
+    	//((RestaurantAnimationPanel) restaurantAnimationPanel).addNewTable();
+    	//restPanel.getHost().addNewTable();
 		
 	}
 	public void addTable(int x, int y) {
 		
     	tables.add(new Table( x, y));
-    	restaurantAnimationPanel.addNewTable();
-    	restPanel.getHost().addNewTable();
+    	//((RestaurantAnimationPanel) restaurantAnimationPanel).addNewTable();
+    	//restPanel.getHost().addNewTable();
 		
 	}
 
 	public void setWaiterOnBreak(String name) {
-		restPanel.setWaiterOnBreak(name);
+		//restPanel.setWaiterOnBreak(name);
 		
 	}
 
 	public void setWaiterCantBreak(String name) {
-		restPanel.setWaiterCantBreak(name);
+		//restPanel.setWaiterCantBreak(name);
 	}
 
 	public void setWaiterBreakable(String name) {
-		restPanel.setWaiterBreakable(name);
+		//restPanel.setWaiterBreakable(name);
 	}
 	public void setWaiterUnbreakable(String name) {
-		restPanel.setWaiterUnbreakable(name);
+		//restPanel.setWaiterUnbreakable(name);
 	}
 
 	public void newHour() {
@@ -396,6 +356,12 @@ public class SimCityGui extends JFrame implements ActionListener {
 		p.msgNextHour(hour, dayOfWeek);
 	}
 	
+	}
+
+	public void displayBuildingPanel(InsideBuildingPanel ibp) {
+		System.out.println(ibp.getName());
+		cardLayout.show(buildingsPanel, ibp.getName());
+		
 	}
 	
 }
