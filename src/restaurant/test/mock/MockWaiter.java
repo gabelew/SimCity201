@@ -52,5 +52,20 @@ public class MockWaiter extends Mock implements Waiter{
 	public void msgOrderIsReady(String choice, int table){
 		log.add(new LoggedEvent("Received msgOrderIsReady from cook."));
 	}
+	
+	@Override
+	public void msgGoOnBreak(){
+		log.add(new LoggedEvent("Received msgGoOnBreak from host."));
+	}
+	
+	@Override
+	public void msgDontGoOnBreak(){
+		log.add(new LoggedEvent("Received msgDontGoOnBreak from host."));
+	}
 
+	@Override
+	public String getName(){
+		log.add(new LoggedEvent("Received getName from host."));
+		return "name";
+	}
 }
