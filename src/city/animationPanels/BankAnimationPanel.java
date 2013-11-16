@@ -5,15 +5,29 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.Timer;
 
+import bank.gui.BankCustomerGui;
+import city.gui.Gui;
 import city.gui.SimCityGui;
 
 public class BankAnimationPanel extends InsideAnimationPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
+	static final int NATMS = 9;
+	static final int NATMS_ROWS = 3;
+	static final int NATMS_COLUMNS = 3;
+	static final int ATM_X_START = 300;
+	static final int ATM_Y_START = 40;
+	static final int ATM_X_GAP = 100;
+	static final int ATM_Y_GAP = 90;
+	public boolean isVisible = true;
+	
 	private SimCityGui simCityGui;
+	private BufferedImage atmImg = null;
 	
 	public BankAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
@@ -23,19 +37,44 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
  
     	Timer timer = new Timer(TIMERDELAY, this );
     	timer.start();	
+    	
+    	for(int i = 0; i < NATMS; i++) {
+    		BankCustomerGui.atms.add(new Semaphore(1,true));
+    	}
 		
 	}
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
+		for(Gui gui : guis) {
+			if (gui.isPresent()) {
+				gui.updatePosition();
+			}
+		}
+		if(isVisible)
+			repaint();
 		
 	}
 	@Override
 	public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-
-		 g2.setColor(Color.BLUE);     
-	     g2.fillRect(20, 20, 100, 100);
+        
+        g2.setColor(getBackground());
+        g2.fillRect(0, 0, WINDOWX, WINDOWY);
+		
+		// draw ATMS
+		for(int i = 0; i < NATMS/NATMS_ROWS; i++) {
+			for(int j = 0; j < NATMS/NATMS_COLUMNS; j++) {
+				g2.setColor(Color.BLACK);
+				g2.fillRect(i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START, 30, 30);
+				// g.drawImage(atmImg, i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START, null);
+			} 
+		}
+		
+		for(Gui gui : guis) {
+			if(gui.isPresent()) {
+				gui.draw(g2);;
+			}
+		}
 
 		
 	}
