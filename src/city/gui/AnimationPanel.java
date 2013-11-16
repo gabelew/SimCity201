@@ -90,8 +90,28 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
+	private BufferedImage busDownImg = null;
+	private BufferedImage busUpImg = null;
+	private BufferedImage carDownImg = null;
+	private BufferedImage carUpImg = null;
+	private BufferedImage carRightImg = null;
+	private BufferedImage carLeftImg = null;
+	
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
+		
+
+		try {
+			StringBuilder path = new StringBuilder("imgs/");
+			busDownImg = ImageIO.read(new File(path.toString() + "bus_front.png"));
+		    busUpImg = ImageIO.read(new File(path.toString() + "bus_back.png"));
+		    carDownImg = ImageIO.read(new File(path.toString() + "carFront.png"));
+		    carUpImg = ImageIO.read(new File(path.toString() + "carBack.png"));
+		    carLeftImg = ImageIO.read(new File(path.toString() + "carRight.png"));
+		    carRightImg = ImageIO.read(new File(path.toString() + "carLeft.png"));
+		} catch (IOException e) {
+		}
+		
 		
 		setSize(WINDOWX, WINDOWY);
         setVisible(true);
@@ -178,7 +198,13 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //Here is the buildings
         for(int i = ZERO; i<buildings.size(); i++){
         	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
-        }        
+        } 
+       
+
+    	g.drawImage(carDownImg, BUILDING_START_X+15, BUILDING_START_Y + 30, null);
+    	g.drawImage(carUpImg, BUILDING_START_X+15+40, BUILDING_START_Y + 30, null);
+    	g.drawImage(carLeftImg, BUILDING_START_X+15, BUILDING_START_Y + 50, null);
+    	g.drawImage(carRightImg, BUILDING_START_X+15+35, BUILDING_START_Y + 50, null);
     }
     
 	public void addGui(PersonGui gui) {
