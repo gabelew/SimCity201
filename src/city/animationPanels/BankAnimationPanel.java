@@ -6,8 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import bank.gui.BankCustomerGui;
@@ -31,6 +34,13 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	
 	public BankAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
+		
+		try {
+			StringBuilder path = new StringBuilder("imgs/");
+			atmImg = ImageIO.read(new File(path.toString() + "atmMirror.png"));
+		} catch (IOException e){
+			
+		}
 
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
@@ -64,9 +74,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 		// draw ATMS
 		for(int i = 0; i < NATMS/NATMS_ROWS; i++) {
 			for(int j = 0; j < NATMS/NATMS_COLUMNS; j++) {
-				g2.setColor(Color.BLACK);
-				g2.fillRect(i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START, 30, 30);
-				// g.drawImage(atmImg, i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START, null);
+				g.drawImage(atmImg, i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START, null);
 			} 
 		}
 		
