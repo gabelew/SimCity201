@@ -3,10 +3,6 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import restaurant.gui.CashierGui;
-import restaurant.gui.CustomerGui;
-import restaurant.gui.WaiterGui;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
