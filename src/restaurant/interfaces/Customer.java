@@ -1,6 +1,6 @@
 package restaurant.interfaces;
 
-import restaurant.WaiterAgent.Menu;
+import restaurant.interfaces.Waiter.Menu;
 import restaurant.gui.CustomerGui;
 
 /**

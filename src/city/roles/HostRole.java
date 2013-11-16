@@ -8,6 +8,7 @@ import restaurant.interfaces.Waiter;
 
 import java.util.*;
 
+import city.PersonAgent;
 import city.gui.SimCityGui;
 
 /**
@@ -17,7 +18,7 @@ import city.gui.SimCityGui;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostRole extends Agent implements Host {
+public class HostRole extends Role implements Host {
 	
 	//a global for the number of tables.
 	private static int NTABLES = 0; // must start at zero -
@@ -71,8 +72,8 @@ public class HostRole extends Agent implements Host {
 		}
 	}
 	
-	public HostRole(String name) {
-		super();
+	public HostRole(PersonAgent p,String name) {
+		super(p);
 		this.name = name;
 		// make some tables
 		tables = Collections.synchronizedList(new ArrayList<Table>(NTABLES));
@@ -194,7 +195,7 @@ print("ooiret");
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.

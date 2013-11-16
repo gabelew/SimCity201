@@ -1,6 +1,6 @@
 package restaurant.test.mock;
 
-import restaurant.WaiterAgent.Menu;
+import restaurant.interfaces.Waiter.Menu;
 import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;

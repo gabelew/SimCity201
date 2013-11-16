@@ -3,6 +3,7 @@ package restaurant.interfaces;
 import java.util.List;
 
 import restaurant.CookAgent.Order;
+import restaurant.gui.CookGui;
 import restaurant.MarketAgent;
 
 /**
@@ -13,6 +14,7 @@ import restaurant.MarketAgent;
  */
 public interface Cook {
 
+	public CookGui cookGui = null;
 	
 	public abstract void msgHereIsOrder(Waiter w, String choice, int table);
 	

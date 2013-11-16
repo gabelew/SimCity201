@@ -15,6 +15,11 @@ public interface Cashier {
 	 *
 	 * Sent by the customer to pay for food eaten.
 	 */
+	public static final double SALAD_COST = 4.99;
+	public static final double STEAK_COST = 15.99;
+	public static final double CHICKEN_COST = 10.99;
+	public static final double BURGER_COST = 8.99;
+	public static final double COOKIE_COST = 3.99;	
 	public abstract void msgPayment(Customer c, double cash);
 
 	/**

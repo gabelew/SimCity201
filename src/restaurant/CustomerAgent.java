@@ -1,11 +1,13 @@
 package restaurant;
 
-import restaurant.WaiterAgent.Menu;
-import restaurant.WaiterAgent.MenuItem;
+//import restaurant.WaiterAgent.Menu;
+//import restaurant.WaiterAgent.MenuItem;
 import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
+import restaurant.interfaces.Waiter.Menu;
+import restaurant.interfaces.Waiter.MenuItem;
 import agent.Agent;
 
 import java.util.ArrayList;

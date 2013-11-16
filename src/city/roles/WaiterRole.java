@@ -1,23 +1,27 @@
-package restaurant;
+package city.roles;
 
 import agent.Agent;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import city.roles.CustomerRole;
 import restaurant.gui.WaiterGui;
+import restaurant.interfaces.Cashier;
+import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
+import restaurant.interfaces.Host;
 
-public class WaiterAgent extends Agent implements Waiter{
+public class WaiterRole extends Role implements Waiter{
 	WaiterGui waiterGui;
 	private String name;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
-	private HostAgent host;
-	private CookAgent cook;
-	private CashierAgent cashier;
+	private Host host;
+	private Cook cook;
+	private Cashier cashier;
 	public enum CustomerState {waiting, seated, askedToOrder, asked, ordered, orderPlaced, 
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
 	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak};
@@ -42,11 +46,11 @@ public class WaiterAgent extends Agent implements Waiter{
 		public List<MenuItem> menuItems = new ArrayList<MenuItem>();
 
 		Menu(){
-			menuItems.add(new MenuItem("Salad", CashierAgent.SALAD_COST));
-			menuItems.add(new MenuItem("Steak", CashierAgent.STEAK_COST));
-			menuItems.add(new MenuItem("Chicken", CashierAgent.CHICKEN_COST));
-			menuItems.add(new MenuItem("Burger", CashierAgent.BURGER_COST));
-			menuItems.add(new MenuItem("Cookie", CashierAgent.COOKIE_COST));
+			menuItems.add(new MenuItem("Salad", Cashier.SALAD_COST));
+			menuItems.add(new MenuItem("Steak", Cashier.STEAK_COST));
+			menuItems.add(new MenuItem("Chicken", Cashier.CHICKEN_COST));
+			menuItems.add(new MenuItem("Burger", Cashier.BURGER_COST));
+			menuItems.add(new MenuItem("Cookie", Cashier.COOKIE_COST));
 		}
 	}
 	public class MenuItem{
@@ -61,8 +65,8 @@ public class WaiterAgent extends Agent implements Waiter{
 		return name;
 	}
 
-	public WaiterAgent(String n) {
-		super();
+	public WaiterRole(PersonAgent p,String n) {
+		super(p);
 		this.name = n;
 	}
 
@@ -151,14 +155,14 @@ public class WaiterAgent extends Agent implements Waiter{
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(HostAgent host) {
+	public void setHost(Host host) {
 		this.host = host;
 	}
 
 	/**
 	 * hack to establish connection to Cook agent.
 	 */
-	public void setCook(CookAgent cook) {
+	public void setCook(Cook cook) {
 		this.cook = cook;
 		waiterGui.setCookGui(cook.cookGui);
 	}
@@ -166,7 +170,7 @@ public class WaiterAgent extends Agent implements Waiter{
 	/**
 	 * hack to establish connection to Cook agent.
 	 */
-	public void setCashier(CashierAgent cashier) {
+	public void setCashier(Cashier cashier) {
 		this.cashier = cashier;
 	}
 	
@@ -203,7 +207,7 @@ public class WaiterAgent extends Agent implements Waiter{
 		return null;
 	}
 
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.gotToWork)
 		{
 			event = AgentEvent.none;

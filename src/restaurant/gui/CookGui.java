@@ -20,6 +20,7 @@ import city.gui.SimCityGui;
 import restaurant.CookAgent;
 import restaurant.CookAgent.Order;
 import restaurant.WaiterAgent;
+import restaurant.interfaces.Waiter;
 
 public class CookGui implements Gui  {
 
@@ -417,7 +418,7 @@ public class CookGui implements Gui  {
 		command = Command.GoToGrill;
 	}
 
-	public void msgPickingUpMyOrder(WaiterAgent w, String choice, int table) {
+	public void msgPickingUpMyOrder(Waiter w, String choice, int table) {
 		MyFood deleteIt = null;
 		synchronized(foods){
 			for(MyFood f:foods){

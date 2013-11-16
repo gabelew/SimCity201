@@ -15,9 +15,11 @@ import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.WaiterRole;
 import restaurant.CustomerAgent;
 import restaurant.WaiterAgent;
 import restaurant.interfaces.Customer;
+import restaurant.interfaces.Waiter;
 
 public class WaiterGui implements Gui {
 
@@ -268,7 +270,7 @@ public class WaiterGui implements Gui {
 			food = null;
 	}
 
-	public void servingFood(WaiterAgent w, String choice, int t){
+	public void servingFood(Waiter w, String choice, int t){
 		cookGui.msgPickingUpMyOrder(w, choice, t);
 		food = new FoodIcon(choice);
 	}

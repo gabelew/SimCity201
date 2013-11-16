@@ -23,6 +23,7 @@ public interface Host {
 	
 	public abstract void msgCanIBreak(Waiter w);
 	
+	public abstract String getName();
 
 	
 }
