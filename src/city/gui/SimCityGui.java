@@ -1,6 +1,7 @@
 package city.gui;
 
 import restaurant.CustomerAgent;
+import restaurant.Restaurant;
 import restaurant.gui.RestaurantPanel;
 import restaurant.gui.Table;
 
@@ -14,6 +15,11 @@ import city.animationPanels.InsideAnimationPanel;
 import city.animationPanels.InsideBuildingPanel;
 import city.animationPanels.MarketAnimationPanel;
 import city.animationPanels.RestaurantAnimationPanel;
+import city.roles.CashierRole;
+import city.roles.CookRole;
+import city.roles.CustomerRole;
+import city.roles.HostRole;
+import city.roles.Role;
 import agent.Agent;
 
 import java.awt.*;
@@ -45,6 +51,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private InfoPanel infoPanel = new InfoPanel(this);
  
     private List<Table> tables = new ArrayList<Table>();
+    List<Restaurant> restaurants = new ArrayList<Restaurant>();
     public List<PersonAgent> persons = new ArrayList<PersonAgent>();
     
     private JFrame bottomFrame = new JFrame();
@@ -133,7 +140,10 @@ public class SimCityGui extends JFrame implements ActionListener {
 
         	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, APanel);
         	b.setInsideBuildingPanel(bp);
+        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
         	buildingsPanel.add(bp, "" + i);
+        	restaurants.add(new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
+        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY())));
         	}else if(b.type.equals("market")){
                 
             	JPanel APanel = new JPanel();
@@ -148,6 +158,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 
             	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,marketAnimationPanel, APanel);
             	b.setInsideBuildingPanel(bp);
+            	marketAnimationPanel.setInsideBuildingPanel(bp);
             	buildingsPanel.add(bp, "" + i);
 	    	}else if(b.type.equals("bank")){
 	            
@@ -178,6 +189,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 		
 		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, APanel);
 		    	b.setInsideBuildingPanel(bp);
+		    	houseAnimationPanel.setInsideBuildingPanel(bp);
 		    	buildingsPanel.add(bp, "" + i);
 			}else if(b.type.equals("apartment")){
 			    
@@ -193,6 +205,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			
 				InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,apartmentAnimationPanel, APanel);
 				b.setInsideBuildingPanel(bp);
+				apartmentAnimationPanel.setInsideBuildingPanel(bp);
 				buildingsPanel.add(bp, "" + i);
 	        }
 		}
@@ -360,8 +373,19 @@ public class SimCityGui extends JFrame implements ActionListener {
 
 	public void displayBuildingPanel(InsideBuildingPanel ibp) {
 		System.out.println(ibp.getName());
+		for(int i = 0; i < animationPanel.buildings.size(); i++){
+			System.out.println(animationPanel.buildings.get(i).getInsideBuildingPanel().isVisible);
+			animationPanel.buildings.get(i).getInsideBuildingPanel().isVisible = false;
+		}
+		ibp.isVisible = true;
 		cardLayout.show(buildingsPanel, ibp.getName());
 		
 	}
-	
+	public static Role customerFactory(PersonAgent p, Restaurant r){
+		if(r.customerRole.equalsIgnoreCase("Restaurant1CustomerRole")){
+			return new CustomerRole(p, r);
+		}
+		
+		return null;
+	}
 }

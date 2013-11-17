@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import city.gui.Gui;
 import city.gui.SimCityGui;
 
 public class ApartmentAnimationPanel  extends InsideAnimationPanel implements ActionListener{
@@ -21,13 +22,23 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
  
+
+
+        
     	Timer timer = new Timer(TIMERDELAY, this );
-    	timer.start();	
+    	timer.start();		
 		
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
+			repaint();  //Will have paintComponent called
 		
 	}
 	@Override

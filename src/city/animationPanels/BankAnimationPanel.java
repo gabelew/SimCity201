@@ -27,7 +27,6 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	static final int ATM_Y_START = 40;
 	static final int ATM_X_GAP = 100;
 	static final int ATM_Y_GAP = 90;
-	public boolean isVisible = true;
 	
 	private SimCityGui simCityGui;
 	private BufferedImage atmImg = null;
@@ -44,7 +43,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
- 
+        
     	Timer timer = new Timer(TIMERDELAY, this );
     	timer.start();	
     	
@@ -55,13 +54,14 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		for(Gui gui : guis) {
-			if (gui.isPresent()) {
-				gui.updatePosition();
-			}
-		}
-		if(isVisible)
-			repaint();
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
+			repaint();  //Will have paintComponent called
 		
 	}
 	@Override

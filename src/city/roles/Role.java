@@ -7,20 +7,35 @@ public abstract class Role
 {
 	PersonAgent myPerson; 
 	public boolean active = false;
-	public void setPerson(PersonAgent a) {myPerson=a;} 
 	public PersonAgent getPersonAgent() { return myPerson;} //so other agents or role 
 	
 	
+
+	public Role()
+	{
+	}
 	public Role(PersonAgent p)
 	{
 	        this.myPerson = p;
 	}
-	
+
+	public String getName() {
+		return myPerson.getName();
+	}
+	public PersonAgent getPerson(){
+		return myPerson;
+	}
+	public void setPerson(PersonAgent p){
+		this.myPerson = p;
+	}
+
 	//players can send you Person messages.
 	public void stateChanged()
 	{
 		this.active = true;
-		myPerson.stateChanged();
+		if(myPerson != null){
+			myPerson.stateChanged();
+		}
 	}
 	public boolean isActive() {
 	        return active;
@@ -45,7 +60,11 @@ public abstract class Role
      */
     protected void print(String msg, Throwable e) {
         StringBuffer sb = new StringBuffer();
-        sb.append(myPerson.getName());
+        if(myPerson != null){
+        	sb.append(myPerson.getName());
+    	}else{
+            sb.append("emptyRole: ");
+        }
         sb.append(": ");
         sb.append(msg);
         sb.append("\n");

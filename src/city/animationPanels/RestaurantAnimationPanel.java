@@ -32,7 +32,6 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	private Table clickedTable = null;
 	private int clickedTableMouseXOffset;
 	private int clickedTableMouseYOffset;
-	public boolean isVisible = true;
 	
     static final int xREST_POSITION = 350;  
     static final int yREST_POSITION = 400; 
@@ -143,7 +142,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
                 gui.updatePosition();
             }
         }
-		if(isVisible)
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();  //Will have paintComponent called
 	}
 	

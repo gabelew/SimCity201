@@ -12,7 +12,7 @@ import city.gui.SimCityGui;
 public class InsideBuildingPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
-	public boolean isVisible = true;
+	public boolean isVisible = false;
 	SimCityGui myCity;
 	String myName;
 	BuildingIcon buildingIcon;

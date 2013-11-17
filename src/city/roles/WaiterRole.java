@@ -16,7 +16,6 @@ import restaurant.interfaces.Host;
 
 public class WaiterRole extends Role implements Waiter{
 	WaiterGui waiterGui;
-	private String name;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private Host host;
@@ -61,13 +60,9 @@ public class WaiterRole extends Role implements Waiter{
 			cost = d;
 		}
 	}*/
-	public String getName() {
-		return name;
-	}
 
-	public WaiterRole(PersonAgent p,String n) {
+	public WaiterRole(PersonAgent p) {
 		super(p);
-		this.name = n;
 	}
 
 	public void goesToWork(){ //from gui

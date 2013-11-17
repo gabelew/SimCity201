@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
+import city.gui.Gui;
 import city.gui.SimCityGui;
 
 public class MarketAnimationPanel extends InsideAnimationPanel implements ActionListener{
@@ -56,8 +57,16 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
+
+
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible){
+			repaint();  //Will have paintComponent called
+		}
 	}
 	@Override
 	public void paintComponent(Graphics g) {

@@ -31,6 +31,9 @@ public class BuildingIcon {
 	public void setInsideBuildingPanel(InsideBuildingPanel bp){
 		buildingPanel = bp;
 	}
+	public InsideBuildingPanel getInsideBuildingPanel(){
+		return buildingPanel;
+	}
 	public void changePos(int x,int y){
 		xPos = x;
 		yPos = y;

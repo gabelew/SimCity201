@@ -33,8 +33,6 @@ public class HostRole extends Role implements Host {
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 
-	private String name;
-
 	public HostGui hostGui = null;
 	private SimCityGui restGui = null;
 
@@ -72,20 +70,10 @@ public class HostRole extends Role implements Host {
 		}
 	}
 	
-	public HostRole(PersonAgent p,String name) {
-		super(p);
-		this.name = name;
-		// make some tables
-		tables = Collections.synchronizedList(new ArrayList<Table>(NTABLES));
+	public HostRole() {
+		super();
 	}
 
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
 
 	// Messages
 	public void msgReadyToWork(Waiter w) {

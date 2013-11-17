@@ -9,15 +9,17 @@ import java.util.concurrent.Semaphore;
 
 import restaurant.CashierAgent;
 import restaurant.HostAgent;
+import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import agent.Agent;
 import city.gui.PersonGui;
+import city.gui.SimCityGui;
 import city.roles.*;
 
 public class PersonAgent extends Agent {
 	private List<Role> roles = new ArrayList<Role>();
 	//hacked in upon creation
-	private List<MyRestaurant> restaurants = new ArrayList<MyRestaurant>(); 
+	private List<Restaurant> restaurants = new ArrayList<Restaurant>(); 
 	private List<MyBank> banks = new ArrayList<MyBank>(); 
 	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
 	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
@@ -52,22 +54,6 @@ public class PersonAgent extends Agent {
 	public int hungerLevel = 51;
 	public double cashOnHand, businessFunds;
 	
-	class MyRestaurant {
-		//Restaurant r; 
-		HostAgent h;
-		CashierAgent c;
-		Point location;
-		String type;
-		String name;
-		CustomerRole cr;
-		MyRestaurant(HostAgent h, CashierAgent c, Point location, String type, String name) {
-			this.h = h;
-			this.c = c;
-			this.location = location;
-			this.type = type;
-			this.name = name;
-		}
-	}
 	class MyBank {
 		Point location;
 		String name;
@@ -100,8 +86,8 @@ public class PersonAgent extends Agent {
         r.setPerson(this);
 	}
 	
-	public void addRestaurant(HostAgent h, CashierAgent c, Point location, String type, String name) {
-		restaurants.add(new MyRestaurant(h, c, location, type, name));
+	public void addRestaurant(Restaurant r) {
+		restaurants.add(r);
 	}
 	
 	public void setName(String name){
@@ -273,6 +259,7 @@ public class PersonAgent extends Agent {
 	public void msgDoneEatingAtRestaurant() {
 		print("msgDoneEatingAtRestaurant");
 		state = State.doingNothing;
+
 		for(Task t: taskList){
 			print(t.toString());
 		}
@@ -430,7 +417,7 @@ public class PersonAgent extends Agent {
     private void goToRestaurant() {
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
-    	MyRestaurant mr = restaurants.get(0); // hack for first restaurant for now
+    	Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
     	destination = mr.location;
 
     	personGui.DoWalkTo(destination);
@@ -439,24 +426,29 @@ public class PersonAgent extends Agent {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-    	//RestaurantCustomerRole rcr = roles.get(0); // hack 
-    	//mr.h.msgIWantToEat(rcr);
     }
     private void finishGoingToRestaurant(){
     	print("finishGoingToRestaurant");
     	state = State.eating;
     	
-    	/*MyRestaurant mr = restaurants.get(0); // hack for first restaurant for now
-    	CustomerRole role = new CustomerRole(this, name, cashOnHand);
+    	Restaurant r = findRestaurant(destination);
+    	CustomerRole role = (CustomerRole) SimCityGui.customerFactory(this, r);
     	role.setGui(new CustomerGui(role));
     	roles.add(role);
     	role.active = true;
-    	role.setHost(mr.h);
-    	role.setCashier(mr.c);
-    	personGui.gui.restaurantAnimationPanel.addGui(role.getGui());
+    	r.insideAnimationPanel.addGui(role.getGui());
     	role.getGui().setPresent(true);
-    	role.gotHungry();*/
+    	role.gotHungry();
     }
+
+	private Restaurant findRestaurant(Point d) {
+		for(Restaurant r: restaurants){
+			if(r.location.equals(d)){
+				return r;
+			}
+		}
+		return null;
+	}
 
 	public void msgAnimationFinshed() {
     	print("msgAnimationFinshed");
@@ -466,21 +458,13 @@ public class PersonAgent extends Agent {
 	public PersonGui getGui() {
 		return personGui;
 	}
-
-	public void setHost(HostAgent host) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setCashier(CashierAgent cashier) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void setGui(PersonGui g) {
 		personGui = g;
 		
 	}
-
+	public static int randInt(int min, int max) {
+	    Random i = new Random();
+	    return i.nextInt((max - min) + 1) + min;
+	}
 
 }

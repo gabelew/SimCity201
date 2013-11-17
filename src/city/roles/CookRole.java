@@ -7,11 +7,14 @@ import java.util.concurrent.Semaphore;
 
 import city.MarketAgent;
 import city.PersonAgent;
+import restaurant.CookAgent.Order;
+import restaurant.MarketAgent.MyFood;
 import restaurant.gui.CookGui;
 import restaurant.interfaces.Cook;
+import restaurant.interfaces.Market;
 import restaurant.interfaces.Waiter;
 
-public class CookRole extends Role {
+public class CookRole extends Role implements Cook {
 	public List<RoleOrder> orders = Collections.synchronizedList(new ArrayList<RoleOrder>());
 	public List<Food> foods = Collections.synchronizedList(new ArrayList<Food>());
 	public List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
@@ -20,7 +23,6 @@ public class CookRole extends Role {
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
 	
-	private String name;
 	private CashierRole cashier;
 	public CookGui cookGui = null;
 
@@ -139,10 +141,9 @@ public class CookRole extends Role {
 	}
 	public enum marketOrderState {waiting, ordering,waitingForBill, paying};
 	
-	public CookRole(PersonAgent p,String n){
-		super(p);
-		this.name = n;
-
+	public CookRole(){
+		super();
+	
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
 		foods.add(new Food("steak",STEAK_COOKTIME, STEAK_LOW_AMOUNT, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
@@ -494,10 +495,6 @@ public class CookRole extends Role {
 	private void goToRestPost() {
 		cookGui.doGoToRestPost();
 	}
-	public String getName() {
-		return name;
-	}
-
 
 	private MyMarket findMarket(MarketAgent m) {
 
@@ -562,6 +559,34 @@ public class CookRole extends Role {
 				}
 			}
 		}
+		
+	}
+
+
+	@Override
+	public void msgFoodDone(Order o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void msgDelivering(Market m, List<MyFood> orderlist) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void msgOutOfOrder(Market m, List<MyFood> orderList) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void msgAnimationFinishedPutFoodOnPickUpTable(Order o) {
+		// TODO Auto-generated method stub
 		
 	}
 

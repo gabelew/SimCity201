@@ -13,14 +13,13 @@ import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 
-public class CashierRole extends Role {
+public class CashierRole extends Role implements Cashier {
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	Timer timer = new Timer();
 	
 	public EventLog log = new EventLog();
 	
-	private String name;
 	public CashierGui cashierGui = null;
 	Map<String, Double> pricingMap = new HashMap<String, Double>(); 
 	public double bank = 5000; 
@@ -63,9 +62,8 @@ public class CashierRole extends Role {
 	public static final double BURGER_COST = 8.99;
 	public static final double COOKIE_COST = 3.99;	
 	
-	public CashierRole(PersonAgent p,String n){
-		super(p);
-		this.name = n;
+	public CashierRole(){
+		super();
 		
 		pricingMap.put("salad", SALAD_COST);
 		pricingMap.put("steak", STEAK_COST);
@@ -274,10 +272,12 @@ public class CashierRole extends Role {
 		o.waiter.msgHereIsCheck(o.customer, o.check);
 		log.add(new LoggedEvent("Performed giveWaiter. Total of check = "+ o.check));
 	}
-	
-	public String getName() {
-		return name;
+
+	@Override
+	public void msgHereIsBill(Market m, double bill) {
+		//bills.add( new Bill(m, bill, BillState.requested));
+		//log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
+		//stateChanged();
+		
 	}
-
-
 }

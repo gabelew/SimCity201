@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import city.gui.Gui;
 
@@ -13,10 +14,10 @@ public abstract class InsideAnimationPanel extends JPanel implements ActionListe
 	private static final long serialVersionUID = 1L;
 	
 	InsideBuildingPanel insideBuildingPanel;
-	protected static final int TIMERDELAY = 10;
+	protected static final int TIMERDELAY = 20;
 	protected final int WINDOWX = 934;
     protected final int WINDOWY = 472;
-    
+
     protected List<Gui> guis = new ArrayList<Gui>();
     
 	public void setInsideBuildingPanel(InsideBuildingPanel ibp){

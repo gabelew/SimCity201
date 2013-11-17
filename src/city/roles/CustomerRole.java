@@ -2,6 +2,7 @@ package city.roles;
 
 import restaurant.CashierAgent;
 import restaurant.HostAgent;
+import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
@@ -31,13 +32,11 @@ public class CustomerRole extends Role implements Customer {
 	private Semaphore leaveEarly = new Semaphore(1,true);
 	boolean recievedCheck = false;
 	boolean goToATM = false;
-	double cash = 0;
 	double check;
 	
 	// agent correspondents
-	private HostAgent host;
 	private Waiter waiter;
-	private Cashier cashier;
+	private Restaurant restaurant;
 	
 	static final int ATM_WITHDRAWAL_AMOUNT = 200; 
 	static final int HUNGERLEVEL = 5000;
@@ -64,24 +63,10 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(PersonAgent p,String name, double c){
+	public CustomerRole(PersonAgent p, Restaurant r){
 		super(p);
-		this.name = name;
-		cash = c;
-	}
-
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-	public void setHost(HostAgent host) {
-		this.host = host;
-	}
-	
-	/**
-	 * hack to establish connection to Cashier agent.
-	 */
-	public void setCashier(Cashier cashier) {
-		this.cashier = cashier;
+		myPerson = p;
+		restaurant = r;
 	}
 	
 	// Messages
@@ -91,7 +76,7 @@ public class CustomerRole extends Role implements Customer {
 		MENUINDEXEND = MENUINDEXEND_DEFAULT;
 		if(goToATM){
 			goToATM = false;
-			cash += ATM_WITHDRAWAL_AMOUNT;
+			myPerson.cashOnHand += ATM_WITHDRAWAL_AMOUNT;
 		}
 		stateChanged();
 	}
@@ -129,19 +114,19 @@ public class CustomerRole extends Role implements Customer {
 	private void msgChoiceMade(String c){
 		choice = c;
 
-		if(name.equalsIgnoreCase("Steak") && cash >= CashierAgent.STEAK_COST && isAvailable("Steak")){
+		if(name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CashierAgent.STEAK_COST && isAvailable("Steak")){
 			choice = "Steak";
 		}
-		if(name.equalsIgnoreCase("Chicken") && cash >=  CashierAgent.CHICKEN_COST && isAvailable("Chicken")){
+		if(name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CashierAgent.CHICKEN_COST && isAvailable("Chicken")){
 			choice = "Chicken";
 		}
-		if(name.equalsIgnoreCase("Salad") && cash >=  CashierAgent.SALAD_COST && isAvailable("Salad")){
+		if(name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CashierAgent.SALAD_COST && isAvailable("Salad")){
 			choice = "Salad";
 		}
-		if(name.equalsIgnoreCase("Burger") && cash >=  CashierAgent.BURGER_COST && isAvailable("Burger")){
+		if(name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CashierAgent.BURGER_COST && isAvailable("Burger")){
 			choice = "Burger";
 		}
-		if(name.equalsIgnoreCase("Cookie") && cash >=  CashierAgent.COOKIE_COST && isAvailable("Cookie")){
+		if(name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CashierAgent.COOKIE_COST && isAvailable("Cookie")){
 			choice = "Cookie";
 		}
 		
@@ -195,7 +180,7 @@ public class CustomerRole extends Role implements Customer {
 		stateChanged();
 	}
 	public void msgChange(double cashBack) {
-		cash += cashBack;
+		myPerson.cashOnHand += cashBack;
 		event = AgentEvent.payedCheck;
 		stateChanged();	
 	}
@@ -285,7 +270,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 	private void goToRestaurant() {
 		DoGoToRestaurant();
-		host.msgIWantToEat(this);//send our instance, so he can respond to us
+		restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
 		DoWaitForTable();
 	}
 	
@@ -305,7 +290,7 @@ public class CustomerRole extends Role implements Customer {
 					}
 				}
 			}, 
-			randInt(QUICKEST_CHOICE_TIME, SLOWEST_CHOICE_TIME)
+			myPerson.randInt(QUICKEST_CHOICE_TIME, SLOWEST_CHOICE_TIME)
 		);			
 	}
 	
@@ -320,7 +305,7 @@ public class CustomerRole extends Role implements Customer {
 				leaveEarly.release();		
 			}
 		}else{
-			host.msgLeavingRestaurant(this);	
+			restaurant.host.msgLeavingRestaurant(this);	
 			customerGui.DoExitRestaurant();
 			leaveEarly.release();		
 		};
@@ -334,7 +319,7 @@ public class CustomerRole extends Role implements Customer {
 	private void makeChoice(){
 		List<MenuItem> removeMenuItems = new ArrayList<MenuItem>();
 		for(MenuItem m: myMenu.menuItems){
-			if(cash < m.cost && !name.equalsIgnoreCase("Mahdi") && !name.equalsIgnoreCase("ditch") )
+			if(myPerson.cashOnHand < m.cost && !name.equalsIgnoreCase("Mahdi") && !name.equalsIgnoreCase("ditch") )
 			{
 				removeMenuItems.add(m);
 			}
@@ -353,17 +338,14 @@ public class CustomerRole extends Role implements Customer {
 		else{
 			timer.schedule(new TimerTask() {
 				public void run() {
-					msgChoiceMade(myMenu.getMenuItemName(randInt(MENUINDEXSTART,MENUINDEXEND)));
+					msgChoiceMade(myMenu.getMenuItemName(PersonAgent.randInt(MENUINDEXSTART,MENUINDEXEND)));
 				}}, 
-					randInt(QUICKEST_CHOICE_TIME, SLOWEST_CHOICE_TIME)
+					PersonAgent.randInt(QUICKEST_CHOICE_TIME, SLOWEST_CHOICE_TIME)
 			);	
 		}
 	}
 	
-	public static int randInt(int min, int max) {
-	    Random i = new Random();
-	    return i.nextInt((max - min) + ONE) + min;
-	}
+
 	
 	private void tellWaiter(){
 		waiter.msgImReadyToOrder(this);
@@ -404,14 +386,14 @@ public class CustomerRole extends Role implements Customer {
 		waiter = null;
 		myPerson.hungerLevel = 0;
 		doGoToCashier();
-		print(cash - check + " = " + cash + " - " + check);
+		print(myPerson.cashOnHand - check + " = " + myPerson.cashOnHand + " - " + check);
 		
-		if((cash - check) > 0){
-			cash = cash - check;
-			cashier.msgPayment(this, check);
+		if((myPerson.cashOnHand - check) > 0){
+			myPerson.cashOnHand = myPerson.cashOnHand - check;
+			restaurant.cashier.msgPayment(this, check);
 		}else{
-			cashier.msgPayment(this, cash);
-			cash = 0;
+			restaurant.cashier.msgPayment(this, myPerson.cashOnHand);
+			myPerson.cashOnHand = 0;
 		}
 	}
 	
@@ -446,7 +428,7 @@ public class CustomerRole extends Role implements Customer {
 
 	// Accessors, etc.
 	public String getName() {
-		return name;
+		return myPerson.getName();
 	}
 
 	public String toString() {

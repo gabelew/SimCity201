@@ -195,12 +195,6 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         for(int i = ZERO; i<buildings.size(); i++){
         	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
         } 
-       
-
-    	g.drawImage(carDownImg, BUILDING_START_X+15, BUILDING_START_Y + 30, null);
-    	g.drawImage(carUpImg, BUILDING_START_X+15+40, BUILDING_START_Y + 30, null);
-    	g.drawImage(carLeftImg, BUILDING_START_X+15, BUILDING_START_Y + 50, null);
-    	g.drawImage(carRightImg, BUILDING_START_X+15+35, BUILDING_START_Y + 50, null);
     }
     
 	public void addGui(PersonGui gui) {
