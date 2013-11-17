@@ -6,7 +6,6 @@ import javax.swing.*;
 import restaurant.gui.CashierGui;
 import restaurant.gui.CookGui;
 import restaurant.gui.CustomerGui;
-import restaurant.gui.HostGui;
 import restaurant.gui.Table;
 import restaurant.gui.WaiterGui;
 import city.gui.Gui;
@@ -20,8 +19,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 public class RestaurantAnimationPanel extends InsideAnimationPanel implements ActionListener, MouseListener {
@@ -84,7 +81,6 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	private BufferedImage hostStandImg = null;
 	private BufferedImage registerImg = null;
 	private BufferedImage fidgeImg = null;
-	private BufferedImage grillLeftImg = null;
 	private BufferedImage grillRightImg = null;
 	private BufferedImage platingTableImg = null;
 
@@ -99,7 +95,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 		    hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
 		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
 		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
-		    grillLeftImg = ImageIO.read(new File(path.toString() + "grill.png"));
+		    ImageIO.read(new File(path.toString() + "grill.png"));
 		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
 		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
 		} catch (IOException e) {

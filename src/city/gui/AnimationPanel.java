@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 public class AnimationPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
@@ -86,25 +85,18 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
-	private BufferedImage busDownImg = null;
-	private BufferedImage busUpImg = null;
-	private BufferedImage carDownImg = null;
-	private BufferedImage carUpImg = null;
-	private BufferedImage carRightImg = null;
-	private BufferedImage carLeftImg = null;
-	
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
 		
 
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
-			busDownImg = ImageIO.read(new File(path.toString() + "bus_front.png"));
-		    busUpImg = ImageIO.read(new File(path.toString() + "bus_back.png"));
-		    carDownImg = ImageIO.read(new File(path.toString() + "carFront.png"));
-		    carUpImg = ImageIO.read(new File(path.toString() + "carBack.png"));
-		    carLeftImg = ImageIO.read(new File(path.toString() + "carRight.png"));
-		    carRightImg = ImageIO.read(new File(path.toString() + "carLeft.png"));
+			ImageIO.read(new File(path.toString() + "bus_front.png"));
+		    ImageIO.read(new File(path.toString() + "bus_back.png"));
+		    ImageIO.read(new File(path.toString() + "carFront.png"));
+		    ImageIO.read(new File(path.toString() + "carBack.png"));
+		    ImageIO.read(new File(path.toString() + "carRight.png"));
+		    ImageIO.read(new File(path.toString() + "carLeft.png"));
 		} catch (IOException e) {
 		}
 		
