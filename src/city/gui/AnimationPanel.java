@@ -82,6 +82,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	static final int xBUILDING_IMG_AREA_OFFSET = 35;
 	static final int yBUILDING_IMG_AREA_OFFSET = 33;
 
+	public Timer timer;
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = new ArrayList<Gui>();
     private SimCityGui simCityGui;
@@ -104,7 +105,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		setSize(WINDOWX, WINDOWY);
         setVisible(true);
  
-    	Timer timer = new Timer(TIMERDELAY, this );
+    	timer = new Timer(TIMERDELAY, this );
     	timer.start();	
 
         addMouseListener(this);	

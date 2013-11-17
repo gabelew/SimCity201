@@ -43,8 +43,8 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         
-    	Timer timer = new Timer(TIMERDELAY, this );
-    	timer.start();	
+
+        simCityGui.animationPanel.timer.addActionListener(this);
     	
     	for(int i = 0; i < NATMS; i++) {
     		BankCustomerGui.atms.add(new Semaphore(1,true));

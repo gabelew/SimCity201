@@ -104,8 +104,8 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
  
-    	Timer timer = new Timer(TIMERDELAY, this );
-    	timer.start();	
+
+        simCityGui.animationPanel.timer.addActionListener(this);
 		
     	for(int i = 0; i < NWAITSEATS; i++){
 			CustomerGui.waitingSeats.add(new Semaphore(1,true));

@@ -21,12 +21,8 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
- 
-
-
         
-    	Timer timer = new Timer(TIMERDELAY, this );
-    	timer.start();		
+        simCityGui.animationPanel.timer.addActionListener(this);
 		
 	}
 	@Override

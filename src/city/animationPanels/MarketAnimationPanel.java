@@ -51,8 +51,7 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
  
-    	Timer timer = new Timer(TIMERDELAY, this );
-    	timer.start();	
+        simCityGui.animationPanel.timer.addActionListener(this);	
 		
 	}
 	@Override

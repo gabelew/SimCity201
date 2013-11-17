@@ -374,7 +374,6 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public void displayBuildingPanel(InsideBuildingPanel ibp) {
 		System.out.println(ibp.getName());
 		for(int i = 0; i < animationPanel.buildings.size(); i++){
-			System.out.println(animationPanel.buildings.get(i).getInsideBuildingPanel().isVisible);
 			animationPanel.buildings.get(i).getInsideBuildingPanel().isVisible = false;
 		}
 		ibp.isVisible = true;
