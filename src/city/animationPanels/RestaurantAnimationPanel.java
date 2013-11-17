@@ -3,9 +3,11 @@ package city.animationPanels;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import restaurant.Restaurant;
 import restaurant.gui.CashierGui;
 import restaurant.gui.CookGui;
 import restaurant.gui.CustomerGui;
+import restaurant.gui.RestaurantPanel;
 import restaurant.gui.Table;
 import restaurant.gui.WaiterGui;
 import city.gui.Gui;
@@ -19,12 +21,14 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class RestaurantAnimationPanel extends InsideAnimationPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
-    private static int NTABLES = 0;
+    private List<Table> tables = new ArrayList<Table>();
 	private boolean movingTable = false;
 	private Table clickedTable = null;
 	private int clickedTableMouseXOffset;
@@ -43,8 +47,6 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     static final int yTABLE_AREA = 20;
     static final int xTABLE_AREA_WIDTH = 180;
     static final int yTABLE_AREA_WIDTH = 425;
-    static final int xTABLE_WIDTH = 42;
-    static final int yTABLE_WIDTH = 44;
     static final int xKITCHEN_WALL_OFFSET = 10;
     static final int yKITCHEN_WALL_OFFSET = 25;
     static final int xKITCHEN_WALL_WIDTH = 5;
@@ -73,7 +75,19 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     static final int yPLATINGTABLE_OFFSET = 60;
     static final int NPLATING_TABLES = 4;
     static final int NRESTSEATS = 16;
-
+    static final int xTABLE_WIDTH = 42;
+    static final int yTABLE_WIDTH = 44;
+    static final int TABLE_PADDING = 5;
+	static final int xTABLE_IMG_POINT_OFFSET = 1;
+	static final int yTABLE_IMG_POINT_OFFSET = 40;
+	static final int xTABLE_IMG_AREA_OFFSET = 10;
+	static final int yTABLE_IMG_AREA_OFFSET = 42;
+	static final int xDEFAULT_NEW_TABLE_POSITION = 140;
+	static final int yDEFAULT_NEW_TABLE_POSITION = 40;
+	static final int STARTING_TABLES_X = 200;
+	static final int STARTING_TABLE1_Y = 35;
+	static final int STARTING_TABLE_Y_SPACING = 90;
+	
     private SimCityGui simCityGui;
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
@@ -116,21 +130,6 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         addMouseListener(this);	
 		
 	}
-   /* public AnimationPanel() {
-		try {
-		    kitchenImg = ImageIO.read(new File("kitchen.png"));
-		    tableImg = ImageIO.read(new File("table.png"));
-		    chairImg = ImageIO.read(new File("customer_chair_v1.png"));
-		    hostStandImg = ImageIO.read(new File("host_stand.png"));
-		} catch (IOException e) {
-		}
-		
-    	setSize(WINDOWX, WINDOWY);
-        setVisible(true);
- 
-    	Timer timer = new Timer(TIMERDELAY, this );
-    	timer.start();
-    }*/
 
 	public void actionPerformed(ActionEvent e) {
 		for(Gui gui : guis) {
@@ -158,8 +157,8 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         
 
         //Here is the chairs
-        for(int i = ZERO; i<NTABLES; i++){
-        	g.drawImage(chairImg, simCityGui.getTablesXCoord(i) + xCHAIR_OFFSET, simCityGui.getTablesYCoord(i) + yCHAIR_OFFSET, null);
+        for(int i = ZERO; i<tables.size(); i++){
+        	g.drawImage(chairImg, getTablesXCoord(i) + xCHAIR_OFFSET, getTablesYCoord(i) + yCHAIR_OFFSET, null);
         }
         for(int i = ZERO; i<NWAITSEATS/NWAITSEATS_ROWS; i++){
         	for(int j = ZERO; j < NWAITSEATS/NWAITSEATS_COLUMNS; j++ )
@@ -216,8 +215,8 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         
         //Here is the table
         g2.setColor(Color.ORANGE);
-        for(int i = ZERO; i<NTABLES; i++){
-        	g.drawImage(tableImg, simCityGui.getTablesXCoord(i), simCityGui.getTablesYCoord(i), null);
+        for(int i = ZERO; i<tables.size(); i++){
+        	g.drawImage(tableImg, getTablesXCoord(i), getTablesYCoord(i), null);
         }
         
 
@@ -253,7 +252,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	@Override
 	public void mousePressed(MouseEvent me) {
 		//get table
-		clickedTable = simCityGui.getTableAt(me.getPoint());
+		clickedTable = getTableAt(me.getPoint());
 
 		if(clickedTable != null && clickedTable.getState() == Table.TableState.Movable)
 		{
@@ -281,7 +280,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 
 			if(xTABLE_AREA <= placeTableHere.x && xTABLE_AREA + xTABLE_AREA_WIDTH - xTABLE_WIDTH >= placeTableHere.x 
 				&& yTABLE_AREA <= placeTableHere.y && yTABLE_AREA + yTABLE_AREA_WIDTH - yTABLE_WIDTH >= placeTableHere.y
-				&& simCityGui.notOnExistingTable(clickedTable, placeTableHere)){
+				&& notOnExistingTable(clickedTable, placeTableHere)){
 				clickedTable.changePos(placeTableHere);
 			}
 
@@ -291,9 +290,96 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 		}
 		clickedTable = null;
 	}
-	public void addNewTable() {
-		NTABLES++;
+
+    public void addDefaultTables() {
+    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y);
+    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING);
+    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
+    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
 	}
+
+ 	public int getTablesXCoord(int i){
+    	return tables.get(i).getX();
+    }
+    public int getTablesYCoord(int i){
+    	return tables.get(i).getY();
+    }
+
+	public boolean isOnTable(Point i) {
+		for(Table t: tables)
+		{
+			if(t.getX()+xTABLE_IMG_POINT_OFFSET <= i.x && t.getX()+yTABLE_IMG_POINT_OFFSET >= i.x && t.getY()+xTABLE_IMG_AREA_OFFSET <= i.y && t.getY()+yTABLE_IMG_AREA_OFFSET >= i.y)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Table getTableAt(Point i) {
+		for(Table t: tables)
+		{
+			if(t.getX()+xTABLE_IMG_POINT_OFFSET <= i.x && t.getX()+yTABLE_IMG_POINT_OFFSET >= i.x && t.getY()+xTABLE_IMG_AREA_OFFSET <= i.y && t.getY()+yTABLE_IMG_AREA_OFFSET >= i.y)
+			{
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	public Table getTableAtIndex(int i) {
+		if(tables.size() < i){
+			return tables.get(i);
+		}
+		
+		return null;
+	}
+	public void setTableOccupied(int tableNumber) {
+		tables.get(tableNumber).setOccupied();
+		((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableDisabled(tableNumber);
+	}
+	public void setTableUnoccupied(int tableNumber) {
+		tables.get(tableNumber).setMovable();
+		((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableEnabled(tableNumber);
+	}
+
+	public boolean notOnExistingTable(Table newTablePos, Point placeTableHere) {
+		for(Table t: tables)
+		{
+			if(t != newTablePos){
+				if(
+					(t.getX() - TABLE_PADDING <= placeTableHere.x && t.getX()+xTABLE_WIDTH + TABLE_PADDING >= placeTableHere.x &&
+					t.getY() - TABLE_PADDING <= placeTableHere.y && t.getY()+yTABLE_WIDTH + TABLE_PADDING >= placeTableHere.y) ||
+					(placeTableHere.x - TABLE_PADDING <= t.getX() && placeTableHere.x+xTABLE_WIDTH + TABLE_PADDING >= t.getX() &&
+					placeTableHere.y - TABLE_PADDING <= t.getY() && placeTableHere.y+yTABLE_WIDTH + TABLE_PADDING >= t.getY())){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public void addTable() {
+    	tables.add(new Table(xDEFAULT_NEW_TABLE_POSITION, yDEFAULT_NEW_TABLE_POSITION));
+    	for(Restaurant r: simCityGui.getRestaurants()){
+    		if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
+    			r.host.addNewTable();
+    		}
+    	}
+    	
+		
+	}
+	public void addTable(int x, int y) {
+		
+    	tables.add(new Table( x, y));
+    	for(Restaurant r: simCityGui.getRestaurants()){
+    		if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
+    			r.host.addNewTable();
+    		}
+    	}
+		
+	}
+
 
 	
 }

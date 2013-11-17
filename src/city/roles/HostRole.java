@@ -1,14 +1,17 @@
 package city.roles;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.gui.HostGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 
+import java.awt.Point;
 import java.util.*;
 
 import city.PersonAgent;
+import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.SimCityGui;
 
 /**
@@ -29,12 +32,12 @@ public class HostRole extends Role implements Host {
 	
 	public List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	
-	public Collection<Table> tables;
+	public Collection<Table> tables = Collections.synchronizedList(new ArrayList<Table>());
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 
 	public HostGui hostGui = null;
-	private SimCityGui restGui = null;
+	private SimCityGui simCityGui = null;
 
 	public enum cState {waiting, waitingAndTold, eating, done};
 	public enum wState {idle, working, askedForBreak}; 
@@ -143,7 +146,12 @@ print("ooiret");
 				customers.remove(c); //c.state = cState.done;
 
 				table.setUnoccupied();
-				restGui.setTableUnoccupied(table.getTableNumber());
+
+				for(Restaurant r: simCityGui.getRestaurants()){
+			    	if(r.host == this){
+						((RestaurantAnimationPanel) r.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
+			    	}
+			    }
 				stateChanged();
 			}
 		}		
@@ -283,14 +291,14 @@ print("ooiret");
 	private void doLetWaiterBreak(MyWaiter w) {
 		w.state = wState.idle;
 		w.w.msgGoOnBreak();
-		restGui.setWaiterOnBreak(w.w.getName());
+		simCityGui.setWaiterOnBreak(w.w.getName());
 		print(w.w.getName() + ", go on break.");
 	}
 
 	private void dontLetWaiterBreak(MyWaiter w) {
 		w.state = wState.working;
 		w.w.msgDontGoOnBreak();
-		restGui.setWaiterCantBreak(w.w.getName());
+		simCityGui.setWaiterCantBreak(w.w.getName());
 		print(w.w.getName() + ", we don't have enough working waiters to break.");
 	}
 	
@@ -309,8 +317,12 @@ print("ooiret");
 		
 		if(c != null){
 			t.setOccupant(c.c);
-			restGui.setTableOccupied(t.tableNumber);
-	
+
+			for(Restaurant r: simCityGui.getRestaurants()){
+		    	if(r.host == this){
+					((RestaurantAnimationPanel) r.insideAnimationPanel).setTableOccupied(t.getTableNumber());
+		    	}
+		    }
 			c.setState(cState.eating);
 			c.c.msgTableIsReady();
 			
@@ -333,7 +345,7 @@ print("ooiret");
 	
 	public void setGui(HostGui gui, SimCityGui gui2) {
 		hostGui = gui;
-		restGui = gui2;
+		simCityGui = gui2;
 	}
 
 	public HostGui getGui() {

@@ -265,10 +265,7 @@ public class ListPanel extends JPanel implements ActionListener {
             {
             	infoPanel.addPerson(type, name);//puts customer or waiter on list
             }
-            if(type == "Tables")
-            {
-            	infoPanel.addTable();//puts customer or waiter on list
-            }
+
             
             validate();
         }
@@ -324,8 +321,6 @@ public class ListPanel extends JPanel implements ActionListener {
         listItems.add(new ListItem(label, newstateCB));
         addNewCustView.add(label);
         view.add(addNewCustView);
-            	
-    	infoPanel.addTable(x, y);
     	
     	validate();
     }

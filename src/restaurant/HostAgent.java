@@ -33,7 +33,7 @@ public class HostAgent extends Agent {
 	private String name;
 
 	public HostGui hostGui = null;
-	private SimCityGui restGui = null;
+	private SimCityGui simCityGui = null;
 
 	public enum cState {waiting, waitingAndTold, eating, done};
 	public enum wState {idle, working, askedForBreak}; 
@@ -152,7 +152,7 @@ print("ooiret");
 				customers.remove(c); //c.state = cState.done;
 
 				table.setUnoccupied();
-				restGui.setTableUnoccupied(table.getTableNumber());
+				//simCityGui.setTableUnoccupied(table.getTableNumber());
 				stateChanged();
 			}
 		}		
@@ -292,14 +292,14 @@ print("ooiret");
 	private void doLetWaiterBreak(MyWaiter w) {
 		w.state = wState.idle;
 		w.w.msgGoOnBreak();
-		restGui.setWaiterOnBreak(w.w.getName());
+		simCityGui.setWaiterOnBreak(w.w.getName());
 		print(w.w.getName() + ", go on break.");
 	}
 
 	private void dontLetWaiterBreak(MyWaiter w) {
 		w.state = wState.working;
 		w.w.msgDontGoOnBreak();
-		restGui.setWaiterCantBreak(w.w.getName());
+		simCityGui.setWaiterCantBreak(w.w.getName());
 		print(w.w.getName() + ", we don't have enough working waiters to break.");
 	}
 	
@@ -318,7 +318,7 @@ print("ooiret");
 		
 		if(c != null){
 			t.setOccupant(c.c);
-			restGui.setTableOccupied(t.tableNumber);
+			//simCityGui.setTableOccupied(t.tableNumber);
 	
 			c.setState(cState.eating);
 			c.c.msgTableIsReady();
@@ -342,7 +342,7 @@ print("ooiret");
 	
 	public void setGui(HostGui gui, SimCityGui gui2) {
 		hostGui = gui;
-		restGui = gui2;
+		simCityGui = gui2;
 	}
 
 	public HostGui getGui() {

@@ -32,6 +32,11 @@ public interface Cook {
 	
 	public abstract void msgAnimationFinishedPutFoodOnPickUpTable(Order o);
 	
+	public abstract void badSteaks();
+
+	public abstract void cookieMonster();
+
+	public abstract void setSteaksAmount(int i);
 	
 
 	

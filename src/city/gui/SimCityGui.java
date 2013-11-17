@@ -50,8 +50,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 
     private InfoPanel infoPanel = new InfoPanel(this);
  
-    private List<Table> tables = new ArrayList<Table>();
-    List<Restaurant> restaurants = new ArrayList<Restaurant>();
+    private List<Restaurant> restaurants = new ArrayList<Restaurant>();
     public List<PersonAgent> persons = new ArrayList<PersonAgent>();
     
     private JFrame bottomFrame = new JFrame();
@@ -71,18 +70,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     static final int NROWS = 1;
     static final int NCOLUMNS = 0;
     static final int REST_PANEL_Y = 450;
-    static final int xTABLE_WIDTH = 42;
-    static final int yTABLE_WIDTH = 44;
-    static final int TABLE_PADDING = 5;
-	static final int xTABLE_IMG_POINT_OFFSET = 1;
-	static final int yTABLE_IMG_POINT_OFFSET = 40;
-	static final int xTABLE_IMG_AREA_OFFSET = 10;
-	static final int yTABLE_IMG_AREA_OFFSET = 42;
-	static final int xDEFAULT_NEW_TABLE_POSITION = 140;
-	static final int yDEFAULT_NEW_TABLE_POSITION = 40;
-	static final int STARTING_TABLES_X = 200;
-	static final int STARTING_TABLE1_Y = 35;
-	static final int STARTING_TABLE_Y_SPACING = 90;
+    
     
     /**
      * Constructor for RestaurantGui class.
@@ -128,51 +116,48 @@ public class SimCityGui extends JFrame implements ActionListener {
         	
         	if(b.type.equals("restaurant")){
             
-        	JPanel APanel = new JPanel();
-            RestaurantPanel restPanel = new RestaurantPanel(this);
+        	RestaurantPanel restPanel = new RestaurantPanel(this);
             InsideAnimationPanel restaurantAnimationPanel = new RestaurantAnimationPanel(this);
         	
             Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
             restPanel.setPreferredSize(restDim);
             restPanel.setMinimumSize(restDim);
             restPanel.setMaximumSize(restDim);
-            APanel.add(restPanel);
 
-        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, APanel);
+        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, restPanel);
+        	restPanel.setInsideBuildingPanel(bp);
         	b.setInsideBuildingPanel(bp);
         	restaurantAnimationPanel.setInsideBuildingPanel(bp);
         	buildingsPanel.add(bp, "" + i);
-        	restaurants.add(new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
+        	getRestaurants().add(new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
         			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY())));
+        	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
         	}else if(b.type.equals("market")){
                 
-            	JPanel APanel = new JPanel();
-                RestaurantPanel restPanel = new RestaurantPanel(this);
+            	RestaurantPanel restPanel = new RestaurantPanel(this);
                 InsideAnimationPanel marketAnimationPanel = new MarketAnimationPanel(this);
             	
                 Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
                 restPanel.setPreferredSize(restDim);
                 restPanel.setMinimumSize(restDim);
                 restPanel.setMaximumSize(restDim);
-                APanel.add(restPanel);
 
-            	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,marketAnimationPanel, APanel);
+            	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,marketAnimationPanel, restPanel);
+            	restPanel.setInsideBuildingPanel(bp);
             	b.setInsideBuildingPanel(bp);
             	marketAnimationPanel.setInsideBuildingPanel(bp);
             	buildingsPanel.add(bp, "" + i);
 	    	}else if(b.type.equals("bank")){
 	            
-	        	JPanel APanel = new JPanel();
-	            RestaurantPanel restPanel = new RestaurantPanel(this);
+	        	RestaurantPanel restPanel = new RestaurantPanel(this);
 	            InsideAnimationPanel bankAnimationPanel = new BankAnimationPanel(this);
 	        	
 	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
 	            restPanel.setPreferredSize(restDim);
 	            restPanel.setMinimumSize(restDim);
 	            restPanel.setMaximumSize(restDim);
-	            APanel.add(restPanel);
 	
-	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, APanel);
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, restPanel);
 	        	b.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);
 			}else if(b.type.equals("house")){
@@ -187,23 +172,23 @@ public class SimCityGui extends JFrame implements ActionListener {
 		        restPanel.setMaximumSize(restDim);
 		        APanel.add(restPanel);
 		
-		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, APanel);
+		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, restPanel);
+            	restPanel.setInsideBuildingPanel(bp);
 		    	b.setInsideBuildingPanel(bp);
 		    	houseAnimationPanel.setInsideBuildingPanel(bp);
 		    	buildingsPanel.add(bp, "" + i);
 			}else if(b.type.equals("apartment")){
 			    
-				JPanel APanel = new JPanel();
-			    RestaurantPanel restPanel = new RestaurantPanel(this);
+				RestaurantPanel restPanel = new RestaurantPanel(this);
 			    InsideAnimationPanel apartmentAnimationPanel = new ApartmentAnimationPanel(this);
 				
 			    Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
 			    restPanel.setPreferredSize(restDim);
 			    restPanel.setMinimumSize(restDim);
 			    restPanel.setMaximumSize(restDim);
-			    APanel.add(restPanel);
 			
-				InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,apartmentAnimationPanel, APanel);
+				InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,apartmentAnimationPanel, restPanel);
+            	restPanel.setInsideBuildingPanel(bp);
 				b.setInsideBuildingPanel(bp);
 				apartmentAnimationPanel.setInsideBuildingPanel(bp);
 				buildingsPanel.add(bp, "" + i);
@@ -250,90 +235,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         gui.setVisible(true);
         gui.setResizable(false);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.addDefaultTables();
     }
-    private void addDefaultTables() {
-        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y);
-        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING);
-        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
-        //restPanel.getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
-	}
-
- 	public int getTablesXCoord(int i){
-    	return tables.get(i).getX();
-    }
-    public int getTablesYCoord(int i){
-    	return tables.get(i).getY();
-    }
-
-	public boolean isOnTable(Point i) {
-		for(Table t: tables)
-		{
-			if(t.getX()+xTABLE_IMG_POINT_OFFSET <= i.x && t.getX()+yTABLE_IMG_POINT_OFFSET >= i.x && t.getY()+xTABLE_IMG_AREA_OFFSET <= i.y && t.getY()+yTABLE_IMG_AREA_OFFSET >= i.y)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public Table getTableAt(Point i) {
-		for(Table t: tables)
-		{
-			if(t.getX()+xTABLE_IMG_POINT_OFFSET <= i.x && t.getX()+yTABLE_IMG_POINT_OFFSET >= i.x && t.getY()+xTABLE_IMG_AREA_OFFSET <= i.y && t.getY()+yTABLE_IMG_AREA_OFFSET >= i.y)
-			{
-				return t;
-			}
-		}
-		return null;
-	}
-	
-	public Table getTableAtIndex(int i) {
-		if(tables.size() < i){
-			return tables.get(i);
-		}
-		
-		return null;
-	}
-	public void setTableOccupied(int tableNumber) {
-		tables.get(tableNumber).setOccupied();
-		//restPanel.setTableDisabled(tableNumber);
-	}
-	public void setTableUnoccupied(int tableNumber) {
-		tables.get(tableNumber).setMovable();
-		//restPanel.setTableEnabled(tableNumber);
-	}
-
-	public boolean notOnExistingTable(Table newTablePos, Point placeTableHere) {
-		for(Table t: tables)
-		{
-			if(t != newTablePos){
-				if(
-					(t.getX() - TABLE_PADDING <= placeTableHere.x && t.getX()+xTABLE_WIDTH + TABLE_PADDING >= placeTableHere.x &&
-					t.getY() - TABLE_PADDING <= placeTableHere.y && t.getY()+yTABLE_WIDTH + TABLE_PADDING >= placeTableHere.y) ||
-					(placeTableHere.x - TABLE_PADDING <= t.getX() && placeTableHere.x+xTABLE_WIDTH + TABLE_PADDING >= t.getX() &&
-					placeTableHere.y - TABLE_PADDING <= t.getY() && placeTableHere.y+yTABLE_WIDTH + TABLE_PADDING >= t.getY())){
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	public void addTable() {
-    	tables.add(new Table(xDEFAULT_NEW_TABLE_POSITION, yDEFAULT_NEW_TABLE_POSITION));
-    	//((RestaurantAnimationPanel) restaurantAnimationPanel).addNewTable();
-    	//restPanel.getHost().addNewTable();
-		
-	}
-	public void addTable(int x, int y) {
-		
-    	tables.add(new Table( x, y));
-    	//((RestaurantAnimationPanel) restaurantAnimationPanel).addNewTable();
-    	//restPanel.getHost().addNewTable();
-		
-	}
-
 	public void setWaiterOnBreak(String name) {
 		//restPanel.setWaiterOnBreak(name);
 		
@@ -387,4 +289,9 @@ public class SimCityGui extends JFrame implements ActionListener {
 		
 		return null;
 	}
+
+	public List<Restaurant> getRestaurants() {
+		return restaurants;
+	}
+
 }

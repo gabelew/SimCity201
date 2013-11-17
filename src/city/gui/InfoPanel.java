@@ -186,7 +186,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		g.setPresent(true);
     		gui.animationPanel.addGui(g);// dw
     		
-    		for(Restaurant r: gui.restaurants){
+    		for(Restaurant r: gui.getRestaurants()){
     			p.addRestaurant(r);
     		}
     		p.setGui(g);
@@ -225,13 +225,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 	public void setTableDisabled(int tableNumber){
 		tablesPanel.setTableDisabled(tableNumber);
 	}*/
-	public void addTable() {
-		gui.addTable();
-	}
-	
-	public void addTable(int x,int y) {
-		gui.addTable(x,y);
-	}
+
 	
     public void pauseAgents()
     {

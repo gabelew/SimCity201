@@ -15,7 +15,7 @@ public class WaiterAgent extends Agent implements Waiter{
 	private String name;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
-	private HostAgent host;
+	public HostAgent host;
 	private CookAgent cook;
 	private CashierAgent cashier;
 	public enum CustomerState {waiting, seated, askedToOrder, asked, ordered, orderPlaced, 

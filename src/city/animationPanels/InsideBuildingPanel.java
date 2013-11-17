@@ -16,7 +16,7 @@ public class InsideBuildingPanel extends JPanel{
 	SimCityGui myCity;
 	String myName;
 	BuildingIcon buildingIcon;
-	InsideAnimationPanel insideAnimationPanel;
+	public InsideAnimationPanel insideAnimationPanel;
 	JPanel guiInteractionPanel;
 
     static final int FRAMEX = 1100;

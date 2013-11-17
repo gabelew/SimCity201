@@ -141,7 +141,7 @@ public class RestaurantListPanel extends JPanel implements ActionListener {
         }
         else if(e.getSource() == pauseAgentsB)
         {
-        	restPanel.pauseAgents();	
+        	//restPanel.pauseAgents();	
         }
         else //if(listItems.contains(e.getSource()))
         {

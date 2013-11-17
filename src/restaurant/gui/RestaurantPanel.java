@@ -5,13 +5,18 @@ import restaurant.CookAgent;
 import restaurant.CustomerAgent;
 import restaurant.HostAgent;
 import restaurant.MarketAgent;
+import restaurant.Restaurant;
 import restaurant.WaiterAgent;
 
 import javax.swing.*;
 
 import city.PersonAgent;
+import city.animationPanels.InsideBuildingPanel;
+import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.roles.CookRole;
+import city.roles.CookRole.Food;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -34,15 +39,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	private static final double CUSTOMER_DEFAULT_CASH = 200.00;
 	private static final double NO_CASH = 0.0;
 	
-    //Host, cook, waiters and customers
-    public HostAgent host = new HostAgent("Sarah");
-    private HostGui hostGui = new HostGui(host);
-    private CookAgent cook = new CookAgent("David");
-    private CookGui cookGui = new CookGui(cook);
-    public CashierAgent cashier = new CashierAgent("Gabe");
-    private CashierGui cashierGui = new CashierGui(cashier);
-
-    private Vector<MarketAgent> markets = new Vector<MarketAgent>();
+    //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
     private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
     private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
 
@@ -55,7 +52,8 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     private JPanel group = new JPanel();
 
     private SimCityGui gui; //reference to main gui
-
+    private InsideBuildingPanel insideBuildingPanel;
+    
     public RestaurantPanel(SimCityGui gui) {
 
        /* markets.add(new MarketAgent("Vons Market"));
@@ -301,58 +299,13 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		tablesPanel.setTableDisabled(tableNumber);
 	}
 	public void addTable() {
-		gui.addTable();
+		((RestaurantAnimationPanel) insideBuildingPanel.insideAnimationPanel).addTable();
 	}
 	
 	public void addTable(int x,int y) {
-		gui.addTable(x,y);
+		((RestaurantAnimationPanel) insideBuildingPanel.insideAnimationPanel).addTable(x,y);
 	}
 	
-    public void pauseAgents()
-    {
-    	if(tablesPanel.getPauseButtonLabel() == "Pause")
-    	{
-    	 for (CustomerAgent temp: customers)
-    	 {
-             temp.pauseAgent();
-    	 }
-    	 for (WaiterAgent temp: waiters) 
-    	 {
-             temp.pauseAgent();
-    	 }
-    	 for (MarketAgent temp: markets) 
-    	 {
-             temp.pauseAgent();
-    	 }
-    	 host.pauseAgent();
-    	 cook.pauseAgent();
-    	 cashier.pauseAgent();
-    	}
-    	else
-    	{
-       	 for(CustomerAgent temp: customers)
-       	 {
-                temp.resumeAgent();
-       	 }
-       	 for (WaiterAgent temp: waiters)
-       	 {
-                temp.resumeAgent();
-       	 }
-       	 for (MarketAgent temp: markets)
-       	 {
-                temp.resumeAgent();
-       	 }
-       	 host.resumeAgent();
-       	 cook.resumeAgent();
-    	 cashier.resumeAgent();
-    	}
-    	 tablesPanel.changePauseButton();     
-    }
-
-	public HostAgent getHost() {
-		return host;
-	}
-
 	public RestaurantListPanel getTablesPanel() {
 		return tablesPanel;
 	}
@@ -362,20 +315,20 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	}
 
 	public void setWaiterOnBreak(String name) {
-		//waitersPanel.setWaiterOnBreak(name);
+		waitersPanel.setWaiterOnBreak(name);
 	}
 
 	public void setWaiterCantBreak(String name) {
-		//waitersPanel.setWaiterCantBreak(name);
+		waitersPanel.setWaiterCantBreak(name);
 		
 	}
 
 	public void setWaiterBreakable(String name) {
-		//waitersPanel.setWaiterBreakable(name);
+		waitersPanel.setWaiterBreakable(name);
 		
 	}
 	public void setWaiterUnbreakable(String name) {
-		//waitersPanel.setWaiterUnbreakable(name);
+		waitersPanel.setWaiterUnbreakable(name);
 		
 	}
 
@@ -429,22 +382,35 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            cook.badSteaks();
+			for(Restaurant r: gui.getRestaurants()){
+				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
+		            r.cook.badSteaks();
+				}
+			}
         }
 		
 		if ((e.getKeyCode() == KeyEvent.VK_2) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            cook.cookieMonster();
+			for(Restaurant r: gui.getRestaurants()){
+				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
+					r.cook.cookieMonster();
+				}
+			}
         }
 
-		if ((e.getKeyCode() == KeyEvent.VK_D) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+		/*if ((e.getKeyCode() == KeyEvent.VK_D) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             markets.get(0).msgTossEverythingButCookies();
-        }
+        }*/
 		
 		if ((e.getKeyCode() == KeyEvent.VK_F) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-			cook.setSteaksAmount(5);
+
+			for(Restaurant r: gui.getRestaurants()){
+				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
+					r.cook.setSteaksAmount(5);
+				}
+			}
         }
 
-		if ((e.getKeyCode() == KeyEvent.VK_W) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+		/*if ((e.getKeyCode() == KeyEvent.VK_W) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 			
 			for(MarketAgent m: markets){
 				System.out.println("\nMarket Inventory: " + m.getName());
@@ -460,13 +426,18 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 				}
 				System.out.println(" ");
 			}
-        }
+        }*/
 
 		if ((e.getKeyCode() == KeyEvent.VK_E) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 				System.out.println("Cook Inventory: ");
-				for(CookAgent.Food f: cook.foods){
-					System.out.print("\t" + f.getChoice() + "\t" + f.getAmount() + "\t");
+				for(Restaurant r: gui.getRestaurants()){
+					if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
+						for(Food f: ((CookRole)r.cook).foods){
+							System.out.print("\t" + f.getChoice() + "\t" + f.getAmount() + "\t");
+						}
+					}
 				}
+				
 				System.out.println(" ");
         }
 		
@@ -478,6 +449,11 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {		
 	}
-
+	public void setInsideBuildingPanel(InsideBuildingPanel parent){
+    	insideBuildingPanel = parent;
+    } 
+    public InsideBuildingPanel getInsideBuildingPanel(){
+    	return insideBuildingPanel;
+    }
 }
 

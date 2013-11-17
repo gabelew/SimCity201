@@ -13,10 +13,12 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import city.roles.WaiterRole;
 import restaurant.CustomerAgent;
+import restaurant.Restaurant;
 import restaurant.WaiterAgent;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
@@ -172,8 +174,12 @@ public class WaiterGui implements Gui {
 	}
 
 	public void DoBringToTable(int t) {
-        xDestination = gui.getTablesXCoord(t) + WAITER_TABLE_OFFSET;
-        yDestination = gui.getTablesYCoord(t) - WAITER_TABLE_OFFSET;
+       for(Restaurant r: gui.getRestaurants()){
+    	   if(r.host == agent.host){
+    			xDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesXCoord(t) + WAITER_TABLE_OFFSET;
+    	        yDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesYCoord(t) - WAITER_TABLE_OFFSET;
+    	   }
+       }
 
 		if(waitingSeatNumber >= 0){
 			waitingSeats.get(waitingSeatNumber).release();
@@ -190,10 +196,15 @@ public class WaiterGui implements Gui {
 	}
 
 	public void msgImReadyToBeSeated(CustomerGui c){
-        xDestination = gui.getTablesXCoord(table) + WAITER_TABLE_OFFSET;
-        yDestination = gui.getTablesYCoord(table) - WAITER_TABLE_OFFSET;
+	       for(Restaurant r: gui.getRestaurants()){
+	    	   if(r.host == agent.host){
+	    	        xDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesXCoord(table) + WAITER_TABLE_OFFSET;
+	    	        yDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesYCoord(table) - WAITER_TABLE_OFFSET;
+
+	    			c.msgGoSitAtTable(new Point(((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesXCoord(table), ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesYCoord(table)));
+	    	   }
+	       }
         
-		c.msgGoSitAtTable(new Point(gui.getTablesXCoord(table), gui.getTablesYCoord(table)));
 
 		if(waitingSeatNumber >= 0){
 			waitingSeats.get(waitingSeatNumber).release();
