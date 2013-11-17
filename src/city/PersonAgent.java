@@ -2,13 +2,9 @@
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.sql.Time;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
-
-import restaurant.CashierAgent;
-import restaurant.HostAgent;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import agent.Agent;
@@ -16,10 +12,15 @@ import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.roles.*;
 
-public class PersonAgent extends Agent {
+public class PersonAgent extends Agent 
+{
+/********************************************************
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ *                       DATA 
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ ******************^^^^^^^^^^^^^^^^*********************/
 	private List<Role> roles = new ArrayList<Role>();
-	//hacked in upon creation
-	private List<Restaurant> restaurants = new ArrayList<Restaurant>(); 
+	private List<Restaurant> restaurants = new ArrayList<Restaurant>();//hacked in upon creation 
 	private List<MyBank> banks = new ArrayList<MyBank>(); 
 	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
 	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
@@ -27,7 +28,7 @@ public class PersonAgent extends Agent {
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
 	
-
+	//Various States
 	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak};
 	enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak };
 	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
@@ -54,6 +55,9 @@ public class PersonAgent extends Agent {
 	public int hungerLevel = 51;
 	public double cashOnHand, businessFunds;
 	
+/***********************
+ *  UTILITY CLASSES START
+ ***********************/
 	class MyBank {
 		Point location;
 		String name;
@@ -74,13 +78,23 @@ public class PersonAgent extends Agent {
 		Shift shift;
 		Role role;
 	}
+/***********************
+ *  UTILITY CLASSES END
+ ***********************/
+	
 	enum Shift {day, night}
 	
+	/**
+	 * Constructor
+	 */
 	public PersonAgent(String name, double cash) {
 	    this.name = name;
 	    this.cashOnHand = cash;
 	}
 	
+/***********************
+ *  ACCESSOR METHODS START
+ ***********************/
 	public void addRole(Role r) {
         roles.add(r);
         r.setPerson(this);
@@ -97,8 +111,19 @@ public class PersonAgent extends Agent {
 	public String getName(){
        return name;
 	}
+/***********************
+ *  ACCESSOR METHODS END
+ ***********************/
 	
-	// messages
+/********************************************************
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ *                     MESSAGES 
+  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ ******************^^^^^^^^^^^^^^^^*********************/
+	
+/***************************
+ * BANKING MESSAGES START
+ ***************************/
 	public void msgTransferSuccessful(PersonAgent recipient, double amount, String purpose) {
 
 	}
@@ -112,8 +137,15 @@ public class PersonAgent extends Agent {
 	public void msgHereIsBalance(double amount, String accountType) {
 		
 	}
+/***************************
+ * BANKING MESSAGES END
+ ***************************/
 
-	public void msgNextHour(int hour, String dayOfWeek) {
+/***************************
+ * TIME SENSITIVE MESSAGES START
+ ***************************/
+	public void msgNextHour(int hour, String dayOfWeek) 
+	{
 		this.currentHour = hour;
 		this.dayOfWeek = dayOfWeek;
 		this.hungerLevel += 1;
@@ -151,8 +183,12 @@ public class PersonAgent extends Agent {
 				taskList.add(Task.doPayEmployees);
 			}
 		}
-		
-		if(hungerLevel > 50 && state != State.goingOutToEat && state != State.eating && state != State.goingHomeToEat){
+
+		/**********
+		 * GETS FOOD IF HUNGRY
+		 *************/
+		if(hungerLevel > 50 && state != State.goingOutToEat && state != State.eating && state != State.goingHomeToEat)
+		{
 			boolean inList = false;
 			for(Task t: taskList){
 				if(t == Task.goEatFood)
@@ -165,7 +201,13 @@ public class PersonAgent extends Agent {
 		} 
 		stateChanged();
 	}
-	
+/***************************
+ * TIME SENSITIVE MESSAGES END
+ ***************************/
+
+/***************************
+ * WORK RELATED MESSAGES START
+ ***************************/
 	public void msgGoBackToWork(){
 		boolean inList = false;
 		for(Task t: taskList){
@@ -190,19 +232,82 @@ public class PersonAgent extends Agent {
 		stateChanged();
 	}
 	
-	public void msgNoMoreFood(){
+	public void msgDoneWorking()
+	{
+		state = State.doingNothing;
+		/*Role temp = null;
+		for(Role r: roles){
+			if(r instanceof job.role){
+				
+			}
+		}
+		
+		*/
+		stateChanged();
+	}
+/***************************
+ * WORK RELATED MESSAGES END
+ ***************************/
+	
+/***************************
+ * MANAGER WORK RELATED MESSAGES START
+ ***************************/	
+	public void msgDepositBusinessCash(){
 		boolean inList = false;
 		for(Task t: taskList){
-			if(t == Task.goToMarket)
+			if(t == Task.goToBankNow)
 				inList = true;
 		}
 		if(!inList){
-			taskList.add(Task.goToMarket);
+			taskList.add(Task.goToBankNow);
 		}
 		stateChanged();
 	}
+/***************************
+ * MANAGER WORK RELATED MESSAGES END
+ ***************************/	
+
+/***************************
+ * TRANSPORTATION RELATED MESSAGES START
+ ***************************/	
+	public void msgBusIshere(){
+		transportState = TransportState.GettingOnBus;
+		stateChanged();
+	}
+	public void msgAtYourStop(){
+		transportState = TransportState.GettingOffBus;
+		stateChanged();
+	}
+/***************************
+ * TRANSPORTATION RELATED MESSAGES END
+ ***************************/	
 	
-	public void msgGetFoodFromMarket(Map<String,Integer> toOrderFromMarket){
+	public void msgDoneEatingAtRestaurant() {
+		print("msgDoneEatingAtRestaurant");
+		state = State.doingNothing;
+
+		for(Task t: taskList){
+			print(t.toString());
+		}
+
+		print(state.toString());
+		
+		stateChanged();
+
+	}
+/***************************
+ * ATHOME MESSAGES START
+ ***************************/
+	
+	//RepairMan to Person that appliance is fixed
+	public void ApplianceFixed(String appliance, double price)
+	{
+		
+	}
+	
+	//Role to Itself to get food
+	public void msgGetFoodFromMarket(Map<String,Integer> toOrderFromMarket)
+	{
 		if(this.toOrderFromMarket != null){
         	Iterator<Entry<String, Integer>> it = toOrderFromMarket.entrySet().iterator();
         	while (it.hasNext()) {
@@ -221,56 +326,28 @@ public class PersonAgent extends Agent {
 		stateChanged();
 	}
 	
-	public void msgDepositBusinessCash(){
+	public void msgNoMoreFood(){
 		boolean inList = false;
 		for(Task t: taskList){
-			if(t == Task.goToBankNow)
+			if(t == Task.goToMarket)
 				inList = true;
 		}
 		if(!inList){
-			taskList.add(Task.goToBankNow);
+			taskList.add(Task.goToMarket);
 		}
 		stateChanged();
 	}
-	public void msgReenablePerson(){
-		//gui.setPresent();
-	}
-	public void msgBusIshere(){
-		transportState = TransportState.GettingOnBus;
-		stateChanged();
-	}
-	public void msgAtYourStop(){
-		transportState = TransportState.GettingOffBus;
-		stateChanged();
-	}
-	public void msgDoneWorking(){
-		state = State.doingNothing;
-		/*Role temp = null;
-		for(Role r: roles){
-			if(r instanceof job.role){
-				
-			}
-		}
-		
-		*/
-		stateChanged();
-	}
+/***************************
+ * ATHOME MESSAGES END
+ ***************************/
 	
-	public void msgDoneEatingAtRestaurant() {
-		print("msgDoneEatingAtRestaurant");
-		state = State.doingNothing;
-
-		for(Task t: taskList){
-			print(t.toString());
-		}
-
-		print(state.toString());
-		
-		stateChanged();
-
-	}
-	
-    public boolean pickAndExecuteAnAction() {
+/********************************************************
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ *                    SCHEDULER 
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ ******************^^^^^^^^^^^^^^^^*********************/
+    public boolean pickAndExecuteAnAction() 
+    {
         try {
         	Task temp = null;
 /*
@@ -384,7 +461,7 @@ public class PersonAgent extends Agent {
 	        }
 	        
 	        if(state == State.doingNothing){
-	        	System.out.println("goingHome");
+	        	print("goingHome");
 	        	goHome();
         	}
 	        
@@ -392,16 +469,13 @@ public class PersonAgent extends Agent {
         } catch(ConcurrentModificationException e){ return false; }
 	}
     
-    private void goHome() {
-		personGui.DoWalkTo(new Point(75,103)); ///CHange to special go home method and remove semaphore
-		try {
-			waitingResponse.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
 
-	//actions
+
+/********************************************************
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ *                     ACTIONS 
+ *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
+ ******************^^^^^^^^^^^^^^^^*********************/
     private void doPayRent(){
     	//bank.msgTransferFunds(this, landlord, "personal","rent");
     }
@@ -466,5 +540,24 @@ public class PersonAgent extends Agent {
 	    Random i = new Random();
 	    return i.nextInt((max - min) + 1) + min;
 	}
+	public void print(String msg)
+	{
+		System.out.println(name + ": " + msg);
+	}
+/********************************************************
+ *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
+ *                ANIMATION METHODS 
+ *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
+ ******************^^^^^^^^^^^^^^^^*********************/
+	    private void goHome() 
+	    {
+			personGui.DoWalkTo(new Point(75,103)); //CHange to special go home method and remove semaphore
+			try {waitingResponse.acquire();} 
+			catch (InterruptedException e) { e.printStackTrace(); }
+		}
+	    
+	    public void msgReenablePerson(){
+			//gui.setPresent();
+		}
 
 }

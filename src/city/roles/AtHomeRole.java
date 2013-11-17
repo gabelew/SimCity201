@@ -20,7 +20,6 @@ public class AtHomeRole extends Role
 	enum AppState {working, broken, repairRequested, payRepairman};
 	enum OrderState {pending, cooking, done, eating}
 	Map<String, Food> findFood = new HashMap<String, Food>();
-	Map<String, Integer> CookingTime = new HashMap<String, Integer>();
 	//Lists
 	List<Food> foodInFridge = new ArrayList<Food>();
 	List<Order> orders = new ArrayList<Order>();
@@ -32,6 +31,18 @@ public class AtHomeRole extends Role
 	public AtHomeRole(PersonAgent p) 
 	{
 		super(p);
+		//Adds initial food
+		choices.add("ceaser_salad");
+		choices.add("prime_rib");
+		choices.add("macncheese");
+		choices.add("pasta");
+		//Adds it to list of choices and hashmap
+		for(String s : choices)
+		{
+			Food f = new Food(s, 5);
+			foodInFridge.add(f);
+			findFood.put(s, f);
+		}
 	}
 /*********************
  ***** MESSAGES
@@ -232,9 +243,10 @@ public class AtHomeRole extends Role
 	    int low = 2;
 	    int capacity = 5;
 	    FoodOrderState state = FoodOrderState.none;
-	    public Food(String c)
+	    public Food(String c, int ct)
 	    {
 	    	this.choice = c;
+	    	this.cookingTime = ct;
 	    }
 	}
 	
