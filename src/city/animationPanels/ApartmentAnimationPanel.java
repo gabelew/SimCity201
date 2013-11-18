@@ -72,8 +72,15 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	     g2.fillRect(0, 150, WALL_LENGTH, WALL_WIDTH);
 	     g2.fillRect(0, 300, WALL_LENGTH, WALL_WIDTH);
 	     
+	     g2.setColor(Color.GRAY);
+	     g2.fillRect(0, 160, WALL_LENGTH, 140);
+	     
+	     g2.setColor(Color.RED);
+	     g2.fillRect(0, 200, WALL_LENGTH, 60);
+	     
 	     //create rooms for each person. Total of 8 rooms in an apartment
 	     for(int i = 0; i < 5; i++){
+		     g2.setColor(Color.BLACK);
 	    	 g2.fillRect(217*i, 0, WALL_WIDTH, 150);
 	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 150);
 	     }
