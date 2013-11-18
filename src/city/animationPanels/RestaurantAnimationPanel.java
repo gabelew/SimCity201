@@ -33,6 +33,9 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	private Table clickedTable = null;
 	private int clickedTableMouseXOffset;
 	private int clickedTableMouseYOffset;
+
+	public List<Semaphore> waitingSeatsWaiter = new ArrayList<Semaphore>();
+	public List<Semaphore> waitingSeats = new ArrayList<Semaphore>();
 	
     static final int xREST_POSITION = 350;  
     static final int yREST_POSITION = 400; 
@@ -122,10 +125,10 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         simCityGui.animationPanel.timer.addActionListener(this);
 		
     	for(int i = 0; i < NWAITSEATS; i++){
-			CustomerGui.waitingSeats.add(new Semaphore(1,true));
+			waitingSeats.add(new Semaphore(1,true));
 		}
     	for(int i = 0; i < NRESTSEATS; i++){
-			WaiterGui.waitingSeats.add(new Semaphore(1,true));
+			waitingSeatsWaiter.add(new Semaphore(1,true));
 		}
         addMouseListener(this);	
 		

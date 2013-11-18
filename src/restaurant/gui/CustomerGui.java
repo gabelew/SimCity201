@@ -16,6 +16,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import city.roles.CustomerRole;
@@ -39,7 +40,6 @@ public class CustomerGui implements Gui{
 	private enum State {standing, sitting};
 	private State state = State.standing;
 	private FoodIcon food = null;
-	public static List<Semaphore> waitingSeats = new ArrayList<Semaphore>();
 	private Semaphore executingAnimation = new Semaphore(1,true);
 	private int waitingSeatNumber = -1;
 	private Map<Integer, Point> seatMap = new HashMap<Integer, Point>();
@@ -207,7 +207,7 @@ public class CustomerGui implements Gui{
 		xDestination = p.x + xSEAT_OFFSET;
 		yDestination = p.y + ySEAT_OFFSET;
 		if(waitingSeatNumber >= 0){
-			waitingSeats.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		command = Command.GoToSeat;
@@ -217,7 +217,7 @@ public class CustomerGui implements Gui{
 		state = State.standing;
 
 		if(waitingSeatNumber >= 0){
-			waitingSeats.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -247,9 +247,9 @@ public class CustomerGui implements Gui{
 	}
 	
 	private void findPlaceToWait() {		
-		for(int i = 0; i < waitingSeats.size(); i++){
+		for(int i = 0; i < ((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.size(); i++){
 			if(waitingSeatNumber < 0){
-				if(waitingSeats.get(i).tryAcquire()){
+				if(((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(i).tryAcquire()){
 					waitingSeatNumber = i;
 					xDestination = seatMap.get(i).x;
 					yDestination = seatMap.get(i).y;

@@ -36,7 +36,7 @@ public class CustomerRole extends Role implements Customer {
 	
 	// agent correspondents
 	private Waiter waiter;
-	private Restaurant restaurant;
+	public Restaurant restaurant;
 	
 	static final int ATM_WITHDRAWAL_AMOUNT = 200; 
 	static final int HUNGERLEVEL = 5000;
