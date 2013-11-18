@@ -23,6 +23,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	private static BufferedImage kitchen = null;
 	private static BufferedImage fridge = null;
 	private static BufferedImage table = null;
+	private static BufferedImage bed = null;
     static final int WALL_LENGTH = 875;
     static final int WALL_WIDTH = 10; 
 	
@@ -39,6 +40,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 			kitchen = ImageIO.read(new File(path.toString() + "kitchen.png"));
 			fridge = ImageIO.read(new File(path.toString() + "fidge.png"));
 			table = ImageIO.read(new File(path.toString() + "table.png"));
+			bed = ImageIO.read(new File(path.toString() + "bed.png"));
 			
 		} catch (IOException e){
 			
@@ -75,15 +77,20 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	    	 g2.fillRect(217*i, 0, WALL_WIDTH, 150);
 	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 150);
 	     }
-
+	     
+	     //creates a kitchen, fridge, table, and bed for each tenant
 	     for(int i = 0; i < 5; i++){
+	    	 //top 4
 		     g2.drawImage(kitchen, 15+(i*217), 20, null);
 		     g2.drawImage(fridge, 100+(i*217), 10, null);
 		     g2.drawImage(table, 57+(i*217), 50, null);
+		     g2.drawImage(bed, 150+(i*217), 70, null);
 		     
+		     //bottom 4
 		     g2.drawImage(kitchen, 15+(i*217), 320, null);
 		     g2.drawImage(fridge, 100+(i*217), 310, null);
 		     g2.drawImage(table, 57+(i*217), 350, null);
+		     g2.drawImage(bed, 150+(i*217), 370, null);
 
 		 }
 		
