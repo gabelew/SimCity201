@@ -102,10 +102,14 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		} catch (IOException e) {
 		}
 		
-	    BusAgent ba = new BusAgent();
-	    BusGui bg = new BusGui(ba, simCityGui);
-	    bg.setPresent(true);
-        guis.add(bg);
+	    BusAgent ba1 = new BusAgent();
+	    BusGui bg1 = new BusGui(ba1, simCityGui, 'B');
+	    BusAgent ba2 = new BusAgent();
+	    BusGui bg2 = new BusGui(ba2, simCityGui, 'F');
+	    bg1.setPresent(true);
+	    bg2.setPresent(true);
+        guis.add(bg1);
+        guis.add(bg2);
 		setSize(WINDOWX, WINDOWY);
         setVisible(true);
  

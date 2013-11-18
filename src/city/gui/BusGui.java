@@ -28,7 +28,7 @@ public class BusGui implements Gui{
 	private enum State {walking, driving};
 	private State state = State.walking;
 	
-	public BusGui(BusAgent b, SimCityGui gui){ //HostAgent m) {
+	public BusGui(BusAgent b, SimCityGui gui, char type){ //HostAgent m) {
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -38,10 +38,19 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
-		xPos = 30;
-		yPos = 300; //103+80*i
-		xDestination = 30;
-		yDestination = 70;
+		
+		if(type == 'B'){
+			xPos = 30;
+			yPos = 350;
+			xDestination = 30;
+			yDestination = 70;
+		}
+		else if(type == 'F'){
+			xPos = 825;
+			yPos = 70;
+			xDestination = 825;
+			yDestination = 300;
+		}
         
 		this.gui = gui;
 		
@@ -71,10 +80,13 @@ public class BusGui implements Gui{
 
 	@Override
 	public void draw(Graphics2D g) {
-		//if(agent.car != null)
-		//{
+		if(xPos == 30)
+		{
 			g.drawImage(bus_back, xPos, yPos, null);
-		//}
+		}
+		if(xPos == 825){
+			g.drawImage(bus_front, xPos, yPos, null);
+		}
 
 		
 	}
