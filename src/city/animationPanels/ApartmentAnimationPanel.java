@@ -16,6 +16,9 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	
 	private SimCityGui simCityGui;
 	
+    static final int WALL_LENGTH = 875;
+    static final int WALL_WIDTH = 10; 
+	
 	public ApartmentAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
 
@@ -40,9 +43,21 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	@Override
 	public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-
-		 g2.setColor(Color.yellow);     
-	     g2.fillRect(20, 20, 100, 100);
+        
+         //Clear the screen by painting a rectangle the size of the frame
+		 g2.setColor(getBackground());     
+	     g2.fillRect(0, 0, WINDOWX, WINDOWY);
+	     
+	     //make a hallway
+	     g2.setColor(Color.BLACK);
+	     g2.fillRect(0, 150, WALL_LENGTH, WALL_WIDTH);
+	     g2.fillRect(0, 300, WALL_LENGTH, WALL_WIDTH);
+	     
+	     //create rooms for each person. Total of 8 rooms in an apartment
+	     for(int i = 0; i < 5; i++){
+	     g2.fillRect(217*i, 0, WALL_WIDTH, 150);
+	     g2.fillRect(217*i, 300, WALL_WIDTH, 150);
+	     }
 
 		
 	}
