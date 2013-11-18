@@ -2,11 +2,13 @@ package city;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import city.roles.BankCustomerRole;
 import agent.Agent;
+import city.interfaces.Bank;
 
-public class BankAgent extends Agent{
+public class BankAgent extends Agent implements Bank{
 	
 	class BankAccount {
 		double currentBalance = 0.0;
@@ -49,8 +51,8 @@ public class BankAgent extends Agent{
 	}
 	
 	enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, loanPayment};
-	List<BankAccount> accounts = new ArrayList<BankAccount>();
-	List<Transaction> transactions = new ArrayList<Transaction>();
+	List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
+	List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
 	
 	double fundsAvailable = 50000.0;
 	final double customerLoanMax = 500;
@@ -121,7 +123,9 @@ public class BankAgent extends Agent{
 		stateChanged();
 	}
 	
-	public void msgTransferFunds(PersonAgent sender, PersonAgent recipient, double amount, String senderAccountType, String recipientAccountType, String purpose) {
+	public void msgTransferFunds(PersonAgent sender, PersonAgent recipient, 
+			double amount, String senderAccountType, 
+			String recipientAccountType, String purpose) {
 		BankAccount senderAccount = findBankAccount(sender,senderAccountType);
 		BankAccount recipientAccount = findBankAccount(recipient,recipientAccountType);
 		if(senderAccount != null && recipientAccount != null) {

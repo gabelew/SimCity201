@@ -26,6 +26,8 @@ public class BankCustomerGui implements Gui{
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
 	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
 	
+	private enum Command {noCommand, WaitForATM, GoToATM, LeaveBank};
+	private Command command = Command.noCommand;
 	private int atmNumber = -1;
 	public static List<Semaphore> atms = new ArrayList<Semaphore>();
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
@@ -33,6 +35,13 @@ public class BankCustomerGui implements Gui{
 	static final int CUST_START_POS = -40;
 	static final int xWAITING_START = 50;
 	static final int yWAITING_START = 70;
+	static final int NATMS = 9;
+	static final int NATMS_ROWS = 3;
+	static final int NATMS_COLUMNS = 3;
+	static final int ATM_X_START = 300;
+	static final int ATM_Y_START = 40;
+	static final int ATM_X_GAP = 100;
+	static final int ATM_Y_GAP = 90;
 	
 	public BankCustomerGui(BankCustomerRole role) {
 		try {
@@ -42,6 +51,13 @@ public class BankCustomerGui implements Gui{
 			
 		}
 		this.role = role;
+		
+		for(int i = 0; i < NATMS/NATMS_ROWS; i++) {
+			for(int j = 0; j < NATMS/NATMS_COLUMNS; j++) {
+				atmMap.put(j+i*3, new Point(i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START));
+			}
+		}
+		
 	}
 	
 	@Override
@@ -55,6 +71,13 @@ public class BankCustomerGui implements Gui{
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
+		
+		if (xPos == xDestination && yPos == yDestination) {
+			if(command == Command.WaitForATM) {
+				
+			}
+			command = Command.noCommand;
+		}
 	}
 
 	@Override
@@ -65,6 +88,27 @@ public class BankCustomerGui implements Gui{
 	@Override
 	public boolean isPresent() {
 		return isPresent;
+	}
+	
+	public void DoEnterBank() {
+		
+	}
+	
+	private void findATM() {
+		for(int i = 0; i < atms.size(); i++) {
+			if(atmNumber < 0) {
+				if(atms.get(i).tryAcquire()) {
+					atmNumber = i;
+					xDestination = atmMap.get(i).x;
+					yDestination = atmMap.get(i).y;
+				}
+			}
+		}
+		
+		if(atmNumber < 0) {
+			xDestination = xWAITING_START;
+			yDestination = yWAITING_START;
+		}
 	}
 
 }

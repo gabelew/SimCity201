@@ -1,8 +1,10 @@
 package city.roles;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Semaphore;
 
+import bank.gui.BankCustomerGui;
 import city.BankAgent;
 import city.PersonAgent;
 
@@ -19,17 +21,27 @@ public class BankCustomerRole extends Role{
 			this.accountType = at;
 		}
 	}
-	List<Task> tasks = new ArrayList<Task>();
+	
+	List<Task> tasks = new CopyOnWriteArrayList<Task>();
 	BankAgent bank;
 	enum BankingState{WantToCheckBalance, WantToOpenAccount, WantToDeposit, WantToWithdraw, 
 		WantToGetALoan, WantToPayBackLoan, CheckingBalance, OpeningAccount, Depositing, Withdrawing, 
 		RequestingALoan, PayingLoan };
+	enum CustomerState {None, EnteringBank, InBank, AtAtm, LeavingBank};
+	private CustomerState state = CustomerState.None;
+	private BankCustomerGui customerGui;
+	private Semaphore waitingResponse = new Semaphore(0,true);
 	
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
 	}
 	
 	// Messages
+	public void goingToBank() {
+		state = CustomerState.EnteringBank;
+		stateChanged();
+	}
+	
 	public void msgIWantToCheckBalance(String accountType) {
 		tasks.add(new Task(BankingState.WantToCheckBalance, 0, accountType));
 	}
@@ -62,10 +74,12 @@ public class BankCustomerRole extends Role{
 	
 	public void msgHereIsBalance(double balance, String accountType) {
 		print("Current balance for " + accountType + " account is: $" + balance);
+		stateChanged();
 	}
 	
 	public void msgLoanDenied(double amount, String accountType) {
 		print("$" + amount + " loan for " + accountType + " account was denied.");
+		stateChanged();
 	}
 	
 	public void msgLoanApproved(double amount, String accountType) {
@@ -75,57 +89,76 @@ public class BankCustomerRole extends Role{
 			myPerson.businessFunds += amount;
 		}
 		print("$" + amount + " loan for " + accountType + " account was approved.");
-		
+		stateChanged();
+	}
+	
+	public void msgAtATM() {
+		waitingResponse.release();
+		state = CustomerState.AtAtm;
+		stateChanged();
 	}
 	
 	// Scheduler
 	public boolean pickAndExecuteAnAction() {
-		for(Task t : tasks) {
-			if(BankingState.WantToCheckBalance.equals(t.bs)){
-				t.bs = BankingState.CheckingBalance;
-				CheckBalance(t);
-				return true;
+		
+		if(CustomerState.EnteringBank.equals(state)) {
+			state = CustomerState.InBank;
+			EnterBank();
+			return true;
+		} else if(CustomerState.AtAtm.equals(state)) {
+			for(Task t : tasks) {
+				if(BankingState.WantToCheckBalance.equals(t.bs)){
+					t.bs = BankingState.CheckingBalance;
+					CheckBalance(t);
+					return true;
+				}
+			}
+			for(Task t : tasks) {
+				if(BankingState.WantToOpenAccount.equals(t.bs)){
+					t.bs = BankingState.OpeningAccount;
+					OpenAccount(t);
+					return true;
+				}
+			}
+			for(Task t : tasks) {
+				if(BankingState.WantToDeposit.equals(t.bs)){
+					t.bs = BankingState.Depositing;
+					DepositMoney(t);
+					return true;
+				}
+			}
+			for(Task t : tasks) {
+				if(BankingState.WantToWithdraw.equals(t.bs)){
+					t.bs = BankingState.Withdrawing;
+					WithdrawMoney(t);
+					return true;
+				}
+			}
+			for(Task t : tasks) {
+				if(BankingState.WantToPayBackLoan.equals(t.bs)){
+					t.bs = BankingState.PayingLoan;
+					PayLoan(t);
+					return true;
+				}
+			}
+			for(Task t : tasks) {
+				if(BankingState.WantToGetALoan.equals(t.bs)){
+					t.bs = BankingState.RequestingALoan;
+					RequestLoan(t);
+					return true;
+				}
 			}
 		}
-		for(Task t : tasks) {
-			if(BankingState.WantToOpenAccount.equals(t.bs)){
-				t.bs = BankingState.OpeningAccount;
-				OpenAccount(t);
-				return true;
-			}
-		}
-		for(Task t : tasks) {
-			if(BankingState.WantToDeposit.equals(t.bs)){
-				t.bs = BankingState.Depositing;
-				DepositMoney(t);
-				return true;
-			}
-		}
-		for(Task t : tasks) {
-			if(BankingState.WantToWithdraw.equals(t.bs)){
-				t.bs = BankingState.Withdrawing;
-				WithdrawMoney(t);
-				return true;
-			}
-		}
-		for(Task t : tasks) {
-			if(BankingState.WantToPayBackLoan.equals(t.bs)){
-				t.bs = BankingState.PayingLoan;
-				PayLoan(t);
-				return true;
-			}
-		}
-		for(Task t : tasks) {
-			if(BankingState.WantToGetALoan.equals(t.bs)){
-				t.bs = BankingState.RequestingALoan;
-				RequestLoan(t);
-				return true;
-			}
-		}
+		
 		return false;
 	}
 	
 	//Actions
+	private void EnterBank() {
+		Do("Entering bank");
+		customerGui.DoEnterBank();
+	}
+	
 	private void CheckBalance(Task t) {
 		bank.msgCheckBalance(this, t.accountType);
 		tasks.remove(findTaskIndex(t));
@@ -191,6 +224,11 @@ public class BankCustomerRole extends Role{
 		}
 		return taskIndex;
 	}
-
+	public BankCustomerGui getGui() {
+		return customerGui;
+	}
+	public void setGui(BankCustomerGui g) {
+		customerGui = g;
+	}
 	
 }
