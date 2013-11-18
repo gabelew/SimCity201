@@ -97,14 +97,14 @@ public class SimCityGui extends JFrame implements ActionListener {
         buildingsPanel.setMinimumSize(buildingsPanelDim);
         buildingsPanel.setPreferredSize(buildingsPanelDim);
         
-        createDefaultBuildingPanels();
-        
         
         bottomFrame.setLayout(new BorderLayout());
         bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
         bottomFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         bottomFrame.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
         bottomFrame.setVisible(true);
+
+        createDefaultBuildingPanels();
     }
 
     private void createDefaultBuildingPanels() {
