@@ -27,7 +27,7 @@ public class BusAgent extends Agent{
 	MyBusStop atStop = null;
 	
 	
-	BusAgent(){
+	public BusAgent(){
 
 	}
 	

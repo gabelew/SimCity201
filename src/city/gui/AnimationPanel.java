@@ -3,6 +3,8 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import city.BusAgent;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -88,7 +90,6 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private SimCityGui simCityGui;
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
-		
 
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -101,7 +102,10 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		} catch (IOException e) {
 		}
 		
-		
+	    BusAgent ba = new BusAgent();
+	    BusGui bg = new BusGui(ba, simCityGui);
+	    bg.setPresent(true);
+        guis.add(bg);
 		setSize(WINDOWX, WINDOWY);
         setVisible(true);
  
