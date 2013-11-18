@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private final int WINDOWY = 467;
     private static int timeIncrementer = 1400;
 
-    List<BuildingIcon> buildings = new ArrayList<BuildingIcon>();
+    List<BuildingIcon> buildings = Collections.synchronizedList(new ArrayList<BuildingIcon>());
     
     static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  

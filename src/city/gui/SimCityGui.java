@@ -3,7 +3,6 @@ package city.gui;
 import restaurant.CustomerAgent;
 import restaurant.Restaurant;
 import restaurant.gui.RestaurantPanel;
-import restaurant.gui.Table;
 
 import javax.swing.*;
 
@@ -20,16 +19,13 @@ import city.roles.CookRole;
 import city.roles.CustomerRole;
 import city.roles.HostRole;
 import city.roles.Role;
-import agent.Agent;
+import city.roles.WaiterRole;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
 /**
  * Main GUI class.
  * Contains the main frame and subsequent panels
@@ -50,7 +46,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 
     private InfoPanel infoPanel = new InfoPanel(this);
  
-    private List<Restaurant> restaurants = new ArrayList<Restaurant>();
+    List<Restaurant> restaurants = new ArrayList<Restaurant>();
     public List<PersonAgent> persons = new ArrayList<PersonAgent>();
     
     private JFrame bottomFrame = new JFrame();
@@ -105,9 +101,35 @@ public class SimCityGui extends JFrame implements ActionListener {
         bottomFrame.setVisible(true);
 
         createDefaultBuildingPanels();
+        
+        setVisible(true);
+        createDefaultPeople();
     }
 
-    private void createDefaultBuildingPanels() {
+    private void createDefaultPeople() {
+    	infoPanel.getPersonPanel().addPerson("waiter01day");
+    	infoPanel.getPersonPanel().addPerson("waiter01day");
+    	infoPanel.getPersonPanel().addPerson("waiter01night");
+    	infoPanel.getPersonPanel().addPerson("waiter01night");
+    	infoPanel.getPersonPanel().addPerson("waiter02day");
+    	infoPanel.getPersonPanel().addPerson("waiter02day");
+    	infoPanel.getPersonPanel().addPerson("waiter02night");
+    	infoPanel.getPersonPanel().addPerson("waiter02night");
+    	infoPanel.getPersonPanel().addPerson("waiter03day");
+    	infoPanel.getPersonPanel().addPerson("waiter03day");
+    	infoPanel.getPersonPanel().addPerson("waiter03night");
+    	infoPanel.getPersonPanel().addPerson("waiter03night");
+    	infoPanel.getPersonPanel().addPerson("waiter04day");
+    	infoPanel.getPersonPanel().addPerson("waiter04day");
+    	infoPanel.getPersonPanel().addPerson("waiter04night");
+    	infoPanel.getPersonPanel().addPerson("waiter04night");
+    	infoPanel.getPersonPanel().addPerson("waiter05day");
+    	infoPanel.getPersonPanel().addPerson("waiter05day");
+    	infoPanel.getPersonPanel().addPerson("waiter05night");
+    	infoPanel.getPersonPanel().addPerson("waiter05night");
+    }
+
+	private void createDefaultBuildingPanels() {
     	List<BuildingIcon> buildings = animationPanel.buildings;
     	System.out.println(buildings.size());
         for(int i =0; i<buildings.size(); i++){
@@ -130,7 +152,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         	restaurantAnimationPanel.setInsideBuildingPanel(bp);
         	buildingsPanel.add(bp, "" + i);
         	getRestaurants().add(new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
-        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY())));
+        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY()), "Restaurant1WaiterRole"));
         	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
         	}else if(b.type.equals("market")){
                 
@@ -285,6 +307,13 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public static Role customerFactory(PersonAgent p, Restaurant r){
 		if(r.customerRole.equalsIgnoreCase("Restaurant1CustomerRole")){
 			return new CustomerRole(p, r);
+		}
+		
+		return null;
+	}
+	public static Role waiterFactory(PersonAgent p, Restaurant r){
+		if(r.waiterRole.equalsIgnoreCase("Restaurant1WaiterRole")){
+			return new WaiterRole(p, r);
 		}
 		
 		return null;

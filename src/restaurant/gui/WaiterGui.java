@@ -25,10 +25,10 @@ import restaurant.interfaces.Waiter;
 
 public class WaiterGui implements Gui {
 
-	private WaiterAgent agent = null;
+	private WaiterRole role = null;
 	private boolean isPresent = false;
 	private static BufferedImage waiterImg = null;
-	SimCityGui gui;
+	
 
 	private enum Command {noCommand, GoToHost, GoToTable, GoToKitchen, GoToCashier, GoToRestArea};
 	private Command command=Command.noCommand;
@@ -74,13 +74,13 @@ public class WaiterGui implements Gui {
     static final int xWAITING_OVERFLOW_POS = 335;
     static final int yWAITING_OVERFLOW_POS = 465;
     
-	public WaiterGui(WaiterAgent w, SimCityGui gui) {
+	public WaiterGui(WaiterRole w) {
 		try {
 		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
 		} catch (IOException e) {
 		}
 	    
-		agent = w;
+		role = w;
 		xPos = START_POSITION;
 		yPos = START_POSITION;
 		xDestination = START_POSITION;
@@ -90,8 +90,6 @@ public class WaiterGui implements Gui {
         	for(int j = 0; j < NWAITSEATS/NWAITSEATS_COLUMNS; j++ )
         		seatMap.put(j+i*2, new Point(i*WAITINGSEATS_X_GAP+WAITINGSEATS_X_START, j*WAITINGSEATS_Y_GAP+WAITINGSEATS_Y_START));
         }
-		
-		this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -108,22 +106,22 @@ public class WaiterGui implements Gui {
 
         if (xPos == xDestination && yPos == yDestination && command==Command.GoToHost){
             command=Command.noCommand;
-        	agent.msgAtEntrance();
+        	role.msgAtEntrance();
         }
         else  if (xPos == xDestination && yPos == yDestination && xPos > xTABLE_AREA 
         		&& xPos < xTABLE_AREA + xTABLE_AREA_WIDTH && yPos > yTABLE_AREA && yPos < yTABLE_AREA + yTABLE_AREA_WIDTH
         		 && command==Command.GoToTable){
             command=Command.noCommand;
-            agent.msgAtTable();
+            role.msgAtTable();
          }
         else  if (xPos == xDestination && yPos == yDestination && xPos == xCASHIER_POSITION 
         		&& yPos == yCASHIER_POSITION && command==Command.GoToCashier){
             command=Command.noCommand;
-            agent.msgAtCashier();
+            role.msgAtCashier();
          }
         else  if (xPos == xDestination && yPos == yDestination && command==Command.GoToKitchen){
             command=Command.noCommand;
-        	agent.msgAtKitchen();
+        	role.msgAtKitchen();
          }else if(xPos == xDestination && yPos == yDestination && xPos > xREST_AREA_START 
         		&& xPos < xREST_AREA_END && yPos > yREST_AREA_START && yPos < yREST_AREA_END
         		 && command==Command.GoToRestArea){
@@ -157,12 +155,12 @@ public class WaiterGui implements Gui {
 	}
 
 	public void setWorking() {
-		agent.goesToWork();
+		role.goesToWork();
 		setPresent(true);
 	}
 	
 	public void askBreak() {
-		agent.msgAskForBreak();
+		role.msgAskForBreak();
 	}
 	
 	public void setPresent(boolean p) {
@@ -174,12 +172,8 @@ public class WaiterGui implements Gui {
 	}
 
 	public void DoBringToTable(int t) {
-       for(Restaurant r: gui.getRestaurants()){
-    	   if(r.host == agent.host){
-    			xDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesXCoord(t) + WAITER_TABLE_OFFSET;
-    	        yDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesYCoord(t) - WAITER_TABLE_OFFSET;
-    	   }
-       }
+		xDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesXCoord(t) + WAITER_TABLE_OFFSET;
+    	yDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesYCoord(t) - WAITER_TABLE_OFFSET;
 
 		if(waitingSeatNumber >= 0){
 			waitingSeats.get(waitingSeatNumber).release();
@@ -196,14 +190,11 @@ public class WaiterGui implements Gui {
 	}
 
 	public void msgImReadyToBeSeated(CustomerGui c){
-	       for(Restaurant r: gui.getRestaurants()){
-	    	   if(r.host == agent.host){
-	    	        xDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesXCoord(table) + WAITER_TABLE_OFFSET;
-	    	        yDestination = ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesYCoord(table) - WAITER_TABLE_OFFSET;
+	   xDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesXCoord(table) + WAITER_TABLE_OFFSET;
+	   yDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesYCoord(table) - WAITER_TABLE_OFFSET;
+	    	
+	   c.msgGoSitAtTable(new Point(((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesXCoord(table), ((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).getTablesYCoord(table)));
 
-	    			c.msgGoSitAtTable(new Point(((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesXCoord(table), ((RestaurantAnimationPanel) r.insideAnimationPanel).getTablesYCoord(table)));
-	    	   }
-	       }
         
 
 		if(waitingSeatNumber >= 0){

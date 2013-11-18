@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.roles.CustomerRole;
+import restaurant.Restaurant;
 import restaurant.gui.WaiterGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
@@ -18,9 +19,7 @@ public class WaiterRole extends Role implements Waiter{
 	WaiterGui waiterGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
-	private Host host;
-	private Cook cook;
-	private Cashier cashier;
+	public Restaurant restaurant;
 	public enum CustomerState {waiting, seated, askedToOrder, asked, ordered, orderPlaced, 
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
 	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak};
@@ -61,8 +60,9 @@ public class WaiterRole extends Role implements Waiter{
 		}
 	}*/
 
-	public WaiterRole(PersonAgent p) {
+	public WaiterRole(PersonAgent p, Restaurant r) {
 		super(p);
+		restaurant = r;
 	}
 
 	public void goesToWork(){ //from gui
@@ -146,28 +146,6 @@ public class WaiterRole extends Role implements Waiter{
 		waitingResponse.release();// = true;
 		stateChanged();
 	}	
-	
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-	public void setHost(Host host) {
-		this.host = host;
-	}
-
-	/**
-	 * hack to establish connection to Cook agent.
-	 */
-	public void setCook(Cook cook) {
-		this.cook = cook;
-		waiterGui.setCookGui(cook.cookGui);
-	}
-	
-	/**
-	 * hack to establish connection to Cook agent.
-	 */
-	public void setCashier(Cashier cashier) {
-		this.cashier = cashier;
-	}
 	
 	public void setGui(WaiterGui g) {
 		waiterGui = g;
@@ -304,7 +282,7 @@ public class WaiterRole extends Role implements Waiter{
 
 	private void tellHost() {
 		print("Reporting for Duty");
-		host.msgReadyToWork(this);
+		restaurant.host.msgReadyToWork(this);
 	}
 
 	private void seatCustomer(MyCustomer c){
@@ -344,7 +322,7 @@ public class WaiterRole extends Role implements Waiter{
 		print("\t\t HERHER IM IN DA KITCH");
 		c.s = CustomerState.orderPlaced;
 		print("\t\t BEFORE THE PAUSE msgHereIsOrder");
-		cook.msgHereIsOrder(this, c.choice, c.table);
+		restaurant.cook.msgHereIsOrder(this, c.choice, c.table);
 		print("\t\t msgHereIsOrder");
 		waiterGui.placedOrder();
 		print("\t\t waiterGui.placedOrder");
@@ -357,7 +335,7 @@ public class WaiterRole extends Role implements Waiter{
 		c.c.msgHereIsYourFood();
 		waiterGui.doneServingOrder();
 		//doGoToCashier();
-		cashier.msgProduceCheck(this, c.c, c.choice);
+		restaurant.cashier.msgProduceCheck(this, c.c, c.choice);
 	}
 
 	private void pickUpOrder(MyCustomer c){
@@ -369,13 +347,13 @@ public class WaiterRole extends Role implements Waiter{
 	}
 
 	private void tableFree(MyCustomer c) {
-		host.msgTableIsFree(this, c.table);
+		restaurant.host.msgTableIsFree(this, c.table);
 		customers.remove(c);
 	}
 	
 	public void askForBreak(){
-		print(host.getName() + ", can I go on break?");
-		host.msgCanIBreak(this);
+		print(restaurant.host.getName() + ", can I go on break?");
+		restaurant.host.msgCanIBreak(this);
 	}
 	private void tellBadNews(MyCustomer c) {
 		doGoToTable(c.table);

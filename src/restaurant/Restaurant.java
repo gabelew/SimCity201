@@ -3,6 +3,7 @@ package restaurant;
 import java.awt.Point;
 
 import city.animationPanels.InsideAnimationPanel;
+import city.roles.WaiterRole;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Host;
@@ -17,8 +18,9 @@ public class Restaurant {
 	public Menu m;
 	public String type;
 	public InsideAnimationPanel insideAnimationPanel;
+	public String waiterRole;
 	
-	public Restaurant(Host h, Cashier c, Cook co, Menu m, String cr, String t, InsideAnimationPanel iap, Point p){
+	public Restaurant(Host h, Cashier c, Cook co, Menu m, String cr, String t, InsideAnimationPanel iap, Point p, String wr){
 		this.host = h;
 		this.cashier = c;
 		this.cook = co;
@@ -26,5 +28,6 @@ public class Restaurant {
 		this.type = t;
 		this.insideAnimationPanel = iap;
 		this.location = p;
+		this.waiterRole = wr;
 	}
 }

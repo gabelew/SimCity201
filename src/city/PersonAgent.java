@@ -5,8 +5,10 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
+
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
+import restaurant.gui.WaiterGui;
 import agent.Agent;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
@@ -40,7 +42,7 @@ public class PersonAgent extends Agent
 	public BufferedImage car = null;
 	//Bus busLeft;
 	//Bus busRight;
-	MyJob job;
+	public MyJob job;
 	private State state = State.doingNothing;
 	private Location location = Location.InCity;
 	private TransportState transportState = TransportState.none;
@@ -72,17 +74,23 @@ public class PersonAgent extends Agent
 	class MyBusStop {
 		Point location;
 	}
-	class MyJob{
-		Point location;
-		String type;
-		Shift shift;
-		Role role;
+	public class MyJob{
+		public Point location;
+		public String type;
+		public Shift shift;
+		public Role role;
+		
+		public MyJob(Point l, String type, Shift s){
+			this.location = l;
+			this.type = type;
+			this.shift = s;
+		}
 	}
 /***********************
  *  UTILITY CLASSES END
  ***********************/
 	
-	enum Shift {day, night}
+	public enum Shift {day, night}
 	
 	/**
 	 * Constructor
@@ -149,9 +157,10 @@ public class PersonAgent extends Agent
 		this.currentHour = hour;
 		this.dayOfWeek = dayOfWeek;
 		this.hungerLevel += 1;
-		/*
-		if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 20 || currentHour <= 11)) ||
-				(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 12 || currentHour <= 3))){
+		
+		if(job!=null){
+		if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 12)) ||
+				(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 8 && currentHour < 22))){
 			boolean inList = false;
 			for(Task t: taskList){
 				if(t == Task.goToWork)
@@ -160,7 +169,8 @@ public class PersonAgent extends Agent
 			if(!inList){
 				taskList.add(Task.goToWork);
 			}
-		}*/
+		}
+		}
 		print("newhour");
 		if(hour == 23 && isRenter){
 			boolean inList = false;
@@ -195,7 +205,6 @@ public class PersonAgent extends Agent
 					inList = true;
 			}
 			if(!inList){
-				print("\t\t\t\tAHHHHHHHHHHHHHHHHH");
 				taskList.add(Task.goEatFood);
 			}
 		} 
@@ -361,7 +370,7 @@ public class PersonAgent extends Agent
         		doPayRent();
         		taskList.remove(temp);
         		return true;
-        	}
+        	}*/
         	
         	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToWork){
@@ -375,7 +384,7 @@ public class PersonAgent extends Agent
         		return true;
         	}
         
-        	for(Task t:taskList){
+        	/*for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToBankNow){
         			temp = t;
         		}
@@ -432,11 +441,11 @@ public class PersonAgent extends Agent
 			if(transportState = TransportState.GettingOffBus){
 				getOffBus();
 				return true;
-			}
+			}*/
 			if(transportState == TransportState.none && state == State.goingToWork){
 				finishGoingToWork();
 				return true;
-			}*/
+			}
 			if(transportState == TransportState.none && state == State.goingOutToEat){
 				finishGoingToRestaurant();
 				return true;
@@ -471,6 +480,7 @@ public class PersonAgent extends Agent
     
 
 
+
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  *                     ACTIONS 
@@ -481,8 +491,44 @@ public class PersonAgent extends Agent
     }
     private void goToWork(){
     	state = State.goingToWork;
+    	print("going to work");
+    	destination = job.location;
+    	personGui.DoWalkTo(destination);
+    	try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    }
+    private void finishGoingToWork() {
+    	print("finishGoingToRestaurant");
+    	state = State.eating;
+    	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
+    			|| job.type.equalsIgnoreCase("cashier")){
+    		Restaurant r = findRestaurant(destination);
+    		if(job.type.equalsIgnoreCase("waiter")){
+    			WaiterRole role = (WaiterRole) SimCityGui.waiterFactory(this, r);
+            	role.setGui(new WaiterGui(role));
+            	roles.add(role);
+            	role.active = true;
+            	r.insideAnimationPanel.addGui(role.getGui());
+            	role.getGui().setPresent(true);
+            	role.goesToWork();	
+    		}else if(job.type.equalsIgnoreCase("host")){
+    			HostRole role = (HostRole)(r.host);
+            	role.active = true;
+    		}else if(job.type.equalsIgnoreCase("cook")){
+    			CookRole role = (CookRole)(r.cook);
+            	role.active = true;
+    		}else if(job.type.equalsIgnoreCase("cashier")){
+    			CashierRole role = (CashierRole)(r.cashier);
+            	role.active = true;
+    		}
+        	
+    	}
     	
     }
+
     private void goEatFood() {
     	state = State.goingOutToEat;
     	goToRestaurant();

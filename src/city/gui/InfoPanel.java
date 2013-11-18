@@ -12,6 +12,8 @@ import restaurant.gui.CustomerGui;
 import javax.swing.*;
 
 import city.PersonAgent;
+import city.PersonAgent.MyJob;
+import city.roles.Role;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -42,12 +44,9 @@ public class InfoPanel extends JPanel implements KeyListener {
     private CashierAgent cashier = new CashierAgent("Gabe");
     private CashierGui cashierGui = new CashierGui(cashier);
 */
-    private Vector<MarketAgent> markets = new Vector<MarketAgent>();
-    private Vector<PersonAgent> persons = new Vector<PersonAgent>();
-    private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
 
     private JPanel restLabel = new JPanel();
-    private ListPanel customerPanel = new ListPanel(this, "Persons");
+    private ListPanel personPanel = new ListPanel(this, "Persons");
 
     //private ListPanel waitersPanel = new ListPanel(this, "Waiters");
     //private ListPanel tablesPanel = new ListPanel(this, "Tables");
@@ -82,7 +81,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
 
-        add(customerPanel);
+        add(personPanel);
 
         //initRestLabel();
         //add(restLabel);
@@ -91,7 +90,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         //add(tablesPanel);
         
 
-        customerPanel.getTypeNameHere().addKeyListener(this);
+        personPanel.getTypeNameHere().addKeyListener(this);
     //    waitersPanel.getTypeNameHere().addKeyListener(this);
     }
 
@@ -138,7 +137,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 
         if (type.equals("Persons")) {
 
-            for (PersonAgent temp: persons){
+            for (PersonAgent temp: gui.persons){
                 if (temp.getName() == name){}
                 	//temp.getGui().setHungry();
             }
@@ -176,12 +175,454 @@ public class InfoPanel extends JPanel implements KeyListener {
     		PersonAgent p = null;
     		if(stringIsDouble(name)){
     			p = new PersonAgent(name, Double.valueOf(name));
-    		}else if(name.equalsIgnoreCase("Rami") || name.equalsIgnoreCase("Mahdi") 
-    				|| name.equalsIgnoreCase("ditch") || name.equalsIgnoreCase("broke")){
+    		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
+    				|| name.toLowerCase().contains("ditch") || name.toLowerCase().contains("broke")){
     			p = new PersonAgent(name, NO_CASH);   			
     		}else{
     			p = new PersonAgent(name, PERSONS_DEFAULT_CASH);
     		}
+    		
+    		if(name.toLowerCase().contains("waiter") && name.toLowerCase().contains("day")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
+    			}
+    			
+    		}
+    		else if(name.toLowerCase().contains("waiter") && name.toLowerCase().contains("night")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.night);
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.night);
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.night);
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.night);
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.night);
+    			}
+    		}else if(name.toLowerCase().contains("host") && name.toLowerCase().contains("day")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+    					}
+        			}
+    			}
+    		}else if(name.toLowerCase().contains("host") && name.toLowerCase().contains("night")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasHost = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    							hasHost = true;
+    						}
+    					}
+    					if(!hasHost){
+    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+    					}
+        			}
+    			}
+    		}else if(name.toLowerCase().contains("cook") && name.toLowerCase().contains("day")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+    					}
+        			}
+    			}
+    		}else if(name.toLowerCase().contains("cook") && name.toLowerCase().contains("night")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasCook = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    							hasCook = true;
+    						}
+    					}
+    					if(!hasCook){
+    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+    					}
+        			}
+    			}
+    		}else if(name.toLowerCase().contains("cashier") && name.toLowerCase().contains("day")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+    					}
+        			}
+    			}    			
+    		}else if(name.toLowerCase().contains("cashier") && name.toLowerCase().contains("night")){
+    			if(name.toLowerCase().contains("01")){
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("02")){
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("03")){
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("04")){
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+    					}
+        			}
+    			}else if(name.toLowerCase().contains("05")){
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasCashier = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    							hasCashier = true;
+    						}
+    					}
+    					if(!hasCashier){
+    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+    					}
+        			}
+    			}    			
+    			
+    		}
+    		
     		PersonGui g = new PersonGui(p, gui);
     		g.setPresent(true);
     		gui.animationPanel.addGui(g);// dw
@@ -191,7 +632,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		}
     		p.setGui(g);
     			
-    		persons.add(p);
+    		gui.persons.add(p);
     		p.startThread();
     		gui.persons.add(p);
     	}
@@ -215,7 +656,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 
     }
     public void setCustomerEnabled(CustomerAgent c){
-    	customerPanel.setCustomerEnabled(c.getName());
+    	personPanel.setCustomerEnabled(c.getName());
     }
 /*
 	public void setTableEnabled(int tableNumber){
@@ -396,6 +837,10 @@ public class InfoPanel extends JPanel implements KeyListener {
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {		
+	}
+	
+	public ListPanel getPersonPanel(){
+		return personPanel;
 	}
 
 }
