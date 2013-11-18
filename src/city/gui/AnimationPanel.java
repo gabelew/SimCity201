@@ -227,7 +227,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 	private void addDefaultBuildings(){
 	    	for(int j =0; j<BUILDING_ROWS;j++){
-		    	for(int i = 0; i<BUILDING_COLUMNS;i++){
+		    	for(int i = 1; i<BUILDING_COLUMNS;i++){
 		    		if(i < 5){
 		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house"));
 
@@ -260,7 +260,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		        	}else if(i<14){
 		    			buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"apartment"));
 		        	}
-		        	else{
+		        	else if(i<18){
 		        		buildings.add(new BuildingIcon(BUILDING_START_X+BUILDING_OFFSET_X*i,BUILDING_START_Y+BUILDING_OFFSET_Y*j,"house"));
 		        	}
 		    	}
