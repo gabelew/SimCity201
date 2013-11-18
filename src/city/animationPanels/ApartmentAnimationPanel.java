@@ -5,7 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import city.gui.Gui;
@@ -16,6 +20,9 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	
 	private SimCityGui simCityGui;
 	
+	private static BufferedImage kitchen = null;
+	private static BufferedImage fridge = null;
+	private static BufferedImage table = null;
     static final int WALL_LENGTH = 875;
     static final int WALL_WIDTH = 10; 
 	
@@ -26,6 +33,16 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
         setVisible(true);
         
         simCityGui.animationPanel.timer.addActionListener(this);
+        
+        try {
+			StringBuilder path = new StringBuilder("imgs/");
+			kitchen = ImageIO.read(new File(path.toString() + "kitchen.png"));
+			fridge = ImageIO.read(new File(path.toString() + "fidge.png"));
+			table = ImageIO.read(new File(path.toString() + "table.png"));
+			
+		} catch (IOException e){
+			
+		}
 		
 	}
 	@Override
@@ -55,10 +72,20 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	     
 	     //create rooms for each person. Total of 8 rooms in an apartment
 	     for(int i = 0; i < 5; i++){
-	     g2.fillRect(217*i, 0, WALL_WIDTH, 150);
-	     g2.fillRect(217*i, 300, WALL_WIDTH, 150);
+	    	 g2.fillRect(217*i, 0, WALL_WIDTH, 150);
+	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 150);
 	     }
 
+	     for(int i = 0; i < 5; i++){
+		     g2.drawImage(kitchen, 15+(i*217), 20, null);
+		     g2.drawImage(fridge, 100+(i*217), 10, null);
+		     g2.drawImage(table, 57+(i*217), 50, null);
+		     
+		     g2.drawImage(kitchen, 15+(i*217), 320, null);
+		     g2.drawImage(fridge, 100+(i*217), 310, null);
+		     g2.drawImage(table, 57+(i*217), 350, null);
+
+		 }
 		
 	}
 }
