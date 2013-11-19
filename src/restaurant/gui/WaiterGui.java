@@ -34,7 +34,6 @@ public class WaiterGui implements Gui {
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private FoodIcon food = null; 
-	private CookGui cookGui;
 	private int waitingSeatNumber = -1;
 	private Map<Integer, Point> seatMap = new HashMap<Integer, Point>();
 	
@@ -271,7 +270,7 @@ public class WaiterGui implements Gui {
 	}
 
 	public void servingFood(Waiter w, String choice, int t){
-		cookGui.msgPickingUpMyOrder(w, choice, t);
+		role.restaurant.cook.cookGui.msgPickingUpMyOrder(w, choice, t);
 		food = new FoodIcon(choice);
 	}
 	
@@ -290,10 +289,6 @@ public class WaiterGui implements Gui {
 		}
 		
         command=Command.GoToCashier;
-	}
-
-	public void setCookGui(CookGui g){
-		cookGui = g;
 	}
 
 }
