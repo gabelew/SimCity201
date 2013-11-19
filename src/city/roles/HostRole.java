@@ -355,7 +355,6 @@ public class HostRole extends Role implements Host {
 	//utilities
 
 	public void addNewTable() {
-		print("newTable");
 		tables.add(new Table(NTABLES++));
 	}
 	

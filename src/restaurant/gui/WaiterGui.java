@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.CookRole;
 import city.roles.WaiterRole;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
@@ -270,7 +271,8 @@ public class WaiterGui implements Gui {
 	}
 
 	public void servingFood(Waiter w, String choice, int t){
-		role.restaurant.cook.cookGui.msgPickingUpMyOrder(w, choice, t);
+
+		((CookRole)role.restaurant.cook).cookGui.msgPickingUpMyOrder(w, choice, t);
 		food = new FoodIcon(choice);
 	}
 	

@@ -512,6 +512,7 @@ public class PersonAgent extends Agent
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CookRole role = (CookRole)(r.cook);
     			roles.add(role);
+    			print("adding cook role");
             	role.active = true;
             	role.getGui().setPresent(true);
             	role.goesToWork();
