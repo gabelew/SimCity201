@@ -3,7 +3,6 @@ package restaurant;
 import java.awt.Point;
 
 import city.animationPanels.InsideAnimationPanel;
-import city.roles.WaiterRole;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Host;

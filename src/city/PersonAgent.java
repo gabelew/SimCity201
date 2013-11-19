@@ -506,12 +506,14 @@ public class PersonAgent extends Agent
     		}else if(job.type.equalsIgnoreCase("host")){
     			HostRole role = (HostRole)(r.host);
     			roles.add(role);
+    			role.setPerson(this);
             	role.active = true;
             	role.getGui().setPresent(true);
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CookRole role = (CookRole)(r.cook);
     			roles.add(role);
+    			role.setPerson(this);
     			print("adding cook role");
             	role.active = true;
             	role.getGui().setPresent(true);
@@ -519,6 +521,7 @@ public class PersonAgent extends Agent
     		}else if(job.type.equalsIgnoreCase("cashier")){
     			CashierRole role = (CashierRole)(r.cashier);
     			roles.add(role);
+    			role.setPerson(this);
             	role.active = true;
             	role.getGui().setPresent(true);
             	role.goesToWork();
