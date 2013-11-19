@@ -1,10 +1,8 @@
 package city.roles;
 
 import restaurant.CashierAgent;
-import restaurant.HostAgent;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
-import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Waiter.Menu;

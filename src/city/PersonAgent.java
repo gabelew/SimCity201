@@ -167,11 +167,11 @@ public class PersonAgent extends Agent
 					inList = true;
 			}
 			if(!inList){
+				print("goToWork task added");
 				taskList.add(Task.goToWork);
 			}
 		}
 		}
-		print("newhour");
 		if(hour == 23 && isRenter){
 			boolean inList = false;
 			for(Task t: taskList){
@@ -459,11 +459,14 @@ public class PersonAgent extends Agent
 				return true;
 			}*/
         	
-        	
+        	print("before role scheduler call");
 	        for(Role r : roles) {
 	        	if( r.isActive() ) {
+
+	            	print("in role scheduler call");
 	        		boolean tempBool = r.pickAndExecuteAnAction();
 	        		if(tempBool){
+	                	print("return true role scheduler call");
 	        			return true;
 	        		}
 	        	}
@@ -501,7 +504,8 @@ public class PersonAgent extends Agent
 		}
     }
     private void finishGoingToWork() {
-    	print("finishGoingToRestaurant");
+    	print("finishGoingToWork");
+    	location = Location.AtWork;
     	state = State.eating;
     	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
     			|| job.type.equalsIgnoreCase("cashier")){
@@ -516,12 +520,22 @@ public class PersonAgent extends Agent
             	role.goesToWork();	
     		}else if(job.type.equalsIgnoreCase("host")){
     			HostRole role = (HostRole)(r.host);
+    			roles.add(role);
             	role.active = true;
+            	role.getGui().setPresent(true);
+            	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CookRole role = (CookRole)(r.cook);
+    			roles.add(role);
             	role.active = true;
+            	role.getGui().setPresent(true);
+            	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
     			CashierRole role = (CashierRole)(r.cashier);
+    			roles.add(role);
+            	role.active = true;
+            	role.getGui().setPresent(true);
+            	role.goesToWork();
             	role.active = true;
     		}
         	

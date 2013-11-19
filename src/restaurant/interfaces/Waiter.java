@@ -3,8 +3,6 @@ package restaurant.interfaces;
 import java.util.ArrayList;
 import java.util.List;
 
-import restaurant.CustomerAgent;
-
 /**
  * A sample Waiter interface built to unit test a CashierAgent.
  *

@@ -17,9 +17,7 @@ import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import city.roles.WaiterRole;
-import restaurant.CustomerAgent;
 import restaurant.Restaurant;
-import restaurant.WaiterAgent;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import city.animationPanels.RestaurantAnimationPanel;
@@ -297,8 +295,5 @@ public class WaiterGui implements Gui {
 	public void setCookGui(CookGui g){
 		cookGui = g;
 	}
-
-
-
 
 }

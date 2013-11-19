@@ -87,7 +87,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	public void actionPerformed(ActionEvent arg0) 
 	{
 
-		for(Gui gui : guis) {
+		for(Gui gui : getGuis()) {
             if (gui.isPresent()) {
                 gui.updatePosition();
             }

@@ -1,7 +1,5 @@
 package restaurant.interfaces;
 
-import restaurant.MarketAgent;
-
 /**
  * A sample Cashier interface built to unit test a CashierAgent.
  *

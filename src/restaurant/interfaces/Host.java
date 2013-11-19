@@ -2,8 +2,6 @@ package restaurant.interfaces;
 
 import java.util.List;
 
-import restaurant.CookAgent.Order;
-import restaurant.MarketAgent;
 
 /**
  * A sample Cashier interface built to unit test a CashierAgent.

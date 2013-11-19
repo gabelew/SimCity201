@@ -5,6 +5,8 @@ import agent.Agent;
 import java.util.*;
 
 import city.PersonAgent;
+import city.roles.HostRole.State;
+import restaurant.Restaurant;
 import restaurant.gui.CashierGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
@@ -19,10 +21,14 @@ public class CashierRole extends Role implements Cashier {
 	Timer timer = new Timer();
 	
 	public EventLog log = new EventLog();
-	
+
+	public Restaurant restaurant;
 	public CashierGui cashierGui = null;
 	Map<String, Double> pricingMap = new HashMap<String, Double>(); 
 	public double bank = 5000; 
+	enum State {none, goToWork, working, leaving};
+	State state = State.none;
+	
 	
 	static final int MAKE_CHECK_TIME = 5000;
 	public class Order{
@@ -79,7 +85,11 @@ public class CashierRole extends Role implements Cashier {
 	public CashierGui getGui() {
 		return cashierGui;
 	}
-	
+
+	public void goesToWork() {
+		state = State.goToWork;
+		stateChanged();
+	}
 	public void msgProduceCheck(Waiter w, Customer c, String choice)
 	{
 		orders.add(new Order(w, c, choice, OrderState.requested));
@@ -138,6 +148,20 @@ public class CashierRole extends Role implements Cashier {
 	}
 
 	public boolean pickAndExecuteAnAction() {
+
+		if(state == State.goToWork){
+
+			print("role state working");
+			state = State.working;
+			cashierGui.DoEnterRestaurant();
+			return true;
+		}
+		if(state == State.leaving){
+			state = State.none;
+			cashierGui.DoLeaveRestaurant();
+			return true;
+		}
+		
 		Order temp = null;
 		synchronized(orders){
 			for (Order o : orders)
@@ -278,6 +302,11 @@ public class CashierRole extends Role implements Cashier {
 		//bills.add( new Bill(m, bill, BillState.requested));
 		//log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
 		//stateChanged();
+		
+	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 		
 	}
 }

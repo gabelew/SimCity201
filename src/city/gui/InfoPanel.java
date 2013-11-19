@@ -1,12 +1,7 @@
 package city.gui;
 
 import restaurant.CashierAgent;
-import restaurant.CookAgent;
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
-import restaurant.MarketAgent;
 import restaurant.Restaurant;
-import restaurant.WaiterAgent;
 import restaurant.gui.CustomerGui;
 
 import javax.swing.*;
@@ -225,13 +220,16 @@ public class InfoPanel extends JPanel implements KeyListener {
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    		    				System.out.println("already has host");
     							hasHost = true;
     						}
     					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
-    					}
-        			}
+    				}
+    				if(!hasHost){
+    	    			System.out.println("making host");
+    					p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+    				}
+        			
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				boolean hasHost = false;
@@ -241,10 +239,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasHost = true;
     						}
     					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
     				boolean hasHost = false;
@@ -254,10 +252,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasHost = true;
     						}
     					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
     				boolean hasHost = false;
@@ -266,11 +264,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
-    					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
-    					}
+    					}	
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
     				boolean hasHost = false;
@@ -280,10 +278,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasHost = true;
     						}
     					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
+					}
     			}
     		}else if(name.toLowerCase().contains("host") && name.toLowerCase().contains("night")){
     			if(name.toLowerCase().contains("01")){
@@ -295,10 +293,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasHost = true;
     						}
     					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				boolean hasHost = false;
@@ -307,11 +305,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
-    					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
     				boolean hasHost = false;
@@ -320,11 +318,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
-    					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
     				boolean hasHost = false;
@@ -334,10 +332,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasHost = true;
     						}
     					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
     				boolean hasHost = false;
@@ -346,11 +344,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
-    					}
-    					if(!hasHost){
-    						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasHost){
+						p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.night);
+					}
     			}
     		}else if(name.toLowerCase().contains("cook") && name.toLowerCase().contains("day")){
     			if(name.toLowerCase().contains("01")){
@@ -361,11 +359,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				boolean hasCook = false;
@@ -374,11 +372,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
     				boolean hasCook = false;
@@ -387,11 +385,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
     				boolean hasCook = false;
@@ -400,11 +398,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
     				boolean hasCook = false;
@@ -414,10 +412,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCook = true;
     						}
     					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.day);
+					}
     			}
     		}else if(name.toLowerCase().contains("cook") && name.toLowerCase().contains("night")){
     			if(name.toLowerCase().contains("01")){
@@ -428,11 +426,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				boolean hasCook = false;
@@ -441,11 +439,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
     				boolean hasCook = false;
@@ -454,11 +452,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
     				boolean hasCook = false;
@@ -468,10 +466,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCook = true;
     						}
     					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
     				boolean hasCook = false;
@@ -480,11 +478,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
-    					}
-    					if(!hasCook){
-    						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
-    					}
+    					}    					
         			}
+    				if(!hasCook){
+						p.job = p.new MyJob(r.location , "cook", PersonAgent.Shift.night);
+					}
     			}
     		}else if(name.toLowerCase().contains("cashier") && name.toLowerCase().contains("day")){
     			if(name.toLowerCase().contains("01")){
@@ -495,11 +493,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
-    					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
-    					}
+    					}    					
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				boolean hasCashier = false;
@@ -509,10 +507,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
     				boolean hasCashier = false;
@@ -522,10 +520,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
     				boolean hasCashier = false;
@@ -535,10 +533,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
     				boolean hasCashier = false;
@@ -548,10 +546,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+					}
     			}    			
     		}else if(name.toLowerCase().contains("cashier") && name.toLowerCase().contains("night")){
     			if(name.toLowerCase().contains("01")){
@@ -563,10 +561,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				boolean hasCashier = false;
@@ -576,10 +574,11 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
-    					}
+    					
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
     				boolean hasCashier = false;
@@ -589,10 +588,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
     				boolean hasCashier = false;
@@ -602,10 +601,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
     				boolean hasCashier = false;
@@ -615,10 +614,10 @@ public class InfoPanel extends JPanel implements KeyListener {
     							hasCashier = true;
     						}
     					}
-    					if(!hasCashier){
-    						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
-    					}
         			}
+    				if(!hasCashier){
+						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+					}
     			}    			
     			
     		}
@@ -655,10 +654,9 @@ public class InfoPanel extends JPanel implements KeyListener {
     	}*/
 
     }
-    public void setCustomerEnabled(CustomerAgent c){
+ /*  public void setCustomerEnabled(CustomerAgent c){
     	personPanel.setCustomerEnabled(c.getName());
     }
-/*
 	public void setTableEnabled(int tableNumber){
 		tablesPanel.setTableEnabled(tableNumber);
 	}

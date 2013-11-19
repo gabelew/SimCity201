@@ -1,8 +1,5 @@
 package restaurant.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.MarketAgent.Order;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -29,7 +29,8 @@ public class HostRole extends Role implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
-	
+
+	public Restaurant restaurant;
 	public List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	
 	public Collection<Table> tables = Collections.synchronizedList(new ArrayList<Table>());
@@ -41,6 +42,8 @@ public class HostRole extends Role implements Host {
 
 	public enum cState {waiting, waitingAndTold, eating, done};
 	public enum wState {idle, working, askedForBreak}; 
+	enum State {none, goToWork, working, leaving};
+	State state = State.none;
 	
 	static final int ZERO = 0;
 	
@@ -79,6 +82,12 @@ public class HostRole extends Role implements Host {
 
 
 	// Messages
+	public void goesToWork() {
+		state = State.goToWork;
+		stateChanged();
+		print("role goesToWork");
+	}
+	
 	public void msgReadyToWork(Waiter w) {
 		/*** Prevents waiter from being added twice ***/
 		boolean addWaiter = true;
@@ -99,7 +108,6 @@ public class HostRole extends Role implements Host {
 	}
 	
 	public void msgIWantToEat(Customer cust) {
-print("ooiret");
 		/*** Prevents customer from being added twice ***/
 		boolean addCustomer = true;
 		synchronized(customers){
@@ -118,7 +126,6 @@ print("ooiret");
 	}
 
 	public void msgLeavingRestaurant(Customer cust) {
-		print("\t\t msgLeavingRestaurant");
 		MyCustomer deleteC = null;
 		
 		synchronized(customers){
@@ -197,6 +204,16 @@ print("ooiret");
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		if(state == State.goToWork){
+			state = State.working;
+			hostGui.DoEnterRestaurant();
+			return true;
+		}
+		if(state == State.leaving){
+			state = State.none;
+			hostGui.DoLeaveRestaurant();
+			return true;
+		}
 		MyWaiter tempWaiter = null;
 		
 		synchronized(waiters){
@@ -343,9 +360,8 @@ print("ooiret");
 		tables.add(new Table(NTABLES++));
 	}
 	
-	public void setGui(HostGui gui, SimCityGui gui2) {
+	public void setGui(HostGui gui) {
 		hostGui = gui;
-		simCityGui = gui2;
 	}
 
 	public HostGui getGui() {
@@ -383,6 +399,14 @@ print("ooiret");
 			return msg.toString();
 		}
 	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
+		
+	}
+
+
+
 
 }
 

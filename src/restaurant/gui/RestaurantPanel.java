@@ -1,12 +1,7 @@
 package restaurant.gui;
 
 import restaurant.CashierAgent;
-import restaurant.CookAgent;
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
-import restaurant.MarketAgent;
 import restaurant.Restaurant;
-import restaurant.WaiterAgent;
 
 import javax.swing.*;
 
@@ -17,6 +12,8 @@ import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.roles.CookRole;
 import city.roles.CookRole.Food;
+import city.roles.CustomerRole;
+import city.roles.WaiterRole;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -40,8 +37,8 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	private static final double NO_CASH = 0.0;
 	
     //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
-    private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
+    //private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
+    private Vector<WaiterRole> waiters = new Vector<WaiterRole>();
 
     private JPanel restLabel = new JPanel();
     //private ListPanel customerPanel = new ListPanel(this, "Customers");
@@ -135,20 +132,20 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     
     public void setHungry(String type, String name) {
 
-        if (type.equals("Customers")) {
+      /*  if (type.equals("Customers")) {
 
             for (CustomerAgent temp: customers){
                 if (temp.getName() == name)
                 	temp.getGui().setHungry();
             }
-        }
+        }*/
     }
     
     public void setWorking(String type, String name) {
 
         if (type.equals("Waiters")) {
 
-            for (WaiterAgent temp: waiters) {
+            for (WaiterRole temp: waiters) {
                 if (temp.getName() == name)
                 {
                 	temp.getGui().setWorking();
@@ -158,7 +155,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     }
 
 	public void askBreak(String name) {
-        for (WaiterAgent temp: waiters) {
+        for (WaiterRole temp: waiters) {
             if (temp.getName() == name)
             	temp.getGui().askBreak();
         }
@@ -287,7 +284,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     	}
 
     }
-    public void setCustomerEnabled(CustomerAgent c){
+    public void setCustomerEnabled(CustomerRole c){
     //	customerPanel.setCustomerEnabled(c.getName());
     }
 

@@ -6,8 +6,6 @@ import java.sql.Time;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
-
-import restaurant.CookAgent;
 import agent.Agent;
 import city.roles.*;
 import restaurant.interfaces.Market;

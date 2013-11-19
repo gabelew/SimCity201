@@ -135,7 +135,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		for(Gui gui : guis) {
+		for(Gui gui : getGuis()) {
             if (gui.isPresent()) {
                 gui.updatePosition();
             }
@@ -179,7 +179,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 		
 
 
-        for(Gui gui : guis) {
+        for(Gui gui : getGuis()) {
         	if(!(gui instanceof CustomerGui || gui instanceof WaiterGui))
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
@@ -191,7 +191,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
       			g.drawImage(platingTableImg, xCOOK_POSITION+xPLATINGTABLE_OFFSET+17*i, yCOOK_POSITION+yPLATINGTABLE_OFFSET+8*i, null);
           	}
 
-        for(Gui gui : guis) {
+        for(Gui gui : getGuis()) {
         	if(gui instanceof CustomerGui || gui instanceof WaiterGui)
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
@@ -209,7 +209,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         //draw Register Stand
     	g.drawImage(registerImg, xREGISTER_POSITION, yREGISTER_POSITION, null);
     	
-    	for(Gui gui : guis) {
+    	for(Gui gui : getGuis()) {
         	if(gui instanceof CashierGui)
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
@@ -223,7 +223,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         }
         
 
-        for(Gui gui : guis) {
+        for(Gui gui : getGuis()) {
         	if(gui instanceof CustomerGui){
         		CustomerGui cGui = (CustomerGui) gui;
 	            if (cGui.isPresent()) {

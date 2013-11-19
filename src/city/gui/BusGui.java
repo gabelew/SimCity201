@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 
 import city.BusAgent;
 import city.PersonAgent;
-import restaurant.CustomerAgent;
 
 public class BusGui implements Gui{
 	

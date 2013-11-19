@@ -2,9 +2,8 @@ package restaurant.interfaces;
 
 import java.util.List;
 
-import restaurant.CookAgent.Order;
+import city.roles.CookRole.RoleOrder;
 import restaurant.gui.CookGui;
-import restaurant.MarketAgent;
 
 /**
  * A sample Cashier interface built to unit test a CashierAgent.
@@ -18,11 +17,11 @@ public interface Cook {
 	
 	public abstract void msgHereIsOrder(Waiter w, String choice, int table);
 	
-	public abstract void msgFoodDone(Order o);
+	public abstract void msgFoodDone(RoleOrder o);
 	
-	public abstract void msgDelivering(Market m, List<MarketAgent.MyFood>orderlist);
+	//public abstract void msgDelivering(Market m, List<MarketAgent.MyFood>orderlist);
 	
-	public abstract void msgOutOfOrder(Market m, List<MarketAgent.MyFood> orderList);
+	//public abstract void msgOutOfOrder(Market m, List<MarketAgent.MyFood> orderList);
 	
 	public abstract void msgAnimationFinishedAtFidge();
 	
@@ -30,7 +29,7 @@ public interface Cook {
 	
 	public abstract void msgAnimationFinishedWaiterPickedUpFood();
 	
-	public abstract void msgAnimationFinishedPutFoodOnPickUpTable(Order o);
+	public abstract void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o);
 	
 	public abstract void badSteaks();
 

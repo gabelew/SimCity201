@@ -17,7 +17,7 @@ public abstract class InsideAnimationPanel extends JPanel implements ActionListe
 	protected final int WINDOWX = 934;
     protected final int WINDOWY = 472;
 
-    protected List<Gui> guis = new ArrayList<Gui>();
+    private List<Gui> guis = new ArrayList<Gui>();
     
 	public void setInsideBuildingPanel(InsideBuildingPanel ibp){
 		insideBuildingPanel = ibp;
@@ -28,7 +28,13 @@ public abstract class InsideAnimationPanel extends JPanel implements ActionListe
 	
     public abstract void paintComponent(Graphics g);
     public void addGui(Gui gui) {
-		guis.add(gui);
+		getGuis().add(gui);
+	}
+	public List<Gui> getGuis() {
+		return guis;
+	}
+	public void setGuis(List<Gui> guis) {
+		this.guis = guis;
 	}
     
 }

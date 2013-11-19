@@ -54,7 +54,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		for(Gui gui : guis) {
+		for(Gui gui : getGuis()) {
             if (gui.isPresent()) {
                 gui.updatePosition();
             }
@@ -77,7 +77,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 			} 
 		}
 		
-		for(Gui gui : guis) {
+		for(Gui gui : getGuis()) {
 			if(gui.isPresent()) {
 				gui.draw(g2);;
 			}

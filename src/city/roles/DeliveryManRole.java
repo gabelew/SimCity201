@@ -1,8 +1,6 @@
 package city.roles;
 
 import restaurant.CashierAgent;
-import restaurant.CookAgent;
-import restaurant.HostAgent;
 //import restaurant.WaiterAgent.Menu;
 //import restaurant.WaiterAgent.MenuItem;
 import restaurant.gui.CustomerGui;

@@ -14,17 +14,16 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.roles.CookRole;
 import city.roles.CookRole.RoleOrder;
 import city.gui.Gui;
 import city.gui.SimCityGui;
-import restaurant.CookAgent;
-import restaurant.CookAgent.Order;
-import restaurant.WaiterAgent;
+import restaurant.gui.HostGui.Command;
 import restaurant.interfaces.Waiter;
 
 public class CookGui implements Gui  {
 
-	private CookAgent agent = null;
+	private CookRole role = null;
 	private boolean isPresent = true;
 	private BufferedImage cookImg = null;
 	SimCityGui gui;
@@ -32,7 +31,7 @@ public class CookGui implements Gui  {
 	public static List<Semaphore> grillingSpots = new ArrayList<Semaphore>();
 	public static List<Semaphore> counterSpots = new ArrayList<Semaphore>();
 	public static List<Semaphore> pickUpSpots = new ArrayList<Semaphore>();
-	private enum Command {noCommand, GoToFidge, GoToGrill, GoToCounter, GoToPlate, GoToRestPost};
+	private enum Command {noCommand, GoToFidge, GoToGrill, GoToCounter, GoToPlate, GoToRestPost, enterRestaurant, leaveRestaurant};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
 	private Map<Integer, Point> grillMap = new HashMap<Integer, Point>();
@@ -42,12 +41,12 @@ public class CookGui implements Gui  {
 	class MyFood{
 		FoodIcon food;
 		Point point;
-		Order order;
-		RoleOrder roleOrder;
+		//Order order;
+		RoleOrder order;
 		FoodState state;
 		public int cookingSpot = -1;
 		public int pickUpSpot = -1;
-		
+		/*
 		MyFood(FoodIcon f, Point p, Order o){
 			this.food = f;
 			this.point = p;
@@ -58,12 +57,12 @@ public class CookGui implements Gui  {
 			}else{
 				state = FoodState.PutFoodOnCounter;
 			}
-		}
+		}*/
 		
 		MyFood(FoodIcon f, Point p, RoleOrder o){
 			this.food = f;
 			this.point = p;
-			this.roleOrder = o;
+			this.order = o;
 			
 			if(order.choice.equalsIgnoreCase("steak") || order.choice.equalsIgnoreCase("chicken") || order.choice.equalsIgnoreCase("burger")){
 				state = FoodState.PutFoodOnGrill;
@@ -73,8 +72,8 @@ public class CookGui implements Gui  {
 		}
 	}
 
-    static final int xSTART_POSITION = 383;
-    static final int ySTART_POSITION = 105; 
+    static final int xREST_POSITION = 383;
+    static final int yREST_POSITION = 105; 
     static final int xFIDGE_POSITION = 430;
     static final int yFIDGE_POSITION = 129;
     static final int xFOOD_OFFSET = 10;
@@ -100,19 +99,19 @@ public class CookGui implements Gui  {
     public static final int N_PICKUP_SPOTS = 12;
     static final int N_PICKUP_SPOT_COLUMNS = 6;
     static final int N_PICKUP_SPOT_ROWS = 2;
-
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = xSTART_POSITION, yDestination = ySTART_POSITION;//default start position
+    static final int START_POSITION = -20;
+    private int xPos = START_POSITION, yPos = START_POSITION;//default waiter position
+    private int xDestination = xREST_POSITION, yDestination = yREST_POSITION;//default start position
     
-	public CookGui(CookAgent c) {
+	public CookGui(CookRole cook) {
 		try {
 		    cookImg = ImageIO.read(new File("imgs/chef_v1.png"));
 		} catch (IOException e) {
 		}
 		
-		setAgent(c);
-		xDestination = xSTART_POSITION;
-		yDestination = ySTART_POSITION;
+		setRole(cook);
+		xDestination = xREST_POSITION;
+		yDestination = yREST_POSITION;
 		
 		for(int i = 0; i < N_GRILLING_SPOTS; i++){
 			grillingSpots.add(new Semaphore(1,true));
@@ -142,12 +141,12 @@ public class CookGui implements Gui  {
         
 	}
 	
-	public CookAgent getAgent() {
-		return agent;
+	public CookRole getRole() {
+		return role;
 	}
 
-	public void setAgent(CookAgent agent) {
-		this.agent = agent;
+	public void setRole(CookRole role) {
+		this.role = role;
 	}
 
 	public void updatePosition() {
@@ -160,11 +159,15 @@ public class CookGui implements Gui  {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
-        
+   
         if(command != Command.noCommand && xPos == xDestination && yPos == yDestination){
-        	if(command == Command.GoToFidge){
+        	if(command == Command.leaveRestaurant){
         		command = Command.noCommand;
-        		agent.msgAnimationFinishedAtFidge();
+        	}else if(command == Command.enterRestaurant){
+        		command = Command.noCommand;
+        	}else if(command == Command.GoToFidge){
+        		command = Command.noCommand;
+        		role.msgAnimationFinishedAtFidge();
         	}else if (command == Command.GoToGrill){
         		command = Command.noCommand;
 
@@ -244,8 +247,8 @@ public class CookGui implements Gui  {
 		command = Command.GoToFidge;
 		
 	}
-
-	public void DoCookFood(Order order) {
+/*
+	public void DoCookFood(RoleOrder order) {
 		// Grab food from fidge(already at fidge
 		// if burger,steak,chicken put on grill and set timer
 		// if salad or cookie, put on right
@@ -262,7 +265,7 @@ public class CookGui implements Gui  {
 		}
 		
 	}
-	
+	*/
 	public void DoCookFood(RoleOrder order) {
 		// Grab food from fidge(already at fidge
 		// if burger,steak,chicken put on grill and set timer
@@ -292,7 +295,7 @@ public class CookGui implements Gui  {
 				}
 			}
 		}
-		agent.msgAnimationFinishedPutFoodOnGrill();
+		role.msgAnimationFinishedPutFoodOnGrill();
 	}
 	
 	private void putFoodOnCounter(MyFood f){
@@ -306,7 +309,7 @@ public class CookGui implements Gui  {
 				}
 			}
 		}
-		agent.msgAnimationFinishedPutFoodOnGrill();
+		role.msgAnimationFinishedPutFoodOnGrill();
 	}
 	
 	private void pickUpFoodOnGrill(MyFood f){
@@ -347,10 +350,10 @@ public class CookGui implements Gui  {
 			}
 		}
 
-		agent.msgAnimationFinishedPutFoodOnPickUpTable(f.order);
+		role.msgAnimationFinishedPutFoodOnPickUpTable(f.order);
 	}
 	
-	public void DoPlateFood(Order o){
+	/*public void DoPlateFood(Order o){
 		MyFood f = findMyFood(o);
 
 		if(f.order.choice.equalsIgnoreCase("steak") || f.order.choice.equalsIgnoreCase("chicken") || f.order.choice.equalsIgnoreCase("burger")){
@@ -364,7 +367,7 @@ public class CookGui implements Gui  {
 			f.state = FoodState.PickUpFromCounter;
 			command = Command.GoToCounter;
 		}
-	}
+	}*/
 	
 	public void DoPlateFood(RoleOrder o){
 		MyFood f = findMyFood(o);
@@ -381,7 +384,7 @@ public class CookGui implements Gui  {
 			command = Command.GoToCounter;
 		}
 	}
-
+/*
 	private MyFood findMyFood(Order o) {
 
 		synchronized(foods){
@@ -393,12 +396,12 @@ public class CookGui implements Gui  {
 		}
 		return null;
 	}
-	
+	*/
 	private MyFood findMyFood(RoleOrder o) {
 
 		synchronized(foods){
 			for(MyFood f: foods){
-				if(f.roleOrder == o){
+				if(f.order == o){
 					return f;
 				}
 			}
@@ -407,8 +410,8 @@ public class CookGui implements Gui  {
 	}
 
 	public void doGoToRestPost() {
-		xDestination = xSTART_POSITION;
-		yDestination = ySTART_POSITION;
+		xDestination = xREST_POSITION;
+		yDestination = yREST_POSITION;
 		command = Command.GoToRestPost;
 	}
 
@@ -426,7 +429,7 @@ public class CookGui implements Gui  {
 						&& f.order.table == table){
 					deleteIt = f;
 					pickUpSpots.get(f.pickUpSpot).release();
-					agent.msgAnimationFinishedWaiterPickedUpFood();
+					role.msgAnimationFinishedWaiterPickedUpFood();
 				}
 			}
 		}
@@ -436,4 +439,14 @@ public class CookGui implements Gui  {
 		}
 	}
 
+    public void DoLeaveRestaurant() {
+        xDestination = START_POSITION;
+        yDestination = START_POSITION;
+        command = Command.leaveRestaurant;
+    }
+    public void DoEnterRestaurant(){
+        xDestination = xREST_POSITION;
+        yDestination = yREST_POSITION; 
+        command = Command.enterRestaurant;   	
+    }
 }

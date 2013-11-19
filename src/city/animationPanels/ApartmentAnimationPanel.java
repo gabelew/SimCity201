@@ -50,7 +50,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-		for(Gui gui : guis) {
+		for(Gui gui : getGuis()) {
             if (gui.isPresent()) {
                 gui.updatePosition();
             }

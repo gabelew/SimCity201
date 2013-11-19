@@ -1,7 +1,9 @@
 package city.gui;
 
-import restaurant.CustomerAgent;
 import restaurant.Restaurant;
+import restaurant.gui.CashierGui;
+import restaurant.gui.CookGui;
+import restaurant.gui.HostGui;
 import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
@@ -127,6 +129,40 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("waiter05day");
     	infoPanel.getPersonPanel().addPerson("waiter05night");
     	infoPanel.getPersonPanel().addPerson("waiter05night");
+    	
+    	infoPanel.getPersonPanel().addPerson("host01day");
+    	infoPanel.getPersonPanel().addPerson("host01night");
+    	infoPanel.getPersonPanel().addPerson("host02day");
+    	infoPanel.getPersonPanel().addPerson("host02night");
+    	infoPanel.getPersonPanel().addPerson("host03day");
+    	infoPanel.getPersonPanel().addPerson("host03night");
+    	infoPanel.getPersonPanel().addPerson("host04day");
+    	infoPanel.getPersonPanel().addPerson("host04night");
+    	infoPanel.getPersonPanel().addPerson("host05day");
+    	infoPanel.getPersonPanel().addPerson("host05night");
+    	
+    	infoPanel.getPersonPanel().addPerson("cook01day");
+    	infoPanel.getPersonPanel().addPerson("cook01night");
+    	infoPanel.getPersonPanel().addPerson("cook02day");
+    	infoPanel.getPersonPanel().addPerson("cook02night");
+    	infoPanel.getPersonPanel().addPerson("cook03day");
+    	infoPanel.getPersonPanel().addPerson("cook03night");
+    	infoPanel.getPersonPanel().addPerson("cook04day");
+    	infoPanel.getPersonPanel().addPerson("cook04night");
+    	infoPanel.getPersonPanel().addPerson("cook05day");
+    	infoPanel.getPersonPanel().addPerson("cook05night");
+    	
+    	infoPanel.getPersonPanel().addPerson("cashier01day");
+    	infoPanel.getPersonPanel().addPerson("cashier01night");
+    	infoPanel.getPersonPanel().addPerson("cashier02day");
+    	infoPanel.getPersonPanel().addPerson("cashier02night");
+    	infoPanel.getPersonPanel().addPerson("cashier03day");
+    	infoPanel.getPersonPanel().addPerson("cashier03night");
+    	infoPanel.getPersonPanel().addPerson("cashier04day");
+    	infoPanel.getPersonPanel().addPerson("cashier04night");
+    	infoPanel.getPersonPanel().addPerson("cashier05day");
+    	infoPanel.getPersonPanel().addPerson("cashier05night");
+    	
     }
 
 	private void createDefaultBuildingPanels() {
@@ -151,9 +187,28 @@ public class SimCityGui extends JFrame implements ActionListener {
         	b.setInsideBuildingPanel(bp);
         	restaurantAnimationPanel.setInsideBuildingPanel(bp);
         	buildingsPanel.add(bp, "" + i);
-        	getRestaurants().add(new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
-        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY()), "Restaurant1WaiterRole"));
+        	Restaurant r = new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
+        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY()), "Restaurant1WaiterRole");
+        	getRestaurants().add(r);
         	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
+
+        	((HostRole)r.host).setRestaurant(r);
+        	HostGui hg = new HostGui(((HostRole)r.host));
+        	((HostRole)r.host).setGui(hg);
+        	restaurantAnimationPanel.addGui(hg);
+
+
+        	((CashierRole)r.cashier).setRestaurant(r);
+        	CashierGui cg = new CashierGui(((CashierRole)r.cashier));
+        	((CashierRole)r.cashier).setGui(cg);
+        	restaurantAnimationPanel.addGui(cg);
+        	
+
+        	((CookRole)r.cook).setRestaurant(r);
+        	CookGui ccg = new CookGui(((CookRole)r.cook));
+        	((CookRole)r.cook).setGui(ccg);
+        	restaurantAnimationPanel.addGui(ccg);
+
         	}else if(b.type.equals("market")){
                 
             	RestaurantPanel restPanel = new RestaurantPanel(this);
@@ -232,7 +287,7 @@ public class SimCityGui extends JFrame implements ActionListener {
      *
      * @param c reference to the customer
      */ 
-    public void setCustomerEnabled(CustomerAgent c) {
+    /*public void setCustomerEnabled(CustomerAgent c) {
     	
     	infoPanel.setCustomerEnabled(c);
     	//find customer in list
@@ -246,8 +301,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 	            }
 	     }
             
-        }*/
-    }
+        }
+    }*/
     /**
      * Main routine to get gui started
      */

@@ -9,7 +9,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import city.PersonAgent;
-import restaurant.CustomerAgent;
 
 public class PersonGui implements Gui{
 	

@@ -1,8 +1,6 @@
 package restaurant.test.mock;
 
 import java.util.List;
-import restaurant.CookAgent;
-import restaurant.CookAgent.Food;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Market;
 
@@ -20,10 +18,10 @@ public class MockMarket extends Mock implements Market {
 	}
 
 	
-	@Override
-	public void msgHereIsOrder(CookAgent c, Cashier cashier, List<Food> orderList) {
+	/*@Override
+	public void msgHereIsOrder(Cook c, Cashier cashier, List<Food> orderList) {
 		log.add(new LoggedEvent("Received msgHereIsOrder from cook."));
-	}
+	}*/
 
 	@Override
 	public void msgPayment(Cashier c, double payment) {

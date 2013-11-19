@@ -7,8 +7,8 @@ import java.util.concurrent.Semaphore;
 
 import city.MarketAgent;
 import city.PersonAgent;
-import restaurant.CookAgent.Order;
-import restaurant.MarketAgent.MyFood;
+import city.roles.HostRole.State;
+import restaurant.Restaurant;
 import restaurant.gui.CookGui;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Market;
@@ -23,7 +23,6 @@ public class CookRole extends Role implements Cook {
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
 	
-	private CashierRole cashier;
 	public CookGui cookGui = null;
 
     static final int SALAD_COOKTIME = 7000;
@@ -49,6 +48,10 @@ public class CookRole extends Role implements Cook {
 	private int grillItems = 0;
 	private int counterItems = 0;
 	private int pickUpTableItems = 0;
+	public Restaurant restaurant;
+
+	enum State {none, goToWork, working, leaving};
+	State state = State.none;
 	
     public class Food{
     	private String choice;
@@ -155,12 +158,14 @@ public class CookRole extends Role implements Cook {
 	public void setGui(CookGui g) {
 		cookGui = g;
 	}
-	public void setCashier(CashierRole g) {
-		cashier = g;
-	}
 
 	public CookGui getGui() {
 		return cookGui;
+	}
+
+	public void goesToWork() {
+		state = State.goToWork;
+		stateChanged();
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
@@ -289,7 +294,16 @@ public class CookRole extends Role implements Cook {
 	}	
 	
 	public boolean pickAndExecuteAnAction() {
-		
+		if(state == State.goToWork){
+			state = State.working;
+			cookGui.DoEnterRestaurant();
+			return true;
+		}
+		if(state == State.leaving){
+			state = State.none;
+			cookGui.DoLeaveRestaurant();
+			return true;
+		}
 		if(orderFromMarket){
 			print("ordering Food");
 			orderFromMarket = false;
@@ -488,7 +502,7 @@ public class CookRole extends Role implements Cook {
 	}
 	
 	private void hereIsMarketBill(MarketOrder morder){
-		cashier.msgHereIsInvoice(morder.price,morder.deliveryMan);
+		//restaurant.cashier.msgHereIsInvoice(morder.price,morder.deliveryMan);
 		marketOrders.remove(morder);
 	}
 	
@@ -509,7 +523,7 @@ public class CookRole extends Role implements Cook {
 	}
 
 	public void addMarket(MarketAgent m){
-		markets.add(new MyMarket(m));
+		//markets.add(new MyMarket(m));
 	}
 
 
@@ -562,7 +576,7 @@ public class CookRole extends Role implements Cook {
 		
 	}
 
-
+/*
 	@Override
 	public void msgFoodDone(Order o) {
 		// TODO Auto-generated method stub
@@ -585,8 +599,14 @@ public class CookRole extends Role implements Cook {
 
 
 	@Override
-	public void msgAnimationFinishedPutFoodOnPickUpTable(Order o) {
+	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o) {
 		// TODO Auto-generated method stub
+		
+	}*/
+
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 		
 	}
 
