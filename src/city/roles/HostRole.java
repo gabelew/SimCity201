@@ -24,7 +24,7 @@ import city.gui.SimCityGui;
 public class HostRole extends Role implements Host {
 	
 	//a global for the number of tables.
-	private static int NTABLES = 0; // must start at zero -
+	private int NTABLES = 0; // must start at zero -
 	
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -84,7 +84,7 @@ public class HostRole extends Role implements Host {
 	// Messages
 	public void goesToWork() {
 		state = State.goToWork;
-		stateChanged();
+		this.stateChanged();
 		print("role goesToWork");
 	}
 	
@@ -104,7 +104,7 @@ public class HostRole extends Role implements Host {
 			waiters.add(new MyWaiter(w, wState.working, ZERO));
 		}
 		
-		stateChanged();
+		this.stateChanged();
 	}
 	
 	public void msgIWantToEat(Customer cust) {
@@ -122,7 +122,7 @@ public class HostRole extends Role implements Host {
 			customers.add(new MyCustomer(cust, cState.waiting));
 		}
 		
-		stateChanged();
+		this.stateChanged();
 	}
 
 	public void msgLeavingRestaurant(Customer cust) {
@@ -137,7 +137,7 @@ public class HostRole extends Role implements Host {
 		}
 		
 		customers.remove(deleteC);
-		stateChanged();
+		this.stateChanged();
 	}
 	
 	public void msgTableIsFree(Waiter waiter, int msgerT){
@@ -157,7 +157,7 @@ public class HostRole extends Role implements Host {
 				((RestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
 			    	
 			   
-				stateChanged();
+				this.stateChanged();
 			}
 		}		
 		}
@@ -166,7 +166,7 @@ public class HostRole extends Role implements Host {
 	public void msgCanIBreak(Waiter w) {
 		MyWaiter mw = findWaiter(w);
 		mw.state = wState.askedForBreak;
-		stateChanged();
+		this.stateChanged();
 	}
 
 	private MyWaiter findWaiter(Waiter w) {
@@ -355,6 +355,7 @@ public class HostRole extends Role implements Host {
 	//utilities
 
 	public void addNewTable() {
+		print("newTable");
 		tables.add(new Table(NTABLES++));
 	}
 	

@@ -536,7 +536,9 @@ public class PersonAgent extends Agent
     private void goToRestaurant() {
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
-    	Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
+    	
+    	//Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
+    	Restaurant mr = restaurants.get(randInt(0,0));
     	destination = mr.location;
 
     	personGui.DoWalkTo(destination);
