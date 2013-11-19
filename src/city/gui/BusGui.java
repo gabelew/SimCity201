@@ -15,6 +15,7 @@ public class BusGui implements Gui{
 	
 	private BusAgent agent = null;
 	private boolean isPresent = false;
+	private char type;
 	
 	private static BufferedImage bus_back = null;
 	private static BufferedImage bus_front = null;
@@ -37,18 +38,19 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
+		this.type = type;
 		
 		if(type == 'B'){
 			xPos = 30;
-			yPos = 350;
+			yPos = 400;
 			xDestination = 30;
-			yDestination = 70;
+			yDestination = -40;
 		}
 		else if(type == 'F'){
 			xPos = 825;
-			yPos = 70;
+			yPos = -40;
 			xDestination = 825;
-			yDestination = 300;
+			yDestination = 410;
 		}
         
 		this.gui = gui;
@@ -71,6 +73,14 @@ public class BusGui implements Gui{
 		if (xPos == xDestination && yPos == yDestination) {
 			//if(command == Command.walkToDestination){
 				command = Command.noCommand;
+				if(type == 'B'){
+					xPos = 30;
+					yPos = 400;
+					}
+					else if(type == 'F'){
+					xPos = 825;
+					yPos = -40;
+					}
 				//agent.msgAtStop();
 			//}
 		}
