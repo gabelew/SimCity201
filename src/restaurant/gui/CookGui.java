@@ -24,7 +24,7 @@ import restaurant.interfaces.Waiter;
 public class CookGui implements Gui  {
 
 	private CookRole role = null;
-	private boolean isPresent = true;
+	private boolean isPresent = false;
 	private BufferedImage cookImg = null;
 	SimCityGui gui;
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
@@ -101,7 +101,7 @@ public class CookGui implements Gui  {
     static final int N_PICKUP_SPOT_ROWS = 2;
     static final int START_POSITION = -20;
     private int xPos = START_POSITION, yPos = START_POSITION;//default waiter position
-    private int xDestination = xREST_POSITION, yDestination = yREST_POSITION;//default start position
+    private int xDestination = START_POSITION, yDestination = START_POSITION;//default start position
     
 	public CookGui(CookRole cook) {
 		try {

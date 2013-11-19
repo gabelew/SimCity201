@@ -38,7 +38,7 @@ public class PersonAgent extends Agent
 	boolean isRenter;
 	boolean isManager;
 	
-	private String name;
+	public String name;
 	public BufferedImage car = null;
 	//Bus busLeft;
 	//Bus busRight;
@@ -167,7 +167,6 @@ public class PersonAgent extends Agent
 					inList = true;
 			}
 			if(!inList){
-				print("goToWork task added");
 				taskList.add(Task.goToWork);
 			}
 		}
@@ -292,14 +291,7 @@ public class PersonAgent extends Agent
  ***************************/	
 	
 	public void msgDoneEatingAtRestaurant() {
-		print("msgDoneEatingAtRestaurant");
 		state = State.doingNothing;
-
-		for(Task t: taskList){
-			print(t.toString());
-		}
-
-		print(state.toString());
 		
 		stateChanged();
 
@@ -459,21 +451,16 @@ public class PersonAgent extends Agent
 				return true;
 			}*/
         	
-        	print("before role scheduler call");
 	        for(Role r : roles) {
 	        	if( r.isActive() ) {
-
-	            	print("in role scheduler call");
 	        		boolean tempBool = r.pickAndExecuteAnAction();
 	        		if(tempBool){
-	                	print("return true role scheduler call");
 	        			return true;
 	        		}
 	        	}
 	        }
 	        
 	        if(state == State.doingNothing){
-	        	print("goingHome");
 	        	goHome();
         	}
 	        
@@ -494,7 +481,6 @@ public class PersonAgent extends Agent
     }
     private void goToWork(){
     	state = State.goingToWork;
-    	print("going to work");
     	destination = job.location;
     	personGui.DoWalkTo(destination);
     	try {
@@ -504,7 +490,6 @@ public class PersonAgent extends Agent
 		}
     }
     private void finishGoingToWork() {
-    	print("finishGoingToWork");
     	location = Location.AtWork;
     	state = State.eating;
     	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")

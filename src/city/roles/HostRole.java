@@ -154,11 +154,9 @@ public class HostRole extends Role implements Host {
 
 				table.setUnoccupied();
 
-				for(Restaurant r: simCityGui.getRestaurants()){
-			    	if(r.host == this){
-						((RestaurantAnimationPanel) r.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
-			    	}
-			    }
+				((RestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
+			    	
+			   
 				stateChanged();
 			}
 		}		
@@ -204,6 +202,8 @@ public class HostRole extends Role implements Host {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		
+		print("" +customers.size() + "    " + tables.size());
 		if(state == State.goToWork){
 			state = State.working;
 			hostGui.DoEnterRestaurant();
@@ -335,11 +335,9 @@ public class HostRole extends Role implements Host {
 		if(c != null){
 			t.setOccupant(c.c);
 
-			for(Restaurant r: simCityGui.getRestaurants()){
-		    	if(r.host == this){
-					((RestaurantAnimationPanel) r.insideAnimationPanel).setTableOccupied(t.getTableNumber());
-		    	}
-		    }
+
+			((RestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableOccupied(t.getTableNumber());
+		 
 			c.setState(cState.eating);
 			c.c.msgTableIsReady();
 			

@@ -21,7 +21,6 @@ import city.PersonAgent;
  * Restaurant customer agent.
  */
 public class CustomerRole extends Role implements Customer {
-	private String name;
 	private String choice; 				// will hold the customers food choice
 	private MyMenu myMenu;	
 	Timer timer = new Timer();
@@ -112,19 +111,19 @@ public class CustomerRole extends Role implements Customer {
 	private void msgChoiceMade(String c){
 		choice = c;
 
-		if(name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CashierAgent.STEAK_COST && isAvailable("Steak")){
+		if(myPerson.name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CashierAgent.STEAK_COST && isAvailable("Steak")){
 			choice = "Steak";
 		}
-		if(name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CashierAgent.CHICKEN_COST && isAvailable("Chicken")){
+		if(myPerson.name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CashierAgent.CHICKEN_COST && isAvailable("Chicken")){
 			choice = "Chicken";
 		}
-		if(name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CashierAgent.SALAD_COST && isAvailable("Salad")){
+		if(myPerson.name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CashierAgent.SALAD_COST && isAvailable("Salad")){
 			choice = "Salad";
 		}
-		if(name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CashierAgent.BURGER_COST && isAvailable("Burger")){
+		if(myPerson.name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CashierAgent.BURGER_COST && isAvailable("Burger")){
 			choice = "Burger";
 		}
-		if(name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CashierAgent.COOKIE_COST && isAvailable("Cookie")){
+		if(myPerson.name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CashierAgent.COOKIE_COST && isAvailable("Cookie")){
 			choice = "Cookie";
 		}
 		
@@ -276,7 +275,7 @@ public class CustomerRole extends Role implements Customer {
 		timer.schedule(
 			new TimerTask() {
 				public void run() {
-					if(!name.equalsIgnoreCase("wait")){
+					if(!myPerson.name.equalsIgnoreCase("wait")){
 						if(leaveEarly.tryAcquire()){
 							if(state == AgentState.WaitigForTable){
 								event = AgentEvent.leavingEarly;
@@ -317,7 +316,7 @@ public class CustomerRole extends Role implements Customer {
 	private void makeChoice(){
 		List<MenuItem> removeMenuItems = new ArrayList<MenuItem>();
 		for(MenuItem m: myMenu.menuItems){
-			if(myPerson.cashOnHand < m.cost && !name.equalsIgnoreCase("Mahdi") && !name.equalsIgnoreCase("ditch") )
+			if(myPerson.cashOnHand < m.cost && !myPerson.name.equalsIgnoreCase("Mahdi") && !myPerson.name.equalsIgnoreCase("ditch") )
 			{
 				removeMenuItems.add(m);
 			}
