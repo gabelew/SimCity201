@@ -105,7 +105,6 @@ public class HostAgent extends Agent {
 	}
 	
 	public void msgIWantToEat(Customer cust) {
-print("ooiret");
 		/*** Prevents customer from being added twice ***/
 		boolean addCustomer = true;
 		synchronized(customers){
@@ -124,7 +123,6 @@ print("ooiret");
 	}
 
 	public void msgLeavingRestaurant(Customer cust) {
-		print("\t\t msgLeavingRestaurant");
 		MyCustomer deleteC = null;
 		
 		synchronized(customers){

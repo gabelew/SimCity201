@@ -404,6 +404,27 @@ public class HostRole extends Role implements Host {
 	}
 
 
+	public void releaveFromDuty() {
+		myPerson.releavedFromDuty(this);
+		//how to animate this?
+	}
+
+
+	@Override
+	public void msgDoneWorking(WaiterRole role) {
+		MyWaiter removeW = null;
+		for(MyWaiter w: waiters){
+			if(w.w == role){
+				removeW = w;
+			}
+		}
+		if(removeW !=null){
+			waiters.remove(removeW);
+		}
+		
+	}
+
+
 
 
 }

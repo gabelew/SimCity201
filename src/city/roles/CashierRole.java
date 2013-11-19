@@ -309,4 +309,8 @@ public class CashierRole extends Role implements Cashier {
 		restaurant = r;
 		
 	}
+
+	public void releaveFromDuty() {
+		myPerson.releavedFromDuty(this);
+	}
 }

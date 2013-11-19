@@ -169,12 +169,12 @@ public class InfoPanel extends JPanel implements KeyListener {
     	if (type.equals("Persons")) {
     		PersonAgent p = null;
     		if(stringIsDouble(name)){
-    			p = new PersonAgent(name, Double.valueOf(name));
+    			p = new PersonAgent(name, Double.valueOf(name),gui);
     		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
     				|| name.toLowerCase().contains("ditch") || name.toLowerCase().contains("broke")){
-    			p = new PersonAgent(name, NO_CASH);   			
+    			p = new PersonAgent(name, NO_CASH,gui);   			
     		}else{
-    			p = new PersonAgent(name, PERSONS_DEFAULT_CASH);
+    			p = new PersonAgent(name, PERSONS_DEFAULT_CASH, gui);
     		}
     		
     		if(name.toLowerCase().contains("waiter") && name.toLowerCase().contains("day")){

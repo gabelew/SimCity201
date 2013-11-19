@@ -33,7 +33,6 @@ public abstract class Role
 	public void stateChanged()
 	{
 		if(this.myPerson != null){
-			print("\t\t\t\t role called state changed");
 			this.myPerson.stateChanged();
 		}
 	}

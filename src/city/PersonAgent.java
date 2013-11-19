@@ -56,6 +56,7 @@ public class PersonAgent extends Agent
 	
 	public int hungerLevel = 51;
 	public double cashOnHand, businessFunds;
+	private SimCityGui simCityGui;
 	
 /***********************
  *  UTILITY CLASSES START
@@ -78,7 +79,7 @@ public class PersonAgent extends Agent
 		public Point location;
 		public String type;
 		public Shift shift;
-		public Role role;
+		//public Role role;
 		
 		public MyJob(Point l, String type, Shift s){
 			this.location = l;
@@ -95,9 +96,10 @@ public class PersonAgent extends Agent
 	/**
 	 * Constructor
 	 */
-	public PersonAgent(String name, double cash) {
+	public PersonAgent(String name, double cash, SimCityGui simCityGui) {
 	    this.name = name;
 	    this.cashOnHand = cash;
+	    this.simCityGui = simCityGui;
 	}
 	
 /***********************
@@ -159,17 +161,38 @@ public class PersonAgent extends Agent
 		this.hungerLevel += 1;
 		
 		if(job!=null){
-		if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 12)) ||
-				(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 8 && currentHour < 22))){
-			boolean inList = false;
-			for(Task t: taskList){
-				if(t == Task.goToWork)
-					inList = true;
+			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 12)) ||
+					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 8 && currentHour < 22))){
+				boolean inList = false;
+				for(Task t: taskList){
+					if(t == Task.goToWork)
+						inList = true;
+				}
+				if(!inList){
+					taskList.add(Task.goToWork);
+				}
 			}
-			if(!inList){
-				taskList.add(Task.goToWork);
+			
+			if(job.type.equalsIgnoreCase("waiter") && location == Location.AtWork 
+					&& ((job.shift == Shift.day && !(currentHour >= 22 || currentHour <= 12)) ||
+					((job.shift == Shift.night && !(currentHour >= 8 && currentHour < 22))))){
+				for(Restaurant r: simCityGui.getRestaurants()){
+					if(r.location.equals(job.location)){
+						Role removeRole = null;
+						for(Role role: roles){
+							if(role instanceof WaiterRole){
+								r.host.msgDoneWorking(((WaiterRole)role));
+								removeRole = role;
+							}
+						}
+						if(removeRole != null){
+							roles.remove(removeRole);
+						}
+						state = State.doingNothing;
+						location = Location.InCity;
+					}
+				}
 			}
-		}
 		}
 		if(hour == 23 && isRenter){
 			boolean inList = false;
@@ -505,6 +528,9 @@ public class PersonAgent extends Agent
             	role.goesToWork();	
     		}else if(job.type.equalsIgnoreCase("host")){
     			HostRole role = (HostRole)(r.host);
+    			if(role.getPerson() != null){
+    				role.releaveFromDuty();
+    			}
     			roles.add(role);
     			role.setPerson(this);
             	role.active = true;
@@ -512,14 +538,20 @@ public class PersonAgent extends Agent
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CookRole role = (CookRole)(r.cook);
+
+    			if(role.getPerson() != null){
+    				role.releaveFromDuty();
+    			}
     			roles.add(role);
     			role.setPerson(this);
-    			print("adding cook role");
             	role.active = true;
             	role.getGui().setPresent(true);
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
     			CashierRole role = (CashierRole)(r.cashier);
+    			if(role.getPerson() != null){
+    				role.releaveFromDuty();
+    			}
     			roles.add(role);
     			role.setPerson(this);
             	role.active = true;
@@ -604,6 +636,21 @@ public class PersonAgent extends Agent
 	    
 	    public void msgReenablePerson(){
 			//gui.setPresent();
+		}
+
+		public void releavedFromDuty(Role role) {
+			Role removeRole = null;
+			for(Role r:roles){
+				if(role == r){
+					removeRole = r;
+				}
+			}
+			if(removeRole!=null){
+				roles.remove(removeRole);
+				state = State.doingNothing;
+				location = Location.InCity;
+			}
+			stateChanged();
 		}
 
 }

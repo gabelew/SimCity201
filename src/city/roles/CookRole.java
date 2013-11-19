@@ -611,6 +611,11 @@ public class CookRole extends Role implements Cook {
 	}
 
 
+	public void releaveFromDuty() {
+		myPerson.releavedFromDuty(this);
+	}
+
+
 
 
 

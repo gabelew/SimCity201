@@ -2,6 +2,9 @@ package restaurant.interfaces;
 
 import java.util.List;
 
+import city.roles.Role;
+import city.roles.WaiterRole;
+
 
 /**
  * A sample Cashier interface built to unit test a CashierAgent.
@@ -24,5 +27,7 @@ public interface Host {
 	public abstract String getName();
 	
 	public abstract void addNewTable();
+
+	public abstract void msgDoneWorking(WaiterRole role);
 	
 }
