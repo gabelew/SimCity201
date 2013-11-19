@@ -63,6 +63,7 @@ public class CashierGui implements Gui  {
         
         if(xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
+        		role.msgAnimationHasLeftRestaurant();
         		command = Command.none;
         	}else if(command == Command.enterRestaurant){
         		command = Command.none;

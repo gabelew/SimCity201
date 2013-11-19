@@ -135,11 +135,14 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		for(Gui gui : getGuis()) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
+
+    	synchronized(getGuis()){
+			for(Gui gui : getGuis()) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+    	}
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();  //Will have paintComponent called
 	}
@@ -179,24 +182,29 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 		
 
 
-        for(Gui gui : getGuis()) {
-        	if(!(gui instanceof CustomerGui || gui instanceof WaiterGui))
-	            if (gui.isPresent()) {
-	                gui.draw(g2);
-	            }
-        }
+    	synchronized(getGuis()){
+	        for(Gui gui : getGuis()) {
+	        	if(!(gui instanceof CustomerGui || gui instanceof WaiterGui))
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
         
       //Plating  tables
       		for(int i = 0; i<NPLATING_TABLES; i++){
       			g.drawImage(platingTableImg, xCOOK_POSITION+xPLATINGTABLE_OFFSET+17*i, yCOOK_POSITION+yPLATINGTABLE_OFFSET+8*i, null);
           	}
 
-        for(Gui gui : getGuis()) {
-        	if(gui instanceof CustomerGui || gui instanceof WaiterGui)
-	            if (gui.isPresent()) {
-	                gui.draw(g2);
-	            }
-        }
+
+    	synchronized(getGuis()){		
+	        for(Gui gui : getGuis()) {
+	        	if(gui instanceof CustomerGui || gui instanceof WaiterGui)
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
         
         g2.setColor(Color.MAGENTA);       
 		// draw kitchen wall
@@ -223,19 +231,21 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
         }
         
 
-        for(Gui gui : getGuis()) {
-        	if(gui instanceof CustomerGui){
-        		CustomerGui cGui = (CustomerGui) gui;
-	            if (cGui.isPresent()) {
-	            	cGui.drawFood(g2);
-	            }
-        	}else if(gui instanceof CookGui){
-        		CookGui cGui = (CookGui) gui;
-	            if (cGui.isPresent()) {
-	            	cGui.drawFood(g2);
-	            }
-        	}
-        }
+    	synchronized(getGuis()){
+	        for(Gui gui : getGuis()) {
+	        	if(gui instanceof CustomerGui){
+	        		CustomerGui cGui = (CustomerGui) gui;
+		            if (cGui.isPresent()) {
+		            	cGui.drawFood(g2);
+		            }
+	        	}else if(gui instanceof CookGui){
+	        		CookGui cGui = (CookGui) gui;
+		            if (cGui.isPresent()) {
+		            	cGui.drawFood(g2);
+		            }
+	        	}
+	        }
+    	}
 
     }
     

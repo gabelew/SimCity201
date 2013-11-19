@@ -9,6 +9,7 @@ import restaurant.interfaces.Waiter;
 
 import java.awt.Point;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.animationPanels.RestaurantAnimationPanel;
@@ -25,7 +26,9 @@ public class HostRole extends Role implements Host {
 	
 	//a global for the number of tables.
 	private int NTABLES = 0; // must start at zero -
-	
+
+	private Semaphore waitingResponse = new Semaphore(0,true);
+	PersonAgent replacementPerson = null;
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
@@ -42,7 +45,7 @@ public class HostRole extends Role implements Host {
 
 	public enum cState {waiting, waitingAndTold, eating, done};
 	public enum wState {idle, working, askedForBreak}; 
-	enum State {none, goToWork, working, leaving};
+	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
 	
 	static final int ZERO = 0;
@@ -87,7 +90,16 @@ public class HostRole extends Role implements Host {
 		this.stateChanged();
 		print("role goesToWork");
 	}
-	
+
+	public void msgReleaveFromDuty(PersonAgent p) {
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
+	}
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.releaveFromDuty;
+		waitingResponse.release();
+	}
 	public void msgReadyToWork(Waiter w) {
 		/*** Prevents waiter from being added twice ***/
 		boolean addWaiter = true;
@@ -202,8 +214,13 @@ public class HostRole extends Role implements Host {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
-		
-		print("" +customers.size() + "    " + tables.size());
+		if(state == State.releaveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
 		if(state == State.goToWork){
 			state = State.working;
 			hostGui.DoEnterRestaurant();
@@ -212,6 +229,11 @@ public class HostRole extends Role implements Host {
 		if(state == State.leaving){
 			state = State.none;
 			hostGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		MyWaiter tempWaiter = null;
@@ -356,6 +378,7 @@ public class HostRole extends Role implements Host {
 
 	public void addNewTable() {
 		tables.add(new Table(NTABLES++));
+		this.stateChanged();
 	}
 	
 	public void setGui(HostGui gui) {
@@ -403,13 +426,6 @@ public class HostRole extends Role implements Host {
 		
 	}
 
-
-	public void releaveFromDuty() {
-		myPerson.releavedFromDuty(this);
-		//how to animate this?
-	}
-
-
 	@Override
 	public void msgDoneWorking(WaiterRole role) {
 		MyWaiter removeW = null;
@@ -423,6 +439,9 @@ public class HostRole extends Role implements Host {
 		}
 		
 	}
+
+
+
 
 
 

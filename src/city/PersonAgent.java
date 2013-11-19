@@ -27,7 +27,7 @@ public class PersonAgent extends Agent
 	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
 	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
 	private List<Task> taskList = new ArrayList<Task>(); 
-	private Semaphore waitingResponse = new Semaphore(0,true);
+	public Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
 	
 	//Various States
@@ -529,7 +529,12 @@ public class PersonAgent extends Agent
     		}else if(job.type.equalsIgnoreCase("host")){
     			HostRole role = (HostRole)(r.host);
     			if(role.getPerson() != null){
-    				role.releaveFromDuty();
+    				role.msgReleaveFromDuty(this);
+    				try {
+    					waitingResponse.acquire();
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
     			}
     			roles.add(role);
     			role.setPerson(this);
@@ -538,10 +543,17 @@ public class PersonAgent extends Agent
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CookRole role = (CookRole)(r.cook);
-
     			if(role.getPerson() != null){
-    				role.releaveFromDuty();
+        			print("role.getPerson() != null");
+    				role.msgReleaveFromDuty(this);
+    				try {
+    					waitingResponse.acquire();
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
     			}
+
+    			print("roles switched");
     			roles.add(role);
     			role.setPerson(this);
             	role.active = true;
@@ -549,8 +561,16 @@ public class PersonAgent extends Agent
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
     			CashierRole role = (CashierRole)(r.cashier);
+    			print("CashierRole role = (CashierRole)(r.cashier);");
     			if(role.getPerson() != null){
-    				role.releaveFromDuty();
+
+        			print("role.getPerson() != null");
+    				role.msgReleaveFromDuty(this);
+    				try {
+    					waitingResponse.acquire();
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
     			}
     			roles.add(role);
     			role.setPerson(this);

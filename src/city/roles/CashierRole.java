@@ -3,6 +3,7 @@ package city.roles;
 import agent.Agent;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.roles.HostRole.State;
@@ -26,9 +27,11 @@ public class CashierRole extends Role implements Cashier {
 	public CashierGui cashierGui = null;
 	Map<String, Double> pricingMap = new HashMap<String, Double>(); 
 	public double bank = 5000; 
-	enum State {none, goToWork, working, leaving};
+	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
-	
+
+	private Semaphore waitingResponse = new Semaphore(0,true);
+	PersonAgent replacementPerson = null;
 	
 	static final int MAKE_CHECK_TIME = 5000;
 	public class Order{
@@ -90,6 +93,16 @@ public class CashierRole extends Role implements Cashier {
 		state = State.goToWork;
 		stateChanged();
 	}
+
+	public void msgReleaveFromDuty(PersonAgent p) {
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
+	}
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.releaveFromDuty;
+		waitingResponse.release();
+	}
 	public void msgProduceCheck(Waiter w, Customer c, String choice)
 	{
 		orders.add(new Order(w, c, choice, OrderState.requested));
@@ -148,10 +161,14 @@ public class CashierRole extends Role implements Cashier {
 	}
 
 	public boolean pickAndExecuteAnAction() {
-
+		if(state == State.releaveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
 		if(state == State.goToWork){
-
-			print("role state working");
 			state = State.working;
 			cashierGui.DoEnterRestaurant();
 			return true;
@@ -159,6 +176,11 @@ public class CashierRole extends Role implements Cashier {
 		if(state == State.leaving){
 			state = State.none;
 			cashierGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		
@@ -310,7 +332,4 @@ public class CashierRole extends Role implements Cashier {
 		
 	}
 
-	public void releaveFromDuty() {
-		myPerson.releavedFromDuty(this);
-	}
 }

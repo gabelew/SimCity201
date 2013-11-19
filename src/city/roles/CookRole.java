@@ -19,7 +19,8 @@ public class CookRole extends Role implements Cook {
 	public List<Food> foods = Collections.synchronizedList(new ArrayList<Food>());
 	public List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	public List<MarketOrder>marketOrders=Collections.synchronizedList(new ArrayList<MarketOrder>());
-	private Semaphore awaitingTask = new Semaphore(0,true);
+	private Semaphore waitingResponse = new Semaphore(0,true);
+	PersonAgent replacementPerson = null;
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
 	
@@ -50,7 +51,7 @@ public class CookRole extends Role implements Cook {
 	private int pickUpTableItems = 0;
 	public Restaurant restaurant;
 
-	enum State {none, goToWork, working, leaving};
+	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
 	
     public class Food{
@@ -167,6 +168,16 @@ public class CookRole extends Role implements Cook {
 		state = State.goToWork;
 		stateChanged();
 	}
+	public void msgReleaveFromDuty(PersonAgent p) {
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
+	}
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.releaveFromDuty;
+		waitingResponse.release();
+		this.stateChanged();
+	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
 		orders.add(new RoleOrder(w, choice, table, OrderState.PENDING));
@@ -249,11 +260,11 @@ public class CookRole extends Role implements Cook {
 
 	public void msgAnimationFinishedAtFidge(){
 		//From animation
-		awaitingTask.release();
+		waitingResponse.release();
 	}
 	public void msgAnimationFinishedPutFoodOnGrill() {
 		//From animation
-		awaitingTask.release();
+		waitingResponse.release();
 	}
 	public void msgAnimationFinishedWaiterPickedUpFood(){
 		//From animation
@@ -290,10 +301,17 @@ public class CookRole extends Role implements Cook {
 				}
 			}
 		}
-		awaitingTask.release();
+		waitingResponse.release();
 	}	
 	
 	public boolean pickAndExecuteAnAction() {
+		if(state == State.releaveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
 		if(state == State.goToWork){
 			state = State.working;
 			cookGui.DoEnterRestaurant();
@@ -302,8 +320,14 @@ public class CookRole extends Role implements Cook {
 		if(state == State.leaving){
 			state = State.none;
 			cookGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
+
 		if(orderFromMarket){
 			print("ordering Food");
 			orderFromMarket = false;
@@ -372,7 +396,7 @@ public class CookRole extends Role implements Cook {
 		DoPlating(o);
 	
 		try {
-			awaitingTask.acquire();
+			waitingResponse.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -387,7 +411,7 @@ public class CookRole extends Role implements Cook {
 	{
 		DoGoToFidge();
 		try {
-			awaitingTask.acquire();
+			waitingResponse.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -409,7 +433,7 @@ public class CookRole extends Role implements Cook {
 				}
 			
 				try {
-					awaitingTask.acquire();
+					waitingResponse.acquire();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -611,9 +635,6 @@ public class CookRole extends Role implements Cook {
 	}
 
 
-	public void releaveFromDuty() {
-		myPerson.releavedFromDuty(this);
-	}
 
 
 

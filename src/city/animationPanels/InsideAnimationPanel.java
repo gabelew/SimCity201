@@ -3,6 +3,7 @@ package city.animationPanels;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -17,7 +18,7 @@ public abstract class InsideAnimationPanel extends JPanel implements ActionListe
 	protected final int WINDOWX = 934;
     protected final int WINDOWY = 472;
 
-    private List<Gui> guis = new ArrayList<Gui>();
+    private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
     
 	public void setInsideBuildingPanel(InsideBuildingPanel ibp){
 		insideBuildingPanel = ibp;

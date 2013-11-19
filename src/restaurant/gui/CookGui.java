@@ -162,6 +162,7 @@ public class CookGui implements Gui  {
    
         if(command != Command.noCommand && xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
+        		role.msgAnimationHasLeftRestaurant();
         		command = Command.noCommand;
         	}else if(command == Command.enterRestaurant){
         		command = Command.noCommand;

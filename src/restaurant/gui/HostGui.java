@@ -21,7 +21,7 @@ public class HostGui implements Gui {
     
     static final int xWorkingPosition = 80;
     static final int yWorkingPosition = 70;
-    static final int START_POSITION = 20;
+    static final int START_POSITION = -20;
     enum Command {none,enterRestaurant, leaveRestaurant };
     Command command = Command.none;
     
@@ -56,6 +56,7 @@ public class HostGui implements Gui {
         
         if(xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
+        		role.msgAnimationHasLeftRestaurant();
         		command = Command.none;
         	}else if(command == Command.enterRestaurant){
         		command = Command.none;
