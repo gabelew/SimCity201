@@ -219,7 +219,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
     		    				System.out.println("already has host");
     							hasHost = true;
     						}
@@ -235,7 +235,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}
@@ -248,7 +248,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}
@@ -261,7 +261,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}	
@@ -274,7 +274,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}
@@ -289,7 +289,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}
@@ -302,7 +302,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}    					
@@ -315,7 +315,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}    					
@@ -328,7 +328,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}
@@ -341,7 +341,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasHost = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("host")){
     							hasHost = true;
     						}
     					}    					
@@ -356,7 +356,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -369,7 +369,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -382,7 +382,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -395,7 +395,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -408,7 +408,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}
@@ -423,7 +423,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -436,7 +436,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -449,7 +449,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -462,7 +462,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}
@@ -475,7 +475,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCook = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cook")){
     							hasCook = true;
     						}
     					}    					
@@ -490,7 +490,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}    					
@@ -503,7 +503,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -516,7 +516,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -529,7 +529,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -542,7 +542,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -557,7 +557,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -570,7 +570,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -584,7 +584,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -597,7 +597,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}
@@ -610,7 +610,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     				boolean hasCashier = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
+    						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("cashier")){
     							hasCashier = true;
     						}
     					}

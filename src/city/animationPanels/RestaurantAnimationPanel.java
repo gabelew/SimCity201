@@ -338,6 +338,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 		return null;
 	}
 	public void setTableOccupied(int tableNumber) {
+		System.out.println("\t\t\tsetTableOccupied " + tableNumber + "Tables size " + tables.size());
 		tables.get(tableNumber).setOccupied();
 		((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableDisabled(tableNumber);
 	}

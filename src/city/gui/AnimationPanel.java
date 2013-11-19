@@ -87,7 +87,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 	public Timer timer;
     int VERT_STREET_Y_START = 35;
-    private List<Gui> guis = new ArrayList<Gui>();
+    private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
     private SimCityGui simCityGui;
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
@@ -181,18 +181,20 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 	        
 
+		synchronized(guis){
 		for(Gui gui : guis) {
 			if (gui.isPresent()) {
 				gui.updatePosition();
 	        }
 	    }
-		
+		}
+		synchronized(guis){
 		for(Gui gui : guis) {
 			if (gui.isPresent()) {
 				gui.draw(g2);
 	        }
         }
-		
+		}
         //Here is the buildings
         for(int i = ZERO; i<buildings.size(); i++){
         	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);

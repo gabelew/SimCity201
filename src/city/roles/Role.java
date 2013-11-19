@@ -32,9 +32,9 @@ public abstract class Role
 	//players can send you Person messages.
 	public void stateChanged()
 	{
-		this.active = true;
-		if(myPerson != null){
-			myPerson.stateChanged();
+		if(this.myPerson != null){
+			print("\t\t\t\t role called state changed");
+			this.myPerson.stateChanged();
 		}
 	}
 	public boolean isActive() {

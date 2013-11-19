@@ -547,7 +547,6 @@ public class PersonAgent extends Agent
 		}
     }
     private void finishGoingToRestaurant(){
-    	print("finishGoingToRestaurant");
     	state = State.eating;
     	
     	Restaurant r = findRestaurant(destination);
@@ -570,7 +569,6 @@ public class PersonAgent extends Agent
 	}
 
 	public void msgAnimationFinshed() {
-    	print("msgAnimationFinshed");
 		waitingResponse.release();	
 	}
 
@@ -585,10 +583,7 @@ public class PersonAgent extends Agent
 	    Random i = new Random();
 	    return i.nextInt((max - min) + 1) + min;
 	}
-	public void print(String msg)
-	{
-		System.out.println(name + ": " + msg);
-	}
+
 /********************************************************
  *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
  *                ANIMATION METHODS 
