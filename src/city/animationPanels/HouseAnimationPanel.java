@@ -32,11 +32,11 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	private BufferedImage fidgeImg = null;
 	private BufferedImage grillRightImg = null;
 	private BufferedImage platingTableImg = null;
-	
+	private BufferedImage flooringImg = null;
 	private final int ZERO = 0;
 	private SimCityGui simCityGui;
 	
-    static final int xCOOK_POSITION = 340;  
+    static final int xCOOK_POSITION = 50;  
     static final int yCOOK_POSITION = 50;
     
     static final int yGRILL_RIGHT_OFFSET = 30;
@@ -44,6 +44,11 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
     static final int yFIDGE_OFFSET = 15;
     static final int xFIDGE_OFFSET = 100;
     
+    static final int xTable = 150;
+    static final int yTable = 150;
+    
+    static final int xBed = 800;
+    static final int yBed = 0;
 	public HouseAnimationPanel(SimCityGui simCityGui)
 	{
 		this.simCityGui = simCityGui;
@@ -57,7 +62,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 		    couchImg = ImageIO.read(new File(path.toString() + "couch.png"));
 		    tvImg = ImageIO.read(new File(path.toString() + "tv.png"));
 		    //tableImg = ImageIO.read(new File(path.toString() + "house_table.png"));
-		    
+		    flooringImg = ImageIO.read(new File(path.toString() + "flooring.png"));
 		    //StringBuilder path = new StringBuilder("imgs/");
 		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
 		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
@@ -97,26 +102,20 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
          Graphics2D g2 = (Graphics2D)g;
          g2.setColor(getBackground());
          g2.fillRect(ZERO, ZERO, WINDOWX, WINDOWY );
-         g2.setColor(Color.lightGray);
-         
-         
-      // draw kitchen
- 		g.drawImage(kitchenCounterImg, xCOOK_POSITION, yCOOK_POSITION, null);
- 		//g.drawImage(grillLeftImg, xCOOK_POSITION, yCOOK_POSITION-ySALAD_BAR_OFFSET, null);
- 		g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
- 		g.drawImage(fidgeImg, xCOOK_POSITION+xFIDGE_OFFSET, yCOOK_POSITION+yFIDGE_OFFSET, null);
-         //kitchen stuff
-         //g.drawImage(fridgeImg, 75,-10, null);
-         //g.drawImage(stoveImg, 150,0, null);
-         //g.drawImage(sinkImg, 0,0, null);
-         
+         for(int i = 0; i < 8; i ++)
+        	 for(int j = 0; j < 10; j++)
+        		 g.drawImage(flooringImg, 115*i, 50*j, null);
+         //draw kitchen stuff
+ 		 g.drawImage(kitchenCounterImg, xCOOK_POSITION, yCOOK_POSITION, null);
+ 		 g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
+ 		 g.drawImage(fidgeImg, xCOOK_POSITION+xFIDGE_OFFSET, yCOOK_POSITION+yFIDGE_OFFSET, null);
          //dining room stuff
-         g.drawImage(tableImg, 100, 200,null);
+ 		 g.drawImage(tableImg, xTable, yTable, null);
          
          //bedroom stuff
-         g.drawImage(bedImg, 800,0, null);
-         g.drawImage(bedImg, 800,150, null);
-         
+ 		 for(int j = 0; j < 2; j++)
+ 			 g.drawImage(bedImg, 800,150*j, null);
+ 		 
          //living room stuff
          for(int i = 0; i < 2; i++)
         	 g.drawImage(couchImg, 600+ 100*i,300, null);
