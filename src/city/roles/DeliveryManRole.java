@@ -8,6 +8,7 @@ import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import agent.Agent;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ public class DeliveryManRole extends Role {
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
 	private String name;
 	Order o;
+	Point location;
 	class Order{
 		public Order(Map<String, Integer> choice, orderState state) {
 			Choices=choice;
@@ -119,8 +121,8 @@ public class DeliveryManRole extends Role {
 	}
 	
 	private void giveOrder(){
-		//DoGoPutOnTruck();
-		//DoGoDeliver();
+		deliveryGui.DoGoPutOnTruck();
+		deliveryGui.DoGoDeliver(location);
 		cook.msgHereIsOrderFromMarket(this,o.Choices, o.outOf);
 		o.s=orderState.waitingForPayment;
 	}

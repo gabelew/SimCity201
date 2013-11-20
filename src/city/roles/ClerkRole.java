@@ -42,9 +42,8 @@ public class ClerkRole extends Role {
 	private enum orderState{waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
 	double Price=5;
-	public ClerkRole(PersonAgent p){
-		super(p);
-		this.myPerson=p;
+	public ClerkRole(){
+		super();
 	}
 
 	//messages

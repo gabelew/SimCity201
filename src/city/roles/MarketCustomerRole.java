@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 
+
+import market.gui.MarketCustomerGui;
 import city.PersonAgent;
 
 /**
  * Restaurant customer agent.
  */
 public class MarketCustomerRole extends Role {
+	private MarketCustomerGui marketCGui=new MarketCustomerGui(this);
 	PersonAgent myPerson; 
 	ClerkRole Clerk;
 	Order o;
@@ -76,6 +79,7 @@ public class MarketCustomerRole extends Role {
 	}
 	
 	private void receivedOrder(){
+		marketCGui.DoLeaveMarket();
 		o=null;
 	}
 }
