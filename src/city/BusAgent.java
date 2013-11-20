@@ -8,7 +8,7 @@ import agent.Agent;
 public class BusAgent extends Agent{
 	public List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
 	
-	class MyBusStop{
+	public class MyBusStop{
 		Point location;
 		int stopnumber;
 		List<MyPassenger> passengers = Collections.synchronizedList(new ArrayList<MyPassenger>());
@@ -16,6 +16,10 @@ public class BusAgent extends Agent{
 		MyBusStop(Point p, int sn){
 			location = p;
 			stopnumber = sn;
+		}
+		
+		public Point getLocation(){
+			return location;
 		}
 		
 	}
@@ -55,6 +59,9 @@ public class BusAgent extends Agent{
 		busStops.add(new MyBusStop(busStation8,8));
 	}
 	
+	public List<MyBusStop> getBusStops(){
+		return busStops;
+	}
 	
 	//Messages
 	
@@ -79,6 +86,7 @@ public class BusAgent extends Agent{
 	}
 	
 	public void msgAtStop(Point busStop){ //from animation
+		//print("msg at stop");
 		for(MyBusStop b : busStops){
 			if(b.location == busStop){
 				atStop = b;
