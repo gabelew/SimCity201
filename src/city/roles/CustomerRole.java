@@ -1,6 +1,5 @@
 package city.roles;
 
-import restaurant.CashierAgent;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Customer;
@@ -111,19 +110,19 @@ public class CustomerRole extends Role implements Customer {
 	private void msgChoiceMade(String c){
 		choice = c;
 
-		if(myPerson.name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CashierAgent.STEAK_COST && isAvailable("Steak")){
+		if(myPerson.name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CashierRole.STEAK_COST && isAvailable("Steak")){
 			choice = "Steak";
 		}
-		if(myPerson.name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CashierAgent.CHICKEN_COST && isAvailable("Chicken")){
+		if(myPerson.name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CashierRole.CHICKEN_COST && isAvailable("Chicken")){
 			choice = "Chicken";
 		}
-		if(myPerson.name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CashierAgent.SALAD_COST && isAvailable("Salad")){
+		if(myPerson.name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CashierRole.SALAD_COST && isAvailable("Salad")){
 			choice = "Salad";
 		}
-		if(myPerson.name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CashierAgent.BURGER_COST && isAvailable("Burger")){
+		if(myPerson.name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CashierRole.BURGER_COST && isAvailable("Burger")){
 			choice = "Burger";
 		}
-		if(myPerson.name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CashierAgent.COOKIE_COST && isAvailable("Cookie")){
+		if(myPerson.name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CashierRole.COOKIE_COST && isAvailable("Cookie")){
 			choice = "Cookie";
 		}
 		

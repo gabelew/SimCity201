@@ -1,14 +1,12 @@
 package restaurant.test.mock;
 
-import restaurant.CashierAgent;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import restaurant.interfaces.*;
 
 public class MockWaiter extends Mock implements Waiter{
 
 	public EventLog log = new EventLog();
 	
-	public CashierAgent cashier;
+	public Cashier cashier;
 	
 	public MockWaiter(String name) {
 		super(name);

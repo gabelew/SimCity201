@@ -1,6 +1,5 @@
 package city.gui;
 
-import restaurant.CashierAgent;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 
