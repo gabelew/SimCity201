@@ -35,7 +35,7 @@ public class WaiterGui implements Gui {
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private FoodIcon food = null; 
-	private int waitingSeatNumber = -1;
+	public int waitingSeatNumber = -1;
 	private Map<Integer, Point> seatMap = new HashMap<Integer, Point>();
 	
     static final int START_POSITION = -20;  
@@ -137,6 +137,7 @@ public class WaiterGui implements Gui {
 		for(int i = 0; i < ((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.size(); i++){
 			if(waitingSeatNumber < 0){
 				if(((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(i).tryAcquire()){
+					System.out.println("\t\t\t\t\t\t"+ i);
 					waitingSeatNumber = i;
 					xDestination = seatMap.get(i).x;
 					yDestination = seatMap.get(i).y;
@@ -300,6 +301,12 @@ public class WaiterGui implements Gui {
 	public void DoLeaveRestaurant() {
         xDestination = START_POSITION;
         yDestination = START_POSITION;
+		
+        if(waitingSeatNumber >= 0){
+			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			waitingSeatNumber = -1;
+		}
+		
         command=Command.LeaveRestaurant;
 		
 	}

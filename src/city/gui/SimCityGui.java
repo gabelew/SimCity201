@@ -165,7 +165,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("cashier05day");
     	infoPanel.getPersonPanel().addPerson("cashier05night");*/
     	
-    	infoPanel.getPersonPanel().addPerson("athomeguy");
+    	//infoPanel.getPersonPanel().addPerson("athomeguy");
     	
     }
 

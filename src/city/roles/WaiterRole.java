@@ -284,7 +284,11 @@ public class WaiterRole extends Role implements Waiter{
 			doGoToBreakPos();
 			return false;
 		}
-		doGoToRestPos();
+
+		if(waiterGui.waitingSeatNumber < 0){
+			doGoToRestPos();
+		}
+		
 		return false;
 	}
 

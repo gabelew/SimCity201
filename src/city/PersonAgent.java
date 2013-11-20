@@ -28,7 +28,7 @@ public class PersonAgent extends Agent
 	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
 	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
 	private List<Task> taskList = new ArrayList<Task>(); 
-	private Home myHome;
+	//private Home myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
 	
@@ -89,10 +89,10 @@ public class PersonAgent extends Agent
 			this.shift = s;
 		}
 	}
-	public void setHome(Home h)
+	/*public void setHome(Home h)
 	{
 		this.myHome = h;
-	}
+	}*/
 /***********************
  *  UTILITY CLASSES END
  ***********************/
@@ -640,14 +640,14 @@ public class PersonAgent extends Agent
  ******************^^^^^^^^^^^^^^^^*********************/
 	    private void goHome() 
 	    {
-	    		location = Location.AtHome;
-				personGui.DoWalkTo(myHome.location); //CHange to special go home method and remove semaphore
+	    		//location = Location.AtHome;
+				personGui.DoWalkTo(new Point(20,20)); //CHange to special go home method and remove semaphore
 				//print("i have "+roles.size());
-				//try {waitingResponse.acquire();} 
-				//catch (InterruptedException e) { e.printStackTrace(); }
-				AtHomeRole role = new AtHomeRole(this);
-				role.setGui(personGui);
-				myHome.insideAnimationPanel.addGui(personGui);
+				try {waitingResponse.acquire();} 
+				catch (InterruptedException e) { e.printStackTrace(); }
+				//AtHomeRole role = new AtHomeRole(this);
+				//role.setGui(personGui);
+				//myHome.insideAnimationPanel.addGui(personGui);
 				personGui.setPresent(true);
 				//personGui.doEnterHome();
 		}

@@ -636,7 +636,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		for(Restaurant r: gui.getRestaurants()){
     			p.addRestaurant(r);
     		}
-    		for(Home h : gui.getHomes())
+    		/*for(Home h : gui.getHomes())
     		{
     			if(h.people.size() == 0 && gui.getHomes().indexOf(h) != 32)
     			{
@@ -649,10 +649,9 @@ public class InfoPanel extends JPanel implements KeyListener {
     				p.setHome(h);
         			h.addPerson(p);
     			}
-    		}
+    		}*/
     		p.setGui(g);
     			
-    		gui.persons.add(p);
     		p.startThread();
     		gui.persons.add(p);
     	}
