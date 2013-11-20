@@ -27,7 +27,7 @@ public class BankCustomerRole extends Role{
 	enum BankingState{WantToCheckBalance, WantToOpenAccount, WantToDeposit, WantToWithdraw, 
 		WantToGetALoan, WantToPayBackLoan, CheckingBalance, OpeningAccount, Depositing, Withdrawing, 
 		RequestingALoan, PayingLoan };
-	enum CustomerState {None, EnteringBank, InBank, AtAtm, LeavingBank};
+	enum CustomerState {None, EnteringBank, InBank, FindingATM, AtAtm, LeavingBank};
 	private CustomerState state = CustomerState.None;
 	private BankCustomerGui customerGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
@@ -98,12 +98,26 @@ public class BankCustomerRole extends Role{
 		stateChanged();
 	}
 	
+	public void msgAnimationFinishedEnterBank() {
+		waitingResponse.release();
+		stateChanged();
+	}
+	
+	public void msgLeftBank() {
+		waitingResponse.release();
+		stateChanged();
+	}
+	
 	// Scheduler
 	public boolean pickAndExecuteAnAction() {
 		
 		if(CustomerState.EnteringBank.equals(state)) {
 			state = CustomerState.InBank;
 			EnterBank();
+			return true;
+		} else if(CustomerState.InBank.equals(state)) {
+			state = CustomerState.FindingATM;
+			FindATM();
 			return true;
 		} else if(CustomerState.AtAtm.equals(state)) {
 			for(Task t : tasks) {
@@ -148,6 +162,15 @@ public class BankCustomerRole extends Role{
 					return true;
 				}
 			}
+		} else if(CustomerState.LeavingBank.equals(state)) {
+			state = CustomerState.None;
+			LeaveBank();
+			return true;
+		}
+		
+		if(0 == tasks.size()) {
+			state = CustomerState.LeavingBank;
+			return true;
 		}
 		
 		return false;
@@ -157,6 +180,32 @@ public class BankCustomerRole extends Role{
 	private void EnterBank() {
 		Do("Entering bank");
 		customerGui.DoEnterBank();
+		try {
+			waitingResponse.acquire();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void FindATM() {
+		Do("Going to ATM");
+		customerGui.DoGoToATM();
+		try {
+			waitingResponse.acquire();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void LeaveBank() {
+		Do("Leaving bank.");
+		customerGui.DoLeaveBank();
+		try {
+			waitingResponse.acquire();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		myPerson.msgDoneAtBank();
 	}
 	
 	private void CheckBalance(Task t) {

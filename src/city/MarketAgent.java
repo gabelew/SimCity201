@@ -11,6 +11,7 @@ import city.roles.*;
 import restaurant.interfaces.Market;
 
 public class MarketAgent extends Agent {
+public Point location;
 private String name;
 List<MyCustomer>MyCustomers=new ArrayList<MyCustomer>();
 List<MyCook>MyCooks= new ArrayList<MyCook>();
@@ -40,6 +41,12 @@ DeliveryManRole deliveryMan;
 boolean clerkFree;
 boolean deliveryFree;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
+
+public MarketAgent(ClerkRole Clerk,Point Location,String Name){
+	this.clerk=Clerk;
+	this.location=Location;
+	this.name=Name;
+}
 
 //messages to market
 public void msgPlaceOrder(MarketCustomerRole CR){
@@ -102,4 +109,5 @@ private void giveToDelivery(MyCook MC){
 public String getName(){
 	return name;
 }
+
 }

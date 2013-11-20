@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import city.roles.CashierRole;
-import restaurant.CashierAgent;
 import restaurant.gui.HostGui.Command;
 
 public class CashierGui implements Gui  {

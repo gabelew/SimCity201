@@ -9,11 +9,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import city.BusAgent;
+import city.BusAgent.MyBusStop;
 import city.PersonAgent;
+import java.util.*;
 
 public class BusGui implements Gui{
 	
 	private BusAgent agent = null;
+	private List<MyBusStop> busStops;
 	private boolean isPresent = false;
 	private char type;
 	
@@ -38,6 +41,7 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
+		this.busStops = b.getBusStops();
 		this.type = type;
 		
 		if(type == 'B'){
@@ -69,19 +73,54 @@ public class BusGui implements Gui{
 			else if (yPos > yDestination)
 				yPos--;
 		
+			if(type == 'B'){
+				if(yPos == 305){
+					agent.msgAtStop(busStops.get(3).getLocation());
+				}
+				if(yPos == 225){
+					agent.msgAtStop(busStops.get(2).getLocation());
+				}
+				
+				if(yPos == 145){
+					agent.msgAtStop(busStops.get(1).getLocation());
+				}
+				
+				if(yPos == 65){
+					agent.msgAtStop(busStops.get(0).getLocation());
+				}
+			}
+			
+			if(type == 'F'){
+				if(yPos == 305){
+					agent.msgAtStop(busStops.get(7).getLocation());
+				}
+				if(yPos == 225){
+					agent.msgAtStop(busStops.get(6).getLocation());
+				}
+				
+				if(yPos == 145){
+					agent.msgAtStop(busStops.get(5).getLocation());
+				}
+				
+				if(yPos == 65){
+					agent.msgAtStop(busStops.get(4).getLocation());
+				}
+			}
 
-		if (xPos == xDestination && yPos == yDestination) {
+
+				if (xPos == xDestination && yPos == yDestination) {
 			//if(command == Command.walkToDestination){
-				command = Command.noCommand;
-				if(type == 'B'){
-					xPos = 30;
-					yPos = 400;
+				//command = Command.noCommand;
+					if(type == 'B'){
+						xPos = 30;
+						yPos = 400;
 					}
 					else if(type == 'F'){
-					xPos = 825;
-					yPos = -40;
+						xPos = 825;
+						yPos = -40;
 					}
-				//agent.msgAtStop();
+				
+					//agent.msgAtStop();
 			//}
 		}
 

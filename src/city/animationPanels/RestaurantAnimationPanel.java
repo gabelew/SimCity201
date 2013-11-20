@@ -216,13 +216,15 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     	
         //draw Register Stand
     	g.drawImage(registerImg, xREGISTER_POSITION, yREGISTER_POSITION, null);
-    	
-    	for(Gui gui : getGuis()) {
-        	if(gui instanceof CashierGui)
-	            if (gui.isPresent()) {
-	                gui.draw(g2);
-	            }
-        }
+
+    	synchronized(getGuis()){
+	    	for(Gui gui : getGuis()) {
+	        	if(gui instanceof CashierGui)
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
         
         //Here is the table
         g2.setColor(Color.ORANGE);

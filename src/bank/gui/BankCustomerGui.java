@@ -24,7 +24,7 @@ public class BankCustomerGui implements Gui{
 	private static BufferedImage customerImg = null;
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
-	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
+	private int xDestination = CUST_START_POS, yDestination = CUST_START_POS;
 	
 	private enum Command {noCommand, WaitForATM, GoToATM, LeaveBank};
 	private Command command = Command.noCommand;
@@ -73,8 +73,12 @@ public class BankCustomerGui implements Gui{
 			yPos--;
 		
 		if (xPos == xDestination && yPos == yDestination) {
-			if(command == Command.WaitForATM) {
-				
+			if(command == Command.WaitForATM && xDestination == xWAITING_START && yDestination == yWAITING_START) {
+				role.msgAnimationFinishedEnterBank();
+			} else if (command == Command.GoToATM) {
+				role.msgAtATM();
+			} else if (command == Command.LeaveBank) {
+				role.msgLeftBank();
 			}
 			command = Command.noCommand;
 		}
@@ -91,7 +95,20 @@ public class BankCustomerGui implements Gui{
 	}
 	
 	public void DoEnterBank() {
-		
+		xDestination = xWAITING_START;
+		yDestination = yWAITING_START;
+		command = Command.WaitForATM;
+	}
+	
+	public void DoLeaveBank() {
+		xDestination = CUST_START_POS;
+		yDestination = CUST_START_POS;
+		command = Command.LeaveBank;
+	}
+	
+	public void DoGoToATM() {
+		findATM();
+		command = Command.GoToATM;
 	}
 	
 	private void findATM() {

@@ -113,6 +113,20 @@ public class HostRole extends Role implements Host {
 		}
 		
 		if(addWaiter){
+			if(w.getName().toLowerCase().contains("day")){
+				for(MyWaiter existingW: waiters){
+					if(existingW.w.getName().toLowerCase().contains("night")){
+						existingW.state = wState.idle;
+					}
+				}
+			}else if(w.getName().toLowerCase().contains("night")){
+				for(MyWaiter existingW: waiters){
+					if(existingW.w.getName().toLowerCase().contains("day")){
+						existingW.state = wState.idle;
+					}
+				}
+			}
+
 			waiters.add(new MyWaiter(w, wState.working, ZERO));
 		}
 		
@@ -158,7 +172,9 @@ public class HostRole extends Role implements Host {
 			if (table.getTableNumber() == msgerT) {
 				MyCustomer c = findCustomer(table);
 				MyWaiter w = findWaiter(waiter);
-				w.tableCount--;
+				if(w!=null){
+					w.tableCount--;
+				}
 				/*if(w.tableCount == 0){
 					restGui.setWaiterBreakable(w.w.getName()); //enables break check box
 				}*/

@@ -339,7 +339,6 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 
 	public void newHour() {
-		System.out.println("30 secs");
 		hour++;
 		if(hour == 24){
 			for(int i = daysOfWeek.length; i>0;i--){
@@ -353,6 +352,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}
 			hour = 0;
 		}	
+		System.out.println("" + hour + "\t"+ dayOfWeek.toString());
 	for(PersonAgent p:persons){
 		p.msgNextHour(hour, dayOfWeek);
 	}

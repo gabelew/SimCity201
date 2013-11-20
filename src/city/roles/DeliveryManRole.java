@@ -1,6 +1,5 @@
 package city.roles;
 
-import restaurant.CashierAgent;
 //import restaurant.WaiterAgent.Menu;
 //import restaurant.WaiterAgent.MenuItem;
 import restaurant.gui.CustomerGui;
@@ -9,6 +8,7 @@ import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import agent.Agent;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import market.gui.DeliveryManGui;
 import city.MarketAgent;
 import city.PersonAgent;
 
@@ -26,8 +27,10 @@ import city.PersonAgent;
  * Restaurant customer agent.
  */
 public class DeliveryManRole extends Role {
+	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
 	private String name;
 	Order o;
+	Point location;
 	class Order{
 		public Order(Map<String, Integer> choice, orderState state) {
 			Choices=choice;
@@ -94,7 +97,6 @@ public class DeliveryManRole extends Role {
 	}
 	
 	private void fillOrder(){
-		//DoGoGetFood();
 		Iterator it = o.Choices.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
@@ -113,13 +115,14 @@ public class DeliveryManRole extends Role {
 	        }
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
+	    deliveryGui.DoGoGetFood(o.Choices);
 	    cook.msgHereIsPrice(o.amountOwed,this);
 	    o.s=orderState.ordered;
 	}
 	
 	private void giveOrder(){
-		//DoGoPutOnTruck();
-		//DoGoDeliver();
+		deliveryGui.DoGoPutOnTruck();
+		deliveryGui.DoGoDeliver(location);
 		cook.msgHereIsOrderFromMarket(this,o.Choices, o.outOf);
 		o.s=orderState.waitingForPayment;
 	}

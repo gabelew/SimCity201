@@ -1,6 +1,5 @@
 package city.roles;
 
-import restaurant.CashierAgent;
 import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
@@ -17,6 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import market.gui.ClerkGui;
 import city.MarketAgent;
 import city.PersonAgent;
 
@@ -24,6 +24,7 @@ import city.PersonAgent;
  * Restaurant customer agent.
  */
 public class ClerkRole extends Role {
+	private ClerkGui clerkGui=new ClerkGui(this);
 	Order o;
 	class Order{
 		public Order(Map<String, Integer> choice, orderState state) {
@@ -40,9 +41,8 @@ public class ClerkRole extends Role {
 	private enum orderState{waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
 	double Price=5;
-	public ClerkRole(PersonAgent p){
-		super(p);
-		this.myPerson=p;
+	public ClerkRole(){
+		super();
 	}
 
 	//messages
@@ -104,12 +104,13 @@ public class ClerkRole extends Role {
 	        }
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
+	    clerkGui.DoGoGetFood(o.Choices);
 	    MCR.msgHereIsPrice(o.amountOwed);
 	    o.s=orderState.waitingForPayment;
 	}
 	
 	private void giveOrder(){
-		//DoGoGiveOrder();
+		clerkGui.DoGoGiveOrder();
 		MCR.msgHereIsOrder(o.Choices,o.outOf);
 		o.s=orderState.done;
 	}

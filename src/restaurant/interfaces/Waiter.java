@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A sample Waiter interface built to unit test a CashierAgent.
+ * A sample Waiter interface built to unit test a CashierRole.
  *
  * @author Chad Martin
  *

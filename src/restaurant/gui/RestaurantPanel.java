@@ -1,6 +1,5 @@
 package restaurant.gui;
 
-import restaurant.CashierAgent;
 import restaurant.Restaurant;
 
 import javax.swing.*;

@@ -332,4 +332,8 @@ public class CashierRole extends Role implements Cashier {
 		
 	}
 
+	public int getStateChangePermits() {
+		return getStateChangePermits();
+	}
+
 }
