@@ -28,12 +28,16 @@ public class CookGui implements Gui  {
 	private BufferedImage cookImg = null;
 	SimCityGui gui;
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
-	public static List<Semaphore> grillingSpots = new ArrayList<Semaphore>();
-	public static List<Semaphore> counterSpots = new ArrayList<Semaphore>();
-	public static List<Semaphore> pickUpSpots = new ArrayList<Semaphore>();
+	public List<Semaphore> grillingSpots = new ArrayList<Semaphore>();
+	public List<Semaphore> counterSpots = new ArrayList<Semaphore>();
+	public List<Semaphore> pickUpSpots = new ArrayList<Semaphore>();
 	private enum Command {noCommand, GoToFidge, GoToGrill, GoToCounter, GoToPlate, GoToRestPost, enterRestaurant, leaveRestaurant};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
+	int xDestination_old;
+	int yDestination_old;
+	Command command_old;
+
 	private Map<Integer, Point> grillMap = new HashMap<Integer, Point>();
 	private Map<Integer, Point> counterMap = new HashMap<Integer, Point>();
 	private Map<Integer, Point> pickUpMap = new HashMap<Integer, Point>();
@@ -163,7 +167,9 @@ public class CookGui implements Gui  {
         if(command != Command.noCommand && xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
         		role.msgAnimationHasLeftRestaurant();
-        		command = Command.noCommand;
+        		command = command_old;
+        		xDestination = xDestination_old;
+        		yDestination = yDestination_old;
         	}else if(command == Command.enterRestaurant){
         		command = Command.noCommand;
         	}else if(command == Command.GoToFidge){
@@ -440,7 +446,10 @@ public class CookGui implements Gui  {
 		}
 	}
 
-    public void DoLeaveRestaurant() {
+	public void DoLeaveRestaurant() {
+        xDestination_old = xDestination;
+        yDestination_old = yDestination;
+        command_old = command;
         xDestination = START_POSITION;
         yDestination = START_POSITION;
         command = Command.leaveRestaurant;

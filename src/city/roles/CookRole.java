@@ -20,6 +20,7 @@ public class CookRole extends Role implements Cook {
 	public List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	public List<MarketOrder>marketOrders=Collections.synchronizedList(new ArrayList<MarketOrder>());
 	private Semaphore waitingResponse = new Semaphore(0,true);
+	private Semaphore leavingRestaurant = new Semaphore(0,true);
 	PersonAgent replacementPerson = null;
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
@@ -175,7 +176,7 @@ public class CookRole extends Role implements Cook {
 	}
 	public void msgAnimationHasLeftRestaurant() {
 		state = State.releaveFromDuty;
-		waitingResponse.release();
+		leavingRestaurant.release();
 		this.stateChanged();
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
@@ -321,7 +322,7 @@ public class CookRole extends Role implements Cook {
 			state = State.none;
 			cookGui.DoLeaveRestaurant();
 			try {
-				waitingResponse.acquire();
+				leavingRestaurant.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
