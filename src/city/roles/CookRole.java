@@ -319,13 +319,14 @@ public class CookRole extends Role implements Cook {
 			return true;
 		}
 		if(state == State.leaving){
-			state = State.none;
+			/*state = State.none;
 			cookGui.DoLeaveRestaurant();
 			try {
 				leavingRestaurant.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
+			}*/
+			state = State.releaveFromDuty;
 			return true;
 		}
 

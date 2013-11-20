@@ -584,8 +584,8 @@ public class PersonAgent extends Agent
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
     	
-    	//Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
-    	Restaurant mr = restaurants.get(randInt(0,0));
+    	Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
+    	//Restaurant mr = restaurants.get(randInt(0,0));
     	destination = mr.location;
 
     	personGui.DoWalkTo(destination);
@@ -641,7 +641,7 @@ public class PersonAgent extends Agent
 	    private void goHome() 
 	    {
 	    		//location = Location.AtHome;
-				personGui.DoWalkTo(new Point(20,20)); //CHange to special go home method and remove semaphore
+				personGui.DoWalkTo(new Point(75,103)); //CHange to special go home method and remove semaphore
 				//print("i have "+roles.size());
 				try {waitingResponse.acquire();} 
 				catch (InterruptedException e) { e.printStackTrace(); }
