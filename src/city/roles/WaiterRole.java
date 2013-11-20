@@ -1,28 +1,22 @@
 package city.roles;
 
-import agent.Agent;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
 import city.PersonAgent;
-import city.roles.CustomerRole;
 import restaurant.Restaurant;
 import restaurant.gui.WaiterGui;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
-import restaurant.interfaces.Host;
 
 public class WaiterRole extends Role implements Waiter{
 	WaiterGui waiterGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
-	List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
+	public List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
 	public Restaurant restaurant;
 	public enum CustomerState {waiting, seated, askedToOrder, asked, ordered, orderPlaced, 
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
-	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak};
+	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, releaveFromDuty};
 	AgentEvent event = AgentEvent.none;
 	
 	private class MyCustomer{
@@ -181,6 +175,21 @@ public class WaiterRole extends Role implements Waiter{
 	}
 
 	public boolean pickAndExecuteAnAction() {
+		if(event == AgentEvent.releaveFromDuty){
+			event = AgentEvent.none;
+			myPerson.releavedFromDuty(this);
+			restaurant.insideAnimationPanel.removeGui(waiterGui);
+			print("event == AgentEvent.releaveFromDuty  finshed");
+			return true;
+		}
+		
+		if(customers.size() == 0 && (
+				(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
+				(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
+			leaveWork();
+			print("leaveWork finshed");
+			return true;
+		}
 		if(event == AgentEvent.gotToWork)
 		{
 			event = AgentEvent.none;
@@ -279,6 +288,17 @@ public class WaiterRole extends Role implements Waiter{
 		return false;
 	}
 
+
+	private void leaveWork() {
+		print("leaveWork");
+		waiterGui.DoLeaveRestaurant();
+		restaurant.host.msgDoneWorking(this);
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void tellHost() {
 		print("Reporting for Duty");
@@ -428,6 +448,12 @@ public class WaiterRole extends Role implements Waiter{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void msgLeftTheRestaurant() {
+		print("msgLeftTheRestaurant");
+		waitingResponse.release();
+		event = AgentEvent.releaveFromDuty;
 	}
 	
 }

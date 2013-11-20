@@ -262,7 +262,7 @@ public class CustomerRole extends Role implements Customer {
 	private void reactivatePerson() {
 		print("reactivatePerson");
 		myPerson.msgDoneEatingAtRestaurant();
-		
+		restaurant.insideAnimationPanel.removeGui(customerGui);
 	}
 	private void goToRestaurant() {
 		DoGoToRestaurant();

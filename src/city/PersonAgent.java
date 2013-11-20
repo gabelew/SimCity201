@@ -51,7 +51,7 @@ public class PersonAgent extends Agent
 	Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
 	
 	//Time currentTime;
-	int currentHour;
+	public int currentHour;
 	String dayOfWeek;
 	
 	public int hungerLevel = 51;
@@ -166,8 +166,8 @@ public class PersonAgent extends Agent
 		this.hungerLevel += 1;
 		
 		if(job!=null){
-			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 12)) ||
-					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 8 && currentHour < 22))){
+			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 5)) ||
+					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 10 && currentHour < 17))){
 				boolean inList = false;
 				for(Task t: taskList){
 					if(t == Task.goToWork)
@@ -178,28 +178,8 @@ public class PersonAgent extends Agent
 				}
 			}
 			
-			if(job.type.equalsIgnoreCase("waiter") && location == Location.AtWork 
-					&& ((job.shift == Shift.day && !(currentHour >= 22 || currentHour <= 12)) ||
-					((job.shift == Shift.night && !(currentHour >= 8 && currentHour < 22))))){
-				for(Restaurant r: simCityGui.getRestaurants()){
-					if(r.location.equals(job.location)){
-						Role removeRole = null;
-						for(Role role: roles){
-							if(role instanceof WaiterRole){
-								r.host.msgDoneWorking(((WaiterRole)role));
-								removeRole = role;
-							}
-						}
-						if(removeRole != null){
-							roles.remove(removeRole);
-						}
-						state = State.doingNothing;
-						location = Location.InCity;
-					}
-				}
-			}
 		}
-		if(hour == 23 && isRenter){
+		if(currentHour == 23 && isRenter){
 			boolean inList = false;
 			for(Task t: taskList){
 				if(t == Task.doPayRent)

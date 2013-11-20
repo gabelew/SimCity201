@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import restaurant.gui.CustomerGui;
+import restaurant.gui.WaiterGui;
 import city.gui.Gui;
 
 public abstract class InsideAnimationPanel extends JPanel implements ActionListener {
@@ -36,6 +38,10 @@ public abstract class InsideAnimationPanel extends JPanel implements ActionListe
 	}
 	public void setGuis(List<Gui> guis) {
 		this.guis = guis;
+	}
+	public void removeGui(Gui gui) {
+		guis.remove(gui);
+		
 	}
     
 }

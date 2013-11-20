@@ -30,7 +30,7 @@ public class WaiterGui implements Gui {
 	private static BufferedImage waiterImg = null;
 	
 
-	private enum Command {noCommand, GoToHost, GoToTable, GoToKitchen, GoToCashier, GoToRestArea};
+	private enum Command {noCommand, GoToHost, GoToTable, GoToKitchen, GoToCashier, GoToRestArea, LeaveRestaurant};
 	private Command command=Command.noCommand;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -105,6 +105,10 @@ public class WaiterGui implements Gui {
         if (xPos == xDestination && yPos == yDestination && command==Command.GoToHost){
             command=Command.noCommand;
         	role.msgAtEntrance();
+        }else if(xPos == xDestination && yPos == yDestination && command==Command.LeaveRestaurant){
+            command=Command.noCommand;
+        	role.msgLeftTheRestaurant();
+        	
         }
         else  if (xPos == xDestination && yPos == yDestination && xPos > xTABLE_AREA 
         		&& xPos < xTABLE_AREA + xTABLE_AREA_WIDTH && yPos > yTABLE_AREA && yPos < yTABLE_AREA + yTABLE_AREA_WIDTH
@@ -291,6 +295,13 @@ public class WaiterGui implements Gui {
 		}
 		
         command=Command.GoToCashier;
+	}
+
+	public void DoLeaveRestaurant() {
+        xDestination = START_POSITION;
+        yDestination = START_POSITION;
+        command=Command.LeaveRestaurant;
+		
 	}
 
 }
