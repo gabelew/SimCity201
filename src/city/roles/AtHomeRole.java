@@ -9,6 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import city.PersonAgent;
+import city.animationPanels.HouseAnimationPanel;
+import city.gui.PersonGui;
 
 public class AtHomeRole extends Role
 {	
@@ -26,16 +28,15 @@ public class AtHomeRole extends Role
 	List<Appliance> appliances = new ArrayList<Appliance>();
 	List<String> choices = new ArrayList<String>();
 	Timer timer = new Timer(); //Timer for Cooking Food
-	PersonAgent myPerson;
-	
+	PersonAgent myPerson;//PersonAgent that has this role
+	PersonGui personGui;
 	public AtHomeRole(PersonAgent p) 
 	{
 		super(p);
 		//Adds initial food
-		choices.add("ceaser_salad");
-		choices.add("prime_rib");
-		choices.add("macncheese");
-		choices.add("pasta");
+		choices.add("salad");
+		choices.add("steak");
+		choices.add("pizza");
 		//Adds it to list of choices and hashmap
 		for(String s : choices)
 		{
@@ -43,6 +44,11 @@ public class AtHomeRole extends Role
 			foodInFridge.add(f);
 			findFood.put(s, f);
 		}
+	}
+	
+	public void setGui(PersonGui g)
+	{
+		this.personGui = g;
 	}
 /*********************
  ***** MESSAGES

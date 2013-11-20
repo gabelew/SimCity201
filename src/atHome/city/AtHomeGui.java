@@ -1,4 +1,4 @@
-package city.gui;
+package atHome.city;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -7,9 +7,12 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import city.PersonAgent;
 
-public class PersonGui implements Gui{
+import city.PersonAgent;
+import city.gui.Gui;
+import city.gui.SimCityGui;
+
+public class AtHomeGui implements Gui{
 	
 	private PersonAgent agent = null;
 	private boolean isPresent = false;
@@ -24,10 +27,7 @@ public class PersonGui implements Gui{
 	private int xHomePosition = 20;
 	private int yHomePosition = 20;
 	
-	private enum State {walking, driving};
-	private State state = State.walking;
-	
-	public PersonGui(PersonAgent c, SimCityGui gui){ //HostAgent m) {
+	public AtHomeGui(PersonAgent c, SimCityGui gui){ //HostAgent m) {
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -49,16 +49,6 @@ public class PersonGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
-		if(agent.car==null){
-			if (xPos < xDestination && (yPos - 103)%80==0)
-				xPos++;
-			else if (xPos > xDestination && (yPos - 103)%80==0)
-				xPos--;
-			else if (yPos < yDestination)
-				yPos++;
-			else if (yPos > yDestination)
-				yPos--;
-		}else{
 			if (xPos < xDestination && (yPos - 115)%80==0)
 				xPos++;
 			else if (xPos > xDestination && (yPos - 115)%80==0)
@@ -66,8 +56,8 @@ public class PersonGui implements Gui{
 			else if (yPos < yDestination)
 				yPos++;
 			else if (yPos > yDestination)
-				yPos--;
-		}
+			yPos--;
+		
 
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command == Command.walkToDestination){

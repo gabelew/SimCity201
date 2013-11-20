@@ -6,8 +6,10 @@ import restaurant.gui.CustomerGui;
 
 import javax.swing.*;
 
+import atHome.city.Home;
 import city.PersonAgent;
 import city.PersonAgent.MyJob;
+import city.roles.AtHomeRole;
 import city.roles.Role;
 
 import java.awt.*;
@@ -618,9 +620,15 @@ public class InfoPanel extends JPanel implements KeyListener {
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
 					}
-    			}    			
-    			
+    			}
     		}
+    		if(name.equals("athomeguy"))
+			{
+				System.out.println("Making athomeguy" );
+				//p.addRole(new AtHomeRole(p));
+				//p.setHome(gui.getHomes().get(0));
+				
+			}
     		
     		PersonGui g = new PersonGui(p, gui);
     		g.setPresent(true);
@@ -628,6 +636,20 @@ public class InfoPanel extends JPanel implements KeyListener {
     		
     		for(Restaurant r: gui.getRestaurants()){
     			p.addRestaurant(r);
+    		}
+    		for(Home h : gui.getHomes())
+    		{
+    			if(h.people.size() == 0 && gui.getHomes().indexOf(h) != 32)
+    			{
+    			p.setHome(h);
+    			h.addPerson(p);
+    			System.out.println("my home is house #" + gui.getHomes().indexOf(h) +" " + gui.getHomes().size());
+    			}
+    			if(gui.getHomes().indexOf(h) == 31)
+    			{
+    				p.setHome(h);
+        			h.addPerson(p);
+    			}
     		}
     		p.setGui(g);
     			

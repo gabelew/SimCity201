@@ -12,26 +12,21 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
+import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.PersonGui;
 import city.gui.SimCityGui;
 
 public class HouseAnimationPanel  extends InsideAnimationPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	private BufferedImage fridgeImg = null;
-	private BufferedImage stoveImg = null;
-	private BufferedImage sinkImg = null;
 	private BufferedImage bedImg = null;
 	private BufferedImage couchImg = null;
 	private BufferedImage tvImg = null;
 	
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
-	private BufferedImage chairImg = null;
-	private BufferedImage hostStandImg = null;
-	private BufferedImage registerImg = null;
 	private BufferedImage fidgeImg = null;
 	private BufferedImage grillRightImg = null;
-	private BufferedImage platingTableImg = null;
 	private BufferedImage flooringImg = null;
 	private final int ZERO = 0;
 	private SimCityGui simCityGui;
@@ -55,9 +50,6 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
         try 
         {
 			StringBuilder path = new StringBuilder("imgs/");
-		    //fridgeImg = ImageIO.read(new File(path.toString() + "fridge.png"));
-		    stoveImg = ImageIO.read(new File(path.toString() + "stove.png"));
-		    sinkImg = ImageIO.read(new File(path.toString() + "sink.png"));
 		    bedImg = ImageIO.read(new File(path.toString() + "bed.png"));
 		    couchImg = ImageIO.read(new File(path.toString() + "couch.png"));
 		    tvImg = ImageIO.read(new File(path.toString() + "tv.png"));
@@ -66,16 +58,11 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 		    //StringBuilder path = new StringBuilder("imgs/");
 		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
 		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
-		    chairImg = ImageIO.read(new File(path.toString() + "customer_chair_v1.png"));
-		    hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
-		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
 		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
 		    ImageIO.read(new File(path.toString() + "grill.png"));
 		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
-		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
 		} 
         catch (IOException e){}
-		
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
  

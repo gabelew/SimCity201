@@ -8,6 +8,7 @@ import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
 
+import atHome.city.Home;
 import city.PersonAgent;
 import city.animationPanels.ApartmentAnimationPanel;
 import city.animationPanels.BankAnimationPanel;
@@ -48,6 +49,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 
     private InfoPanel infoPanel = new InfoPanel(this);
  
+    List<Home> homes = new ArrayList<Home>();
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
     public List<PersonAgent> persons = new ArrayList<PersonAgent>();
     
@@ -163,6 +165,8 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("cashier05day");
     	infoPanel.getPersonPanel().addPerson("cashier05night");*/
     	
+    	infoPanel.getPersonPanel().addPerson("athomeguy");
+    	
     }
 
 	private void createDefaultBuildingPanels() {
@@ -172,44 +176,47 @@ public class SimCityGui extends JFrame implements ActionListener {
         	
         	BuildingIcon b = buildings.get(i);
         	
-        	if(b.type.equals("restaurant")){
-            
-        	RestaurantPanel restPanel = new RestaurantPanel(this);
-            InsideAnimationPanel restaurantAnimationPanel = new RestaurantAnimationPanel(this);
-        	
-            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
-            restPanel.setPreferredSize(restDim);
-            restPanel.setMinimumSize(restDim);
-            restPanel.setMaximumSize(restDim);
+        	if(b.type.equals("restaurant"))
+        	{
+	            
+	        	RestaurantPanel restPanel = new RestaurantPanel(this);
+	            InsideAnimationPanel restaurantAnimationPanel = new RestaurantAnimationPanel(this);
+	        	
+	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+	            restPanel.setPreferredSize(restDim);
+	            restPanel.setMinimumSize(restDim);
+	            restPanel.setMaximumSize(restDim);
+	
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, restPanel);
+	        	restPanel.setInsideBuildingPanel(bp);
+	        	b.setInsideBuildingPanel(bp);
+	        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
+	        	buildingsPanel.add(bp, "" + i);
+	        	Restaurant r = new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
+	        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY()), "Restaurant1WaiterRole");
+	        	getRestaurants().add(r);
+	        	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
+	
+	        	((HostRole)r.host).setRestaurant(r);
+	        	HostGui hg = new HostGui(((HostRole)r.host));
+	        	((HostRole)r.host).setGui(hg);
+	        	restaurantAnimationPanel.addGui(hg);
+	
+	
+	        	((CashierRole)r.cashier).setRestaurant(r);
+	        	CashierGui cg = new CashierGui(((CashierRole)r.cashier));
+	        	((CashierRole)r.cashier).setGui(cg);
+	        	restaurantAnimationPanel.addGui(cg);
+	        	
+	
+	        	((CookRole)r.cook).setRestaurant(r);
+	        	CookGui ccg = new CookGui(((CookRole)r.cook));
+	        	((CookRole)r.cook).setGui(ccg);
+	        	restaurantAnimationPanel.addGui(ccg);
 
-        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, restPanel);
-        	restPanel.setInsideBuildingPanel(bp);
-        	b.setInsideBuildingPanel(bp);
-        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
-        	buildingsPanel.add(bp, "" + i);
-        	Restaurant r = new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
-        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY()), "Restaurant1WaiterRole");
-        	getRestaurants().add(r);
-        	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
-
-        	((HostRole)r.host).setRestaurant(r);
-        	HostGui hg = new HostGui(((HostRole)r.host));
-        	((HostRole)r.host).setGui(hg);
-        	restaurantAnimationPanel.addGui(hg);
-
-
-        	((CashierRole)r.cashier).setRestaurant(r);
-        	CashierGui cg = new CashierGui(((CashierRole)r.cashier));
-        	((CashierRole)r.cashier).setGui(cg);
-        	restaurantAnimationPanel.addGui(cg);
-        	
-
-        	((CookRole)r.cook).setRestaurant(r);
-        	CookGui ccg = new CookGui(((CookRole)r.cook));
-        	((CookRole)r.cook).setGui(ccg);
-        	restaurantAnimationPanel.addGui(ccg);
-
-        	}else if(b.type.equals("market")){
+        	}
+        	else if(b.type.equals("market"))
+        	{
                 
             	RestaurantPanel restPanel = new RestaurantPanel(this);
                 InsideAnimationPanel marketAnimationPanel = new MarketAnimationPanel(this);
@@ -248,12 +255,14 @@ public class SimCityGui extends JFrame implements ActionListener {
 		        restPanel.setMinimumSize(restDim);
 		        restPanel.setMaximumSize(restDim);
 		        APanel.add(restPanel);
-		
+		        
 		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, restPanel);
             	restPanel.setInsideBuildingPanel(bp);
 		    	b.setInsideBuildingPanel(bp);
 		    	houseAnimationPanel.setInsideBuildingPanel(bp);
 		    	buildingsPanel.add(bp, "" + i);
+		    	//adds new home to list
+		    	homes.add(new Home( houseAnimationPanel, new Point(b.getX(),b.getY())));
 			}else if(b.type.equals("apartment")){
 			    
 				RestaurantPanel restPanel = new RestaurantPanel(this);
@@ -376,6 +385,10 @@ public class SimCityGui extends JFrame implements ActionListener {
 
 	public List<Restaurant> getRestaurants() {
 		return restaurants;
+	}
+	
+	public List<Home> getHomes() {
+		return homes;
 	}
 
 }
