@@ -147,6 +147,11 @@ public class PersonAgent extends Agent
 	public void msgHereIsBalance(double amount, String accountType) {
 		
 	}
+	
+	public void msgDoneAtBank() {
+		// make Bank Role inactive
+	}
+	
 /***************************
  * BANKING MESSAGES END
  ***************************/
