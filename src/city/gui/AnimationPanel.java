@@ -183,9 +183,9 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 		synchronized(guis){
 		for(Gui gui : guis) {
-			if (gui.isPresent()) {
+			//if (gui.isPresent()) {
 				gui.updatePosition();
-	        }
+	        //}
 	    }
 		}
 		synchronized(guis){
