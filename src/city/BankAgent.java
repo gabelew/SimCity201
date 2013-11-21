@@ -53,12 +53,18 @@ public class BankAgent extends Agent implements Bank{
 	enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, loanPayment};
 	List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
 	List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
-	
+	String name;
 	double fundsAvailable = 50000.0;
 	final double customerLoanMax = 500;
 	final double businessLoanMax = 1000;
 
-
+	/**
+	 * Constructor
+	 */
+	public BankAgent(String name) {
+		this.name = name;
+	}
+	
 	// Messages
 	/**
 	 * For BankCustomerRole to check balance.

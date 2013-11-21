@@ -57,7 +57,7 @@ public class PersonAgent extends Agent
 	String dayOfWeek;
 	
 	public int hungerLevel = 51;
-	public double cashOnHand, businessFunds;
+	public double cashOnHand = 0, businessFunds = 0;
 	private SimCityGui simCityGui;
 	
 /***********************
@@ -102,6 +102,14 @@ public class PersonAgent extends Agent
 	/**
 	 * Constructor
 	 */
+	
+	// for unit testing purposes, where gui is not needed
+	public PersonAgent(String name, double cash, double business) {
+		this.name = name;
+		this.cashOnHand = cash;
+		this.businessFunds = business;
+	}
+	
 	public PersonAgent(String name, double cash, SimCityGui simCityGui) {
 	    this.name = name;
 	    this.cashOnHand = cash;
