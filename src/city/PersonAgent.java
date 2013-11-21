@@ -41,7 +41,7 @@ public class PersonAgent extends Agent
 	boolean isManager;
 	
 	public String name;
-	public BufferedImage car = null;
+	public boolean car = false;
 	//Bus busLeft;
 	//Bus busRight;
 	public MyJob job;
@@ -106,6 +106,9 @@ public class PersonAgent extends Agent
 	    this.name = name;
 	    this.cashOnHand = cash;
 	    this.simCityGui = simCityGui;
+	    if(this.name.toLowerCase().contains("car")){
+	    	car = true;
+	    }
 	}
 	
 /***********************
@@ -641,7 +644,7 @@ public class PersonAgent extends Agent
 	    private void goHome() 
 	    {
 	    		//location = Location.AtHome;
-				personGui.DoWalkTo(new Point(75,103)); //CHange to special go home method and remove semaphore
+				personGui.DoWalkTo(new Point(75,68)); //CHange to special go home method and remove semaphore
 				//print("i have "+roles.size());
 				try {waitingResponse.acquire();} 
 				catch (InterruptedException e) { e.printStackTrace(); }

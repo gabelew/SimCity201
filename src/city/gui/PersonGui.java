@@ -15,12 +15,16 @@ public class PersonGui implements Gui{
 	private boolean isPresent = false;
 	
 	private static BufferedImage personImg = null;
-	private static BufferedImage carImg = null;
+	private static BufferedImage carImgRight = null;
+	private static BufferedImage carImgUp = null;
+	private static BufferedImage carImgDown = null;
 	public SimCityGui gui;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private enum Command {noCommand, walkToDestination, enterHome};
 	private Command command=Command.noCommand;
+	private enum DrivingDirection {up,down,right};
+	DrivingDirection drivingDirection = DrivingDirection.right;
 	private int xHomePosition = 20;
 	private int yHomePosition = 20;
 	
@@ -32,7 +36,9 @@ public class PersonGui implements Gui{
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
 		    personImg = ImageIO.read(new File(path.toString() + "person.png"));
-		    carImg = ImageIO.read(new File(path.toString() + "person.png"));
+		    carImgRight = ImageIO.read(new File(path.toString() + "carRight.png"));
+		    carImgUp = ImageIO.read(new File(path.toString() + "carBack.png"));
+		    carImgDown = ImageIO.read(new File(path.toString() + "carFront.png"));
 		} catch (IOException e) {
 		}
 		
@@ -49,24 +55,46 @@ public class PersonGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
-		if(agent.car==null){
+		if(agent.car ==false){
 			if (xPos < xDestination && (yPos - 103)%80==0)
 				xPos++;
 			else if (xPos > xDestination && (yPos - 103)%80==0)
 				xPos--;
 			else if (yPos < yDestination)
 				yPos++;
-			else if (yPos > yDestination)
+			else if (yPos > yDestination && xPos == xDestination)
 				yPos--;
-		}else{
-			if (xPos < xDestination && (yPos - 115)%80==0)
-				xPos++;
-			else if (xPos > xDestination && (yPos - 115)%80==0)
-				xPos--;
-			else if (yPos < yDestination)
+			else if(xPos != xDestination){
 				yPos++;
-			else if (yPos > yDestination)
+			}
+		}else if(agent.car==true){
+			if(yPos == yDestination && xPos == xDestination){}
+			else if(xPos > xDestination  && (yPos - 115)%80==0 && xPos < 950){
+				drivingDirection = DrivingDirection.right;
+				xPos++;
+			}
+			else if(yPos != yDestination && xPos != xDestination && (yPos - 115)%80!=0){
+				//System.out.println((yPos - 115)%80);
+				//System.out.println(" xDestination "+ xDestination +" yDestination "+ yDestination);
+				drivingDirection = DrivingDirection.down;
+				yPos++;
+			}else if (xPos == 950){
+				drivingDirection = DrivingDirection.right;
+				xPos = 0;
+				yPos = yDestination + 46;
+			}
+			else if (yPos != yDestination &&(xPos < xDestination || (xPos < 950 && (Math.abs(yPos - yDestination) > 47 || yPos - yDestination == -33)))){
+				drivingDirection = DrivingDirection.right;
+				xPos++;
+			}
+			else if (yPos > yDestination){
+				drivingDirection = DrivingDirection.up;
 				yPos--;
+			}
+			else if(xPos != xDestination){
+				drivingDirection = DrivingDirection.down;
+				yPos++;
+			}
 		}
 
 		if (xPos == xDestination && yPos == yDestination) {
@@ -80,9 +108,14 @@ public class PersonGui implements Gui{
 
 	@Override
 	public void draw(Graphics2D g) {
-		if(agent.car != null)
+		if(agent.car == true)
 		{
-			g.drawImage(carImg, xPos, yPos, null);
+			if(this.drivingDirection == DrivingDirection.right)
+				g.drawImage(carImgRight, xPos, yPos, null);
+			else if(this.drivingDirection == DrivingDirection.down)
+				g.drawImage(carImgDown, xPos, yPos, null);
+			else if(this.drivingDirection == DrivingDirection.up)
+				g.drawImage(carImgUp, xPos, yPos, null);
 		}
 		else
 		{
