@@ -536,7 +536,7 @@ public class PersonAgent extends Agent
     			CookRole role = (CookRole)(r.cook);
     			if(role.getPerson() != null){
         			print("role.getPerson() != null");
-    				role.msgReleaveFromDuty(this);
+    				role.msgRelieveFromDuty(this);
     				try {
     					waitingResponse.acquire();
     				} catch (InterruptedException e) {

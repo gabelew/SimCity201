@@ -52,7 +52,7 @@ public class CookRole extends Role implements Cook {
 	private int pickUpTableItems = 0;
 	public Restaurant restaurant;
 
-	enum State {none, goToWork, working, leaving, releaveFromDuty};
+	enum State {none, goToWork, working, leaving, relieveFromDuty};
 	State state = State.none;
 	
     public class Food{
@@ -169,21 +169,21 @@ public class CookRole extends Role implements Cook {
 		state = State.goToWork;
 		stateChanged();
 	}
-	public void msgReleaveFromDuty(PersonAgent p) {
+	public void msgRelieveFromDuty(PersonAgent p) {
 		replacementPerson = p;
 		state = State.leaving;
 		this.stateChanged();
 	}
 	public void msgAnimationHasLeftRestaurant() {
-		state = State.releaveFromDuty;
-		leavingRestaurant.release();
+		state = State.relieveFromDuty;
+		waitingResponse.release();
 		this.stateChanged();
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
 		orders.add(new RoleOrder(w, choice, table, OrderState.PENDING));
 		stateChanged();
-		print("order recieved!!");
+		print("order received!!");
 	}
 	public void msgFoodDone(RoleOrder o)
 	{
@@ -306,7 +306,7 @@ public class CookRole extends Role implements Cook {
 	}	
 	
 	public boolean pickAndExecuteAnAction() {
-		if(state == State.releaveFromDuty){
+		if(state == State.relieveFromDuty){
 			state = State.none;
 			myPerson.releavedFromDuty(this);
 			if(replacementPerson != null){
@@ -319,14 +319,14 @@ public class CookRole extends Role implements Cook {
 			return true;
 		}
 		if(state == State.leaving){
-			/*state = State.none;
+			state = State.none;
 			cookGui.DoLeaveRestaurant();
 			try {
-				leavingRestaurant.acquire();
+				waitingResponse.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}*/
-			state = State.releaveFromDuty;
+			}
+			state = State.relieveFromDuty;
 			return true;
 		}
 
