@@ -1,8 +1,8 @@
-package restaurant.test.mock;
+package city.test.mock;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
+import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
+import restaurant.test.mock.Mock;
 import city.PersonAgent;
 import city.interfaces.Bank;
 import city.roles.BankCustomerRole;

@@ -8,8 +8,9 @@ import bank.gui.BankCustomerGui;
 import city.BankAgent;
 import city.PersonAgent;
 import city.interfaces.Bank;
+import city.interfaces.BankCustomer;
 
-public class BankCustomerRole extends Role{
+public class BankCustomerRole extends Role implements BankCustomer{
 	
 	// Data
 	class Task {
@@ -95,6 +96,16 @@ public class BankCustomerRole extends Role{
 			myPerson.businessFunds += amount;
 		}
 		print("$" + amount + " loan for " + accountType + " account was approved.");
+		stateChanged();
+	}
+	
+	public void msgLoanPaid(double amount, String accountType) {
+		print("$" + amount + " loan for " + accountType + " account was paid.");
+		stateChanged();
+	}
+	
+	public void msgDepositSuccessful(double amount, String accountType, double remainingBalance) {
+		print("$" + amount + " was deposited successfully into account: " + accountType + ". Remaining balance: " + remainingBalance);
 		stateChanged();
 	}
 	

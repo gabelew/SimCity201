@@ -1,11 +1,10 @@
 package city.test;
 
-import restaurant.test.mock.MockBank;
 import junit.framework.TestCase;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
 import city.roles.BankCustomerRole.CustomerState;
-import city.roles.CashierRole;
+import city.test.mock.MockBank;
 
 
 public class BankCustomerRoleTest extends TestCase{
