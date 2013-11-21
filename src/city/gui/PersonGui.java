@@ -19,9 +19,10 @@ public class PersonGui implements Gui{
 	private static BufferedImage carImgUp = null;
 	private static BufferedImage carImgDown = null;
 	public SimCityGui gui;
-	private int xPos, yPos;
+	public int xPos;
+	public int yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, walkToDestination, enterHome};
+	private enum Command {noCommand, walkToDestination, enterHome, walkingToBus, walkingOnToBus};
 	private Command command=Command.noCommand;
 	private enum DrivingDirection {up,down,right};
 	DrivingDirection drivingDirection = DrivingDirection.right;
@@ -113,6 +114,13 @@ public class PersonGui implements Gui{
 			if(command == Command.walkToDestination){
 				command = Command.noCommand;
 				agent.msgAnimationFinshed();
+			}else if(command == Command.walkingToBus){
+				command = Command.noCommand;
+				agent.msgAnimationFinshed();
+			}else if(command == Command.walkingOnToBus){
+				isPresent = false;
+				agent.msgAnimationFinshed();
+				command = Command.noCommand;
 			}
 		}
 		
@@ -155,6 +163,73 @@ public class PersonGui implements Gui{
 		xDestination = destination.x;
 		yDestination = destination.y;
 		command = Command.walkToDestination;
+		
+	}
+
+
+	public void doGoToBus() {
+		if(xPos < 432){
+			xDestination = 67;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}else{
+			xDestination = 797;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}
+		command = Command.walkingToBus;
+	}
+
+
+	public void doGetOnBus() {
+
+		if(xPos < 432){
+			xDestination = agent.busLeft.getBusGui().xPos;
+			yDestination = agent.busLeft.getBusGui().yPos;
+		}else{
+			xDestination = agent.busRight.getBusGui().xPos;
+			yDestination = agent.busRight.getBusGui().yPos;
+		}
+		
+		command = Command.walkingOnToBus;
+	}
+
+
+	public void doGetOffBus() {
+		this.isPresent = true;
+		if(xPos < 432){
+			xDestination = 67;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}else{
+			xDestination = 797;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}
 		
 	}
 

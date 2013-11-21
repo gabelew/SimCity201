@@ -3,11 +3,18 @@ package city;
 import java.awt.Point;
 import java.util.*;
 
+import city.gui.BusGui;
 import agent.Agent;
 
 public class BusAgent extends Agent{
 	public List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
-	
+	private BusGui busGui;
+	public BusGui getBusGui() {
+		return busGui;
+	}
+	public void setBusGui(BusGui bg){
+		this.busGui = bg;
+	}
 	public class MyBusStop{
 		Point location;
 		int stopnumber;
@@ -39,15 +46,15 @@ public class BusAgent extends Agent{
 	
 	
 	public BusAgent(){
-		
-		Point busStation1 = new Point(30,65);
-		Point busStation2 = new Point(30,145);
-		Point busStation3 = new Point(30,225);
-		Point busStation4 = new Point(30,305);
-		Point busStation5 = new Point(825,65);
-		Point busStation6 = new Point(825,145);
-		Point busStation7 = new Point(825,225);
-		Point busStation8 = new Point(825,305);
+												//where customers will pile up
+		Point busStation1 = new Point(30,65);	//(67, 85+80*0)
+		Point busStation2 = new Point(30,145);	//(67, 85+80*1)
+		Point busStation3 = new Point(30,225);	//(67, 85+80*2)
+		Point busStation4 = new Point(30,305);	//(67, 85+80*3)
+		Point busStation5 = new Point(825,65);	//(797, 85+80*0)
+		Point busStation6 = new Point(825,145);	//(797, 85+80*1)
+		Point busStation7 = new Point(825,225);	//(797, 85+80*2)
+		Point busStation8 = new Point(825,305);	//(797, 85+80*3)
 		
 		busStops.add(new MyBusStop(busStation1,1));
 		busStops.add(new MyBusStop(busStation2,2));
@@ -130,6 +137,8 @@ public class BusAgent extends Agent{
 		}	
 		
 	}
+
+
 	
 	
 	

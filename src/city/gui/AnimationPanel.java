@@ -3,6 +3,8 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import restaurant.gui.CustomerGui;
+import restaurant.gui.WaiterGui;
 import city.BusAgent;
 
 import java.awt.*;
@@ -105,8 +107,10 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		
 	    BusAgent ba1 = new BusAgent();
 	    BusGui bg1 = new BusGui(ba1, simCityGui, 'B');
+	    ba1.setBusGui(bg1);
 	    BusAgent ba2 = new BusAgent();
 	    BusGui bg2 = new BusGui(ba2, simCityGui, 'F');
+	    ba2.setBusGui(bg2);
 	    bg1.setPresent(true);
 	    bg2.setPresent(true);
         guis.add(bg1);
@@ -198,7 +202,16 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //Here is the buildings
         for(int i = ZERO; i<buildings.size(); i++){
         	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
-        } 
+        }
+        
+    	synchronized(guis){		
+	        for(Gui gui : guis) {
+	        	if(gui instanceof BusGui)
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
     }
     
 	public void addGui(PersonGui gui) {
