@@ -18,7 +18,6 @@ public class AtHomeGui implements Gui{
 	private boolean isPresent = false;
 	
 	private static BufferedImage personImg = null;
-	private static BufferedImage carImg = null;
 	public SimCityGui gui;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
@@ -32,7 +31,6 @@ public class AtHomeGui implements Gui{
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
 		    personImg = ImageIO.read(new File(path.toString() + "person.png"));
-		    carImg = ImageIO.read(new File(path.toString() + "person.png"));
 		} catch (IOException e) {
 		}
 		
@@ -69,16 +67,9 @@ public class AtHomeGui implements Gui{
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
-		if(agent.car != null)
-		{
-			g.drawImage(carImg, xPos, yPos, null);
-		}
-		else
-		{
-			g.drawImage(personImg, xPos, yPos, null);
-		}
-		
+	public void draw(Graphics2D g) 
+	{
+		g.drawImage(personImg, xPos, yPos, null);
 	}
 
 	public void doEnterHome()
