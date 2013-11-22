@@ -21,7 +21,7 @@ import junit.framework.*;
  *
  * @author Emily Bernstein
  */
-public class MarketTest extends TestCase
+public class ClerkRoleTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
 	MarketAgent market;

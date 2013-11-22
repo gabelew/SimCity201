@@ -1,20 +1,16 @@
 package city;
 
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.sql.Time;
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.Semaphore;
 
 import agent.Agent;
 import city.roles.*;
-import restaurant.interfaces.Market;
+import market.interfaces.Market;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import market.interfaces.*;
 
-public class MarketAgent extends Agent {
+public class MarketAgent extends Agent implements Market {
 public EventLog log = new EventLog();
 public Point location;
 private String name;
