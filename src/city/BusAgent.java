@@ -50,26 +50,25 @@ public class BusAgent extends Agent{
 		
 		
 		
-		if(type == 'B'){						//where customers will pile up
+												//where customers will pile up
 		Point busStation0 = new Point(30,65);	//(67, 85+80*0)
 		Point busStation1 = new Point(30,145);	//(67, 85+80*1)
 		Point busStation2 = new Point(30,225);	//(67, 85+80*2)
 		Point busStation3 = new Point(30,305);	//(67, 85+80*3)
-		busStops.add(new MyBusStop(busStation0,0));
-		busStops.add(new MyBusStop(busStation1,1));
-		busStops.add(new MyBusStop(busStation2,2));
-		busStops.add(new MyBusStop(busStation3,3));
-		}
-		if(type == 'F'){
 		Point busStation4 = new Point(825,65);	//(797, 85+80*0)
 		Point busStation5 = new Point(825,145);	//(797, 85+80*1)
 		Point busStation6 = new Point(825,225);	//(797, 85+80*2)
 		Point busStation7 = new Point(825,305);	//(797, 85+80*3)
+		
+		busStops.add(new MyBusStop(busStation0,0));
+		busStops.add(new MyBusStop(busStation1,1));
+		busStops.add(new MyBusStop(busStation2,2));
+		busStops.add(new MyBusStop(busStation3,3));
 		busStops.add(new MyBusStop(busStation4,4));
 		busStops.add(new MyBusStop(busStation5,5));
 		busStops.add(new MyBusStop(busStation6,6));
 		busStops.add(new MyBusStop(busStation7,7));
-		}
+		
 		
 	}
 	
