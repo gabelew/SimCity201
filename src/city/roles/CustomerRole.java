@@ -38,7 +38,7 @@ public class CustomerRole extends Role implements Customer {
 	static final int HUNGERLEVEL = 5000;
 	static final int ONE = 1;
 	static final int MENUINDEXSTART = 0;
-	static final int MENUINDEXEND_DEFAULT = 4;
+	static final int MENUINDEXEND_DEFAULT = 3;
 	int MENUINDEXEND = MENUINDEXEND_DEFAULT;
 	static final int QUICKEST_CHOICE_TIME = 8000;
 	static final int SLOWEST_CHOICE_TIME = 20000;
