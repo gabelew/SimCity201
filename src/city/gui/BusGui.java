@@ -154,5 +154,17 @@ public class BusGui implements Gui{
 		command = Command.walkToDestination;
 		
 	}
+	
+	public void GoToRest(){
+		if(type == 'B'){
+			xPos = 300;
+			yPos = 400;
+		}
+		
+		else if(type == 'F'){
+			xPos = 825;
+			yPos = -40;
+		}
+	}
 
 }

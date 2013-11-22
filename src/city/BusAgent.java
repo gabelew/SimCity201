@@ -27,8 +27,7 @@ public class BusAgent extends Agent{
 		
 		public Point getLocation(){
 			return location;
-		}
-		
+		}	
 	}
 	
 	class MyPassenger{
@@ -41,21 +40,23 @@ public class BusAgent extends Agent{
 		}
 	}
 	
-	enum StopEvent {pickUp, dropOff}
-	MyBusStop atStop = null;
-	
+	enum StopEvent {pickUp, dropOff}	
+	enum State {none, atStop0, atStop1, atStop2, atStop3}
+	private State state = State.none;
+	private MyBusStop atStop = null;
 	
 	public BusAgent(){
 												//where customers will pile up
-		Point busStation1 = new Point(30,65);	//(67, 85+80*0)
-		Point busStation2 = new Point(30,145);	//(67, 85+80*1)
-		Point busStation3 = new Point(30,225);	//(67, 85+80*2)
-		Point busStation4 = new Point(30,305);	//(67, 85+80*3)
-		Point busStation5 = new Point(825,65);	//(797, 85+80*0)
-		Point busStation6 = new Point(825,145);	//(797, 85+80*1)
-		Point busStation7 = new Point(825,225);	//(797, 85+80*2)
-		Point busStation8 = new Point(825,305);	//(797, 85+80*3)
+		Point busStation0 = new Point(30,65);	//(67, 85+80*0)
+		Point busStation1 = new Point(30,145);	//(67, 85+80*1)
+		Point busStation2 = new Point(30,225);	//(67, 85+80*2)
+		Point busStation3 = new Point(30,305);	//(67, 85+80*3)
+		Point busStation4 = new Point(825,65);	//(797, 85+80*0)
+		Point busStation5 = new Point(825,145);	//(797, 85+80*1)
+		Point busStation6 = new Point(825,225);	//(797, 85+80*2)
+		Point busStation7 = new Point(825,305);	//(797, 85+80*3)
 		
+		busStops.add(new MyBusStop(busStation0,0));
 		busStops.add(new MyBusStop(busStation1,1));
 		busStops.add(new MyBusStop(busStation2,2));
 		busStops.add(new MyBusStop(busStation3,3));
@@ -63,7 +64,6 @@ public class BusAgent extends Agent{
 		busStops.add(new MyBusStop(busStation5,5));
 		busStops.add(new MyBusStop(busStation6,6));
 		busStops.add(new MyBusStop(busStation7,7));
-		busStops.add(new MyBusStop(busStation8,8));
 	}
 	
 	public List<MyBusStop> getBusStops(){
@@ -94,12 +94,6 @@ public class BusAgent extends Agent{
 	
 	public void msgAtStop(Point busStop){ //from animation
 		//print("msg at stop");
-		for(MyBusStop b : busStops){
-			if(b.location == busStop){
-				atStop = b;
-			}
-		}	
-		
 		stateChanged();
 	}
 	
@@ -107,9 +101,29 @@ public class BusAgent extends Agent{
 	
 	protected boolean pickAndExecuteAnAction() {
 		
-		if(atStop != null){
-			transferPeople();
-			return true;
+		if(state == State.atStop0){
+			transferPeople(busStops.get(0));
+		}
+		
+		if(state == State.atStop1){
+			transferPeople(busStops.get(1));
+		}	
+		
+		if(state == State.atStop2){
+			transferPeople(busStops.get(2));
+		}	
+		
+		if(state == State.atStop3){
+			transferPeople(busStops.get(3));
+		}
+		
+		
+		
+		for(MyBusStop b : busStops){
+			if(!b.passengers.isEmpty()){
+				GoToBusStop(b);
+				return true;
+			}
 		}
 		
 		
@@ -120,26 +134,24 @@ public class BusAgent extends Agent{
 	
 	//Actions
 	
-	private void transferPeople(){
-		MyBusStop s = atStop;
-		atStop = null;
-		
-		for(MyPassenger p : s.passengers){
+	private void GoToBusStop(MyBusStop mbs){
+		print("Going to busStop " + mbs.stopnumber );
+	}
+	
+	private void transferPeople(MyBusStop ms){
+		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){
 				p.person.msgAtYourStop();
 			}
 		}	
 		
-		for(MyPassenger p : s.passengers){
+		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.pickUp){
 				p.person.msgBusIshere();
 			}
 		}	
 		
 	}
-
-
-	
 	
 	
 	
