@@ -1,6 +1,9 @@
-package restaurant.interfaces;
+package market.interfaces;
 
-import market.interfaces.DeliveryMan;
+import city.MarketAgent;
+import restaurant.interfaces.Customer;
+import restaurant.interfaces.Market;
+import restaurant.interfaces.Waiter;
 
 /**
  * A sample Cashier interface built to unit test a CashierAgent.
@@ -26,6 +29,6 @@ public interface Cashier {
 	 */
 	public abstract void msgProduceCheck(Waiter w, Customer c, String choice);
 
-	public abstract void msgHereIsBill(DeliveryMan DMR, double bill);
+	public abstract void msgHereIsBill(MarketAgent marketAgent, double bill);
 
 }

@@ -5,6 +5,7 @@ import agent.Agent;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.roles.HostRole.State;
 import restaurant.Restaurant;
@@ -53,11 +54,11 @@ public class CashierRole extends Role implements Cashier {
 	public enum OrderState {requested, printingCheck, deliverCheck, awaitingPayment, paymentRecieved, done, inDebt};
 	
 	public class Bill{
-		public DeliveryManRole deliveryMan;
+		public DeliveryMan deliveryMan;
 		public double bill;
 		public BillState state;
 		
-		Bill(DeliveryManRole DMR, double b, BillState s){
+		Bill(DeliveryMan DMR, double b, BillState s){
 			deliveryMan=DMR;
 			bill = b;
 			state = s;
@@ -137,7 +138,7 @@ public class CashierRole extends Role implements Cashier {
 		stateChanged();
 	}
 
-	public void msgHereIsInvoice(double price,DeliveryManRole DMR) {
+	public void msgHereIsInvoice(double price,DeliveryMan DMR) {
 		bills.add(new Bill(DMR,price,BillState.requested));
 		stateChanged();
 	}
@@ -320,10 +321,10 @@ public class CashierRole extends Role implements Cashier {
 	}
 
 	@Override
-	public void msgHereIsBill(Market m, double bill) {
-		//bills.add( new Bill(m, bill, BillState.requested));
-		//log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
-		//stateChanged();
+	public void msgHereIsBill(DeliveryMan DM, double bill) {
+		bills.add( new Bill(DM, bill, BillState.requested));
+		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
+		stateChanged();
 		
 	}
 

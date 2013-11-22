@@ -17,13 +17,14 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.gui.ClerkGui;
+import market.interfaces.*;
 import city.MarketAgent;
 import city.PersonAgent;
 
 /**
  * Restaurant customer agent.
  */
-public class ClerkRole extends Role {
+public class ClerkRole extends Role implements Clerk {
 	private ClerkGui clerkGui=new ClerkGui(this);
 	Order o;
 	class Order{
@@ -37,7 +38,7 @@ public class ClerkRole extends Role {
 		double amountOwed;
 	}
 	MarketAgent Market;
-	MarketCustomerRole MCR;
+	MarketCustomer MCR;
 	private enum orderState{waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
 	double Price=5;
@@ -46,7 +47,7 @@ public class ClerkRole extends Role {
 	}
 
 	//messages
-	public void msgTakeCustomer(MarketCustomerRole CR,MarketAgent m){
+	public void msgTakeCustomer(MarketCustomer CR,MarketAgent m){
 		MCR=CR;
 		Market=m;
 	}

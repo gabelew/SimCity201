@@ -5,6 +5,7 @@ import agent.Agent;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.roles.HostRole.State;
@@ -140,7 +141,7 @@ public class CookRole extends Role implements Cook {
 		}
 		Map<String,Integer>Choices;
 		marketOrderState marketState;
-		DeliveryManRole deliveryMan;
+		DeliveryMan deliveryMan;
 		MarketAgent Market;
 		double price;
 	}
@@ -191,7 +192,7 @@ public class CookRole extends Role implements Cook {
 		stateChanged();
 	}
 	
-	public void msgCanIHelpYou(DeliveryManRole DMR,MarketAgent m){
+	public void msgCanIHelpYou(DeliveryMan DMR,MarketAgent m){
 		for (MarketOrder order: marketOrders){
 			if(order.Market==m){
 				order.deliveryMan=DMR;
@@ -199,7 +200,7 @@ public class CookRole extends Role implements Cook {
 			}
 		}
 	}
-	public void msgHereIsOrderFromMarket(DeliveryManRole DMR,Map<String,Integer>choices, List<String>outOf,double amountOwed){
+	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, List<String>outOf,double amountOwed){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
 				order.price=amountOwed;
@@ -518,7 +519,7 @@ public class CookRole extends Role implements Cook {
 				if(placeOrder){
 					//m.market.msgHereIsOrder(this, cashier, foodsToOrder);
 					marketOrders.add(new MarketOrder(foodsToOrder,m.market,marketOrderState.waiting));
-					m.market.msgPlaceDeliveryOrder(this);
+					m.market.msgPlaceDeliveryOrder((market.interfaces.Cook) this);
 					
 				}
 			}

@@ -6,62 +6,70 @@ import java.sql.Time;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
+
 import agent.Agent;
 import city.roles.*;
 import restaurant.interfaces.Market;
+import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
+import market.interfaces.*;
 
 public class MarketAgent extends Agent {
+public EventLog log = new EventLog();
 public Point location;
 private String name;
-List<MyCustomer>MyCustomers=new ArrayList<MyCustomer>();
-List<MyCook>MyCooks= new ArrayList<MyCook>();
-class MyCustomer{
-	public MyCustomer(MarketCustomerRole MCR, customerState s) {
+public List<MyCustomer>MyCustomers=new ArrayList<MyCustomer>();
+public List<MyCook>MyCooks= new ArrayList<MyCook>();
+public class MyCustomer{
+	public MyCustomer(MarketCustomer MCR, customerState s) {
 		MC=MCR;
 		state=s;
 	}
-	MarketCustomerRole MC;
-	customerState state;
+	public MarketCustomer MC;
+	public customerState state;
 }
-class MyCook{
-	public MyCook(CookRole c, cookState s) {
+public class MyCook{
+	public MyCook(Cook c, cookState s) {
 		cook=c;
 		cookstate=s;
 	}
-	CookRole cook;
-	cookState cookstate;
+	public Cook cook;
+	public cookState cookstate;
 }
 
-enum customerState{waiting, clerkGettingFood,done};
-enum cookState{waiting,deliveryGettingFood,done};
+public enum customerState{waiting, clerkGettingFood,done};
+public enum cookState{waiting,deliveryGettingFood,done};
 
-ClerkRole clerk;
+Clerk clerk;
 DeliveryManRole deliveryMan;
 
-boolean clerkFree;
-boolean deliveryFree;
+public boolean clerkFree=true;
+public boolean deliveryFree=true;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
 
-public MarketAgent(ClerkRole Clerk,Point Location,String Name){
+public MarketAgent(Clerk Clerk,Point Location,String Name){
 	this.clerk=Clerk;
 	this.location=Location;
 	this.name=Name;
 }
 
 //messages to market
-public void msgPlaceOrder(MarketCustomerRole CR){
+public void msgPlaceOrder(MarketCustomer CR){
 	MyCustomers.add(new MyCustomer(CR, customerState.waiting));
 	stateChanged();
+	log.add(new LoggedEvent("Received msgPlaceOrder from MarketCustomer."));
 }
 
-public void msgPlaceDeliveryOrder(CookRole cook){
+public void msgPlaceDeliveryOrder(Cook cook){
 	MyCooks.add(new MyCook(cook, cookState.waiting));
 	stateChanged();
+	log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
 }
 
 public void msgClerkDone(){
 	clerkFree=true;
 	stateChanged();
+	log.add(new LoggedEvent("Received msgClerk from clerk."));
 }
 
 public void msgDeliveryDone(){
@@ -70,7 +78,7 @@ public void msgDeliveryDone(){
 }
 
 //scheduler
-protected boolean pickAndExecuteAnAction() {
+public boolean pickAndExecuteAnAction() {
 	
 	try{
 		for (MyCustomer MC:MyCustomers){

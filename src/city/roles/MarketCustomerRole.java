@@ -7,13 +7,15 @@ import java.util.Map;
 
 
 
+
 import market.gui.MarketCustomerGui;
+import market.interfaces.MarketCustomer;
 import city.PersonAgent;
 
 /**
  * Restaurant customer agent.
  */
-public class MarketCustomerRole extends Role {
+public class MarketCustomerRole extends Role implements MarketCustomer {
 	private MarketCustomerGui marketCGui=new MarketCustomerGui(this);
 	PersonAgent myPerson; 
 	ClerkRole Clerk;

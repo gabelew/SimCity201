@@ -11,13 +11,17 @@ import java.util.List;
 import java.util.Map;
 
 import market.gui.DeliveryManGui;
+import market.interfaces.Cook;
+import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
+import restaurant.Restaurant;
 
 /**
  * Restaurant customer agent.
  */
 public class DeliveryManRole extends Role {
+	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
 	private String name;
 	Order o;
@@ -34,7 +38,7 @@ public class DeliveryManRole extends Role {
 	}
 	double Price=5;
 	CashierRole cashier;
-	CookRole cook;
+	Cook cook;
 	MarketAgent Market;
 	enum orderState{waiting,ordered,waitingForPayment,payed,done};
 	PersonAgent myPerson; 
@@ -43,7 +47,7 @@ public class DeliveryManRole extends Role {
 		this.myPerson=p;
 	}
 	//messages
-	public void msgTakeCustomer(CookRole c,MarketAgent m){
+	public void msgTakeCustomer(Cook c,MarketAgent m){
 		cook=c;
 		Market=m;
 		stateChanged();
@@ -74,6 +78,10 @@ public class DeliveryManRole extends Role {
 			giveOrder();
 			return true;
 		}
+		if(o.s==orderState.waitingForPayment){
+			giveBill();
+			return true;
+		}
 		if (o.s==orderState.payed){
 			orderDone();
 			return true;
@@ -84,7 +92,7 @@ public class DeliveryManRole extends Role {
 
 	//actions
 	private void askForOrder(){
-		cook.msgCanIHelpYou(this,Market);
+		((CookRole) cook).msgCanIHelpYou((DeliveryMan) this,Market);
 	}
 	
 	private void fillOrder(){
@@ -114,8 +122,15 @@ public class DeliveryManRole extends Role {
 	private void giveOrder(){
 		deliveryGui.DoGoPutOnTruck();
 		deliveryGui.DoGoDeliver(location);
-		cook.msgHereIsOrderFromMarket(this,o.Choices, o.outOf,o.amountOwed);
+		((CookRole) cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
+	}
+	private void giveBill(){
+		for(Restaurant r:myPerson.simCityGui.getRestaurants()){
+			if(r.cook==cook){
+				r.cashier.msgHereIsBill((DeliveryMan) this, o.amountOwed);
+			}
+		}
 	}
 	
 	private void orderDone(){
