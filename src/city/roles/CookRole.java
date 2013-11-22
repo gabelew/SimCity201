@@ -144,7 +144,7 @@ public class CookRole extends Role implements Cook {
 		MarketAgent Market;
 		double price;
 	}
-	public enum marketOrderState {waiting, ordering,waitingForBill, paying};
+	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	
 	public CookRole(){
 		super();
@@ -342,6 +342,7 @@ public class CookRole extends Role implements Cook {
 		synchronized(marketOrders){
 			for (MarketOrder mOrder:marketOrders){
 				if(mOrder.marketState==marketOrderState.ordering){
+					mOrder.marketState = marketOrderState.ordered;
 					placingMarketOrder(mOrder);
 					return true;
 				}

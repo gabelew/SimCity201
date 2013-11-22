@@ -58,7 +58,7 @@ public class PersonAgent extends Agent
 	
 	public int hungerLevel = 51;
 	public double cashOnHand = 0, businessFunds = 0;
-	private SimCityGui simCityGui;
+	public SimCityGui simCityGui;
 	
 /***********************
  *  UTILITY CLASSES START
