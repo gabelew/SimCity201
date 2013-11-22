@@ -43,8 +43,8 @@ public class MarketTest extends TestCase
 		customerDitch = new MockMarketCustomer("mockcustomerditch");
 		customerRich = new MockMarketCustomer("mockcustomerrich");
 		clerk = new MockClerk("Clerk");
-		market= new MarketAgent(clerk,location,"market");
 		deliveryMan = new MockDeliveryMan("DeliveryMan");
+		market= new MarketAgent(clerk,deliveryMan,location,"market");
 		cook = new MockCook("cook");
 		cook2 = new MockCook("cook2");
 		cook3 = new MockCook("cook3");
@@ -158,8 +158,8 @@ public class MarketTest extends TestCase
 		
 		
 		// run the market's scheduler
-		//assertTrue("Market's scheduler should have returned true (needs to react to customer's msgPlaceOrder).", 
-				//market.pickAndExecuteAnAction());
+		assertTrue("Market's scheduler should have returned true (needs to react to customer's msgPlaceOrder).", 
+				market.pickAndExecuteAnAction());
 		
 		//check post scheduler
 		/*assertFalse("Delivery Man should be no longer be free",market.deliveryFree);

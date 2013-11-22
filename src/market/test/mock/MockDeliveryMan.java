@@ -33,7 +33,7 @@ public class MockDeliveryMan extends Mock implements DeliveryMan {
 
 	}
 
-	public void msgTakeCustomer(CookRole c,MarketAgent m){
+	public void msgTakeCustomer(Cook c,MarketAgent m){
 		log.add(new LoggedEvent("Received msgTakeCustomer from market"));
 	}
 	

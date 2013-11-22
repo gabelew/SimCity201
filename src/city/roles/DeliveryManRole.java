@@ -20,7 +20,7 @@ import restaurant.Restaurant;
 /**
  * Restaurant customer agent.
  */
-public class DeliveryManRole extends Role {
+public class DeliveryManRole extends Role implements DeliveryMan{
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
 	private String name;

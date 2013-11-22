@@ -41,14 +41,15 @@ public enum customerState{waiting, clerkGettingFood,done};
 public enum cookState{waiting,deliveryGettingFood,done};
 
 Clerk clerk;
-DeliveryManRole deliveryMan;
+DeliveryMan deliveryMan;
 
 public boolean clerkFree=true;
 public boolean deliveryFree=true;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
 
-public MarketAgent(Clerk Clerk,Point Location,String Name){
+public MarketAgent(Clerk Clerk,DeliveryMan DMR,Point Location,String Name){
 	this.clerk=Clerk;
+	this.deliveryMan=DMR;
 	this.location=Location;
 	this.name=Name;
 }
@@ -109,6 +110,7 @@ private void giveToClerk(MyCustomer MC){
 }
 
 private void giveToDelivery(MyCook MC){
+	deliveryFree=false;
 	deliveryMan.msgTakeCustomer(MC.cook,this);
 	MyCooks.remove(MC);
 }

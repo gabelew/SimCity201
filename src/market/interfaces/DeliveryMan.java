@@ -16,7 +16,7 @@ import restaurant.gui.CustomerGui;
  */
 public interface DeliveryMan {
 
-	public abstract void msgTakeCustomer(CookRole c,MarketAgent m);
+	public abstract void msgTakeCustomer(Cook c,MarketAgent m);
 	
 	public abstract void msgHereIsOrder(Map<String,Integer>choice);
 	
