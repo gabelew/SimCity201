@@ -1,6 +1,9 @@
 package market.test.mock;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import restaurant.interfaces.Cashier;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
@@ -13,11 +16,8 @@ import market.interfaces.*;
  */
 public class MockMarket extends Mock implements Market {
 
-	/**
-	 * Reference to the Cashier under test that can be set by the unit test.
-	 */
-	public Cashier cashier;
-	public boolean goToATM = false;
+
+	public Map<String, Integer> Inventory = new HashMap<String, Integer>();
 	public EventLog log = new EventLog();
 	
 	public MockMarket(String name) {
@@ -40,6 +40,15 @@ public class MockMarket extends Mock implements Market {
 	
 	public void msgDeliveryDone(){
 		log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
+	}
+	
+	public void setInventory(int steak, int chicken, int cars, int salad, int cookie){
+		Inventory.put("steak", steak);
+		Inventory.put("car", cars);
+		Inventory.put("chicken",chicken);
+		Inventory.put("salad", salad);
+		Inventory.put("cookie", cookie);
+		log.add(new LoggedEvent("Received setInventory."));
 	}
 	
 }

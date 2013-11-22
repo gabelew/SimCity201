@@ -34,10 +34,10 @@ public class ClerkRole extends Role implements Clerk {
 		public Order(orderState state) {
 			s=state;
 		}
-		Map<String, Integer> Choices = new HashMap<String, Integer>();
-		List<String> outOf;
-		orderState s;
-		double amountOwed;
+		public Map<String, Integer> Choices = new HashMap<String, Integer>();
+		public List<String> outOf;
+		public orderState s;
+		public double amountOwed;
 	}
 	Market Market;
 	public MarketCustomer MCR;
@@ -95,18 +95,19 @@ public class ClerkRole extends Role implements Clerk {
 		Iterator it = o.Choices.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
-	        if(((MarketAgent)Market).Inventory.get(pairs)==0){
+	        if(((MarketAgent)Market).Inventory.get(pairs.getKey())==0){
 	        	o.outOf.add(pairs.getKey().toString());
 	        	o.Choices.remove(pairs);
 	        }
-	        else if(o.Choices.get(pairs)>((MarketAgent)Market).Inventory.get(pairs)){
+	        else if(o.Choices.get(pairs.getKey())>((MarketAgent)Market).Inventory.get(pairs.getKey())){
 	        	o.Choices.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.get(pairs.getKey()));
 	        	o.amountOwed=o.amountOwed+((MarketAgent)Market).Inventory.get(pairs.getKey())*Price;
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), 0);
 	        }
 	        else{
 	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*Price;
-	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.get(pairs.getKey().toString())-o.Choices.get(pairs.getKey().toString())));
+	        	Integer temp=o.Choices.get(pairs.getKey());
+	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
