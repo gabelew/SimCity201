@@ -27,6 +27,7 @@ import city.roles.WaiterRole;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class SimCityGui extends JFrame implements ActionListener {
  
     List<Home> homes = new ArrayList<Home>();
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
-    public List<PersonAgent> persons = new ArrayList<PersonAgent>();
+    public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
     
     private JFrame bottomFrame = new JFrame();
     private JPanel topPanel = new JPanel();
@@ -353,9 +354,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 			hour = 0;
 		}	
 		System.out.println("" + hour + "\t"+ dayOfWeek.toString());
-	for(PersonAgent p:persons){
-		p.msgNextHour(hour, dayOfWeek);
-	}
+		synchronized(persons){
+			for(PersonAgent p:persons){
+				p.msgNextHour(hour, dayOfWeek);
+			}
+		}
 	
 	}
 

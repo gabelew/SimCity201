@@ -7,15 +7,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import city.roles.BankCustomerRole;
 import agent.Agent;
 import city.interfaces.Bank;
+import city.interfaces.BankCustomer;
 
 public class BankAgent extends Agent implements Bank{
 	
 	class BankAccount {
 		double currentBalance = 0.0;
-		BankCustomerRole accountHolder;
+		BankCustomer accountHolder;
 		double owed = 0.0;
 		String accountType;
-		BankAccount(BankCustomerRole bcr, double initialDeposit, String accountType) {
+		BankAccount(BankCustomer bcr, double initialDeposit, String accountType) {
 			this.accountHolder = bcr;
 			this.currentBalance = initialDeposit;
 			this.accountType = accountType;
@@ -53,12 +54,18 @@ public class BankAgent extends Agent implements Bank{
 	enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, loanPayment};
 	List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
 	List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
-	
+	String name;
 	double fundsAvailable = 50000.0;
 	final double customerLoanMax = 500;
 	final double businessLoanMax = 1000;
 
-
+	/**
+	 * Constructor
+	 */
+	public BankAgent(String name) {
+		this.name = name;
+	}
+	
 	// Messages
 	/**
 	 * For BankCustomerRole to check balance.
@@ -182,6 +189,7 @@ public class BankAgent extends Agent implements Bank{
 	private void customerDeposit(Transaction t) {
 		t.ts = TransactionState.none;
 		t.customer.deposit(t.amount);
+		t.customer.accountHolder.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
 		transactions.remove(findTransactionIndex(t));
 	}
 	
@@ -196,6 +204,7 @@ public class BankAgent extends Agent implements Bank{
 		t.ts = TransactionState.none;
 		fundsAvailable += t.amount;
 		t.customer.owed -= t.amount;
+		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
 		transactions.remove(findTransactionIndex(t));
 	}
 	
@@ -223,12 +232,14 @@ public class BankAgent extends Agent implements Bank{
 		t.ts = TransactionState.none;
 		int customerAccountLimit = Double.compare(t.customer.currentBalance, t.amount);
 		if(-1 == customerAccountLimit) {
-			t.customer.accountHolder.getPersonAgent().msgTransferFailure(t.recipient.accountHolder.getPersonAgent(), t.amount, t.purpose);
+			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
+			r.getPersonAgent().msgTransferFailure(r.getPersonAgent(), t.amount, t.purpose);
 		} else{
+			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
 			t.customer.withdraw(t.amount);
 			t.recipient.deposit(t.amount);
-			t.customer.accountHolder.getPersonAgent().msgTransferCompleted(t.recipient.accountHolder.getPersonAgent(), t.amount, t.purpose);
-			t.recipient.accountHolder.getPersonAgent().msgTransferSuccessful(t.recipient.accountHolder.getPersonAgent(), t.amount, t.purpose);
+			r.getPersonAgent().msgTransferCompleted(r.getPersonAgent(), t.amount, t.purpose);
+			r.getPersonAgent().msgTransferSuccessful(r.getPersonAgent(), t.amount, t.purpose);
 		}
 		transactions.remove(findTransactionIndex(t));
 	}
@@ -236,7 +247,8 @@ public class BankAgent extends Agent implements Bank{
 	private void customerBalance(Transaction t) {
 		t.ts = TransactionState.none;
 		if("pbalance".equals(t.purpose)) {
-			t.customer.accountHolder.getPersonAgent().msgHereIsBalance(t.customer.currentBalance, t.customer.accountType);
+			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
+			r.getPersonAgent().msgHereIsBalance(t.customer.currentBalance, t.customer.accountType);
 		} else {
 			t.customer.accountHolder.msgHereIsBalance(t.customer.currentBalance, t.customer.accountType);
 		}

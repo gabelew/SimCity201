@@ -3,6 +3,8 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import restaurant.gui.CustomerGui;
+import restaurant.gui.WaiterGui;
 import city.BusAgent;
 
 import java.awt.*;
@@ -89,6 +91,9 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
     private SimCityGui simCityGui;
+    public BusAgent busLeft = new BusAgent();
+    public BusAgent busRight = new BusAgent();
+    
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
 
@@ -103,10 +108,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		} catch (IOException e) {
 		}
 		
-	    BusAgent ba1 = new BusAgent();
-	    BusGui bg1 = new BusGui(ba1, simCityGui, 'B');
-	    BusAgent ba2 = new BusAgent();
-	    BusGui bg2 = new BusGui(ba2, simCityGui, 'F');
+
+	    BusGui bg1 = new BusGui(busLeft, simCityGui, 'B');
+	    busLeft.setBusGui(bg1);
+	    BusGui bg2 = new BusGui(busRight, simCityGui, 'F');
+	    busRight.setBusGui(bg2);
 	    bg1.setPresent(true);
 	    bg2.setPresent(true);
         guis.add(bg1);
@@ -183,9 +189,9 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 		synchronized(guis){
 		for(Gui gui : guis) {
-			if (gui.isPresent()) {
+			//if (gui.isPresent()) {
 				gui.updatePosition();
-	        }
+	        //}
 	    }
 		}
 		synchronized(guis){
@@ -198,7 +204,16 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         //Here is the buildings
         for(int i = ZERO; i<buildings.size(); i++){
         	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
-        } 
+        }
+        
+    	synchronized(guis){		
+	        for(Gui gui : guis) {
+	        	if(gui instanceof BusGui)
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
     }
     
 	public void addGui(PersonGui gui) {

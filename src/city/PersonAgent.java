@@ -42,8 +42,8 @@ public class PersonAgent extends Agent
 	
 	public String name;
 	public boolean car = false;
-	//Bus busLeft;
-	//Bus busRight;
+	public BusAgent busLeft;
+	public BusAgent busRight;
 	public MyJob job;
 	private State state = State.doingNothing;
 	private Location location = Location.InCity;
@@ -57,7 +57,7 @@ public class PersonAgent extends Agent
 	String dayOfWeek;
 	
 	public int hungerLevel = 51;
-	public double cashOnHand, businessFunds;
+	public double cashOnHand = 0, businessFunds = 0;
 	private SimCityGui simCityGui;
 	
 /***********************
@@ -102,6 +102,17 @@ public class PersonAgent extends Agent
 	/**
 	 * Constructor
 	 */
+	
+	// for unit testing purposes, where gui is not needed
+	public PersonAgent(String name, double cash, double business) {
+		this.name = name;
+		this.cashOnHand = cash;
+		this.businessFunds = business;
+	    if(this.name.toLowerCase().contains("car")){
+	    	car = true;
+	    }
+	}
+	
 	public PersonAgent(String name, double cash, SimCityGui simCityGui) {
 	    this.name = name;
 	    this.cashOnHand = cash;
@@ -109,6 +120,8 @@ public class PersonAgent extends Agent
 	    if(this.name.toLowerCase().contains("car")){
 	    	car = true;
 	    }
+	    this.busLeft = this.simCityGui.animationPanel.busLeft;
+	    this.busRight = this.simCityGui.animationPanel.busRight;
 	}
 	
 /***********************
@@ -439,7 +452,7 @@ public class PersonAgent extends Agent
         		goToMarket();
         		taskList.remove(temp);
         		return true;
-        	}
+        	}*/
         	
         	
 
@@ -447,10 +460,10 @@ public class PersonAgent extends Agent
 				getOnBus();
 				return true;
 			}
-			if(transportState = TransportState.GettingOffBus){
+			if(transportState == TransportState.GettingOffBus){
 				getOffBus();
 				return true;
-			}*/
+			}
 			if(transportState == TransportState.none && state == State.goingToWork){
 				finishGoingToWork();
 				return true;
@@ -488,25 +501,48 @@ public class PersonAgent extends Agent
 
 
 
+
+
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  *                     ACTIONS 
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  ******************^^^^^^^^^^^^^^^^*********************/
+    
+    private void getOffBus() {
+    	personGui.doGetOffBus();
+    	transportState = TransportState.none;
+    }
+
+    private void getOnBus() {
+    	personGui.doGetOnBus();
+    	try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    	transportState = TransportState.OnBus;
+    }
+    
     private void doPayRent(){
     	//bank.msgTransferFunds(this, landlord, "personal","rent");
     }
     private void goToWork(){
     	state = State.goingToWork;
     	destination = job.location;
-    	personGui.DoWalkTo(destination);
-    	try {
-			waitingResponse.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+    	if(car == true || destination.y == personGui.yPos){
+	    	personGui.DoWalkTo(destination);
+	    	try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}else{
+    		goToBusStop();
+    	}
     }
-    private void finishGoingToWork() {
+    
+	private void finishGoingToWork() {
     	location = Location.AtWork;
     	state = State.eating;
     	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
@@ -590,13 +626,16 @@ public class PersonAgent extends Agent
     	Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
     	//Restaurant mr = restaurants.get(randInt(0,0));
     	destination = mr.location;
-
+    	if(car == true || destination.y == personGui.yPos){
     	personGui.DoWalkTo(destination);
-		try {
-			waitingResponse.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}else{
+    		goToBusStop();
+    	}
     }
     private void finishGoingToRestaurant(){
     	state = State.eating;
@@ -610,6 +649,21 @@ public class PersonAgent extends Agent
     	role.getGui().setPresent(true);
     	role.gotHungry();
     }
+    private void goToBusStop() {
+    	personGui.doGoToBus();
+		this.transportState = TransportState.GoingToBus;	
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if(personGui.xPos < 432){
+			busLeft.msgWaitingForBus(this, new Point(personGui.xPos, personGui.yPos));
+		}else{
+			busRight.msgWaitingForBus(this, new Point(personGui.xPos, personGui.yPos));
+		}
+		this.transportState = TransportState.WaitingForBus;	
+	}
 
 	private Restaurant findRestaurant(Point d) {
 		for(Restaurant r: restaurants){

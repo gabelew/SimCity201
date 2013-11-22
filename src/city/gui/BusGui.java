@@ -23,7 +23,7 @@ public class BusGui implements Gui{
 	private static BufferedImage bus_back = null;
 	private static BufferedImage bus_front = null;
 	public SimCityGui gui;
-	private int xPos, yPos;
+	public int xPos, yPos;
 	private int xDestination, yDestination;
 	private enum Command {noCommand, walkToDestination};
 	private Command command=Command.noCommand;
@@ -153,6 +153,18 @@ public class BusGui implements Gui{
 		yDestination = destination.y;
 		command = Command.walkToDestination;
 		
+	}
+	
+	public void GoToRest(){
+		if(type == 'B'){
+			xPos = 300;
+			yPos = 400;
+		}
+		
+		else if(type == 'F'){
+			xPos = 825;
+			yPos = -40;
+		}
 	}
 
 }

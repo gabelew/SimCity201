@@ -7,8 +7,10 @@ import java.util.concurrent.Semaphore;
 import bank.gui.BankCustomerGui;
 import city.BankAgent;
 import city.PersonAgent;
+import city.interfaces.Bank;
+import city.interfaces.BankCustomer;
 
-public class BankCustomerRole extends Role{
+public class BankCustomerRole extends Role implements BankCustomer{
 	
 	// Data
 	class Task {
@@ -22,19 +24,20 @@ public class BankCustomerRole extends Role{
 		}
 	}
 	
-	List<Task> tasks = new CopyOnWriteArrayList<Task>();
-	BankAgent bank;
+	public List<Task> tasks = new CopyOnWriteArrayList<Task>();
+	public Bank bank;
 	enum BankingState{WantToCheckBalance, WantToOpenAccount, WantToDeposit, WantToWithdraw, 
 		WantToGetALoan, WantToPayBackLoan, CheckingBalance, OpeningAccount, Depositing, Withdrawing, 
 		RequestingALoan, PayingLoan };
-	enum CustomerState {None, EnteringBank, InBank, FindingATM, AtAtm, LeavingBank};
-	private CustomerState state = CustomerState.None;
+	public enum CustomerState {None, EnteringBank, InBank, FindingATM, AtAtm, LeavingBank};
+	public CustomerState state = CustomerState.None;
 	private BankCustomerGui customerGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
 	}
+	
 	
 	// Messages
 	public void goingToBank() {
@@ -48,6 +51,10 @@ public class BankCustomerRole extends Role{
 	
 	public void msgIWantToOpenAccount(double amount, String accountType) {
 		tasks.add(new Task(BankingState.WantToOpenAccount, amount, accountType));
+	}
+	
+	public void msgIWantToDeposit(double amount, String accountType) {
+		tasks.add(new Task(BankingState.WantToDeposit, amount, accountType));
 	}
 	
 	public void msgIWantToWithdraw(double amount, String accountType) {
@@ -89,6 +96,16 @@ public class BankCustomerRole extends Role{
 			myPerson.businessFunds += amount;
 		}
 		print("$" + amount + " loan for " + accountType + " account was approved.");
+		stateChanged();
+	}
+	
+	public void msgLoanPaid(double amount, String accountType) {
+		print("$" + amount + " loan for " + accountType + " account was paid.");
+		stateChanged();
+	}
+	
+	public void msgDepositSuccessful(double amount, String accountType, double remainingBalance) {
+		print("$" + amount + " was deposited successfully into account: " + accountType + ". Remaining balance: " + remainingBalance);
 		stateChanged();
 	}
 	

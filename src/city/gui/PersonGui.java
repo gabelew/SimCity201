@@ -19,9 +19,10 @@ public class PersonGui implements Gui{
 	private static BufferedImage carImgUp = null;
 	private static BufferedImage carImgDown = null;
 	public SimCityGui gui;
-	private int xPos, yPos;
+	public int xPos;
+	public int yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, walkToDestination, enterHome};
+	private enum Command {noCommand, walkToDestination, enterHome, walkingToBus, walkingOnToBus, waitingForBus};
 	private Command command=Command.noCommand;
 	private enum DrivingDirection {up,down,right};
 	DrivingDirection drivingDirection = DrivingDirection.right;
@@ -55,8 +56,14 @@ public class PersonGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
-		if(agent.car ==false){
-			if (xPos < xDestination && (yPos - 103)%80==0)
+		this.isPresent = true;
+		if(agent.car == false){
+			if(yPos == yDestination && xPos == xDestination){
+				if(command != Command.waitingForBus && command != Command.walkingToBus){
+					this.isPresent = false;
+				}
+			}
+			else if (xPos < xDestination && (yPos - 103)%80==0)
 				xPos++;
 			else if (xPos > xDestination && (yPos - 103)%80==0)
 				xPos--;
@@ -66,16 +73,20 @@ public class PersonGui implements Gui{
 				yPos--;
 			else if(xPos != xDestination){
 				yPos++;
+			}else if(xPos != xDestination && yPos != yDestination){
+				System.out.println("person stuck");
 			}
-		}else if(agent.car==true){
-			if(yPos == yDestination && xPos == xDestination){}
+		}else {//if(agent.car==true){
+			this.isPresent = true;
+			if(yPos == yDestination && xPos == xDestination){
+				this.isPresent = false;
+				
+			}
 			else if(xPos > xDestination  && (yPos - 115)%80==0 && xPos < 950){
 				drivingDirection = DrivingDirection.right;
 				xPos++;
 			}
 			else if(yPos != yDestination && xPos != xDestination && (yPos - 115)%80!=0){
-				//System.out.println((yPos - 115)%80);
-				//System.out.println(" xDestination "+ xDestination +" yDestination "+ yDestination);
 				drivingDirection = DrivingDirection.down;
 				yPos++;
 			}else if (xPos == 950){
@@ -94,6 +105,8 @@ public class PersonGui implements Gui{
 			else if(xPos != xDestination){
 				drivingDirection = DrivingDirection.down;
 				yPos++;
+			}else{
+				System.out.println("car stuck");
 			}
 		}
 
@@ -101,6 +114,13 @@ public class PersonGui implements Gui{
 			if(command == Command.walkToDestination){
 				command = Command.noCommand;
 				agent.msgAnimationFinshed();
+			}else if(command == Command.walkingToBus){
+				command = Command.waitingForBus;
+				agent.msgAnimationFinshed();
+			}else if(command == Command.walkingOnToBus){
+				isPresent = false;
+				agent.msgAnimationFinshed();
+				command = Command.noCommand;
 			}
 		}
 		
@@ -143,6 +163,73 @@ public class PersonGui implements Gui{
 		xDestination = destination.x;
 		yDestination = destination.y;
 		command = Command.walkToDestination;
+		
+	}
+
+
+	public void doGoToBus() {
+		if(xPos < 432){
+			xDestination = 67;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}else{
+			xDestination = 797;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}
+		command = Command.walkingToBus;
+	}
+
+
+	public void doGetOnBus() {
+
+		if(xPos < 432){
+			xDestination = agent.busLeft.getBusGui().xPos;
+			yDestination = agent.busLeft.getBusGui().yPos;
+		}else{
+			xDestination = agent.busRight.getBusGui().xPos;
+			yDestination = agent.busRight.getBusGui().yPos;
+		}
+		
+		command = Command.walkingOnToBus;
+	}
+
+
+	public void doGetOffBus() {
+		this.isPresent = true;
+		if(xPos < 432){
+			xDestination = 67;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}else{
+			xDestination = 797;
+			if(yPos >= 68 && yPos <= 68+60)
+				yDestination = 85;
+			else if(yPos >= 68+80 && yPos <= 68+80+60)
+				yDestination = 85+80;
+			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+				yDestination = 85+80*2;
+			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+				yDestination = 85+80*3;
+		}
 		
 	}
 
