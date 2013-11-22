@@ -106,13 +106,13 @@ public class BusAgent extends Agent{
 		}else if(location.x < 115+80*3 && location.y < 115+80*3){
 			return busStops.get(0);
 		}else if(location.y < 115){
-			return busStops.get(4);
+			return busStops.get(0);
 		}else if(location.y < 115+80*1){
-			return busStops.get(5);
+			return busStops.get(1);
 		}else if(location.y < 115+80*2){
-			return busStops.get(6);
+			return busStops.get(2);
 		}else {//if(location.y < 115+80*3){
-			return busStops.get(7);
+			return busStops.get(3);
 		}
 	}
 	public void msgComingAboard(PersonAgent p, Point Destination){
