@@ -41,18 +41,19 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	Market Market;
 	public MarketCustomer MCR;
-	public enum orderState{askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
+	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
 	double Price=5;
 	public ClerkRole(){
 		super();
+		o=new Order(orderState.noOrder);
 	}
 
 	//messages
 	public void msgTakeCustomer(MarketCustomer CR,Market m){
 		MCR=CR;
 		Market=m;
-		o=new Order(orderState.askedForOrder);
+		o.s=(orderState.askedForOrder);
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
 	}
 	
@@ -62,7 +63,8 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	
 	public void msgHereIsPayment(double money){
-		o.s=orderState.payed;
+		if(money==o.amountOwed)
+			o.s=orderState.payed;
 	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
@@ -123,7 +125,7 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	
 	private void orderDone(){
-		o=null;
+		o.s=orderState.noOrder;
 		MCR=null;
 		Market.msgClerkDone();
 	}

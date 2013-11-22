@@ -72,7 +72,7 @@ public class ClerkRoleTest extends TestCase
 		 */
 		//pre-initializing checks
 		assertEquals("Clerk customer should be null",clerk.MCR, null);
-		assertEquals("Clerk order should be null",clerk.o, null);
+		assertEquals("Clerk order state should be no order",clerk.o.s,orderState.noOrder);
 		assertEquals(
 				"MockCustomer should have an empty event log before the Clerks's scheduler is called for the first time. Instead, the event log reads: "
 						+ customer.log.toString(), 0, customer.log.size());
@@ -108,6 +108,29 @@ public class ClerkRoleTest extends TestCase
 		//check post scheduler
 		assertEquals("amount owed should be amount time price",clerk.o.amountOwed,normAmount);
 		assertEquals("Market inventory should go down",market.Inventory.get("steak"),amountLeft);
+		assertEquals("Market inventory should go down",market.Inventory.get("cookie"),amountLeft);
+		assertEquals("Market inventory should go down",market.Inventory.get("salad"),amountLeft);
+		assertEquals("Clerk order state should be waiting for payment",clerk.o.s,orderState.waitingForPayment);
+		assertFalse("Clerk's scheduler should have returned false (waiting for payment).", 
+				clerk.pickAndExecuteAnAction());
+		//customer sends payment message
+		clerk.msgHereIsPayment(normAmount);
+		//check post-conditions of message
+		assertEquals("Clerk order state should be payed",clerk.o.s,orderState.payed);
+		//run the clerk's scheduler
+		assertTrue("Clerk's scheduler should have returned true (needs to react to payment).", 
+				clerk.pickAndExecuteAnAction());
+		//check post-conditions of scheduler
+		assertEquals("Clerk order state should be done",clerk.o.s,orderState.done);
+		//run the clerk's scheduler
+		assertTrue("Clerk's scheduler should have returned true (needs to react to done).", 
+				clerk.pickAndExecuteAnAction());
+		//check post-conditions of scheduler
+		assertEquals("customer should be null",clerk.MCR,null);
+		assertEquals("Clerk order state should be no order",clerk.o.s,orderState.noOrder);
+		//run the clerk's scheduler
+		assertFalse("Clerk's scheduler should have returned false (nothing to do).", 
+				clerk.pickAndExecuteAnAction());
 	}
 	public void testOneNormalCookCustomerScenario()
 	{
