@@ -11,10 +11,12 @@ import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
 
 public class CookRole extends Role implements Cook {
+	
 	public List<RoleOrder> orders = Collections.synchronizedList(new ArrayList<RoleOrder>());
 	public List<Food> foods = Collections.synchronizedList(new ArrayList<Food>());
 	public List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	public List<MarketOrder>marketOrders=Collections.synchronizedList(new ArrayList<MarketOrder>());
+	
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	PersonAgent replacementPerson = null;
 	Timer timer = new Timer();
