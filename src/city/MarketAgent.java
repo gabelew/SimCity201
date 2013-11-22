@@ -70,12 +70,13 @@ public void msgPlaceDeliveryOrder(Cook cook){
 public void msgClerkDone(){
 	clerkFree=true;
 	stateChanged();
-	log.add(new LoggedEvent("Received msgClerk from clerk."));
+	log.add(new LoggedEvent("Received msgClerkDone from clerk."));
 }
 
 public void msgDeliveryDone(){
 	deliveryFree=true;
 	stateChanged();
+	log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 }
 
 //scheduler

@@ -127,7 +127,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	private void giveBill(){
 		for(Restaurant r:myPerson.simCityGui.getRestaurants()){
-			if(r.cook==cook){
+			if(r.cook.equals(cook)){
 				r.cashier.msgHereIsBill((DeliveryMan) this, o.amountOwed);
 			}
 		}
