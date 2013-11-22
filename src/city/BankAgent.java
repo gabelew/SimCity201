@@ -1,6 +1,5 @@
 package city;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -11,11 +10,11 @@ import city.interfaces.BankCustomer;
 
 public class BankAgent extends Agent implements Bank{
 	
-	class BankAccount {
-		double currentBalance = 0.0;
-		BankCustomer accountHolder;
-		double owed = 0.0;
-		String accountType;
+	public class BankAccount {
+		public double currentBalance = 0.0;
+		public BankCustomer accountHolder;
+		public double owed = 0.0;
+		public String accountType;
 		BankAccount(BankCustomer bcr, double initialDeposit, String accountType) {
 			this.accountHolder = bcr;
 			this.currentBalance = initialDeposit;
@@ -36,12 +35,12 @@ public class BankAgent extends Agent implements Bank{
 		}
 	}
 	
-	class Transaction {
-		BankAccount customer;
-		BankAccount recipient;
-		double amount;
-		TransactionState ts;
-		String purpose;
+	public class Transaction {
+		public BankAccount customer;
+		public BankAccount recipient;
+		public double amount;
+		public TransactionState ts;
+		public String purpose;
 		Transaction(TransactionState ts, double amount, BankAccount customer, BankAccount recipient, String purpose) {
 			this.ts = ts;
 			this.amount = amount;
@@ -51,9 +50,9 @@ public class BankAgent extends Agent implements Bank{
 		}
 	}
 	
-	enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, loanPayment};
-	List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
-	List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
+	public enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, loanPayment};
+	public List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
+	public List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
 	String name;
 	double fundsAvailable = 50000.0;
 	final double customerLoanMax = 500;
@@ -72,8 +71,8 @@ public class BankAgent extends Agent implements Bank{
 	 * @param bcr
 	 * @param accountType type of account
 	 */
-	public void msgCheckBalance(BankCustomerRole bcr, String accountType) {
-		BankAccount account = findBankAccount(bcr.getPersonAgent(),accountType);
+	public void msgCheckBalance(BankCustomer bcr, String accountType) {
+		BankAccount account = findBankAccount(bcr,accountType);
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.checkBalance, 0, account, null, "balance"));
 		}
@@ -93,37 +92,37 @@ public class BankAgent extends Agent implements Bank{
 		stateChanged();
 	}
 	
-	public void msgOpenAccount(BankCustomerRole bcr, double initialDeposit, String accountType) {
+	public void msgOpenAccount(BankCustomer bcr, double initialDeposit, String accountType) {
 		accounts.add(new BankAccount(bcr,initialDeposit,accountType));
 		stateChanged();
 	}
 	
-	public void msgDepositMoney(BankCustomerRole bcr, double amount, String accountType) {
-		BankAccount account = findBankAccount(bcr.getPersonAgent(),accountType);
+	public void msgDepositMoney(BankCustomer bcr, double amount, String accountType) {
+		BankAccount account = findBankAccount(bcr,accountType);
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.deposit, amount, account, null, "deposit"));
 		}
 		stateChanged();
 	}
 	
-	public void msgWithdrawMoney(BankCustomerRole bcr, double amount, String accountType) {
-		BankAccount account = findBankAccount(bcr.getPersonAgent(),accountType);
+	public void msgWithdrawMoney(BankCustomer bcr, double amount, String accountType) {
+		BankAccount account = findBankAccount(bcr,accountType);
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.withdraw, amount, account, null, "withdraw"));
 		}
 		stateChanged();
 	}
 	
-	public void msgRequestLoan(BankCustomerRole bcr, double amount, String accountType) {
-		BankAccount account = findBankAccount(bcr.getPersonAgent(),accountType);
+	public void msgRequestLoan(BankCustomer bcr, double amount, String accountType) {
+		BankAccount account = findBankAccount(bcr,accountType);
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.loanRequested, amount, account, null, "requestLoan"));
 		}
 		stateChanged();
 	}
 	
-	public void msgPayLoan(BankCustomerRole bcr, double amount, String accountType) {
-		BankAccount account = findBankAccount(bcr.getPersonAgent(),accountType);
+	public void msgPayLoan(BankCustomer bcr, double amount, String accountType) {
+		BankAccount account = findBankAccount(bcr,accountType);
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.loanPayment, amount, account, null, "payLoan"));
 		}
@@ -257,10 +256,21 @@ public class BankAgent extends Agent implements Bank{
 	
 	// Utilities
 	
+	private BankAccount findBankAccount(BankCustomer bc, String accountType) {
+		BankAccount ba = null;
+		for(BankAccount b : accounts) {
+			if(bc.equals(b.accountHolder) && accountType.equals(b.accountType)) {
+				ba = b;
+			}
+		}
+		return ba;
+	}
+	
 	private BankAccount findBankAccount(PersonAgent p, String accountType) {
 		BankAccount ba = null;
 		for(BankAccount b : accounts) {
-			if(p.equals(b.accountHolder) && accountType.equals(b.accountType)) {
+			BankCustomerRole r = (BankCustomerRole)b.accountHolder;
+			if(p.equals(r.getPersonAgent()) && accountType.equals(b.accountType)) {
 				ba = b;
 			}
 		}
