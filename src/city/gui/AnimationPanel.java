@@ -91,8 +91,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
     private SimCityGui simCityGui;
-    public BusAgent busLeft = new BusAgent();
-    public BusAgent busRight = new BusAgent();
+    public BusAgent busLeft = new BusAgent('B');
+    public BusAgent busRight = new BusAgent('F');
     
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;

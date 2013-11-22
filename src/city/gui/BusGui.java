@@ -147,12 +147,10 @@ public class BusGui implements Gui{
 	public void setPresent(boolean p) {
 		isPresent = p;
 	}
-
-	public void DoWalkTo(Point destination) {
-		xDestination = destination.x;
-		yDestination = destination.y;
-		command = Command.walkToDestination;
-		
+	
+	public void GoToBusStop(Point p){
+		xDestination = p.x;
+		yDestination = p.y;
 	}
 	
 	public void GoToRest(){
