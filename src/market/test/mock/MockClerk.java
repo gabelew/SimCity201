@@ -33,7 +33,7 @@ public class MockClerk extends Mock implements Clerk {
 	}
 
 	@Override
-	public void msgTakeCustomer(MarketCustomer mcr, MarketAgent m){
+	public void msgTakeCustomer(MarketCustomer mcr, Market m){
 		log.add(new LoggedEvent("Received msgTakeCustomer from market"));
 	}
 	@Override

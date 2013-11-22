@@ -15,7 +15,7 @@ import restaurant.gui.CustomerGui;
  */
 public interface Clerk {
 
-public abstract void msgTakeCustomer(MarketCustomer mcr,MarketAgent m);
+public abstract void msgTakeCustomer(MarketCustomer mcr,Market m);
 
 public abstract void msgPlaceOrder(Map<String,Integer> choice);
 

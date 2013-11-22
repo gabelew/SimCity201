@@ -4,6 +4,8 @@ import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
 import agent.Agent;
 
 import java.util.ArrayList;
@@ -25,9 +27,10 @@ import city.PersonAgent;
  * Restaurant customer agent.
  */
 public class ClerkRole extends Role implements Clerk {
+	public EventLog log = new EventLog();
 	private ClerkGui clerkGui=new ClerkGui(this);
-	Order o;
-	class Order{
+	public Order o;
+	public class Order{
 		public Order(Map<String, Integer> choice, orderState state) {
 			Choices=choice;
 			s=state;
@@ -37,19 +40,21 @@ public class ClerkRole extends Role implements Clerk {
 		orderState s;
 		double amountOwed;
 	}
-	MarketAgent Market;
-	MarketCustomer MCR;
-	private enum orderState{waiting, waitingForPayment, payed,done};
+	Market Market;
+	public MarketCustomer MCR;
+	public enum orderState{waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
 	double Price=5;
+	public boolean askedForOrder=false;
 	public ClerkRole(){
 		super();
 	}
 
 	//messages
-	public void msgTakeCustomer(MarketCustomer CR,MarketAgent m){
+	public void msgTakeCustomer(MarketCustomer CR,Market m){
 		MCR=CR;
 		Market=m;
+		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
 	}
 	
 	public void msgPlaceOrder(Map<String,Integer> choice){
@@ -61,7 +66,7 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
-		if(MCR!=null &&o==null){
+		if(MCR!=null &&o==null&&!askedForOrder){
 			askForOrder();
 			return true;
 		}
@@ -82,26 +87,26 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	//actions
 	private void askForOrder(){
+		askedForOrder=true;
 		MCR.msgCanIHelpYou(this);
 	}
 	
 	private void fillOrder(){
-		//DoGoGetFood();
 		Iterator it = o.Choices.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
-	        if(Market.Inventory.get(pairs)==0){
+	        if(((MarketAgent)Market).Inventory.get(pairs)==0){
 	        	o.outOf.add(pairs.getKey().toString());
 	        	o.Choices.remove(pairs);
 	        }
-	        else if(o.Choices.get(pairs)>Market.Inventory.get(pairs)){
-	        	o.Choices.put(pairs.getKey().toString(), Market.Inventory.get(pairs.getKey()));
-	        	o.amountOwed=o.amountOwed+Market.Inventory.get(pairs.getKey())*Price;
-	        	Market.Inventory.put(pairs.getKey().toString(), 0);
+	        else if(o.Choices.get(pairs)>((MarketAgent)Market).Inventory.get(pairs)){
+	        	o.Choices.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.get(pairs.getKey()));
+	        	o.amountOwed=o.amountOwed+((MarketAgent)Market).Inventory.get(pairs.getKey())*Price;
+	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), 0);
 	        }
 	        else{
 	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*Price;
-	        	Market.Inventory.put(pairs.getKey().toString(), Market.Inventory.put(pairs.getKey().toString(), Market.Inventory.get(pairs.getKey().toString())-o.Choices.get(pairs.getKey().toString())));
+	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.get(pairs.getKey().toString())-o.Choices.get(pairs.getKey().toString())));
 	        }
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
