@@ -18,7 +18,7 @@ public class AtHomeRole extends Role
  ***** DATA
  ********************/
 	//States for Orders
-	enum FoodOrderState {none, order, ordered};
+	public enum FoodOrderState {none, ordered};
 	enum AppState {working, broken, repairRequested, payRepairman};
 	enum OrderState {pending, cooking, done, eating}
 	Map<String, Food> findFood = new HashMap<String, Food>();
@@ -28,15 +28,17 @@ public class AtHomeRole extends Role
 	List<Appliance> appliances = new ArrayList<Appliance>();
 	public List<String> choices = new ArrayList<String>();
 	Timer timer = new Timer(); //Timer for Cooking Food
-	PersonAgent myPerson;//PersonAgent that has this role
+	public PersonAgent myPerson = null;//PersonAgent that has this role
 	PersonGui personGui;
 	public AtHomeRole(PersonAgent p) 
 	{
 		super(p);
+		this.myPerson = p;
 		//Adds initial food
 		choices.add("salad");
 		choices.add("steak");
-		choices.add("pizza");
+		choices.add("cookie");
+		choices.add("chicken");
 		//Adds it to list of choices and hashmap
 		for(String s : choices)
 		{
@@ -55,9 +57,16 @@ public class AtHomeRole extends Role
  ********************/
 	public void ImHungry()
 	{
-		int choice = (new Random()).nextInt(choices.size());
-		Order o = new Order( choices.get(choice) );
-		orders.add(o);
+		if(myPerson.name.equals("salad"))
+		{
+			orders.add(new Order("salad"));
+		}
+		else
+		{
+			int choice = (new Random()).nextInt(choices.size());
+			Order o = new Order( choices.get(choice) );
+			orders.add(o);
+		}
 	}
 	
 	public void restockFridge(Map<String,Integer> orderList)
@@ -141,6 +150,7 @@ public class AtHomeRole extends Role
 		//adds to marketOrder if low on food
 		if( food.amount > 0)
 		{
+			myPerson.print("Cooking Food");
 			food.amount--;
 			if(food.amount <= food.low)
 			{
@@ -150,6 +160,7 @@ public class AtHomeRole extends Role
 			timer.schedule(new TimerTask() {
 				public void run() 
 				{
+					myPerson.print("Food is Done!!!");
 					o.state = OrderState.done;
 				}
 			},
@@ -231,7 +242,7 @@ public class AtHomeRole extends Role
 	}
 
 	//Order for food cooked at home
-	class Order 
+	public class Order 
 	{
 	    String choice;
 	    OrderState state = OrderState.pending;
@@ -242,14 +253,14 @@ public class AtHomeRole extends Role
 	}
 	
 	//Ingrediants for home
-	class Food
+	public class Food
 	{
-	    String choice;
-	    int cookingTime;
-	    int amount = 3;
-	    int low = 2;
-	    int capacity = 5;
-	    FoodOrderState state = FoodOrderState.none;
+	    public String choice;
+	    public int cookingTime;
+	    public int amount = 3;
+	    public int low = 2;
+	    public int capacity = 5;
+	    public FoodOrderState state = FoodOrderState.none;
 	    public Food(String c, int ct)
 	    {
 	    	this.choice = c;

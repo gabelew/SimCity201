@@ -20,6 +20,10 @@ public class RepairManRole extends Role implements RepairMan
 		public RepairManRole(PersonAgent p)
 		{
 			super(p);
+			pricingMap.put("fridge", new Double(150));
+			pricingMap.put("sink", new Double(85));
+			pricingMap.put("stove", new Double(100));
+			pricingMap.put("tv", new Double(75));
 		}
 /*********************
  ***** MESSAGES
