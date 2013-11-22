@@ -77,13 +77,14 @@ public class ClerkRoleTest extends TestCase
 		assertTrue("Clerk should have logged \"Received msgTakeCustomer\". His log reads: " 
 				+ clerk.log.getLastLoggedEvent().toString(), clerk.log.containsString("Received msgTakeCustomer from Market."));
 		assertEquals("Clerk customer should be equal to customer",clerk.MCR, customer);
-		assertEquals("Order should still be null",clerk.o,null);
-		assertFalse("asked for order should be false",clerk.askedForOrder);
 		// run the clerks's scheduler
 		assertTrue("Clerk's scheduler should have returned true (needs to react to ask customer for order).", 
 				clerk.pickAndExecuteAnAction());
 		//check post scheduler
-		assertTrue("asked for order should be true",clerk.askedForOrder);
+
+		// run the clerks's scheduler
+		assertFalse("Clerk's scheduler should have returned false (needs to wait for order).", 
+				clerk.pickAndExecuteAnAction());
 	}
 	public void testOneNormalCookCustomerScenario()
 	{

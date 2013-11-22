@@ -31,8 +31,7 @@ public class ClerkRole extends Role implements Clerk {
 	private ClerkGui clerkGui=new ClerkGui(this);
 	public Order o;
 	public class Order{
-		public Order(Map<String, Integer> choice, orderState state) {
-			Choices=choice;
+		public Order(orderState state) {
 			s=state;
 		}
 		Map<String, Integer> Choices = new HashMap<String, Integer>();
@@ -42,10 +41,9 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	Market Market;
 	public MarketCustomer MCR;
-	public enum orderState{waiting, waitingForPayment, payed,done};
+	public enum orderState{askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
 	double Price=5;
-	public boolean askedForOrder=false;
 	public ClerkRole(){
 		super();
 	}
@@ -54,11 +52,13 @@ public class ClerkRole extends Role implements Clerk {
 	public void msgTakeCustomer(MarketCustomer CR,Market m){
 		MCR=CR;
 		Market=m;
+		o=new Order(orderState.askedForOrder);
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
 	}
 	
 	public void msgPlaceOrder(Map<String,Integer> choice){
-		o=new Order(choice,orderState.waiting);
+		o.Choices=choice;
+		o.s=orderState.waiting;
 	}
 	
 	public void msgHereIsPayment(double money){
@@ -66,7 +66,7 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
-		if(MCR!=null &&o==null&&!askedForOrder){
+		if(MCR!=null &&o.s==orderState.askedForOrder){
 			askForOrder();
 			return true;
 		}
@@ -87,7 +87,7 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	//actions
 	private void askForOrder(){
-		askedForOrder=true;
+		o.s=orderState.waitingForOrder;
 		MCR.msgCanIHelpYou(this);
 	}
 	
