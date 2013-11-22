@@ -58,13 +58,13 @@ public class BusGui implements Gui{
 	@Override
 	public void updatePosition() {
 		
-			if (yPos != yDestination && type == 'F' && yPos < 410){
+			if (yPos != yDestination && type == 'F' && yPos < 420){
 				yPos++;
-			}else if (yPos != yDestination && type == 'B' && yPos > -40){
+			}else if (yPos != yDestination && type == 'B' && yPos > -50){
 				yPos--;
-			}else if(type == 'B' && yPos <= -40){
+			}else if(type == 'B' && yPos <= -50){
 				yPos = 400;
-			}else if(type == 'F' && yPos >= 410){
+			}else if(type == 'F' && yPos >= 420){
 				yPos = -40;
 			}
 
@@ -105,7 +105,7 @@ public class BusGui implements Gui{
 		command = Command.atBusStop;
 	}
 	
-	public void GoToRest(){
+	public void doGoToRest() {
 		if(type == 'B'){
 			xDestination = 30;
 			yDestination = -40;

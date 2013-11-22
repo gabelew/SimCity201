@@ -2,6 +2,7 @@ package city;
 
 import java.awt.Point;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import city.gui.BusGui;
 import agent.Agent;
@@ -10,6 +11,8 @@ public class BusAgent extends Agent{
 	public List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
 	private BusGui busGui;
 	private char type;
+	public Semaphore waitingResponse = new Semaphore(0,true);
+	Timer timer = new Timer();
 	public BusGui getBusGui() {
 		return busGui;
 	}
@@ -60,14 +63,17 @@ public class BusAgent extends Agent{
 		Point busStation6 = new Point(825,225);	//(797, 85+80*2)
 		Point busStation7 = new Point(825,305);	//(797, 85+80*3)
 		
-		busStops.add(new MyBusStop(busStation0,0));
-		busStops.add(new MyBusStop(busStation1,1));
-		busStops.add(new MyBusStop(busStation2,2));
-		busStops.add(new MyBusStop(busStation3,3));
-		busStops.add(new MyBusStop(busStation4,4));
-		busStops.add(new MyBusStop(busStation5,5));
-		busStops.add(new MyBusStop(busStation6,6));
-		busStops.add(new MyBusStop(busStation7,7));
+		if(this.type == 'B'){
+			busStops.add(new MyBusStop(busStation0,0));
+			busStops.add(new MyBusStop(busStation1,1));
+			busStops.add(new MyBusStop(busStation2,2));
+			busStops.add(new MyBusStop(busStation3,3));
+		}else{
+			busStops.add(new MyBusStop(busStation4,0));
+			busStops.add(new MyBusStop(busStation5,1));
+			busStops.add(new MyBusStop(busStation6,2));
+			busStops.add(new MyBusStop(busStation7,3));
+		}
 		
 		
 	}
@@ -126,21 +132,22 @@ public class BusAgent extends Agent{
 		for(MyBusStop b : busStops){
 			if(b.location.equals(busStop)){
 				
-				if(b.stopnumber == 0 || b.stopnumber == 4){
+				if(b.stopnumber == 0){
+					print("msg at stop 0");
 					state = State.atStop0;
 				}
-				else if(b.stopnumber == 1 || b.stopnumber == 5){
+				else if(b.stopnumber == 1){
+					print("msg at stop 1");
 					state = State.atStop1;
 				}
-				else if(b.stopnumber == 2 || b.stopnumber == 6){
+				else if(b.stopnumber == 2){
+					print("msg at stop 2");
 					state = State.atStop2;
 				}
-				else if(b.stopnumber == 3 || b.stopnumber == 7){
-					print("msg at stop 3 or 7");
-					
+				else if(b.stopnumber == 3){
+					print("msg at stop 3");
 					state = State.atStop3;
 				}
-				
 			}
 		}
 		
@@ -182,7 +189,8 @@ public class BusAgent extends Agent{
 			}
 		}
 		
-		
+		if(state == State.none)
+			goToRest();
 		return false;
 	}
 	
@@ -190,6 +198,10 @@ public class BusAgent extends Agent{
 	
 	//Actions
 	
+	private void goToRest() {
+		busGui.doGoToRest();
+		
+	}
 	private void GoToBusStop(MyBusStop mbs){
 		print("Going to busStop " + mbs.stopnumber );
 		DoGoToBusStop(mbs.location);
@@ -201,11 +213,17 @@ public class BusAgent extends Agent{
 	}
 	
 	private void transferPeople(MyBusStop ms){
+		timer.schedule(new TimerTask() {
+			public void run() {
+				waitingResponse.release();
+			}
+		}, 
+		4000);
 		List<MyPassenger> removePs = Collections.synchronizedList(new ArrayList<MyPassenger>());
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){
 				print("Dropping off at busStop " + ms.stopnumber );
-				p.person.msgAtYourStop();
+				p.person.msgAtYourStop(busGui.xPos, busGui.yPos);
 				removePs.add(p);
 			}
 		}	
@@ -221,6 +239,12 @@ public class BusAgent extends Agent{
 		
 		for(MyPassenger p: removePs){
 			 ms.passengers.remove(p);
+		}
+		
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		state = State.none;
 	}

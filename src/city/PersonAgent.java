@@ -60,6 +60,8 @@ public class PersonAgent extends Agent
 	public double cashOnHand = 0, businessFunds = 0;
 	public SimCityGui simCityGui; 
 	
+	private static final int halfScreen = 417;
+	
 /***********************
  *  UTILITY CLASSES START
  ***********************/
@@ -312,7 +314,14 @@ public class PersonAgent extends Agent
 		transportState = TransportState.GettingOnBus;
 		stateChanged();
 	}
-	public void msgAtYourStop(){
+	public void msgAtYourStop(int xPos, int yPos){
+		personGui.xPos = xPos;
+
+		if(personGui.xPos < halfScreen){
+			personGui.yPos = yPos+16;
+		}else{
+			personGui.yPos = yPos-24;
+		}
 		transportState = TransportState.GettingOffBus;
 		stateChanged();
 	}
@@ -523,10 +532,10 @@ public class PersonAgent extends Agent
 		}
     	transportState = TransportState.OnBus;
 
-		if(personGui.xPos < 432){
-			busLeft.msgComingAboard(this, destination);
+		if(personGui.xPos < halfScreen){
+			busLeft.msgComingAboard(this, new Point(110, destination.y+10));
 		}else{
-			busRight.msgComingAboard(this, destination);
+			busRight.msgComingAboard(this, new Point(490, destination.y+10));
 		}
     }
     
@@ -549,6 +558,12 @@ public class PersonAgent extends Agent
     }
     
 	private void finishGoingToWork() {
+		personGui.DoWalkTo(destination);
+    	try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     	location = Location.AtWork;
     	state = State.eating;
     	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
@@ -644,6 +659,12 @@ public class PersonAgent extends Agent
     	}
     }
     private void finishGoingToRestaurant(){
+    	personGui.DoWalkTo(destination);
+    	try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     	state = State.eating;
     	
     	Restaurant r = findRestaurant(destination);
@@ -663,7 +684,7 @@ public class PersonAgent extends Agent
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		if(personGui.xPos < 432){
+		if(personGui.xPos < halfScreen){
 			busLeft.msgWaitingForBus(this, new Point(personGui.xPos, personGui.yPos));
 		}else{
 			busRight.msgWaitingForBus(this, new Point(personGui.xPos, personGui.yPos));
