@@ -23,7 +23,7 @@ public class BusGui implements Gui{
 	private int xDestination, yDestination;
 	private enum Command {noCommand, atBusStop};
 	private Command command=Command.noCommand;
-		
+	
 	public BusGui(BusAgent b, SimCityGui gui, char type){ //HostAgent m) {
 		
 		try {
@@ -34,6 +34,7 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
+		b.getBusStops();
 		this.type = type;
 		
 		if(type == 'B'){
@@ -57,15 +58,15 @@ public class BusGui implements Gui{
 	@Override
 	public void updatePosition() {
 		
-			if (yPos < yDestination && type == 'F')
+			if (yPos != yDestination && type == 'F' && yPos < 410){
 				yPos++;
-			else if (yPos > yDestination && type == 'B')
+			}else if (yPos != yDestination && type == 'B' && yPos > -40){
 				yPos--;
-			else if(type == 'B' && yPos < -40)
+			}else if(type == 'B' && yPos <= -40){
 				yPos = 400;
-			else if(type == 'F' && yPos > 410)
+			}else if(type == 'F' && yPos >= 410){
 				yPos = -40;
-		
+			}
 
 				if (xPos == xDestination && yPos == yDestination) {
 					if(command == Command.atBusStop){

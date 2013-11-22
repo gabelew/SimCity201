@@ -117,6 +117,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	    bg2.setPresent(true);
         guis.add(bg1);
         guis.add(bg2);
+        busLeft.startThread();
+        busRight.startThread();
 		setSize(WINDOWX, WINDOWY);
         setVisible(true);
  

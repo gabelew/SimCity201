@@ -522,6 +522,12 @@ public class PersonAgent extends Agent
 			e.printStackTrace();
 		}
     	transportState = TransportState.OnBus;
+
+		if(personGui.xPos < 432){
+			busLeft.msgComingAboard(this, destination);
+		}else{
+			busRight.msgComingAboard(this, destination);
+		}
     }
     
     private void doPayRent(){
