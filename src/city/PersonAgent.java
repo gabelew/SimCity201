@@ -108,6 +108,9 @@ public class PersonAgent extends Agent
 		this.name = name;
 		this.cashOnHand = cash;
 		this.businessFunds = business;
+	    if(this.name.toLowerCase().contains("car")){
+	    	car = true;
+	    }
 	}
 	
 	public PersonAgent(String name, double cash, SimCityGui simCityGui) {
@@ -117,6 +120,8 @@ public class PersonAgent extends Agent
 	    if(this.name.toLowerCase().contains("car")){
 	    	car = true;
 	    }
+	    this.busLeft = this.simCityGui.animationPanel.busLeft;
+	    this.busRight = this.simCityGui.animationPanel.busRight;
 	}
 	
 /***********************
@@ -525,16 +530,16 @@ public class PersonAgent extends Agent
     private void goToWork(){
     	state = State.goingToWork;
     	destination = job.location;
-    //	if(car == true || destination.y == personGui.yPos){
+    	if(car == true || destination.y == personGui.yPos){
 	    	personGui.DoWalkTo(destination);
 	    	try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-    //	}else{
-    //		goToBusStop();
-    //	}
+    	}else{
+    		goToBusStop();
+    	}
     }
     
 	private void finishGoingToWork() {
@@ -621,16 +626,16 @@ public class PersonAgent extends Agent
     	Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
     	//Restaurant mr = restaurants.get(randInt(0,0));
     	destination = mr.location;
-//    	if(car == true || destination.y == personGui.yPos){
+    	if(car == true || destination.y == personGui.yPos){
     	personGui.DoWalkTo(destination);
 			try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-  //  	}else{
-  //  		goToBusStop();
-  //  	}
+    	}else{
+    		goToBusStop();
+    	}
     }
     private void finishGoingToRestaurant(){
     	state = State.eating;

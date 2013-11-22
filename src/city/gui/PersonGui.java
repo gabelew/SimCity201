@@ -22,7 +22,7 @@ public class PersonGui implements Gui{
 	public int xPos;
 	public int yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, walkToDestination, enterHome, walkingToBus, walkingOnToBus};
+	private enum Command {noCommand, walkToDestination, enterHome, walkingToBus, walkingOnToBus, waitingForBus};
 	private Command command=Command.noCommand;
 	private enum DrivingDirection {up,down,right};
 	DrivingDirection drivingDirection = DrivingDirection.right;
@@ -57,11 +57,13 @@ public class PersonGui implements Gui{
 	@Override
 	public void updatePosition() {
 		this.isPresent = true;
-		if(yPos == yDestination && xPos == xDestination){
-			this.isPresent = false;
-		}
-		else if(agent.car ==false){
-			if (xPos < xDestination && (yPos - 103)%80==0)
+		if(agent.car == false){
+			if(yPos == yDestination && xPos == xDestination){
+				if(command != Command.waitingForBus && command != Command.walkingToBus){
+					this.isPresent = false;
+				}
+			}
+			else if (xPos < xDestination && (yPos - 103)%80==0)
 				xPos++;
 			else if (xPos > xDestination && (yPos - 103)%80==0)
 				xPos--;
@@ -85,8 +87,6 @@ public class PersonGui implements Gui{
 				xPos++;
 			}
 			else if(yPos != yDestination && xPos != xDestination && (yPos - 115)%80!=0){
-				//System.out.println((yPos - 115)%80);
-				//System.out.println(" xDestination "+ xDestination +" yDestination "+ yDestination);
 				drivingDirection = DrivingDirection.down;
 				yPos++;
 			}else if (xPos == 950){
@@ -115,7 +115,7 @@ public class PersonGui implements Gui{
 				command = Command.noCommand;
 				agent.msgAnimationFinshed();
 			}else if(command == Command.walkingToBus){
-				command = Command.noCommand;
+				command = Command.waitingForBus;
 				agent.msgAnimationFinshed();
 			}else if(command == Command.walkingOnToBus){
 				isPresent = false;

@@ -91,6 +91,9 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     int VERT_STREET_Y_START = 35;
     private List<Gui> guis = Collections.synchronizedList(new ArrayList<Gui>());
     private SimCityGui simCityGui;
+    public BusAgent busLeft = new BusAgent();
+    public BusAgent busRight = new BusAgent();
+    
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
 
@@ -105,12 +108,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		} catch (IOException e) {
 		}
 		
-	    BusAgent ba1 = new BusAgent();
-	    BusGui bg1 = new BusGui(ba1, simCityGui, 'B');
-	    ba1.setBusGui(bg1);
-	    BusAgent ba2 = new BusAgent();
-	    BusGui bg2 = new BusGui(ba2, simCityGui, 'F');
-	    ba2.setBusGui(bg2);
+
+	    BusGui bg1 = new BusGui(busLeft, simCityGui, 'B');
+	    busLeft.setBusGui(bg1);
+	    BusGui bg2 = new BusGui(busRight, simCityGui, 'F');
+	    busRight.setBusGui(bg2);
 	    bg1.setPresent(true);
 	    bg2.setPresent(true);
         guis.add(bg1);
