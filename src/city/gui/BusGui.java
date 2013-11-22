@@ -25,7 +25,7 @@ public class BusGui implements Gui{
 	public SimCityGui gui;
 	public int xPos, yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, walkToDestination};
+	private enum Command {noCommand, atBusStop};
 	private Command command=Command.noCommand;
 	
 	private enum State {walking, driving};
@@ -46,15 +46,15 @@ public class BusGui implements Gui{
 		
 		if(type == 'B'){
 			xPos = 30;
-			yPos = 400;
+			yPos = 410;
 			xDestination = 30;
-			yDestination = -40;
+			yDestination = 410;
 		}
 		else if(type == 'F'){
 			xPos = 825;
 			yPos = -40;
 			xDestination = 825;
-			yDestination = 410;
+			yDestination = -40;
 		}
         
 		this.gui = gui;
@@ -64,65 +64,23 @@ public class BusGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
-			if (xPos < xDestination) //&& (yPos - 130)%80==0)
-				xPos++;
-			else if (xPos > xDestination) //&& (yPos - 103)%80==0)
-				xPos--;
-			if (yPos < yDestination)
-				yPos++;
-			else if (yPos > yDestination)
-				yPos--;
 		
-			if(type == 'B'){
-				if(yPos == 305){
-					agent.msgAtStop(busStops.get(3).getLocation());
-				}
-				if(yPos == 225){
-					agent.msgAtStop(busStops.get(2).getLocation());
-				}
-				
-				if(yPos == 145){
-					agent.msgAtStop(busStops.get(1).getLocation());
-				}
-				
-				if(yPos == 65){
-					agent.msgAtStop(busStops.get(0).getLocation());
-				}
-			}
-			
-			if(type == 'F'){
-				if(yPos == 305){
-					agent.msgAtStop(busStops.get(7).getLocation());
-				}
-				if(yPos == 225){
-					agent.msgAtStop(busStops.get(6).getLocation());
-				}
-				
-				if(yPos == 145){
-					agent.msgAtStop(busStops.get(5).getLocation());
-				}
-				
-				if(yPos == 65){
-					agent.msgAtStop(busStops.get(4).getLocation());
-				}
-			}
-
+			if (yPos < yDestination && type == 'F')
+				yPos++;
+			else if (yPos > yDestination && type == 'B')
+				yPos--;
+			else if(type == 'B' && yPos < -40)
+				yPos = 400;
+			else if(type == 'F' && yPos > 410)
+				yPos = -40;
+		
 
 				if (xPos == xDestination && yPos == yDestination) {
-			//if(command == Command.walkToDestination){
-				//command = Command.noCommand;
-					if(type == 'B'){
-						xPos = 30;
-						yPos = 400;
+					if(command == Command.atBusStop){
+						command = Command.noCommand;
+						agent.msgAtStop(new Point(xDestination, yDestination));
 					}
-					else if(type == 'F'){
-						xPos = 825;
-						yPos = -40;
-					}
-				
-					//agent.msgAtStop();
-			//}
-		}
+				}
 
 	}
 
@@ -151,17 +109,18 @@ public class BusGui implements Gui{
 	public void GoToBusStop(Point p){
 		xDestination = p.x;
 		yDestination = p.y;
+		command = Command.atBusStop;
 	}
 	
 	public void GoToRest(){
 		if(type == 'B'){
-			xPos = 300;
-			yPos = 400;
+			xDestination = 30;
+			yDestination = -40;
 		}
 		
 		else if(type == 'F'){
-			xPos = 825;
-			yPos = -40;
+			xDestination = 825;
+			yDestination = 410;
 		}
 	}
 
