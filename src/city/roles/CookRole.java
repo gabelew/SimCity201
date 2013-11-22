@@ -199,10 +199,11 @@ public class CookRole extends Role implements Cook {
 			}
 		}
 	}
-	public void msgHereIsOrderFromMarket(DeliveryManRole DMR,Map<String,Integer>choices, List<String>outOf){
+	public void msgHereIsOrderFromMarket(DeliveryManRole DMR,Map<String,Integer>choices, List<String>outOf,double amountOwed){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
-				order.marketState=marketOrderState.waitingForBill;
+				order.price=amountOwed;
+				order.marketState=marketOrderState.paying;
 			}
 		}
 		for(String key:choices.keySet()){
@@ -211,14 +212,15 @@ public class CookRole extends Role implements Cook {
 		}
 	}
 	
-	public void msgHereIsPrice(double amountOwed,DeliveryManRole DMR){
+	/*public void msgHereIsPrice(double amountOwed,DeliveryManRole DMR){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
 				order.price=amountOwed;
 				order.marketState=marketOrderState.paying;
 			}
 		}
-	}
+	}*/
+	
 	/*public void msgDelivering(MarketAgent m, List<MarketAgent.MyFood> orderList) {
 		MyMarket mm = findMarket(m);
 		for(MarketAgent.MyFood f: orderList){
@@ -528,7 +530,7 @@ public class CookRole extends Role implements Cook {
 	}
 	
 	private void hereIsMarketBill(MarketOrder morder){
-		//restaurant.cashier.msgHereIsInvoice(morder.price,morder.deliveryMan);
+		((CashierRole)restaurant.cashier).msgHereIsInvoice(morder.price,morder.deliveryMan);
 		marketOrders.remove(morder);
 	}
 	

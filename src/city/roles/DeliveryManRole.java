@@ -2,22 +2,13 @@ package city.roles;
 
 //import restaurant.WaiterAgent.Menu;
 //import restaurant.WaiterAgent.MenuItem;
-import restaurant.gui.CustomerGui;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
-import agent.Agent;
+
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
 
 import market.gui.DeliveryManGui;
 import city.MarketAgent;
@@ -116,14 +107,14 @@ public class DeliveryManRole extends Role {
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
 	    deliveryGui.DoGoGetFood(o.Choices);
-	    cook.msgHereIsPrice(o.amountOwed,this);
+	    //cook.msgHereIsPrice(o.amountOwed,this);
 	    o.s=orderState.ordered;
 	}
 	
 	private void giveOrder(){
 		deliveryGui.DoGoPutOnTruck();
 		deliveryGui.DoGoDeliver(location);
-		cook.msgHereIsOrderFromMarket(this,o.Choices, o.outOf);
+		cook.msgHereIsOrderFromMarket(this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
 	}
 	
