@@ -9,14 +9,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import city.BusAgent;
-import city.BusAgent.MyBusStop;
-import city.PersonAgent;
-import java.util.*;
 
 public class BusGui implements Gui{
 	
 	private BusAgent agent = null;
-	private List<MyBusStop> busStops;
 	private boolean isPresent = false;
 	private char type;
 	
@@ -27,10 +23,7 @@ public class BusGui implements Gui{
 	private int xDestination, yDestination;
 	private enum Command {noCommand, atBusStop};
 	private Command command=Command.noCommand;
-	
-	private enum State {walking, driving};
-	private State state = State.walking;
-	
+		
 	public BusGui(BusAgent b, SimCityGui gui, char type){ //HostAgent m) {
 		
 		try {
@@ -41,7 +34,6 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
-		this.busStops = b.getBusStops();
 		this.type = type;
 		
 		if(type == 'B'){
