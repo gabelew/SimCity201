@@ -8,9 +8,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import atHome.city.AtHomeGui;
 import city.PersonAgent;
-import city.animationPanels.HouseAnimationPanel;
-import city.gui.PersonGui;
 
 public class AtHomeRole extends Role
 {	
@@ -29,7 +28,7 @@ public class AtHomeRole extends Role
 	public List<String> choices = new ArrayList<String>();
 	Timer timer = new Timer(); //Timer for Cooking Food
 	public PersonAgent myPerson = null;//PersonAgent that has this role
-	PersonGui personGui;
+	AtHomeGui atHomeGui;
 	public AtHomeRole(PersonAgent p) 
 	{
 		super(p);
@@ -48,9 +47,9 @@ public class AtHomeRole extends Role
 		}
 	}
 	
-	public void setGui(PersonGui g)
+	public void setGui(AtHomeGui g)
 	{
-		this.personGui = g;
+		this.atHomeGui = g;
 	}
 /*********************
  ***** MESSAGES
