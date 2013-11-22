@@ -117,4 +117,12 @@ public String getName(){
 	return name;
 }
 
+public void setInventory(int cars, int chicken,int steak,int salad, int cookie){
+	Inventory.put("steak", steak);
+	Inventory.put("car", cars);
+	Inventory.put("chicken",chicken);
+	Inventory.put("salad", salad);
+	Inventory.put("cookie", cookie);
+}
+
 }
