@@ -1,18 +1,13 @@
 package city.roles;
 
-import agent.Agent;
-
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
-import city.roles.HostRole.State;
 import restaurant.Restaurant;
 import restaurant.gui.CashierGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
@@ -69,7 +64,6 @@ public class CashierRole extends Role implements Cashier {
 	public static final double SALAD_COST = 4.99;
 	public static final double STEAK_COST = 15.99;
 	public static final double CHICKEN_COST = 10.99;
-	public static final double BURGER_COST = 8.99;
 	public static final double COOKIE_COST = 3.99;	
 	
 	public CashierRole(){
@@ -78,7 +72,6 @@ public class CashierRole extends Role implements Cashier {
 		pricingMap.put("salad", SALAD_COST);
 		pricingMap.put("steak", STEAK_COST);
 		pricingMap.put("chicken", CHICKEN_COST);
-		pricingMap.put("burger", BURGER_COST);
 		pricingMap.put("cookie", COOKIE_COST);
 	}
 

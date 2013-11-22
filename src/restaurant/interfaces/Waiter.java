@@ -22,7 +22,6 @@ public interface Waiter {
 			menuItems.add(new MenuItem("Salad", Cashier.SALAD_COST));
 			menuItems.add(new MenuItem("Steak", Cashier.STEAK_COST));
 			menuItems.add(new MenuItem("Chicken", Cashier.CHICKEN_COST));
-			menuItems.add(new MenuItem("Burger", Cashier.BURGER_COST));
 			menuItems.add(new MenuItem("Cookie", Cashier.COOKIE_COST));
 		}
 	}

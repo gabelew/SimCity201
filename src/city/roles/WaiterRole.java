@@ -34,25 +34,6 @@ public class WaiterRole extends Role implements Waiter{
 		}
 
 	}
-	/*public class Menu{
-		public List<MenuItem> menuItems = new ArrayList<MenuItem>();
-
-		Menu(){
-			menuItems.add(new MenuItem("Salad", Cashier.SALAD_COST));
-			menuItems.add(new MenuItem("Steak", Cashier.STEAK_COST));
-			menuItems.add(new MenuItem("Chicken", Cashier.CHICKEN_COST));
-			menuItems.add(new MenuItem("Burger", Cashier.BURGER_COST));
-			menuItems.add(new MenuItem("Cookie", Cashier.COOKIE_COST));
-		}
-	}
-	public class MenuItem{
-		public String item;
-		public double cost;
-		MenuItem(String i, double d){
-			item = i;
-			cost = d;
-		}
-	}*/
 
 	public WaiterRole(PersonAgent p, Restaurant r) {
 		super(p);

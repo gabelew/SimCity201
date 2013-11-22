@@ -1,18 +1,13 @@
 package city.roles;
 
-import agent.Agent;
-
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
-import city.roles.HostRole.State;
 import restaurant.Restaurant;
 import restaurant.gui.CookGui;
 import restaurant.interfaces.Cook;
-import restaurant.interfaces.Market;
 import restaurant.interfaces.Waiter;
 
 public class CookRole extends Role implements Cook {
@@ -21,7 +16,6 @@ public class CookRole extends Role implements Cook {
 	public List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	public List<MarketOrder>marketOrders=Collections.synchronizedList(new ArrayList<MarketOrder>());
 	private Semaphore waitingResponse = new Semaphore(0,true);
-	private Semaphore leavingRestaurant = new Semaphore(0,true);
 	PersonAgent replacementPerson = null;
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
@@ -31,7 +25,6 @@ public class CookRole extends Role implements Cook {
     static final int SALAD_COOKTIME = 7000;
     static final int STEAK_COOKTIME = 15000;
     static final int CHICKEN_COOKTIME = 20000;
-    static final int BURGER_COOKTIME = 15000;
     static final int COOKIE_COOKTIME = 5000;
 	static final int SALAD_INIT_AMOUNT = 50;
 	static final int SALAD_LOW_AMOUNT = 3;
@@ -42,9 +35,6 @@ public class CookRole extends Role implements Cook {
 	static final int CHICKEN_INIT_AMOUNT = 50;
 	static final int CHICKEN_LOW_AMOUNT = 3;
 	static final int CHICKEN_CAPACITY = 50;
-	static final int BURGER_INIT_AMOUNT = 50;
-	static final int BURGER_LOW_AMOUNT = 3;
-	static final int BURGER_CAPACITY = 50;
 	static final int COOKIE_INIT_AMOUNT = 50;
 	static final int COOKIE_LOW_AMOUNT = 3;
 	static final int COOKIE_CAPACITY = 50;
@@ -121,7 +111,6 @@ public class CookRole extends Role implements Cook {
 			foodInventoryMap.put("steak", InventoryState.POSSIBLE);
 			foodInventoryMap.put("salad", InventoryState.POSSIBLE);
 			foodInventoryMap.put("chicken", InventoryState.POSSIBLE);
-			foodInventoryMap.put("burger", InventoryState.POSSIBLE);
 			foodInventoryMap.put("cookie", InventoryState.POSSIBLE);
 		}
 		public MarketAgent getMarket() {
@@ -153,7 +142,6 @@ public class CookRole extends Role implements Cook {
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
 		foods.add(new Food("steak",STEAK_COOKTIME, STEAK_LOW_AMOUNT, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
-		foods.add(new Food("burger",BURGER_COOKTIME, BURGER_INIT_AMOUNT, BURGER_LOW_AMOUNT, BURGER_CAPACITY));
 		foods.add(new Food("cookie",COOKIE_COOKTIME, COOKIE_INIT_AMOUNT, COOKIE_LOW_AMOUNT, COOKIE_CAPACITY));
 	}
 
@@ -285,11 +273,11 @@ public class CookRole extends Role implements Cook {
 	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o) {
 		//From animation
 
-		if(o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken") || o.choice.equalsIgnoreCase("burger")){
+		if(o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken")){
 			grillItems--;
 			synchronized(orders){
 				for(RoleOrder order:orders){
-					if(order.state == OrderState.QUEUED && (o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken") || o.choice.equalsIgnoreCase("burger"))){
+					if(order.state == OrderState.QUEUED && (o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken") )){
 						order.state = OrderState.PENDING;
 					}
 				}
@@ -429,10 +417,10 @@ public class CookRole extends Role implements Cook {
 				orderFoodFromMarket();
 			}
 
-			if((grillItems < 6 && (o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken") || o.choice.equalsIgnoreCase("burger")))
+			if((grillItems < 6 && (o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken")))
 				|| (counterItems < 3 && (o.choice.equalsIgnoreCase("salad") || o.choice.equalsIgnoreCase("cookie")) )){
 				DoCooking(o);
-				if(o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken") || o.choice.equalsIgnoreCase("burger")){
+				if(o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken")){
 					grillItems++;
 				}else{
 					counterItems++;
@@ -541,7 +529,6 @@ public class CookRole extends Role implements Cook {
 	}
 
 	private MyMarket findMarket(MarketAgent m) {
-
 		synchronized(markets){
 			for(MyMarket mm: markets){
 				if(mm.getMarket() == m){
@@ -558,7 +545,6 @@ public class CookRole extends Role implements Cook {
 
 
 	public void badSteaks() {
-
 		synchronized(foods){
 			for(Food f: foods){
 				if(f.getChoice().equalsIgnoreCase("steak")){
