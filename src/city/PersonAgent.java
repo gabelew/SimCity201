@@ -635,6 +635,7 @@ public class PersonAgent extends Agent
     	
     }
 
+	//Remember to add functionality so person can decide to eat at home
     private void goEatFood() {
     	state = State.goingOutToEat;
     	goToRestaurant();

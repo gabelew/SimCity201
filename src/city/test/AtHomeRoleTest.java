@@ -40,4 +40,5 @@ public class AtHomeRoleTest extends TestCase
 		role.pickAndExecuteAnAction();
 		assertEquals("Finished eating food, no orders left", role.orders.size(), 0);
 	}
+	
 }

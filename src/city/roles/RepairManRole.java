@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
+import city.interfaces.RepairMan;
 
-public class RepairManRole extends Role
+public class RepairManRole extends Role implements RepairMan
 {
 /*********************
  ***** DATA

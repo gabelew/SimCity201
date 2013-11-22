@@ -23,10 +23,10 @@ public class AtHomeRole extends Role
 	enum OrderState {pending, cooking, done, eating}
 	Map<String, Food> findFood = new HashMap<String, Food>();
 	//Lists
-	List<Food> foodInFridge = new ArrayList<Food>();
-	List<Order> orders = new ArrayList<Order>();
+	public List<Food> foodInFridge = new ArrayList<Food>();
+	public List<Order> orders = new ArrayList<Order>();
 	List<Appliance> appliances = new ArrayList<Appliance>();
-	List<String> choices = new ArrayList<String>();
+	public List<String> choices = new ArrayList<String>();
 	Timer timer = new Timer(); //Timer for Cooking Food
 	PersonAgent myPerson;//PersonAgent that has this role
 	PersonGui personGui;
@@ -154,6 +154,7 @@ public class AtHomeRole extends Role
 				}
 			},
 			food.cookingTime);
+			
 		}
 		else //Out of Food, Reorder food, and make a market order
 		{

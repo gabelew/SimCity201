@@ -1,7 +1,5 @@
 package restaurant.interfaces;
 
-import market.interfaces.DeliveryMan;
-
 /**
  * A sample Cashier interface built to unit test a CashierAgent.
  *
