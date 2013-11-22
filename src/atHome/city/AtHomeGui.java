@@ -70,11 +70,11 @@ public class AtHomeGui implements Gui{
 
 	@Override
 	public void draw(Graphics2D g) {
-		/*if(agent.car != null)
+		if(agent.car != null)
 		{
 			g.drawImage(carImg, xPos, yPos, null);
 		}
-		else*/
+		else
 		{
 			g.drawImage(personImg, xPos, yPos, null);
 		}
