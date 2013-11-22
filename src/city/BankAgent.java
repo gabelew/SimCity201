@@ -26,8 +26,9 @@ public class BankAgent extends Agent implements Bank{
 		double withdraw(double amount) {
 			int result = Double.compare(currentBalance, amount);
 			if(-1 == result) {
+				double withdrew = currentBalance;
 				currentBalance = 0.0;
-				return currentBalance;
+				return withdrew;
 			} else {
 				currentBalance -= amount;
 				return amount;
@@ -54,7 +55,7 @@ public class BankAgent extends Agent implements Bank{
 	public List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
 	public List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
 	String name;
-	double fundsAvailable = 50000.0;
+	public double fundsAvailable = 50000.0;
 	final double customerLoanMax = 500;
 	final double businessLoanMax = 1000;
 
@@ -188,6 +189,7 @@ public class BankAgent extends Agent implements Bank{
 	private void customerDeposit(Transaction t) {
 		t.ts = TransactionState.none;
 		t.customer.deposit(t.amount);
+		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.customer.accountHolder.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
 		transactions.remove(findTransactionIndex(t));
 	}
@@ -195,6 +197,7 @@ public class BankAgent extends Agent implements Bank{
 	private void customerWithdrawal(Transaction t) {
 		t.ts = TransactionState.none;
 		double withdrew = t.customer.withdraw(t.amount);
+		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.customer.accountHolder.msgHereIsMoney(withdrew, t.customer.accountType, t.customer.currentBalance);
 		transactions.remove(findTransactionIndex(t));
 	}
@@ -202,7 +205,13 @@ public class BankAgent extends Agent implements Bank{
 	private void customerLoanPayment(Transaction t) {
 		t.ts = TransactionState.none;
 		fundsAvailable += t.amount;
+		fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 		t.customer.owed -= t.amount;
+		t.customer.owed = (Math.round(100*t.customer.owed) / ((double)100));
+		int owedBalance = Double.compare(t.customer.owed, 0);
+		if(-1 == owedBalance) {
+			t.customer.owed = 0;
+		}
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
 		transactions.remove(findTransactionIndex(t));
 	}
@@ -221,7 +230,9 @@ public class BankAgent extends Agent implements Bank{
 			t.customer.accountHolder.msgLoanDenied(t.amount, t.customer.accountType);
 		} else{
 			t.customer.owed += t.amount;
+			t.customer.owed = (Math.round(100*t.customer.owed) / ((double)100));
 			fundsAvailable -= t.amount;
+			fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 			t.customer.accountHolder.msgLoanApproved(t.amount, t.customer.accountType);
 		}
 		transactions.remove(findTransactionIndex(t));
@@ -236,7 +247,9 @@ public class BankAgent extends Agent implements Bank{
 		} else{
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
 			t.customer.withdraw(t.amount);
+			t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 			t.recipient.deposit(t.amount);
+			t.recipient.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 			r.getPersonAgent().msgTransferCompleted(r.getPersonAgent(), t.amount, t.purpose);
 			r.getPersonAgent().msgTransferSuccessful(r.getPersonAgent(), t.amount, t.purpose);
 		}
