@@ -73,12 +73,8 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
         g2.setColor(getBackground());
         g2.fillRect(ZERO, ZERO, WINDOWX, WINDOWY );
         g2.setColor(Color.lightGray);
-
-	     //Clerk Stand
-	     g.drawImage(clerkTableImg, xCLERK_POSITION, yCLERK_POSITION, null);
-	     //Delivery Man Area
-	     g.drawImage(deliveryStandImg,xDELIVERY_POSITION,yDELIVERY_POSITION,null);
-	     //first row of shelves
+		
+        //first row of shelves
 	     for (int i=ZERO;i<NUM_SHELF;i++){
 	    	 g.drawImage(shelfImg, xSHELF_POSITION+i*50, ySHELF_POSITION-i*20, null);
 	     }
@@ -86,16 +82,24 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
 	     for(int i=ZERO;i<NUM_SHELF;i++){
 	    	 g.drawImage(shelfImg, xSHELF2_POSITION+i*50, ySHELF2_POSITION-i*20, null); 
 	     }
+	     
+        for(Gui gui : getGuis()) {
+			if (gui.isPresent()) {
+				gui.draw(g2);
+	        }
+		}
+        
+	     //Clerk Stand
+	     g.drawImage(clerkTableImg, xCLERK_POSITION, yCLERK_POSITION, null);
+	     //Delivery Man Area
+	     g.drawImage(deliveryStandImg,xDELIVERY_POSITION,yDELIVERY_POSITION,null);
+	    
 	     //chiar waiting area
 	     for (int i=ZERO;i<NUM_CHAIR;i++){
 	    	 g.drawImage(chairImg, xCHAIR_POSITION+i*50, yCHAIR_POSITION, null); 
 	     }
 	     
-		for(Gui gui : getGuis()) {
-			if (gui.isPresent()) {
-				gui.draw(g2);
-	        }
-		}
+
 	}
 
 }
