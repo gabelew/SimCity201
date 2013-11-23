@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import city.MarketAgent;
 import city.MarketAgent.cookState;
+import city.MarketAgent.state;
 import city.MarketAgent.customerState;
 import city.roles.CashierRole;
 import city.roles.MarketCustomerRole;
@@ -51,6 +52,8 @@ public class MarketTest extends TestCase
 		cashier = new MockCashier("cashier");
 		cashier2 = new MockCashier("cashier2");
 		cashier3 = new MockCashier("cashier3");
+		market.addClerk(clerk);
+		market.addDeliveryMan(deliveryMan);
 		
 	}	
 	
@@ -91,7 +94,7 @@ public class MarketTest extends TestCase
 		//check post-conditions of message
 		assertTrue("Market should have logged \"Received msgPlaceOrder\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPlaceOrder from MarketCustomer."));
-		assertTrue("Clerk should be free before being assigned a customer",market.clerkFree);
+		assertEquals("Clerk should be free",market.clerks.get(0).clerkState,state.free);
 		assertEquals("Market should have 1 customer in it.",market.MyCustomers.size(), 1);
 		assertTrue("The customer hsould have state waiting",market.MyCustomers.get(0).state==customerState.waiting);
 		assertTrue("The Market's customer should be set to customer." , 
@@ -106,7 +109,7 @@ public class MarketTest extends TestCase
 				market.pickAndExecuteAnAction());
 		
 		//check post scheduler
-		assertFalse("Clerk should be no longer be free",market.clerkFree);
+		assertEquals("Clerk should not be free",market.clerks.get(0).clerkState,state.busy);
 		assertEquals(
 				"MockClerk should not have an empty event log after the Market's scheduler is called for the first time. Instead, the MockClerks's event log reads: "
 						+ clerk.log.toString(), 1, clerk.log.size());
@@ -115,7 +118,7 @@ public class MarketTest extends TestCase
 		market.msgClerkDone(clerk);
 		assertTrue("Market should have logged \"Received msgClerkDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgClerkDone from clerk."));
-		assertTrue("Clerk should now be free",market.clerkFree);
+		assertEquals("Clerk should be free",market.clerks.get(0).clerkState,state.free);
 		assertFalse("Market's scheduler should have returned false (doesn't have anything to do).", 
 				market.pickAndExecuteAnAction());
 	}
@@ -154,7 +157,7 @@ public class MarketTest extends TestCase
 		//check post-conditions of message
 		assertTrue("Market should have logged \"Received msgPlaceDeliveryOrder\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPlaceDeliveryOrder from CookCustomer."));
-		assertTrue("DeliveryMan should be free before being assigned a customer",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.free);
 		assertEquals("Market should have 1 cook customer in it.",market.MyCooks.size(), 1);
 		assertTrue("The cook customer should have state waiting",market.MyCooks.get(0).cookstate==cookState.waiting);
 		assertTrue("The Market's cook customer should be set to cook." , 
@@ -169,18 +172,18 @@ public class MarketTest extends TestCase
 				market.pickAndExecuteAnAction());
 		
 		//check post scheduler
-		assertFalse("Delivery Man should be no longer be free",market.deliveryFree);
-		assertTrue("Clerk should still be free",market.clerkFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.busy);
+		assertEquals("Clerk should be free",market.clerks.get(0).clerkState,state.free);
 		assertEquals(
 				"MockDeliveryMan should not have an empty event log after the Market's scheduler is called for the first time. Instead, the MockClerks's event log reads: "
 						+ deliveryMan.log.toString(), 1, deliveryMan.log.size());
 		assertEquals("Market should now have 0 cook customers in it.",market.MyCooks.size(), 0);
-		assertFalse("Delivery Man should still not be free",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.busy);
 		//when done, DeliveryMan sends message saying he is free
 		market.msgDeliveryDone(deliveryMan);
 		assertTrue("Market should have logged \"Received msgDeliveryDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgDeliveryDone from deliveryMan."));
-		assertTrue("Delivery Man should now be free",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.free);
 		assertFalse("Market's scheduler should have returned false (doesn't have anything to do).", 
 				market.pickAndExecuteAnAction());
 		
@@ -219,7 +222,7 @@ public class MarketTest extends TestCase
 		//check post-conditions of message
 		assertTrue("Market should have logged \"Received msgPlaceDeliveryOrder\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPlaceDeliveryOrder from CookCustomer."));
-		assertTrue("DeliveryMan should be free before being assigned a customer",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.free);
 		assertEquals("Market should have 1 cook customer in it.",market.MyCooks.size(), 1);
 		assertTrue("The cook customer should have state waiting",market.MyCooks.get(0).cookstate==cookState.waiting);
 		assertTrue("The Market's cook customer should be set to cook." , 
@@ -231,7 +234,7 @@ public class MarketTest extends TestCase
 		//check post-conditions of message
 		assertTrue("Market should have logged \"Received msgPlaceOrder\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPlaceOrder from MarketCustomer."));
-		assertTrue("Clerk should be free before being assigned a customer",market.clerkFree);
+		assertEquals("Clerk should be free",market.clerks.get(0).clerkState,state.free);
 		assertEquals("Market should have 1 customer in it.",market.MyCustomers.size(), 1);
 		assertTrue("The customer hsould have state waiting",market.MyCustomers.get(0).state==customerState.waiting);
 		assertTrue("The Market's customer should be set to customer." , 
@@ -244,7 +247,7 @@ public class MarketTest extends TestCase
 		assertTrue("Market's scheduler should have returned true (needs to react to customer's msgPlaceOrder).", 
 				market.pickAndExecuteAnAction());
 		//check post scheduler
-		assertFalse("Clerk should be no longer be free",market.clerkFree);
+		assertEquals("Clerk should not be free",market.clerks.get(0).clerkState,state.busy);
 		assertEquals(
 				"MockClerk should not have an empty event log after the Market's scheduler is called for the first time. Instead, the MockClerks's event log reads: "
 						+ clerk.log.toString(), 1, clerk.log.size());
@@ -253,7 +256,7 @@ public class MarketTest extends TestCase
 		//delivery man should not have done anything yet since clerk has priority in scheduler
 		assertTrue("Market should have logged \"Received msgPlaceDeliveryOrder\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgPlaceDeliveryOrder from CookCustomer."));
-		assertTrue("DeliveryMan should be free before being assigned a customer",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.free);
 		assertEquals("Market should have 1 cook customer in it.",market.MyCooks.size(), 1);
 		assertTrue("The cook customer should have state waiting",market.MyCooks.get(0).cookstate==cookState.waiting);
 		assertTrue("The Market's cook customer should be set to cook." , 
@@ -266,18 +269,18 @@ public class MarketTest extends TestCase
 				market.pickAndExecuteAnAction());
 		
 		//check post scheduler
-		assertFalse("Delivery Man should be no longer be free",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.busy);
 		assertEquals(
 				"MockDeliveryMan should not have an empty event log after the Market's scheduler is called for the first time. Instead, the MockClerks's event log reads: "
 						+ deliveryMan.log.toString(), 1, deliveryMan.log.size());
 		assertEquals("Market should now have 0 cook customers in it.",market.MyCooks.size(), 0);
-		assertFalse("Delivery Man should still not be free",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.busy);
 		
 		//when done, DeliveryMan sends message saying he is free
 		market.msgDeliveryDone(deliveryMan);
 		assertTrue("Market should have logged \"Received msgDeliveryDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgDeliveryDone from deliveryMan."));
-		assertTrue("Delivery Man should now be free",market.deliveryFree);
+		assertEquals("Delivery man should not be free",market.deliverys.get(0).deliveryState,state.free);
 		assertFalse("Market's scheduler should have returned false (doesn't have anything to do).", 
 				market.pickAndExecuteAnAction());
 		
@@ -285,7 +288,7 @@ public class MarketTest extends TestCase
 		market.msgClerkDone(clerk);
 		assertTrue("Market should have logged \"Received msgClerkDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgClerkDone from clerk."));
-		assertTrue("Clerk should now be free",market.clerkFree);
+		assertEquals("Clerk should be free",market.clerks.get(0).clerkState,state.free);
 		assertFalse("Market's scheduler should have returned false (doesn't have anything to do).", 
 				market.pickAndExecuteAnAction());
 		

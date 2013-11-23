@@ -40,25 +40,25 @@ public class MyCook{
 public enum customerState{waiting, clerkGettingFood,done};
 public enum cookState{waiting,deliveryGettingFood,done};
 
-List<clerk>clerks=new ArrayList<clerk>();
-class clerk{
+public List<clerk>clerks=new ArrayList<clerk>();
+public class clerk{
 	public clerk(Clerk c, state free) {
 		clerk=c;
 		clerkState=free;
 	}
 	Clerk clerk;	
-	state clerkState;
+	public state clerkState;
 }
-List<delivery>deliverys=new ArrayList<delivery>();
-class delivery{
+public List<delivery>deliverys=new ArrayList<delivery>();
+public class delivery{
 	public delivery(DeliveryMan dM, state free) {
 		deliveryMan=dM;
 		deliveryState=free;
 	}
 	DeliveryMan deliveryMan;
-	state deliveryState;
+	public state deliveryState;
 }
-enum state{free,busy,wantOffWork,offWork};
+public enum state{free,busy,wantOffWork,offWork};
 public boolean clerkFree=true;
 public boolean deliveryFree=true;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
