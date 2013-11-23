@@ -724,6 +724,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 					}
     			}    			
     		}else if(name.toLowerCase().contains("deliveryMan") && name.toLowerCase().contains("day")){
+    			System.out.println("abdasbdbsadbsabdksandklsfkds");
     			if(name.toLowerCase().contains("01")){
     				MarketAgent m = gui.markets.get(0);
     				boolean hasMarket = false;

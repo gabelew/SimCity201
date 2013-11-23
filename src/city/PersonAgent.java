@@ -110,7 +110,7 @@ public class PersonAgent extends Agent
 		this.name = name;
 		this.cashOnHand = cash;
 		this.businessFunds = business;
-	    if(this.name.toLowerCase().contains("car")){
+	    if(this.name.toLowerCase().contains("car") || this.name.toLowerCase().contains("deliveryman")){
 	    	car = true;
 	    }
 	}
@@ -489,6 +489,10 @@ public class PersonAgent extends Agent
 				finishGoingToBank();
 				return true;
 			}*/
+			if(transportState == TransportState.none && state == State.goingToMarket){
+				finishGoingToMarket();
+				return true;
+			}	
         	
 	        for(Role r : roles) {
 	        	if( r.isActive() ) {
@@ -633,8 +637,8 @@ public class PersonAgent extends Agent
     		}
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
     		MarketAgent ma = findMarket(destination);
+    		print("becomeing market deliveryMan?");
     		if(job.type.equalsIgnoreCase("clerk")){
-        		print("becomeing market clerk");
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
 		    		role.setPerson(this);
@@ -644,6 +648,7 @@ public class PersonAgent extends Agent
 		           	role.getClerkGui().setPresent(true);
 		           	role.goesToWork();	
 			}else if(job.type.equalsIgnoreCase("deliveryMan")){
+        		print("becomeing market deliveryMan");
 					DeliveryManRole role = new DeliveryManRole();
 		    		role.Market = ma;
 		    		role.setPerson(this);
@@ -722,6 +727,7 @@ public class PersonAgent extends Agent
     		goToBusStop();
     	} 
     }
+    
     private void finishGoingToMarket(){
     	state  = State.shopping;
     	MarketAgent m = findMarket(destination);
@@ -732,7 +738,7 @@ public class PersonAgent extends Agent
     	m.insideAnimationPanel.addGui(role.getMarketCustomerGui());
     	role.getMarketCustomerGui().setPresent(true);
     	role.startShopping(m, toOrderFromMarket);
-    	}
+    }
 
     private MarketAgent chooseClosestMarket() {
     	MarketAgent closestMa = simCityGui.getMarkets().get(0);
