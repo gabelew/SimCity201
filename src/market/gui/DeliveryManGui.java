@@ -33,8 +33,8 @@ public class DeliveryManGui implements Gui{
 	private Semaphore atShelf=new Semaphore(1,true);
 	
 	static final int CUST_START_POS = -40;
-	static final int xWAITING_START = 50;
-	static final int yWAITING_START = 50;
+	static final int xWAITING_START = 90;
+	static final int yWAITING_START = 190;
 	static final int xSHELF1=100;
 	static final int ySHELF1=120;
 	
