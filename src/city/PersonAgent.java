@@ -634,6 +634,7 @@ public class PersonAgent extends Agent
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
     		MarketAgent ma = findMarket(destination);
     		if(job.type.equalsIgnoreCase("clerk")){
+        		print("becomeing market clerk");
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
 		    		role.setPerson(this);
