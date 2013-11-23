@@ -33,6 +33,8 @@ public class ClerkRole extends Role implements Clerk {
 	public Market Market;
 	public MarketCustomer MCR;
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
+	public enum AgentEvent{none,GoToWork};
+	AgentEvent event = AgentEvent.none;
 	PersonAgent myPerson; 
 	double Price=5;
 	public ClerkRole(){
@@ -41,24 +43,36 @@ public class ClerkRole extends Role implements Clerk {
 	}
 
 	//messages
+	public void goesToWork(){
+		event = AgentEvent.GoToWork;
+		stateChanged();
+	}
 	public void msgTakeCustomer(MarketCustomer CR,Market m){
 		MCR=CR;
 		Market=m;
 		o.s=(orderState.askedForOrder);
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
+		stateChanged();
 	}
 	
 	public void msgPlaceOrder(Map<String,Integer> choice){
 		o.Choices=choice;
 		o.s=orderState.waiting;
+		stateChanged();
 	}
 	
 	public void msgHereIsPayment(double money){
 		if(money==o.amountOwed)
 			o.s=orderState.payed;
+		stateChanged();
 	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
+		if(event == AgentEvent.GoToWork){
+			event = AgentEvent.none;
+			((MarketAgent)Market).addClerk(((Clerk)this));
+			return true;
+		}
 		if(MCR!=null &&o.s==orderState.askedForOrder){
 			askForOrder();
 			return true;

@@ -639,11 +639,22 @@ public class PersonAgent extends Agent
     	            	role.active = true;
     	    			ma.insideAnimationPanel.addGui(role.getClerkGui());
     	            	role.getClerkGui().setPresent(true);
-    	            	//role.goesToWork();	
+    	            	role.goesToWork();	
     				}
     			}
-
     		}else if(job.type.equalsIgnoreCase("deliveryMan")){
+    			for(MarketAgent ma: simCityGui.getMarkets()){
+    				if(ma.location.equals(job.location)){
+    	    			DeliveryManRole role = new DeliveryManRole();
+    	    			/*role.Market = ma;
+    	    			role.setPerson(this);
+    	    			roles.add(role);
+    	            	role.active = true;
+    	    			ma.insideAnimationPanel.addGui(role.getClerkGui());
+    	            	role.getClerkGui().setPresent(true);
+    	            	role.goesToWork();	*/
+    				}
+    			}
     			
     		}
         	
