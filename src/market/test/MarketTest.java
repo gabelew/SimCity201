@@ -44,7 +44,7 @@ public class MarketTest extends TestCase
 		customerRich = new MockMarketCustomer("mockcustomerrich");
 		clerk = new MockClerk("Clerk");
 		deliveryMan = new MockDeliveryMan("DeliveryMan");
-		market= new MarketAgent(clerk,deliveryMan,location,"market");
+		market= new MarketAgent(location,"market");
 		cook = new MockCook("cook");
 		cook2 = new MockCook("cook2");
 		cook3 = new MockCook("cook3");

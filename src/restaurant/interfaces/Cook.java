@@ -46,4 +46,6 @@ public interface Cook {
 	public abstract void msgNeverOrderFromMarketAgain(MarketAgent market);
 	
 	public abstract void msgHereIsOrderFromMarket(DeliveryMan Dm,Map<String,Integer>choices,List<String> outOf,double amount);
+
+	public abstract void msgIncompleteOrder(DeliveryMan deliveryMan,List<String> outOf);
 }

@@ -259,9 +259,18 @@ public class CookRole extends Role implements Cook {
 		boolean reorder=false;
 		
 		for (String out: outOf){
-			
+			Food food=findFood(out);
+			if(food.amount<=food.low){
+				reorder=true;
+				food.os=OrderingState.order;
+			}
 		}
 		
+		if(reorder){
+			reorder=false;
+			orderFromMarket=true;
+		}
+		stateChanged();
 		
 	}
 	

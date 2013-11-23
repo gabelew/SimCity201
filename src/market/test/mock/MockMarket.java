@@ -35,11 +35,11 @@ public class MockMarket extends Mock implements Market {
 		log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
 	}
 	
-	public void msgClerkDone(){
+	public void msgClerkDone(Clerk c){
 		log.add(new LoggedEvent("Received msgClerkDone from clerk."));
 	}
 	
-	public void msgDeliveryDone(){
+	public void msgDeliveryDone(DeliveryMan DM){
 		log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 	}
 	
