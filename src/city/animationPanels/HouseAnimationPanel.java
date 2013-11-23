@@ -1,6 +1,5 @@
 package city.animationPanels;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -8,13 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import javax.swing.Timer;
-
-import city.PersonAgent;
 import city.gui.Gui;
-import city.gui.PersonGui;
 import city.gui.SimCityGui;
 
 public class HouseAnimationPanel  extends InsideAnimationPanel implements ActionListener{
@@ -33,7 +27,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	
     static final int xCOOK_POSITION = 50;  
     static final int yCOOK_POSITION = 50;
-    
+    static final int yKITCHEN_COUNTER_OFFSET = 30;
     static final int yGRILL_RIGHT_OFFSET = 30;
     static final int xGRILL_RIGHT_OFFSET = 52;
     static final int yFIDGE_OFFSET = 15;
@@ -93,9 +87,10 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
         	 for(int j = 0; j < 10; j++)
         		 g.drawImage(flooringImg, 115*i, 50*j, null);
          //draw kitchen stuff
- 		 g.drawImage(kitchenCounterImg, xCOOK_POSITION, yCOOK_POSITION, null);
- 		 g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
- 		 g.drawImage(fidgeImg, xCOOK_POSITION+xFIDGE_OFFSET, yCOOK_POSITION+yFIDGE_OFFSET, null);
+ 		g.drawImage(kitchenCounterImg, xCOOK_POSITION, yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
+		g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
+		g.drawImage(fidgeImg, xCOOK_POSITION+xFIDGE_OFFSET, yCOOK_POSITION+yFIDGE_OFFSET, null);
+ 		 
          //dining room stuff
  		 g.drawImage(tableImg, xTable, yTable, null);
          

@@ -26,13 +26,15 @@ public class AtHomeGui implements Gui{
 	private int xHomePosition = 20;
 	private int yHomePosition = 20;
 	
-	public AtHomeGui(PersonAgent c, SimCityGui gui){ //HostAgent m) {
+	public AtHomeGui(PersonAgent c, SimCityGui gui)
+	{
 		
-		try {
+		try 
+		{
 			StringBuilder path = new StringBuilder("imgs/");
-		    personImg = ImageIO.read(new File(path.toString() + "person.png"));
-		} catch (IOException e) {
-		}
+		    personImg = ImageIO.read(new File(path.toString() + "customer_v1.png"));
+		} 
+		catch (IOException e) {}
 		
 		agent = c;
 		xPos = 75;
