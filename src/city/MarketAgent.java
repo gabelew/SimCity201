@@ -99,7 +99,10 @@ public void msgClerkDone(Clerk c){
 public void msgDeliveryDone(DeliveryMan D){
 	for(delivery de: deliverys){
 		if(de.deliveryMan==D){
-			de.deliveryState=state.free;
+			if(de.deliveryState==state.wantOffWork)
+				de.deliveryState=state.offWork;
+			else
+				de.deliveryState=state.free;
 		}
 	}
 	stateChanged();
@@ -132,6 +135,9 @@ public boolean pickAndExecuteAnAction() {
 					}
 				}
 			}
+			else if(d.deliveryState==state.offWork){
+				deliveryDone(d);
+			}
 		}
 		
 	}
@@ -156,6 +162,10 @@ private void giveToDelivery(delivery d,MyCook MC){
 
 private void clerkDone(clerk c){
 	clerks.remove(c);
+}
+
+private void deliveryDone(delivery d){
+	deliverys.remove(d);
 }
 
 
@@ -185,6 +195,14 @@ public void offWork(Clerk c){
 	for (clerk cl:clerks){
 		if(cl.clerk==c){
 			cl.clerkState=state.wantOffWork;
+		}
+	}
+}
+
+public void offWork(DeliveryMan DM){
+	for (delivery de:deliverys){
+		if(de.deliveryMan==DM){
+			de.deliveryState=state.wantOffWork;
 		}
 	}
 }
