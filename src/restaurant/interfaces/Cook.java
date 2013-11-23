@@ -41,5 +41,7 @@ public interface Cook {
 	public abstract void setSteaksAmount(int i);
 	
 	public abstract void msgCanIHelpYou(DeliveryMan DM, MarketAgent  M);
+
+	public abstract void msgNeverOrderFromMarketAgain(MarketAgent market);
 	
 }

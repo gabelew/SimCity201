@@ -203,6 +203,11 @@ public class CookRole extends Role implements Cook {
 		}
 	}
 	
+	@Override
+	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
+		MyMarket m = findMarket(market);
+		markets.remove(m);
+	}
 	/*public void msgHereIsPrice(double amountOwed,DeliveryManRole DMR){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
@@ -627,6 +632,9 @@ public class CookRole extends Role implements Cook {
 		restaurant = r;
 		
 	}
+
+
+
 
 
 

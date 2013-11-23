@@ -279,9 +279,10 @@ public class CashierRole extends Role implements Cashier {
 			print("We are never ordering from this Market again.");
 			bank = bank - billFromDman.bill;
 			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
+			//tell cook to put market on naughty list
+			restaurant.cook.msgNeverOrderFromMarketAgain(((DeliveryManRole)billFromDman.deliveryMan).Market);
 			bills.remove(billFromDman);
 			bills.remove(invoiceFromCook);
-			//tell cook to put market on naughty list
 		}
 	}
 	private void processPayment(Order o) {
