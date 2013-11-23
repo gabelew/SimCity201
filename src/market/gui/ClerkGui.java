@@ -101,6 +101,11 @@ public class ClerkGui implements Gui{
 			yDestination=ySHELF1+150;
 			clerkState=state.gettingFood;
 		}
+		if(Food=="car"){
+			xDestination=xSHELF1+200;
+			yDestination=ySHELF1+200;
+			clerkState=state.gettingFood;
+		}
 
 	}
 	
