@@ -91,11 +91,11 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
 	    	 g.drawImage(chairImg, xCHAIR_POSITION+i*50, yCHAIR_POSITION, null); 
 	     }
 	     
-			for(Gui gui : getGuis()) {
-	            if (gui.isPresent()) {
-	                gui.draw(g2);
-	            }
+		for(Gui gui : getGuis()) {
+			if (gui.isPresent()) {
+				gui.draw(g2);
 	        }
+		}
 	}
 
 }
