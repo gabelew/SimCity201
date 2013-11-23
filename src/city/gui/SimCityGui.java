@@ -256,16 +256,16 @@ public class SimCityGui extends JFrame implements ActionListener {
             		name = "Target";
             	}else if(i==44){
             		name = "Kmart";
-            	}else if(i==50){
+            	}else{
             		name = "ChadMart";
             	}
 	        	
-            	/*MarketAgent marketAgent = new MarketAgent(
-            			Clerk Clerk,
-            			DeliveryMan DMR,
+            	MarketAgent marketAgent = new MarketAgent(
             			new Point(b.getX(),b.getY()),
             			name, 
-            			marketAnimationPanel);*/
+            			marketAnimationPanel);
+            	
+            	markets.add(marketAgent);
             	
 	    	}else if(b.type.equals("bank")){
 	            

@@ -6,6 +6,7 @@ import restaurant.gui.CustomerGui;
 import javax.swing.*;
 
 import atHome.city.Home;
+import city.MarketAgent;
 import city.PersonAgent;
 import city.PersonAgent.MyJob;
 import city.roles.AtHomeRole;
@@ -564,7 +565,197 @@ public class InfoPanel extends JPanel implements KeyListener {
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
 					}
     			}
+    		}else if(name.toLowerCase().contains("clerk") && name.toLowerCase().contains("day")){
+    			if(name.toLowerCase().contains("01")){
+    				MarketAgent m = gui.markets.get(0);
+    				boolean hasMarket = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasMarket = true;
+    						}
+    					}    					
+        			}
+    				if(!hasMarket){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}else if(name.toLowerCase().contains("02")){
+    				MarketAgent m = gui.markets.get(1);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}else if(name.toLowerCase().contains("03")){
+    				MarketAgent m = gui.markets.get(2);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}else if(name.toLowerCase().contains("04")){
+    				MarketAgent m = gui.markets.get(3);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}else if(name.toLowerCase().contains("05")){
+    				MarketAgent m = gui.markets.get(4);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}else if(name.toLowerCase().contains("06")){
+    				MarketAgent m = gui.markets.get(5);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}else if(name.toLowerCase().contains("06")){
+    				MarketAgent m = gui.markets.get(5);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.day);
+					}
+    			}    			
+    		}else if(name.toLowerCase().contains("clerk") && name.toLowerCase().contains("night")){
+    			if(name.toLowerCase().contains("01")){
+    				MarketAgent m = gui.markets.get(0);
+    				boolean hasMarket = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasMarket = true;
+    						}
+    					}    					
+        			}
+    				if(!hasMarket){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}else if(name.toLowerCase().contains("02")){
+    				MarketAgent m = gui.markets.get(1);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}else if(name.toLowerCase().contains("03")){
+    				MarketAgent m = gui.markets.get(2);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}else if(name.toLowerCase().contains("04")){
+    				MarketAgent m = gui.markets.get(3);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}else if(name.toLowerCase().contains("05")){
+    				MarketAgent m = gui.markets.get(4);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}else if(name.toLowerCase().contains("06")){
+    				MarketAgent m = gui.markets.get(5);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}else if(name.toLowerCase().contains("06")){
+    				MarketAgent m = gui.markets.get(5);
+    				boolean hasClerk = false;
+    				for(PersonAgent currentP: gui.persons){
+    					if(currentP.job!=null){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("clerk")){
+    							hasClerk = true;
+    						}
+    					}
+        			}
+    				if(!hasClerk){
+						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
+					}
+    			}    			
     		}
+    		
+    		
+    		
+    		
     		
     		PersonGui g = new PersonGui(p, gui);
     		g.setPresent(true);
