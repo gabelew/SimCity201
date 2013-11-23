@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import market.gui.DeliveryManGui;
 import restaurant.interfaces.Cook;
@@ -27,6 +28,7 @@ import restaurant.test.mock.LoggedEvent;
  * Restaurant customer agent.
  */
 public class DeliveryManRole extends Role implements DeliveryMan{
+	private Semaphore atShelf=new Semaphore(0,true);
 	public EventLog log = new EventLog();
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
@@ -138,9 +140,15 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	        	Integer temp=o.Choices.get(pairs.getKey());
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
-	        it.remove(); // avoids a ConcurrentModificationException
+	        //it.remove(); // avoids a ConcurrentModificationException
 	    }
+
 	    deliveryGui.DoGoGetFood(o.Choices);
+	    try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			
+		}
 	    if(o.outOf!=null)
 	    	cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
 	    //cook.msgHereIsPrice(o.amountOwed,this);
@@ -149,6 +157,11 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	private void giveOrder(){
 		deliveryGui.DoGoPutOnTruck();
+	    try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			
+		}
 		deliveryGui.DoGoDeliver(location);
 		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
@@ -164,10 +177,20 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	private void orderDone(){
 		o.s=orderState.noOrder;
 		cook=null;
+		deliveryGui.DoGoBack();
+	    try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			
+		}
 		Market.msgDeliveryDone(this);
 	}
 	public DeliveryManGui getDeliveryManGui() {
 		return deliveryGui;
+	}
+	
+	public void atDest(){
+		atShelf.release();
 	}
 }
 

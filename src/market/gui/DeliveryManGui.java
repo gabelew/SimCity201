@@ -30,7 +30,6 @@ public class DeliveryManGui implements Gui{
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
 	private enum state{waiting,gettingFood,givingFood,delivering,delivered};
 	state deliveryState;
-	private Semaphore atShelf=new Semaphore(1,true);
 	
 	static final int CUST_START_POS = -40;
 	static final int xWAITING_START = 90;
@@ -60,12 +59,16 @@ public class DeliveryManGui implements Gui{
 		else if (yPos > yDestination)
 			yPos--;
 		if (xPos==xDestination&&yPos==yDestination&&deliveryState==state.gettingFood){
-			atShelf.release();
+			role.atDest();
 			deliveryState=state.waiting;
 		}
 		if(xPos==xDestination&&yPos==yDestination&&deliveryState==state.givingFood){
-			atShelf.release();
+			role.atDest();
 			deliveryState=state.delivering;
+		}
+		if(xPos==xDestination&&yPos==yDestination&&deliveryState==state.delivered){
+			role.atDest();
+			deliveryState=state.waiting;
 		}
 	}
 
@@ -100,28 +103,19 @@ public class DeliveryManGui implements Gui{
 			yDestination=ySHELF1+150;
 			deliveryState=state.gettingFood;
 		}
-		try {
-			atShelf.acquire();
-		} catch (InterruptedException e) {
-		}
 	}
 	
 	public void DoGoGetFood(Map<String,Integer> choices){
+		deliveryState=state.waiting;
 		for (String Key:choices.keySet()){
 			GoToShelf(Key);
 		}
-		deliveryState=state.waiting;
 	}
 	
 	public void DoGoPutOnTruck(){
-		xDestination=xWAITING_START;
-		yDestination=yWAITING_START;
+		xDestination=CUST_START_POS;
+		yDestination=CUST_START_POS;
 		deliveryState=state.givingFood;
-		try {
-			atShelf.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void DoGoDeliver(Point Location){
@@ -130,6 +124,12 @@ public class DeliveryManGui implements Gui{
 
 	public void setPresent(boolean b) {
 		isPresent = b;
+	}
+
+	public void DoGoBack() {
+		xDestination=xWAITING_START;
+		yDestination=yWAITING_START;
+		deliveryState=state.delivered;
 	}
 
 }
