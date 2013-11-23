@@ -43,7 +43,7 @@ public class DeliveryManRoleTest extends TestCase
 		customer2 = new MockMarketCustomer("mockcustomer2");
 		customerDitch = new MockMarketCustomer("mockcustomerditch");
 		customerRich = new MockMarketCustomer("mockcustomerrich");
-		market= new MarketAgent(location,"Market");
+		market= new MarketAgent(location,"Market",null);
 		choice= new HashMap<String,Integer>();
 		cook= new MockCook("cook");
 

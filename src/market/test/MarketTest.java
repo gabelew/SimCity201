@@ -44,7 +44,7 @@ public class MarketTest extends TestCase
 		customerRich = new MockMarketCustomer("mockcustomerrich");
 		clerk = new MockClerk("Clerk");
 		deliveryMan = new MockDeliveryMan("DeliveryMan");
-		market= new MarketAgent(location,"market");
+		market= new MarketAgent(location,"market", null);
 		cook = new MockCook("cook");
 		cook2 = new MockCook("cook2");
 		cook3 = new MockCook("cook3");
@@ -112,7 +112,7 @@ public class MarketTest extends TestCase
 						+ clerk.log.toString(), 1, clerk.log.size());
 		assertEquals("Market should now have 0 customers in it.",market.MyCustomers.size(), 0);
 		//when done, Clerk sends message saying he is free
-		market.msgClerkDone();
+		market.msgClerkDone(clerk);
 		assertTrue("Market should have logged \"Received msgClerkDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgClerkDone from clerk."));
 		assertTrue("Clerk should now be free",market.clerkFree);
@@ -177,7 +177,7 @@ public class MarketTest extends TestCase
 		assertEquals("Market should now have 0 cook customers in it.",market.MyCooks.size(), 0);
 		assertFalse("Delivery Man should still not be free",market.deliveryFree);
 		//when done, DeliveryMan sends message saying he is free
-		market.msgDeliveryDone();
+		market.msgDeliveryDone(deliveryMan);
 		assertTrue("Market should have logged \"Received msgDeliveryDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgDeliveryDone from deliveryMan."));
 		assertTrue("Delivery Man should now be free",market.deliveryFree);
@@ -274,7 +274,7 @@ public class MarketTest extends TestCase
 		assertFalse("Delivery Man should still not be free",market.deliveryFree);
 		
 		//when done, DeliveryMan sends message saying he is free
-		market.msgDeliveryDone();
+		market.msgDeliveryDone(deliveryMan);
 		assertTrue("Market should have logged \"Received msgDeliveryDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgDeliveryDone from deliveryMan."));
 		assertTrue("Delivery Man should now be free",market.deliveryFree);
@@ -282,7 +282,7 @@ public class MarketTest extends TestCase
 				market.pickAndExecuteAnAction());
 		
 		//when done, Clerk sends message saying he is free
-		market.msgClerkDone();
+		market.msgClerkDone(clerk);
 		assertTrue("Market should have logged \"Received msgClerkDone\". His log reads: " 
 				+ market.log.getLastLoggedEvent().toString(), market.log.containsString("Received msgClerkDone from clerk."));
 		assertTrue("Clerk should now be free",market.clerkFree);

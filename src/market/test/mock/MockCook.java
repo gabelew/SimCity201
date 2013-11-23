@@ -33,6 +33,11 @@ public class MockCook extends Mock implements Cook {
 		super(name);
 
 	}
+
+	@Override
+	public void msgIncompleteOrder(DeliveryMan Dm,List<String> outOf){
+		log.add(new LoggedEvent("Received msgIncompleteOrder from delivery man."));
+	}
 	
 	@Override
 	public void msgNeverOrderFromMarketAgain(MarketAgent market){
