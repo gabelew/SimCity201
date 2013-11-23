@@ -424,6 +424,9 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public List<Restaurant> getRestaurants() {
 		return restaurants;
 	}
+	public List<MarketAgent> getMarkets() {
+		return markets;
+	}
 	
 	public List<Home> getHomes() {
 		return homes;

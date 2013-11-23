@@ -117,4 +117,8 @@ public class ClerkGui implements Gui{
 		clerkState=state.givingFood;
 	}
 
+	public void setPresent(boolean b) {
+		isPresent = true;
+	}
+
 }

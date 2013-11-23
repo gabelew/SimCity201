@@ -1,23 +1,13 @@
 package city.roles;
 
-import restaurant.gui.CustomerGui;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
-import agent.Agent;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
-
 import market.gui.ClerkGui;
 import market.interfaces.*;
 import city.MarketAgent;
@@ -40,7 +30,7 @@ public class ClerkRole extends Role implements Clerk {
 		public orderState s;
 		public double amountOwed;
 	}
-	Market Market;
+	public Market Market;
 	public MarketCustomer MCR;
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
 	PersonAgent myPerson; 
@@ -144,6 +134,8 @@ public class ClerkRole extends Role implements Clerk {
 	public void atShelf(){
 		atShelf.release();
 	}
-
+	public ClerkGui getClerkGui(){
+		return clerkGui;
+	}
 }
 

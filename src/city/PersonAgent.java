@@ -629,6 +629,22 @@ public class PersonAgent extends Agent
             	role.getGui().setPresent(true);
             	role.goesToWork();
             	role.active = true;
+    		}else if(job.type.equalsIgnoreCase("clerk")){
+    			for(MarketAgent ma: simCityGui.getMarkets()){
+    				if(ma.location.equals(job.location)){
+    	    			ClerkRole role = new ClerkRole();
+    	    			role.Market = ma;
+    	    			role.setPerson(this);
+    	    			roles.add(role);
+    	            	role.active = true;
+    	    			ma.insideAnimationPanel.addGui(role.getClerkGui());
+    	            	role.getClerkGui().setPresent(true);
+    	            	//role.goesToWork();	
+    				}
+    			}
+
+    		}else if(job.type.equalsIgnoreCase("deliveryMan")){
+    			
     		}
         	
     	}
