@@ -230,7 +230,7 @@ public class CookRole extends Role implements Cook {
 		}
 		
 		stateChanged();
-	}
+	}*
 
 	public void msgOutOfOrder(MarketAgent m, List<MarketAgent.MyFood> orderList) {
 		MyMarket mm = findMarket(m);
@@ -254,6 +254,16 @@ public class CookRole extends Role implements Cook {
 		
 		stateChanged();
 	}*/
+	
+	public void msgIncompleteOrder(DeliveryMan m,List<String> outOf){
+		boolean reorder=false;
+		
+		for (String out: outOf){
+			
+		}
+		
+		
+	}
 	
 	//Messages from animation
 

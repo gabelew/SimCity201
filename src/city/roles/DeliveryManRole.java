@@ -147,9 +147,9 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	
 	private void orderDone(){
-		o=null;
+		o.s=orderState.noOrder;
 		cook=null;
-		Market.msgDeliveryDone();
+		Market.msgDeliveryDone(this);
 	}
 }
 

@@ -127,7 +127,7 @@ public class ClerkRole extends Role implements Clerk {
 	private void orderDone(){
 		o.s=orderState.noOrder;
 		MCR=null;
-		Market.msgClerkDone();
+		Market.msgClerkDone(this);
 	}
 
 }

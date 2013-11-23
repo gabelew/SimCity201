@@ -6,6 +6,8 @@ import java.util.*;
 import agent.Agent;
 import city.animationPanels.InsideAnimationPanel;
 import city.roles.*;
+import market.interfaces.Clerk;
+import market.interfaces.DeliveryMan;
 import market.interfaces.Market;
 import restaurant.interfaces.Cook;
 import restaurant.test.mock.EventLog;
@@ -39,16 +41,30 @@ public class MyCook{
 public enum customerState{waiting, clerkGettingFood,done};
 public enum cookState{waiting,deliveryGettingFood,done};
 
-Clerk clerk;
-DeliveryMan deliveryMan;
-
+List<clerk>clerks=new ArrayList<clerk>();
+class clerk{
+	public clerk(Clerk c, state free) {
+		clerk=c;
+		clerkState=free;
+	}
+	Clerk clerk;	
+	state clerkState;
+}
+List<delivery>deliverys=new ArrayList<delivery>();
+class delivery{
+	public delivery(DeliveryMan dM, state free) {
+		deliveryMan=dM;
+		deliveryState=free;
+	}
+	DeliveryMan deliveryMan;
+	state deliveryState;
+}
+enum state{free,busy};
 public boolean clerkFree=true;
 public boolean deliveryFree=true;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
 
-public MarketAgent(Clerk Clerk,DeliveryMan DMR,Point Location,String Name, InsideAnimationPanel iap){
-	this.clerk=Clerk;
-	this.deliveryMan=DMR;
+public MarketAgent(Point Location,String Name, InsideAnimationPanel iap){
 	this.location=Location;
 	this.name=Name;
 	this.insideAnimationPanel = iap;
@@ -67,14 +83,22 @@ public void msgPlaceDeliveryOrder(Cook cook){
 	log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
 }
 
-public void msgClerkDone(){
-	clerkFree=true;
+public void msgClerkDone(Clerk c){
+	for(clerk cl:clerks){
+		if(cl.clerk==c){
+			cl.clerkState=state.free;
+		}
+	}
 	stateChanged();
 	log.add(new LoggedEvent("Received msgClerkDone from clerk."));
 }
 
-public void msgDeliveryDone(){
-	deliveryFree=true;
+public void msgDeliveryDone(DeliveryMan D){
+	for(delivery de: deliverys){
+		if(de.deliveryMan==D){
+			de.deliveryState=state.free;
+		}
+	}
 	stateChanged();
 	log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 }
@@ -83,16 +107,24 @@ public void msgDeliveryDone(){
 public boolean pickAndExecuteAnAction() {
 	
 	try{
-		for (MyCustomer MC:MyCustomers){
-			if (MC.state==customerState.waiting){
-				giveToClerk(MC);
-				return true;
+		for(clerk c:clerks){
+			if(c.clerkState==state.free){
+				for (MyCustomer MC:MyCustomers){
+					if (MC.state==customerState.waiting){
+						giveToClerk(c,MC);
+						return true;
+					}
+				}
 			}
 		}
-		for (MyCook MC:MyCooks){
-			if (MC.cookstate==cookState.waiting){
-				giveToDelivery(MC);
-				return true;
+		for(delivery d: deliverys){
+			if(d.deliveryState==state.free){
+				for (MyCook MC:MyCooks){
+					if (MC.cookstate==cookState.waiting){
+						giveToDelivery(d,MC);
+						return true;
+					}
+				}
 			}
 		}
 		
@@ -104,15 +136,15 @@ public boolean pickAndExecuteAnAction() {
 }
 
 //actions
-private void giveToClerk(MyCustomer MC){
-	clerkFree=false;
-	clerk.msgTakeCustomer(MC.MC,this);
+private void giveToClerk(clerk c,MyCustomer MC){
+	c.clerkState=state.busy;
+	c.clerk.msgTakeCustomer(MC.MC,this);
 	MyCustomers.remove(MC);
 }
 
-private void giveToDelivery(MyCook MC){
-	deliveryFree=false;
-	deliveryMan.msgTakeCustomer(MC.cook,this);
+private void giveToDelivery(delivery d,MyCook MC){
+	d.deliveryState=state.busy;
+	d.deliveryMan.msgTakeCustomer(MC.cook,this);
 	MyCooks.remove(MC);
 }
 
@@ -127,6 +159,16 @@ public void setInventory(int cars, int chicken,int steak,int salad, int cookie){
 	Inventory.put("chicken",chicken);
 	Inventory.put("salad", salad);
 	Inventory.put("cookie", cookie);
+}
+
+public void addClerk(Clerk c){
+	clerks.add(new clerk(c,state.free));
+	stateChanged();
+}
+
+public void addDeliveryMan(DeliveryMan DM){
+	deliverys.add(new delivery(DM,state.free));
+	stateChanged();
 }
 
 }

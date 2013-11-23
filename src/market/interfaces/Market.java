@@ -20,9 +20,9 @@ public interface Market {
 	
 	public abstract void msgPlaceDeliveryOrder(Cook cook);
 	
-	public abstract void msgClerkDone();
+	public abstract void msgClerkDone(Clerk c);
 	
-	public abstract void msgDeliveryDone();
+	public abstract void msgDeliveryDone(DeliveryMan d);
 	
 	public abstract void setInventory(int steak, int chicken, int cars, int salad, int cookie);
 	

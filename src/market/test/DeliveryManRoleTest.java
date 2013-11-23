@@ -43,7 +43,7 @@ public class DeliveryManRoleTest extends TestCase
 		customer2 = new MockMarketCustomer("mockcustomer2");
 		customerDitch = new MockMarketCustomer("mockcustomerditch");
 		customerRich = new MockMarketCustomer("mockcustomerrich");
-		market= new MarketAgent(clerk,deliveryMan,location,"Market");
+		market= new MarketAgent(location,"Market");
 		choice= new HashMap<String,Integer>();
 		cook= new MockCook("cook");
 
@@ -112,31 +112,17 @@ public class DeliveryManRoleTest extends TestCase
 		//customer sends payment message
 		deliveryMan.msgHereIsPayment(normAmount,cashier);
 		//check post-conditions of message
-		/*assertEquals("Clerk order state should be payed",clerk.o.s,orderState.payed);
-		//run the clerk's scheduler
-		assertTrue("Clerk's scheduler should have returned true (needs to react to payment).", 
-				clerk.pickAndExecuteAnAction());
+		assertEquals("Delivery order state should be payed",deliveryMan.o.s,orderState.payed);
+		//run the delivery's scheduler
+		assertTrue("Delivery man's scheduler should have returned true (needs to react to payment).", 
+				deliveryMan.pickAndExecuteAnAction());
 		//check post-conditions of scheduler
-		assertEquals("Clerk order state should be done",clerk.o.s,orderState.done);
+		assertEquals("Delivery order state should be done",deliveryMan.o.s,orderState.noOrder);
+		assertEquals("cook should be null",deliveryMan.cook,null);
 		//run the clerk's scheduler
-		assertTrue("Clerk's scheduler should have returned true (needs to react to done).", 
-				clerk.pickAndExecuteAnAction());
-		//check post-conditions of scheduler
-		assertEquals("customer should be null",clerk.MCR,null);
-		assertEquals("Clerk order state should be no order",clerk.o.s,orderState.noOrder);
-		//run the clerk's scheduler
-		assertFalse("Clerk's scheduler should have returned false (nothing to do).", 
-				clerk.pickAndExecuteAnAction());
-				*/
+		assertFalse("Delivery Man's scheduler should have returned false.", 
+				deliveryMan.pickAndExecuteAnAction());
 	}
-	public void testOneNormalCookCustomerScenario()
-	{
-		/*
-		 * Normal one cook delivery and customer coming into store.
-		 */
-		//pre-initializing checks
-		
-		
-	}
+
 
 }
