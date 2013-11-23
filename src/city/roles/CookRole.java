@@ -532,11 +532,16 @@ public class CookRole extends Role implements Cook {
 				boolean placeOrder = false;
 				Map<String,Integer>foodsToOrder=new HashMap<String,Integer>();
 				//List<Food> foodsToOrder = new ArrayList<Food>();
-
+				if(myPerson.getName().toLowerCase().contains("cook"))
+					print("orderFoodFromMarket ");
 				synchronized(foods){
 					for(Food f: foods){
+						if(myPerson.getName().toLowerCase().contains("cook"))
+							print("orderFoodFromMarket " +m.market.getName() +" "+ f.choice + " " + f.amount + " " + f.low + " " + m.foodInventoryMap.get(f.getChoice().toLowerCase()) + "  " + f.os);
 						if(f.amount <= f.low && m.foodInventoryMap.get(f.getChoice().toLowerCase()) == InventoryState.POSSIBLE  
 								&& f.os != OrderingState.ordered){
+
+							print("orderFoodFromMarket " +m.market.getName() + " " + f.choice + "passed if");
 							f.os = OrderingState.ordered;
 							print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
 							m.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.ATTEMPTING);

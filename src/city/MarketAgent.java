@@ -77,6 +77,7 @@ public void msgPlaceOrder(MarketCustomer CR){
 }
 
 public void msgPlaceDeliveryOrder(Cook cook){
+	print("Received msgPlaceDeliveryOrder from CookCustomer.");
 	MyCooks.add(new MyCook(cook, cookState.waiting));
 	stateChanged();
 	log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
