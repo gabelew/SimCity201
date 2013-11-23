@@ -128,8 +128,10 @@ public boolean pickAndExecuteAnAction() {
 		}
 		for(delivery d: deliverys){
 			if(d.deliveryState==state.free){
+				print("d.deliveryState==state.free");
 				for (MyCook MC:MyCooks){
 					if (MC.cookstate==cookState.waiting){
+						print("MC.cookstate==cookState.waiting");
 						giveToDelivery(d,MC);
 						return true;
 					}
@@ -155,6 +157,7 @@ private void giveToClerk(clerk c,MyCustomer MC){
 }
 
 private void giveToDelivery(delivery d,MyCook MC){
+	print("giveToDelivery");
 	d.deliveryState=state.busy;
 	d.deliveryMan.msgTakeCustomer(MC.cook,this);
 	MyCooks.remove(MC);
@@ -187,6 +190,7 @@ public void addClerk(Clerk c){
 }
 
 public void addDeliveryMan(DeliveryMan DM){
+	print("addDeliveryMan");
 	deliverys.add(new delivery(DM,state.free));
 	stateChanged();
 }

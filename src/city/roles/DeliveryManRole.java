@@ -66,6 +66,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		stateChanged();	
 	}
 	public void msgTakeCustomer(Cook c,MarketAgent m){
+		print("Received msgTakeCustomer from Market.");
 		cook=c;
 		Market=m;
 		o.s=orderState.askedForOrder;

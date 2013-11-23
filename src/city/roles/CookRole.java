@@ -140,30 +140,25 @@ public class CookRole extends Role implements Cook {
 	}
 	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	
-	public CookRole(List<MarketAgent> marks){
+	public CookRole(){
 		super();
 	
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
 		foods.add(new Food("steak",STEAK_COOKTIME, STEAK_INIT_AMOUNT, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
 		foods.add(new Food("cookie",COOKIE_COOKTIME, COOKIE_INIT_AMOUNT, COOKIE_LOW_AMOUNT, COOKIE_CAPACITY));
-		
-		for(MarketAgent m:marks){
-			markets.add(new MyMarket(m));
-		}
 	}
 
-	public CookRole(List<MarketAgent> marks, int steakAmount){
+	public CookRole( int steakAmount){
 		super();
 	
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
 		foods.add(new Food("steak",STEAK_COOKTIME, steakAmount, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
 		foods.add(new Food("cookie",COOKIE_COOKTIME, COOKIE_INIT_AMOUNT, COOKIE_LOW_AMOUNT, COOKIE_CAPACITY));
-		
-		for(MarketAgent m:marks){
-			markets.add(new MyMarket(m));
-		}
+	}
+	public void addMarket(MarketAgent m){
+        markets.add(new MyMarket(m));
 	}
 	public void setGui(CookGui g) {
 		cookGui = g;
@@ -526,18 +521,13 @@ public class CookRole extends Role implements Cook {
 	}
 
 	private void orderFoodFromMarket(){
-
 		synchronized(markets){
 			for(MyMarket m: markets){
 				boolean placeOrder = false;
 				Map<String,Integer>foodsToOrder=new HashMap<String,Integer>();
 				//List<Food> foodsToOrder = new ArrayList<Food>();
-				if(myPerson.getName().toLowerCase().contains("cook"))
-					print("orderFoodFromMarket ");
 				synchronized(foods){
 					for(Food f: foods){
-						if(myPerson.getName().toLowerCase().contains("cook"))
-							print("orderFoodFromMarket " +m.market.getName() +" "+ f.choice + " " + f.amount + " " + f.low + " " + m.foodInventoryMap.get(f.getChoice().toLowerCase()) + "  " + f.os);
 						if(f.amount <= f.low && m.foodInventoryMap.get(f.getChoice().toLowerCase()) == InventoryState.POSSIBLE  
 								&& f.os != OrderingState.ordered){
 

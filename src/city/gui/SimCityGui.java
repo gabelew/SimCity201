@@ -209,7 +209,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        		r = new Restaurant(
     						(restaurant.interfaces.Host)(new HostRole()), 
     						(restaurant.interfaces.Cashier)(new CashierRole()), 
-    						(restaurant.interfaces.Cook)(new CookRole(markets, 1)), 
+    						(restaurant.interfaces.Cook)(new CookRole(1)), 
     						new restaurant.interfaces.Waiter.Menu(), 
     						"Restaurant1CustomerRole", 
     						"Restaurant1", 
@@ -220,7 +220,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        		r = new Restaurant(
 	        						(restaurant.interfaces.Host)(new HostRole()), 
 	        						(restaurant.interfaces.Cashier)(new CashierRole()), 
-	        						(restaurant.interfaces.Cook)(new CookRole(markets)), 
+	        						(restaurant.interfaces.Cook)(new CookRole()), 
 	        						new restaurant.interfaces.Waiter.Menu(), 
 	        						"Restaurant1CustomerRole", 
 	        						"Restaurant1", 
@@ -286,6 +286,7 @@ public class SimCityGui extends JFrame implements ActionListener {
             			name, 
             			marketAnimationPanel);
             	marketAgent.setInventory(200, 200, 200, 200, 200);
+            	marketAgent.startThread();
             	markets.add(marketAgent);
             	
 	    	}else if(b.type.equals("bank")){
@@ -337,6 +338,12 @@ public class SimCityGui extends JFrame implements ActionListener {
 				buildingsPanel.add(bp, "" + i);
 	        }
 		}
+        
+        for(Restaurant r: restaurants){
+        	for(MarketAgent m: markets){
+        		((CookRole)r.cook).addMarket(m);
+        	}
+        }
 	}
 
 	/**
