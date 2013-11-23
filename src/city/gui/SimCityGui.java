@@ -261,7 +261,7 @@ public class SimCityGui extends JFrame implements ActionListener {
             			new Point(b.getX(),b.getY()),
             			name, 
             			marketAnimationPanel);
-            	
+            	marketAgent.setInventory(200, 200, 200, 200, 200);
             	markets.add(marketAgent);
             	
 	    	}else if(b.type.equals("bank")){
