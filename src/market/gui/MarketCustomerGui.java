@@ -78,4 +78,8 @@ public class MarketCustomerGui implements Gui{
 		
 	}
 
+	public void setPresent(boolean b) {
+		isPresent = true;
+	}
+
 }

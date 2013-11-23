@@ -449,7 +449,7 @@ public class PersonAgent extends Agent
         		goToBank();
         		taskList.remove(temp);
         		return true;
-        	}
+        	}*/
         
         	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToMarket){
@@ -461,7 +461,7 @@ public class PersonAgent extends Agent
         		goToMarket();
         		taskList.remove(temp);
         		return true;
-        	}*/
+        	}
         	
         	
 
@@ -677,7 +677,7 @@ public class PersonAgent extends Agent
     	//Restaurant mr = restaurants.get(randInt(0,0));
     	destination = mr.location;
     	if(car == true || destination.y == personGui.yPos){
-    	personGui.DoWalkTo(destination);
+    		personGui.DoWalkTo(destination);
 			try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
@@ -705,7 +705,48 @@ public class PersonAgent extends Agent
     	role.getGui().setPresent(true);
     	role.gotHungry();
     }
-    private void goToBusStop() {
+    
+    private void goToMarket(){
+    	state = State.goingToMarket;
+	    MarketAgent m  = chooseClosestMarket();
+	    destination = m.location;
+	    
+	    if(car == true || destination.y == personGui.yPos){
+    		personGui.DoWalkTo(destination);
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}else{
+    		goToBusStop();
+    	} 
+    }
+    private void finishGoingToMarket(){
+    	state  = State.shopping;
+    	MarketAgent m = findMarket(destination);
+    	personGui.DoWalkTo(destination); //animationStub
+    	MarketCustomerRole role = new MarketCustomerRole(this);
+    	roles.add(role);
+    	role.active = true;
+    	m.insideAnimationPanel.addGui(role.getMarketCustomerGui());
+    	role.getMarketCustomerGui().setPresent(true);
+    	role.startShopping(m, toOrderFromMarket);
+    	}
+
+    private MarketAgent chooseClosestMarket() {
+    	MarketAgent closestMa = simCityGui.getMarkets().get(0);
+    	for(MarketAgent m: simCityGui.getMarkets()){
+			if(Math.abs(closestMa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
+				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
+					closestMa = m;
+				}
+			}
+		}
+		return closestMa;
+	}
+
+	private void goToBusStop() {
     	personGui.doGoToBus();
 		this.transportState = TransportState.GoingToBus;	
 		try {
