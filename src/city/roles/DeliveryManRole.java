@@ -144,7 +144,8 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
 	    deliveryGui.DoGoGetFood(o.Choices);
-	    cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
+	    if(o.outOf!=null)
+	    	cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
 	    //cook.msgHereIsPrice(o.amountOwed,this);
 	    o.s=orderState.ordered;
 	}
