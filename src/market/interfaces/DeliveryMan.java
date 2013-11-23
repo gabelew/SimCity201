@@ -3,10 +3,9 @@ package market.interfaces;
 import java.util.Map;
 
 import city.MarketAgent;
-import city.roles.CashierRole;
-import city.roles.CookRole;
-import restaurant.interfaces.Waiter.Menu;
-import restaurant.gui.CustomerGui;
+import restaurant.interfaces.Cashier;
+import restaurant.interfaces.Cook;
+
 
 /**
  * A sample MarketCustomer interface built to unit test a MarketAgent.
@@ -20,6 +19,6 @@ public interface DeliveryMan {
 	
 	public abstract void msgHereIsOrder(Map<String,Integer>choice);
 	
-	public abstract void msgHereIsPayment(double payment, CashierRole ca);
+	public abstract void msgHereIsPayment(double payment, Cashier ca);
 
 }

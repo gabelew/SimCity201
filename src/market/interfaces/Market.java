@@ -3,6 +3,8 @@ package market.interfaces;
 import java.util.HashMap;
 import java.util.Map;
 
+import restaurant.interfaces.Cook;
+
 
 /**
  * A sample MarketCustomer interface built to unit test a MarketAgent.

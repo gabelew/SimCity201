@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import restaurant.interfaces.Cashier;
+import restaurant.interfaces.Cook;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import market.interfaces.*;

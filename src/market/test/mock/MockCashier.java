@@ -2,6 +2,7 @@ package market.test.mock;
 
 import city.MarketAgent;
 import market.interfaces.*;
+import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -33,8 +34,8 @@ public class MockCashier extends Mock implements Cashier {
 	}
 	
 	@Override
-	public void msgHereIsBill(MarketAgent marketAgent,double bill){
-		log.add(new LoggedEvent("Received msgHereIsBill from market."));
+	public void msgHereIsBill(DeliveryMan DM, double bill){
+		log.add(new LoggedEvent("Received msgHereIsBill from delivery man."));
 	}
 	
 	@Override

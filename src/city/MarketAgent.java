@@ -6,6 +6,7 @@ import java.util.*;
 import agent.Agent;
 import city.roles.*;
 import market.interfaces.Market;
+import restaurant.interfaces.Cook;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import market.interfaces.*;

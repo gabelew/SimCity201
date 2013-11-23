@@ -105,13 +105,14 @@ public class DeliveryManRoleTest extends TestCase
 		assertEquals("Market inventory should go down",market.Inventory.get("steak"),amountLeft);
 		assertEquals("Market inventory should go down",market.Inventory.get("cookie"),amountLeft);
 		assertEquals("Market inventory should go down",market.Inventory.get("salad"),amountLeft);
-		assertEquals("Delivery order state should be waiting for payment",deliveryMan.o.s,orderState.ordered);
+		assertEquals("Delivery order state should be ordered",deliveryMan.o.s,orderState.ordered);
 		assertTrue("Dellvery man's scheduler should have returned false (waiting for payment).", 
 				deliveryMan.pickAndExecuteAnAction());
+		assertEquals("Delivery order state should be waiting for payment",deliveryMan.o.s,orderState.waitingForPayment);
 		//customer sends payment message
-		/*clerk.msgHereIsPayment(normAmount);
+		deliveryMan.msgHereIsPayment(normAmount,cashier);
 		//check post-conditions of message
-		assertEquals("Clerk order state should be payed",clerk.o.s,orderState.payed);
+		/*assertEquals("Clerk order state should be payed",clerk.o.s,orderState.payed);
 		//run the clerk's scheduler
 		assertTrue("Clerk's scheduler should have returned true (needs to react to payment).", 
 				clerk.pickAndExecuteAnAction());

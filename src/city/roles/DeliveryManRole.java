@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import market.gui.DeliveryManGui;
-import market.interfaces.Cook;
+import restaurant.interfaces.Cook;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import restaurant.Restaurant;
+import restaurant.interfaces.Cashier;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 
@@ -39,7 +40,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		public double amountOwed;
 	}
 	double Price=5;
-	CashierRole cashier;
+	Cashier cashier;
 	public Cook cook;
 	MarketAgent Market;
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,waitingForPayment,payed,done};
@@ -68,7 +69,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		stateChanged();
 	}
 	
-	public void msgHereIsPayment(double payment, CashierRole ca){
+	public void msgHereIsPayment(double payment, Cashier ca){
 		cashier=ca;
 		o.s=orderState.payed;
 		stateChanged();

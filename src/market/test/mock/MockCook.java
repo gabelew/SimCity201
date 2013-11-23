@@ -8,6 +8,7 @@ import city.roles.CookRole.RoleOrder;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
+import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -31,6 +32,11 @@ public class MockCook extends Mock implements Cook {
 	public MockCook(String name) {
 		super(name);
 
+	}
+	
+	@Override
+	public void msgNeverOrderFromMarketAgain(MarketAgent market){
+		log.add(new LoggedEvent("Received msgNeverOrderFromMarketAgain from cashier."));
 	}
 	
 	@Override

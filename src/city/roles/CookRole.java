@@ -514,7 +514,7 @@ public class CookRole extends Role implements Cook {
 				if(placeOrder){
 					//m.market.msgHereIsOrder(this, cashier, foodsToOrder);
 					marketOrders.add(new MarketOrder(foodsToOrder,m.market,marketOrderState.waiting));
-					m.market.msgPlaceDeliveryOrder((market.interfaces.Cook) this);
+					m.market.msgPlaceDeliveryOrder((Cook) this);
 					
 				}
 			}
