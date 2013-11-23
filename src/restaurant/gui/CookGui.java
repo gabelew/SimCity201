@@ -15,7 +15,7 @@ import java.util.concurrent.Semaphore;
 import javax.imageio.ImageIO;
 
 import city.roles.CookRole;
-import city.roles.CookRole.RoleOrder;
+import restaurant.RoleOrder;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import restaurant.gui.HostGui.Command;

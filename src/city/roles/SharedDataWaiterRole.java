@@ -1,15 +1,18 @@
 package city.roles;
 
-
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
 import city.PersonAgent;
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
+import restaurant.RoleOrder;
 import restaurant.gui.WaiterGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 
-public class WaiterRole extends Role implements Waiter{
+public class SharedDataWaiterRole extends Role implements Waiter{
+
 	WaiterGui waiterGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	public List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
@@ -18,6 +21,7 @@ public class WaiterRole extends Role implements Waiter{
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
 	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty};
 	AgentEvent event = AgentEvent.none;
+	private RevolvingStandMonitor revolvingStand;
 	
 	private class MyCustomer{
 		private Customer c;
@@ -35,7 +39,7 @@ public class WaiterRole extends Role implements Waiter{
 
 	}
 
-	public WaiterRole(PersonAgent p, Restaurant r) {
+	public SharedDataWaiterRole(PersonAgent p, Restaurant r) {
 		super(p);
 		restaurant = r;
 	}
@@ -326,9 +330,8 @@ public class WaiterRole extends Role implements Waiter{
 		doGoToKitchen(c);
 		print("\t\t HERHER IM IN DA KITCH");
 		c.s = CustomerState.orderPlaced;
-		print("\t\t BEFORE THE PAUSE msgHereIsOrder");
-		restaurant.cook.msgHereIsOrder(this, c.choice, c.table);
-		print("\t\t msgHereIsOrder");
+		print("\t\t Inserting order into revolving stand");
+		revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
 		waiterGui.placedOrder();
 		print("\t\t waiterGui.placedOrder");
 	}
@@ -434,11 +437,14 @@ public class WaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 	}
+	
+	public void setRevolvingStand(RevolvingStandMonitor r) {
+		this.revolvingStand = r;
+	}
 
 	public void msgLeftTheRestaurant() {
 		print("msgLeftTheRestaurant");
 		waitingResponse.release();
 		event = AgentEvent.relieveFromDuty;
 	}
-	
 }

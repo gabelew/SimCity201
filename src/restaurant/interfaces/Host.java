@@ -28,6 +28,6 @@ public interface Host {
 	
 	public abstract void addNewTable();
 
-	public abstract void msgDoneWorking(WaiterRole role);
+	public abstract void msgDoneWorking(Waiter w);
 	
 }

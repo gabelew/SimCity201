@@ -1,12 +1,14 @@
 package city.gui;
 
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
 import restaurant.gui.CashierGui;
 import restaurant.gui.CookGui;
 import restaurant.gui.HostGui;
 import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
+
 import atHome.city.Home;
 import city.MarketAgent;
 import city.PersonAgent;
@@ -54,6 +56,8 @@ public class SimCityGui extends JFrame implements ActionListener {
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
     List<MarketAgent> markets = new ArrayList<MarketAgent>();
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
+    
+    private RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
     
     private JFrame bottomFrame = new JFrame();
     private JPanel topPanel = new JPanel();
@@ -246,6 +250,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((CookRole)r.cook).setRestaurant(r);
 	        	CookGui ccg = new CookGui(((CookRole)r.cook));
 	        	((CookRole)r.cook).setGui(ccg);
+	        	((CookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 
         	}

@@ -439,10 +439,10 @@ public class HostRole extends Role implements Host {
 	}
 
 	@Override
-	public void msgDoneWorking(WaiterRole role) {
+	public void msgDoneWorking(Waiter waiter) {
 		MyWaiter removeW = null;
 		for(MyWaiter w: waiters){
-			if(w.w == role){
+			if(w.w.equals(waiter)){
 				removeW = w;
 			}
 		}

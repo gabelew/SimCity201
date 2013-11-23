@@ -8,6 +8,8 @@ import market.interfaces.Market;
 import city.MarketAgent;
 import city.PersonAgent;
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
+import restaurant.RoleOrder;
 import restaurant.gui.CookGui;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
@@ -23,9 +25,11 @@ public class CookRole extends Role implements Cook {
 	PersonAgent replacementPerson = null;
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
-	
+	private RevolvingStandMonitor revolvingStand;
+	private boolean checkStand;
 	public CookGui cookGui = null;
 
+	static final int CHECK_STAND_TIME = 4000;
     static final int SALAD_COOKTIME = 7000;
     static final int STEAK_COOKTIME = 15000;
     static final int CHICKEN_COOKTIME = 20000;
@@ -91,20 +95,6 @@ public class CookRole extends Role implements Cook {
     }    
     private enum OrderingState {none, order, ordered};
     
-	public class RoleOrder{
-		public Waiter waiter;
-		public String choice;
-		public int table;
-		public OrderState state;
-		
-		RoleOrder(Waiter w, String c, int t ,OrderState s){
-			waiter = w;
-			choice = c;
-			table = t;
-			state = s;	
-		}
-		
-	}
 	public enum OrderState {PENDING, COOKING, DONE, QUEUED, BURNING};
 	
 	public class MyMarket{
@@ -142,7 +132,9 @@ public class CookRole extends Role implements Cook {
 	
 	public CookRole(){
 		super();
-	
+		
+		checkStand = true;
+		
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
 		foods.add(new Food("steak",STEAK_COOKTIME, STEAK_INIT_AMOUNT, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
@@ -151,7 +143,9 @@ public class CookRole extends Role implements Cook {
 
 	public CookRole( int steakAmount){
 		super();
-	
+		
+		checkStand = true;
+		
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
 		foods.add(new Food("steak",STEAK_COOKTIME, steakAmount, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
@@ -184,7 +178,7 @@ public class CookRole extends Role implements Cook {
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
-		orders.add(new RoleOrder(w, choice, table, OrderState.PENDING));
+		orders.add(new RoleOrder(w, choice, table));
 		stateChanged();
 		print("order received!!");
 	}
@@ -416,6 +410,10 @@ public class CookRole extends Role implements Cook {
 			return true;
 		}
 		
+//		if(checkStand) {
+//			checkRevolvingStand();
+//		}
+		
 		goToRestPost();
 		return false;
 	}
@@ -424,6 +422,22 @@ public class CookRole extends Role implements Cook {
 
 
 //Actions
+	
+	private void checkRevolvingStand() {
+		print("Checking stand for any orders");
+		RoleOrder order = revolvingStand.remove();
+		if(order != null) {
+			print("Removed order from stand");
+			orders.add(order);
+		}
+		checkStand = false;
+		timer.schedule(new TimerTask() {
+			public void run() {
+				checkStand = true;
+				stateChanged();
+			}
+		}, CHECK_STAND_TIME);
+	}
 	
 	private void plateIt(RoleOrder o) {
 		DoPlating(o);
@@ -658,6 +672,10 @@ public class CookRole extends Role implements Cook {
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;
 		
+	}
+	
+	public void setRevolvingStand(RevolvingStandMonitor r) {
+		this.revolvingStand = r;
 	}
 
 

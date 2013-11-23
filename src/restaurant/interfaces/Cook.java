@@ -5,7 +5,7 @@ import java.util.Map;
 
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
-import city.roles.CookRole.RoleOrder;
+import restaurant.RoleOrder;
 import city.roles.DeliveryManRole;
 import restaurant.gui.CookGui;
 
