@@ -70,12 +70,14 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 
 	//actions
 	private void giveOrder(){
+		marketCGui.DoGoToClerk();
 		Clerk.msgPlaceOrder(o.Choices);
 		o.s=orderState.ordered;
 	}
 	
 	private void payForOrder(){
 		//subtract amount from money in person agent
+		myPerson.cashOnHand=myPerson.cashOnHand-o.amountOwed;
 		Clerk.msgHereIsPayment(o.amountOwed);
 		o.s=orderState.payed;
 	}

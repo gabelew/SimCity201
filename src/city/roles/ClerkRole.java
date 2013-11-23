@@ -28,6 +28,7 @@ import city.PersonAgent;
  */
 public class ClerkRole extends Role implements Clerk {
 	public EventLog log = new EventLog();
+	private Semaphore atShelf=new Semaphore(1,true);
 	private ClerkGui clerkGui=new ClerkGui(this);
 	public Order o;
 	public class Order{
@@ -114,12 +115,22 @@ public class ClerkRole extends Role implements Clerk {
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
 	    clerkGui.DoGoGetFood(o.Choices);
+		try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    MCR.msgHereIsPrice(o.amountOwed);
 	    o.s=orderState.waitingForPayment;
 	}
 	
 	private void giveOrder(){
 		clerkGui.DoGoGiveOrder();
+		try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		MCR.msgHereIsOrder(o.Choices,o.outOf);
 		o.s=orderState.done;
 	}
@@ -128,6 +139,10 @@ public class ClerkRole extends Role implements Clerk {
 		o.s=orderState.noOrder;
 		MCR=null;
 		Market.msgClerkDone(this);
+	}
+	
+	public void atShelf(){
+		atShelf.release();
 	}
 
 }

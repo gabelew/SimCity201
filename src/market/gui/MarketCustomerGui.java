@@ -25,7 +25,7 @@ public class MarketCustomerGui implements Gui{
 	private static BufferedImage customerImg = null;
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
-	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
+	private int xDestination = 10, yDestination = 10;
 	
 	public static List<Semaphore> atms = new ArrayList<Semaphore>();
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
@@ -70,6 +70,12 @@ public class MarketCustomerGui implements Gui{
 	public void DoLeaveMarket(){
 		xDestination=-5;
 		yDestination=-5;
+	}
+
+	public void DoGoToClerk() {
+		xDestination=xWAITING_START-5;
+		yDestination=yWAITING_START;
+		
 	}
 
 }

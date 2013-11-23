@@ -27,7 +27,6 @@ public class ClerkGui implements Gui{
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
 	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
-	private Semaphore atShelf=new Semaphore(1,true);
 	private enum state{waiting,gettingFood,givingFood};
 	state clerkState;
 	
@@ -62,11 +61,11 @@ public class ClerkGui implements Gui{
 		else if (yPos > yDestination)
 			yPos--;
 		if (xPos==xDestination&&yPos==yDestination&&clerkState==state.gettingFood){
-			atShelf.release();
+			role.atShelf();
 			clerkState=state.waiting;
 		}
 		if(xPos==xDestination&&yPos==yDestination&&clerkState==state.givingFood){
-			atShelf.release();
+			role.atShelf();
 			clerkState=state.waiting;
 		}
 	}
@@ -102,10 +101,7 @@ public class ClerkGui implements Gui{
 			yDestination=ySHELF1+150;
 			clerkState=state.gettingFood;
 		}
-		try {
-			atShelf.acquire();
-		} catch (InterruptedException e) {
-		}
+
 	}
 	
 	public void DoGoGetFood(Map<String,Integer> choices){
@@ -119,11 +115,6 @@ public class ClerkGui implements Gui{
 		xDestination=xWAITING_START;
 		yDestination=yWAITING_START;
 		clerkState=state.givingFood;
-		try {
-			atShelf.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
