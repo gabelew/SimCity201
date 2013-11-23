@@ -22,8 +22,8 @@ public class ClerkGui implements Gui{
 	state clerkState;
 	
 	static final int CUST_START_POS = -40;
-	static final int xWAITING_START = 50;
-	static final int yWAITING_START = 70;
+	static final int xWAITING_START = 150;
+	static final int yWAITING_START = 230;
 	static final int xSHELF1=100;
 	static final int ySHELF1=120;
 	
