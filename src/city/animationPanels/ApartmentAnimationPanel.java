@@ -95,6 +95,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 150);
 	     }
 	     
+	     
 	     //creates a kitchen, fridge, table, and bed for each tenant
 	     for(int i = 0; i < 5; i++){
 	    	 //top 4

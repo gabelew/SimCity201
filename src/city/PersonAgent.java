@@ -342,7 +342,11 @@ public class PersonAgent extends Agent
 	//RepairMan to Person that appliance is fixed
 	public void ApplianceFixed(String appliance, double price)
 	{
-		
+		for(Role r: roles)
+		{
+			//find at home role
+			//send the ApplianceFixedMsg()
+		}
 	}
 	
 	//Role to Itself to get food
@@ -366,7 +370,8 @@ public class PersonAgent extends Agent
 		stateChanged();
 	}
 	
-	public void msgNoMoreFood(){
+	public void msgNoMoreFood()
+	{
 		boolean inList = false;
 		for(Task t: taskList){
 			if(t == Task.goToMarket)

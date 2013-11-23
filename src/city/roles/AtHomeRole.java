@@ -171,15 +171,20 @@ public class AtHomeRole extends Role
 			if(choices.size() > 0)
 			{
 				choices.remove(o.choice);
-				//myPerson.PickAnotherFoodMsg();
+				ImHungry();
 			}
 			else
 			{
-				//myPerson.NoMoreFoodMsg();
+				myPerson.msgNoMoreFood();
 			}
 			if(food.state != FoodOrderState.ordered)
 			{
 				makeMarketList();
+			}
+			
+			if(choices.size() == 0)
+			{
+				myPerson.msgNoMoreFood();
 			}
 			orders.remove(o);
 		}
@@ -197,7 +202,7 @@ public class AtHomeRole extends Role
 				groceryList.put(f.choice, numToOrder);
 			}
 		}
-		//myPerson.getFoodFromMarket(groceryList);
+		myPerson.msgGetFoodFromMarket(groceryList);
 	}
 /*********************
  ***** SCHEDULER
