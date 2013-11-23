@@ -59,7 +59,7 @@ class delivery{
 	DeliveryMan deliveryMan;
 	state deliveryState;
 }
-enum state{free,busy};
+enum state{free,busy,wantOffWork,offWork};
 public boolean clerkFree=true;
 public boolean deliveryFree=true;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
@@ -86,7 +86,10 @@ public void msgPlaceDeliveryOrder(Cook cook){
 public void msgClerkDone(Clerk c){
 	for(clerk cl:clerks){
 		if(cl.clerk==c){
-			cl.clerkState=state.free;
+			if(cl.clerkState==state.wantOffWork)
+				cl.clerkState=state.offWork;
+			else
+				cl.clerkState=state.free;
 		}
 	}
 	stateChanged();
@@ -115,6 +118,9 @@ public boolean pickAndExecuteAnAction() {
 						return true;
 					}
 				}
+			}
+			else if(c.clerkState==state.offWork){
+				clerkDone(c);
 			}
 		}
 		for(delivery d: deliverys){
@@ -148,6 +154,10 @@ private void giveToDelivery(delivery d,MyCook MC){
 	MyCooks.remove(MC);
 }
 
+private void clerkDone(clerk c){
+	clerks.remove(c);
+}
+
 
 public String getName(){
 	return name;
@@ -169,6 +179,14 @@ public void addClerk(Clerk c){
 public void addDeliveryMan(DeliveryMan DM){
 	deliverys.add(new delivery(DM,state.free));
 	stateChanged();
+}
+
+public void offWork(Clerk c){
+	for (clerk cl:clerks){
+		if(cl.clerk==c){
+			cl.clerkState=state.wantOffWork;
+		}
+	}
 }
 
 }
