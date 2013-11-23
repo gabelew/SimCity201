@@ -203,6 +203,7 @@ public class CookRole extends Role implements Cook {
 		}
 	}
 	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, List<String>outOf,double amountOwed){
+		print("msgHereIsOrderFromMarket");
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
 				order.price=amountOwed;
@@ -530,8 +531,6 @@ public class CookRole extends Role implements Cook {
 					for(Food f: foods){
 						if(f.amount <= f.low && m.foodInventoryMap.get(f.getChoice().toLowerCase()) == InventoryState.POSSIBLE  
 								&& f.os != OrderingState.ordered){
-
-							print("orderFoodFromMarket " +m.market.getName() + " " + f.choice + "passed if");
 							f.os = OrderingState.ordered;
 							print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
 							m.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.ATTEMPTING);

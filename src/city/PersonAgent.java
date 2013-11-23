@@ -647,7 +647,7 @@ public class PersonAgent extends Agent
 		           	role.getClerkGui().setPresent(true);
 		           	role.goesToWork();	
 			}else if(job.type.equalsIgnoreCase("deliveryMan")){
-					DeliveryManRole role = new DeliveryManRole();
+					DeliveryManRole role = new DeliveryManRole(this);
 		    		role.Market = ma;
 		    		role.setPerson(this);
 		    		roles.add(role);

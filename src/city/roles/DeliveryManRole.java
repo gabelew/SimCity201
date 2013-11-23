@@ -49,10 +49,8 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,waitingForPayment,payed,done};
 	public enum AgentEvent{none,GoToWork};
 	AgentEvent event = AgentEvent.none;
-	PersonAgent myPerson; 
 	public DeliveryManRole(PersonAgent p){
 		super(p);
-		this.myPerson=p;
 		o=new Order(orderState.noOrder);
 	}
 	public DeliveryManRole(){
@@ -66,7 +64,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		stateChanged();	
 	}
 	public void msgTakeCustomer(Cook c,MarketAgent m){
-		print("Received msgTakeCustomer from Market.");
 		cook=c;
 		Market=m;
 		o.s=orderState.askedForOrder;
