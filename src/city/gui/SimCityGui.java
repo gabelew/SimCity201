@@ -204,16 +204,30 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	b.setInsideBuildingPanel(bp);
 	        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);
-	        	Restaurant r = new Restaurant(
+	        	Restaurant r =null;
+	        	if(i==6){
+	        		r = new Restaurant(
+    						(restaurant.interfaces.Host)(new HostRole()), 
+    						(restaurant.interfaces.Cashier)(new CashierRole()), 
+    						(restaurant.interfaces.Cook)(new CookRole(markets, 1)), 
+    						new restaurant.interfaces.Waiter.Menu(), 
+    						"Restaurant1CustomerRole", 
+    						"Restaurant1", 
+    						restaurantAnimationPanel, 
+    						new Point(b.getX(),b.getY()), 
+    						"Restaurant1WaiterRole");
+	        	}else{
+	        		r = new Restaurant(
 	        						(restaurant.interfaces.Host)(new HostRole()), 
 	        						(restaurant.interfaces.Cashier)(new CashierRole()), 
-	        						(restaurant.interfaces.Cook)(new CookRole()), 
+	        						(restaurant.interfaces.Cook)(new CookRole(markets)), 
 	        						new restaurant.interfaces.Waiter.Menu(), 
 	        						"Restaurant1CustomerRole", 
 	        						"Restaurant1", 
 	        						restaurantAnimationPanel, 
 	        						new Point(b.getX(),b.getY()), 
 	        						"Restaurant1WaiterRole");
+	        	}
 	        	getRestaurants().add(r);
 	        	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
 	

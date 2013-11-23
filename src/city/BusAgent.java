@@ -120,15 +120,12 @@ public class BusAgent extends Agent{
 		MyBusStop b = findBusStop(Destination);	
 		
 		b.passengers.add(new MyPassenger(p, StopEvent.dropOff));
-		if(b!=null)
-			print("msgComingAboard " + p.getName() + state);	
 		state = State.none;
 		stateChanged();
 		
 	}
 	
 	public void msgAtStop(Point busStop){ //from animation
-		print("msg at stop");
 		for(MyBusStop b : busStops){
 			if(b.location.equals(busStop)){
 				
@@ -182,7 +179,6 @@ public class BusAgent extends Agent{
 		
 		for(MyBusStop b : busStops){
 			if(!b.passengers.isEmpty() && state != State.goingToStop){
-				print("GoToBusStop????");
 				state = State.goingToStop;
 				GoToBusStop(b);
 				return true;
@@ -203,12 +199,10 @@ public class BusAgent extends Agent{
 		
 	}
 	private void GoToBusStop(MyBusStop mbs){
-		print("Going to busStop " + mbs.stopnumber );
 		DoGoToBusStop(mbs.location);
 	}
 	
 	private void DoGoToBusStop(Point p){
-		print("DoGoToBusStop");
 		busGui.GoToBusStop(p);
 	}
 	
@@ -222,7 +216,6 @@ public class BusAgent extends Agent{
 		List<MyPassenger> removePs = Collections.synchronizedList(new ArrayList<MyPassenger>());
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){
-				print("Dropping off at busStop " + ms.stopnumber );
 				p.person.msgAtYourStop(busGui.xPos, busGui.yPos);
 				removePs.add(p);
 			}
@@ -231,7 +224,6 @@ public class BusAgent extends Agent{
 		
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.pickUp){
-				print("Picking up at busStop " + ms.stopnumber );
 				p.person.msgBusIshere();
 				removePs.add(p);
 			}

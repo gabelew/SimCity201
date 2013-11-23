@@ -637,7 +637,6 @@ public class PersonAgent extends Agent
     		}
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
     		MarketAgent ma = findMarket(destination);
-    		print("becomeing market deliveryMan?");
     		if(job.type.equalsIgnoreCase("clerk")){
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
@@ -648,7 +647,6 @@ public class PersonAgent extends Agent
 		           	role.getClerkGui().setPresent(true);
 		           	role.goesToWork();	
 			}else if(job.type.equalsIgnoreCase("deliveryMan")){
-        		print("becomeing market deliveryMan");
 					DeliveryManRole role = new DeliveryManRole();
 		    		role.Market = ma;
 		    		role.setPerson(this);

@@ -2,7 +2,9 @@ package city.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
 import market.interfaces.DeliveryMan;
+import market.interfaces.Market;
 import city.MarketAgent;
 import city.PersonAgent;
 import restaurant.Restaurant;
@@ -138,16 +140,31 @@ public class CookRole extends Role implements Cook {
 	}
 	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	
-	public CookRole(){
+	public CookRole(List<MarketAgent> marks){
 		super();
 	
 		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
-		foods.add(new Food("steak",STEAK_COOKTIME, STEAK_LOW_AMOUNT, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
+		foods.add(new Food("steak",STEAK_COOKTIME, STEAK_INIT_AMOUNT, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
 		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
 		foods.add(new Food("cookie",COOKIE_COOKTIME, COOKIE_INIT_AMOUNT, COOKIE_LOW_AMOUNT, COOKIE_CAPACITY));
+		
+		for(MarketAgent m:marks){
+			markets.add(new MyMarket(m));
+		}
 	}
 
-
+	public CookRole(List<MarketAgent> marks, int steakAmount){
+		super();
+	
+		foods.add(new Food("salad",SALAD_COOKTIME, SALAD_INIT_AMOUNT, SALAD_LOW_AMOUNT, SALAD_CAPACITY));
+		foods.add(new Food("steak",STEAK_COOKTIME, steakAmount, STEAK_LOW_AMOUNT, STEAK_CAPACITY));
+		foods.add(new Food("chicken",CHICKEN_COOKTIME, CHICKEN_INIT_AMOUNT, CHICKEN_LOW_AMOUNT, CHICKEN_CAPACITY));
+		foods.add(new Food("cookie",COOKIE_COOKTIME, COOKIE_INIT_AMOUNT, COOKIE_LOW_AMOUNT, COOKIE_CAPACITY));
+		
+		for(MarketAgent m:marks){
+			markets.add(new MyMarket(m));
+		}
+	}
 	public void setGui(CookGui g) {
 		cookGui = g;
 	}
@@ -565,9 +582,6 @@ public class CookRole extends Role implements Cook {
 		return null;
 	}
 
-	public void addMarket(MarketAgent m){
-		//markets.add(new MyMarket(m));
-	}
 
 
 	public void badSteaks() {
