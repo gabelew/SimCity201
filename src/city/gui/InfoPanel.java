@@ -723,191 +723,190 @@ public class InfoPanel extends JPanel implements KeyListener {
 						p.job = p.new MyJob(m.location , "clerk", PersonAgent.Shift.night);
 					}
     			}    			
-    		}else if(name.toLowerCase().contains("deliveryMan") && name.toLowerCase().contains("day")){
-    			System.out.println("abdasbdbsadbsabdksandklsfkds");
+    		}else if(name.toLowerCase().contains("deliveryman") && name.toLowerCase().contains("day")){
     			if(name.toLowerCase().contains("01")){
     				MarketAgent m = gui.markets.get(0);
     				boolean hasMarket = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasMarket = true;
     						}
     					}    					
         			}
     				if(!hasMarket){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}else if(name.toLowerCase().contains("02")){
     				MarketAgent m = gui.markets.get(1);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}else if(name.toLowerCase().contains("03")){
     				MarketAgent m = gui.markets.get(2);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}else if(name.toLowerCase().contains("04")){
     				MarketAgent m = gui.markets.get(3);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}else if(name.toLowerCase().contains("05")){
     				MarketAgent m = gui.markets.get(4);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}else if(name.toLowerCase().contains("06")){
     				MarketAgent m = gui.markets.get(5);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}else if(name.toLowerCase().contains("06")){
     				MarketAgent m = gui.markets.get(5);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.day);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.day);
 					}
     			}    			
-    		}else if(name.toLowerCase().contains("deliveryMan") && name.toLowerCase().contains("night")){
+    		}else if(name.toLowerCase().contains("deliveryman") && name.toLowerCase().contains("night")){
     			if(name.toLowerCase().contains("01")){
     				MarketAgent m = gui.markets.get(0);
     				boolean hasMarket = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasMarket = true;
     						}
     					}    					
         			}
     				if(!hasMarket){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}else if(name.toLowerCase().contains("02")){
     				MarketAgent m = gui.markets.get(1);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}else if(name.toLowerCase().contains("03")){
     				MarketAgent m = gui.markets.get(2);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}else if(name.toLowerCase().contains("04")){
     				MarketAgent m = gui.markets.get(3);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}else if(name.toLowerCase().contains("05")){
     				MarketAgent m = gui.markets.get(4);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}else if(name.toLowerCase().contains("06")){
     				MarketAgent m = gui.markets.get(5);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}else if(name.toLowerCase().contains("06")){
     				MarketAgent m = gui.markets.get(5);
     				boolean hasdeliveryMan = false;
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
-    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryMan")){
+    						if(currentP.job.location == m.location && currentP.job.shift == PersonAgent.Shift.night && currentP.job.type.equalsIgnoreCase("deliveryman")){
     							hasdeliveryMan = true;
     						}
     					}
         			}
     				if(!hasdeliveryMan){
-						p.job = p.new MyJob(m.location , "deliveryMan", PersonAgent.Shift.night);
+						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}    			
     		}
