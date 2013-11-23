@@ -28,7 +28,7 @@ public class PersonAgent extends Agent
 	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
 	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
 	private List<Task> taskList = new ArrayList<Task>(); 
-	//private Home myHome;
+	private Home myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
 	
@@ -91,10 +91,10 @@ public class PersonAgent extends Agent
 			this.shift = s;
 		}
 	}
-	/*public void setHome(Home h)
+	public void setHome(Home h)
 	{
 		this.myHome = h;
-	}*/
+	}
 /***********************
  *  UTILITY CLASSES END
  ***********************/
