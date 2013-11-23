@@ -21,12 +21,21 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	private SimCityGui simCityGui;
 	
 	private static BufferedImage kitchen = null;
+	private static BufferedImage grill = null;
 	private static BufferedImage fridge = null;
 	private static BufferedImage table = null;
 	private static BufferedImage bed = null;
     static final int WALL_LENGTH = 875;
     static final int WALL_WIDTH = 10; 
-	
+    //variables for kitchen
+    static final int xCOOK_POSITION = 20;  
+    static final int yCOOK_POSITION = 30;
+    static final int yKITCHEN_COUNTER_OFFSET = 30;
+    static final int yGRILL_RIGHT_OFFSET = 30;
+    static final int xGRILL_RIGHT_OFFSET = 52;
+    static final int yFIDGE_OFFSET = 15;
+    static final int xFIDGE_OFFSET = 100;
+    
 	public ApartmentAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
 
@@ -41,6 +50,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 			fridge = ImageIO.read(new File(path.toString() + "fidge.png"));
 			table = ImageIO.read(new File(path.toString() + "table.png"));
 			bed = ImageIO.read(new File(path.toString() + "bed.png"));
+			grill = ImageIO.read(new File(path.toString() + "grill2.png"));
 			
 		} catch (IOException e){
 			
@@ -88,16 +98,21 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	     //creates a kitchen, fridge, table, and bed for each tenant
 	     for(int i = 0; i < 5; i++){
 	    	 //top 4
-		     g2.drawImage(kitchen, 15+(i*217), 20, null);
-		     g2.drawImage(fridge, 100+(i*217), 10, null);
-		     g2.drawImage(table, 57+(i*217), 50, null);
-		     g2.drawImage(bed, 150+(i*217), 70, null);
+	    	 g2.drawImage(kitchen, xCOOK_POSITION+(i*217), yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
+	 		 g2.drawImage(grill, xCOOK_POSITION+xGRILL_RIGHT_OFFSET+(i*217), yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
+	 		 g2.drawImage(fridge, xCOOK_POSITION+xFIDGE_OFFSET+(i*217), yCOOK_POSITION+yFIDGE_OFFSET, null);
+		     g2.drawImage(table, 57+(i*217), 70, null);
+		     g2.drawImage(bed, 150+(i*217), 100, null);
 		     
 		     //bottom 4
-		     g2.drawImage(kitchen, 15+(i*217), 320, null);
-		     g2.drawImage(fridge, 100+(i*217), 310, null);
-		     g2.drawImage(table, 57+(i*217), 350, null);
-		     g2.drawImage(bed, 150+(i*217), 370, null);
+		     g2.drawImage(kitchen, xCOOK_POSITION+(i*217),310+ yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
+	 		 g2.drawImage(grill, xCOOK_POSITION+xGRILL_RIGHT_OFFSET+(i*217), 310+yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
+	 		 g2.drawImage(fridge, xCOOK_POSITION+xFIDGE_OFFSET+(i*217),310+ yCOOK_POSITION+yFIDGE_OFFSET, null);
+		     //g2.drawImage(grill, (i*217) ,320,null);
+		     //g2.drawImage(kitchen, 15+(i*217), 320, null);
+		     //g2.drawImage(fridge, 100+(i*217), 310, null);
+		     g2.drawImage(table, 57+(i*217), 370, null);
+		     g2.drawImage(bed, 150+(i*217), 420, null);
 
 		 }
 		
