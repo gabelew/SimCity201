@@ -1,6 +1,7 @@
 package market.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import city.MarketAgent;
 import city.roles.CookRole.RoleOrder;
@@ -40,5 +41,7 @@ public interface Cook {
 	public abstract void setSteaksAmount(int i);
 
 	public abstract void msgCanIHelpYou(DeliveryMan deliveryMan, MarketAgent market);
+
+	public abstract void msgHereIsOrderFromMarket(DeliveryMan deliveryMan,Map<String, Integer> choices, List<String> outOf, double amountOwed);
 	
 }

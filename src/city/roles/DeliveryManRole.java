@@ -42,7 +42,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	CashierRole cashier;
 	public Cook cook;
 	MarketAgent Market;
-	public enum orderState{noOrder,askedForOrder,waiting,ordered,waitingForPayment,payed,done};
+	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,waitingForPayment,payed,done};
 	PersonAgent myPerson; 
 	public DeliveryManRole(PersonAgent p){
 		super(p);
@@ -103,24 +103,26 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	//actions
 	private void askForOrder(){
 		cook.msgCanIHelpYou((DeliveryMan) this,Market);
+		o.s=orderState.waitingForOrder;
 	}
 	
 	private void fillOrder(){
 		Iterator it = o.Choices.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
-	        if(Market.Inventory.get(pairs)==0){
+	        if(Market.Inventory.get(pairs.getKey())==0){
 	        	o.outOf.add(pairs.getKey().toString());
 	        	o.Choices.remove(pairs);
 	        }
-	        else if(o.Choices.get(pairs)>Market.Inventory.get(pairs)){
+	        else if(o.Choices.get(pairs.getKey())>Market.Inventory.get(pairs.getKey())){
 	        	o.Choices.put(pairs.getKey().toString(), Market.Inventory.get(pairs.getKey()));
 	        	o.amountOwed=o.amountOwed+Market.Inventory.get(pairs.getKey())*Price;
 	        	Market.Inventory.put(pairs.getKey().toString(), 0);
 	        }
 	        else{
 	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*Price;
-	        	Market.Inventory.put(pairs.getKey().toString(), Market.Inventory.put(pairs.getKey().toString(), Market.Inventory.get(pairs.getKey().toString())-o.Choices.get(pairs.getKey().toString())));
+	        	Integer temp=o.Choices.get(pairs.getKey());
+	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
@@ -132,7 +134,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	private void giveOrder(){
 		deliveryGui.DoGoPutOnTruck();
 		deliveryGui.DoGoDeliver(location);
-		((CookRole) cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
+		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
 	}
 	private void giveBill(){

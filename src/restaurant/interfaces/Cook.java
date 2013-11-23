@@ -1,6 +1,7 @@
 package restaurant.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
@@ -44,4 +45,5 @@ public interface Cook {
 
 	public abstract void msgNeverOrderFromMarketAgain(MarketAgent market);
 	
+	public abstract void msgHereIsOrderFromMarket(DeliveryMan Dm,Map<String,Integer>choices,List<String> outOf,double amount);
 }

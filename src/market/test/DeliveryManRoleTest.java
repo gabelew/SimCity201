@@ -88,28 +88,28 @@ public class DeliveryManRoleTest extends TestCase
 		assertTrue("Delivery man's scheduler should have returned true (needs to react to ask cook for order).", 
 				deliveryMan.pickAndExecuteAnAction());
 		//check post scheduler
-		/*assertEquals("Clerk order state should be waiting for order",clerk.o.s,orderState.waitingForOrder);
+		assertEquals("Delivery order state should be waiting for order",deliveryMan.o.s,orderState.waitingForOrder);
 		// run the clerks's scheduler
-		assertFalse("Clerk's scheduler should have returned false (needs to wait for order).", 
-				clerk.pickAndExecuteAnAction());
+		assertFalse("Delivery man's scheduler should have returned false (needs to wait for order).", 
+				deliveryMan.pickAndExecuteAnAction());
 		//customer sends message to clerk
-		clerk.msgPlaceOrder(choice);
+		deliveryMan.msgHereIsOrder(choice);
 		//check post-conditions of message
-		assertEquals("order choices should equal choice",clerk.o.Choices,choice);
-		assertEquals("Clerk order state should be waiting",clerk.o.s,orderState.waiting);
+		assertEquals("order choices should equal choice",deliveryMan.o.Choices,choice);
+		assertEquals("Delivery order state should be waiting",deliveryMan.o.s,orderState.waiting);
 		//run the clerk's scheduler
-		assertTrue("Clerk's scheduler should have returned true (needs to react to place order from customer).", 
-				clerk.pickAndExecuteAnAction());
+		assertTrue("Delivery Man's scheduler should have returned true (needs to react to place order from customer).", 
+				deliveryMan.pickAndExecuteAnAction());
 		//check post scheduler
-		assertEquals("amount owed should be amount time price",clerk.o.amountOwed,normAmount);
+		assertEquals("amount owed should be amount time price",deliveryMan.o.amountOwed,normAmount);
 		assertEquals("Market inventory should go down",market.Inventory.get("steak"),amountLeft);
 		assertEquals("Market inventory should go down",market.Inventory.get("cookie"),amountLeft);
 		assertEquals("Market inventory should go down",market.Inventory.get("salad"),amountLeft);
-		assertEquals("Clerk order state should be waiting for payment",clerk.o.s,orderState.waitingForPayment);
-		assertFalse("Clerk's scheduler should have returned false (waiting for payment).", 
-				clerk.pickAndExecuteAnAction());
+		assertEquals("Delivery order state should be waiting for payment",deliveryMan.o.s,orderState.ordered);
+		assertTrue("Dellvery man's scheduler should have returned false (waiting for payment).", 
+				deliveryMan.pickAndExecuteAnAction());
 		//customer sends payment message
-		clerk.msgHereIsPayment(normAmount);
+		/*clerk.msgHereIsPayment(normAmount);
 		//check post-conditions of message
 		assertEquals("Clerk order state should be payed",clerk.o.s,orderState.payed);
 		//run the clerk's scheduler

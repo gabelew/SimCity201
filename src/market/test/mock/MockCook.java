@@ -1,5 +1,8 @@
 package market.test.mock;
 
+import java.util.List;
+import java.util.Map;
+
 import city.MarketAgent;
 import city.roles.CookRole.RoleOrder;
 import restaurant.interfaces.Waiter.Menu;
@@ -78,5 +81,10 @@ public class MockCook extends Mock implements Cook {
 	@Override
 	public void setSteaksAmount(int i){
 		log.add(new LoggedEvent("Recieved set steaks amount"));
+	}
+	
+	@Override
+	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String,Integer> choices, List<String> outOf, double amount){
+		log.add(new LoggedEvent("Recieved msgHereIsOrderFromMarket"));
 	}
 }
