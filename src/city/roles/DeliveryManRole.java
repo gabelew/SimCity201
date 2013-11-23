@@ -12,9 +12,12 @@ import java.util.Map;
 
 import market.gui.DeliveryManGui;
 import restaurant.interfaces.Cook;
+import market.interfaces.Clerk;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.Gui;
+import city.roles.ClerkRole.AgentEvent;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.test.mock.EventLog;
@@ -42,8 +45,10 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	double Price=5;
 	Cashier cashier;
 	public Cook cook;
-	MarketAgent Market;
+	public MarketAgent Market;
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,waitingForPayment,payed,done};
+	public enum AgentEvent{none,GoToWork};
+	AgentEvent event = AgentEvent.none;
 	PersonAgent myPerson; 
 	public DeliveryManRole(PersonAgent p){
 		super(p);
@@ -55,6 +60,11 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o=new Order(orderState.noOrder);
 	}
 	//messages
+
+	public void goesToWork() {
+		event = AgentEvent.GoToWork;
+		stateChanged();	
+	}
 	public void msgTakeCustomer(Cook c,MarketAgent m){
 		cook=c;
 		Market=m;
@@ -77,6 +87,11 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
+		if(event == AgentEvent.GoToWork){
+			event = AgentEvent.none;
+			((MarketAgent)Market).addDeliveryMan(((DeliveryMan)this));
+			return true;
+		}
 		if(cook!=null&&o.s==orderState.askedForOrder){
 			askForOrder();
 			return true;
@@ -151,6 +166,9 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.noOrder;
 		cook=null;
 		Market.msgDeliveryDone(this);
+	}
+	public DeliveryManGui getDeliveryManGui() {
+		return deliveryGui;
 	}
 }
 

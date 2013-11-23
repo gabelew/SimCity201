@@ -566,6 +566,7 @@ public class PersonAgent extends Agent
 		}
     	location = Location.AtWork;
     	state = State.eating;
+    	
     	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
@@ -629,38 +630,37 @@ public class PersonAgent extends Agent
             	role.getGui().setPresent(true);
             	role.goesToWork();
             	role.active = true;
-    		}else if(job.type.equalsIgnoreCase("clerk")){
-    			for(MarketAgent ma: simCityGui.getMarkets()){
-    				if(ma.location.equals(job.location)){
-    	    			ClerkRole role = new ClerkRole();
-    	    			role.Market = ma;
-    	    			role.setPerson(this);
-    	    			roles.add(role);
-    	            	role.active = true;
-    	    			ma.insideAnimationPanel.addGui(role.getClerkGui());
-    	            	role.getClerkGui().setPresent(true);
-    	            	role.goesToWork();	
-    				}
-    			}
-    		}else if(job.type.equalsIgnoreCase("deliveryMan")){
-    			for(MarketAgent ma: simCityGui.getMarkets()){
-    				if(ma.location.equals(job.location)){
-    	    			DeliveryManRole role = new DeliveryManRole();
-    	    			/*role.Market = ma;
-    	    			role.setPerson(this);
-    	    			roles.add(role);
-    	            	role.active = true;
-    	    			ma.insideAnimationPanel.addGui(role.getClerkGui());
-    	            	role.getClerkGui().setPresent(true);
-    	            	role.goesToWork();	*/
-    				}
-    			}
-    			
     		}
-        	
+    	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
+    		MarketAgent ma = findMarket(destination);
+    		if(job.type.equalsIgnoreCase("clerk")){
+		    		ClerkRole role = new ClerkRole();
+		    		role.Market = ma;
+		    		role.setPerson(this);
+		    		roles.add(role);
+		           	role.active = true;
+		    		ma.insideAnimationPanel.addGui(role.getClerkGui());
+		           	role.getClerkGui().setPresent(true);
+		           	role.goesToWork();	
+			}else if(job.type.equalsIgnoreCase("deliveryMan")){
+					DeliveryManRole role = new DeliveryManRole();
+		    		role.Market = ma;
+		    		role.setPerson(this);
+		    		roles.add(role);
+		            role.active = true;
+		    		ma.insideAnimationPanel.addGui(role.getDeliveryManGui());
+		            role.getDeliveryManGui().setPresent(true);
+		            role.goesToWork();		
+			}
     	}
-    	
     }
+
+	private MarketAgent findMarket(Point p) {
+		for(MarketAgent ma:simCityGui.getMarkets()){
+			return ma;
+		}
+		return null;
+	}
 
 	//Remember to add functionality so person can decide to eat at home
     private void goEatFood() {

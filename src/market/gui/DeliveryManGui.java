@@ -128,4 +128,8 @@ public class DeliveryManGui implements Gui{
 		
 	}
 
+	public void setPresent(boolean b) {
+		isPresent = b;
+	}
+
 }
