@@ -1,5 +1,6 @@
 package market.test.mock;
 
+import city.MarketAgent;
 import city.roles.CookRole.RoleOrder;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.gui.CustomerGui;
@@ -27,6 +28,11 @@ public class MockCook extends Mock implements Cook {
 	public MockCook(String name) {
 		super(name);
 
+	}
+	
+	@Override
+	public void msgCanIHelpYou(DeliveryMan Dm, MarketAgent m){
+		log.add(new LoggedEvent("Received msgCanIHelpYou from delivery man."));
 	}
 
 	@Override

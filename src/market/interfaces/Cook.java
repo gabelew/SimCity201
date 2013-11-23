@@ -2,6 +2,7 @@ package market.interfaces;
 
 import java.util.List;
 
+import city.MarketAgent;
 import city.roles.CookRole.RoleOrder;
 import restaurant.gui.CookGui;
 import restaurant.interfaces.Waiter;
@@ -37,7 +38,7 @@ public interface Cook {
 	public abstract void cookieMonster();
 
 	public abstract void setSteaksAmount(int i);
-	
 
+	public abstract void msgCanIHelpYou(DeliveryMan deliveryMan, MarketAgent market);
 	
 }

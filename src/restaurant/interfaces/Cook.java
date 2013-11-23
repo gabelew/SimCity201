@@ -2,7 +2,10 @@ package restaurant.interfaces;
 
 import java.util.List;
 
+import market.interfaces.DeliveryMan;
+import city.MarketAgent;
 import city.roles.CookRole.RoleOrder;
+import city.roles.DeliveryManRole;
 import restaurant.gui.CookGui;
 
 /**
@@ -37,6 +40,8 @@ public interface Cook {
 
 	public abstract void setSteaksAmount(int i);
 	
+	public abstract void msgCanIHelpYou(DeliveryMan DM, MarketAgent  M);
 
+	public abstract void msgNeverOrderFromMarketAgain(MarketAgent market);
 	
 }
