@@ -1,22 +1,13 @@
 package market.gui;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
-
 import javax.imageio.ImageIO;
-
 import city.gui.Gui;
-import city.roles.BankCustomerRole;
 import city.roles.ClerkRole;
-import city.roles.MarketCustomerRole;
 
 public class ClerkGui implements Gui{
 
