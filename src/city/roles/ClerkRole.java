@@ -116,7 +116,6 @@ public class ClerkRole extends Role implements Clerk {
 	        	Integer temp=o.Choices.get(pairs.getKey());
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
-	        it.remove(); // avoids a ConcurrentModificationException
 	    }
 	    clerkGui.DoGoGetFood(o.Choices);
 		try {

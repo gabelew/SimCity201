@@ -101,10 +101,10 @@ public class ClerkGui implements Gui{
 	}
 	
 	public void DoGoGetFood(Map<String,Integer> choices){
+		clerkState=state.waiting;
 		for (String Key:choices.keySet()){
 			GoToShelf(Key);
 		}
-		clerkState=state.waiting;
 	}
 	
 	public void DoGoGiveOrder(){
