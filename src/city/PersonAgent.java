@@ -663,7 +663,9 @@ public class PersonAgent extends Agent
 
 	private MarketAgent findMarket(Point p) {
 		for(MarketAgent ma:simCityGui.getMarkets()){
-			return ma;
+			if(ma.location.equals(p)){
+				return ma;
+			}
 		}
 		return null;
 	}
