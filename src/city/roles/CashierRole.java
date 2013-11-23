@@ -59,7 +59,7 @@ public class CashierRole extends Role implements Cashier {
 			state = s;
 		}
 	}
-	public enum BillState {requested, payed};
+	public enum BillState {requested, payed, informed};
 	
 	public static final double SALAD_COST = 4.99;
 	public static final double STEAK_COST = 15.99;
@@ -132,10 +132,16 @@ public class CashierRole extends Role implements Cashier {
 	}
 
 	public void msgHereIsInvoice(double price,DeliveryMan DMR) {
-		bills.add(new Bill(DMR,price,BillState.requested));
+		bills.add(new Bill(DMR,price,BillState.informed));
 		stateChanged();
 	}
 	
+	@Override
+	public void msgHereIsBill(DeliveryMan DM, double bill) {
+		bills.add( new Bill(DM, bill, BillState.requested));
+		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
+		stateChanged();	
+	}
 	/*public void msgHereIsBill(Market m, double bill) {
 		bills.add( new Bill(m, bill, BillState.requested));
 		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
@@ -225,18 +231,24 @@ public class CashierRole extends Role implements Cashier {
 		}
 		
 		Bill temp2 = null;
+		Bill temp3 = null;
 		synchronized(bills){
 			for (Bill b : bills)
 			{
 				if(b.state == BillState.requested && temp2 == null)
 				{
-					temp2 = b;
+					for(Bill b2: bills){
+						if(b2.state == BillState.informed && b2.deliveryMan == b.deliveryMan){
+							temp2 = b;
+							temp3 = b2;
+						}
+					}
 				}
 			}
 		}
 		
 		if(temp2 != null){
-			payBill(temp2);
+			payBill(temp2, temp3);
 			return true;
 		}
 		
@@ -257,10 +269,20 @@ public class CashierRole extends Role implements Cashier {
 	}
 	*/
 	
-	private void payBill(Bill b){
-		bank=bank-b.bill;
-		b.deliveryMan.msgHereIsPayment(b.bill, this);
-		bills.remove(b);
+	private void payBill(Bill billFromDman, Bill invoiceFromCook){
+		if(billFromDman.bill == invoiceFromCook.bill){
+			bank = bank - billFromDman.bill;
+			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
+			bills.remove(billFromDman);
+			bills.remove(invoiceFromCook);
+		}else{
+			print("We are never ordering from this Market again.");
+			bank = bank - billFromDman.bill;
+			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
+			bills.remove(billFromDman);
+			bills.remove(invoiceFromCook);
+			//tell cook to put market on naughty list
+		}
 	}
 	private void processPayment(Order o) {
 		double cashOut = o.cashIn - o.check;
@@ -311,14 +333,6 @@ public class CashierRole extends Role implements Cashier {
 		o.state = OrderState.awaitingPayment;
 		o.waiter.msgHereIsCheck(o.customer, o.check);
 		log.add(new LoggedEvent("Performed giveWaiter. Total of check = "+ o.check));
-	}
-
-	@Override
-	public void msgHereIsBill(DeliveryMan DM, double bill) {
-		bills.add( new Bill(DM, bill, BillState.requested));
-		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
-		stateChanged();
-		
 	}
 
 	public void setRestaurant(Restaurant r) {
