@@ -5,7 +5,6 @@ import java.util.*;
 
 import agent.Agent;
 import city.animationPanels.InsideAnimationPanel;
-import city.roles.*;
 import market.interfaces.Clerk;
 import market.interfaces.DeliveryMan;
 import market.interfaces.Market;

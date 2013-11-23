@@ -1,16 +1,12 @@
 package city.roles;
 
-import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.gui.HostGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
-
-import java.awt.Point;
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
 import city.PersonAgent;
 import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.SimCityGui;

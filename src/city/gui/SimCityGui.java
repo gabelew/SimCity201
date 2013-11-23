@@ -7,9 +7,6 @@ import restaurant.gui.HostGui;
 import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
-
-import market.interfaces.Clerk;
-import market.interfaces.DeliveryMan;
 import atHome.city.Home;
 import city.MarketAgent;
 import city.PersonAgent;
