@@ -16,45 +16,55 @@ import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import restaurant.Restaurant;
+import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
 
 /**
  * Restaurant customer agent.
  */
 public class DeliveryManRole extends Role implements DeliveryMan{
+	public EventLog log = new EventLog();
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
 	private String name;
-	Order o;
+	public Order o;
 	Point location;
-	class Order{
-		public Order(Map<String, Integer> choice, orderState state) {
-			Choices=choice;
+	public class Order{
+		public Order( orderState state) {
 			s=state;
 		}
-		Map<String, Integer> Choices = new HashMap<String, Integer>();
-		List<String> outOf;
-		orderState s;
-		double amountOwed;
+		public Map<String, Integer> Choices = new HashMap<String, Integer>();
+		public List<String> outOf;
+		public orderState s;
+		public double amountOwed;
 	}
 	double Price=5;
 	CashierRole cashier;
-	Cook cook;
+	public Cook cook;
 	MarketAgent Market;
-	enum orderState{waiting,ordered,waitingForPayment,payed,done};
+	public enum orderState{noOrder,askedForOrder,waiting,ordered,waitingForPayment,payed,done};
 	PersonAgent myPerson; 
 	public DeliveryManRole(PersonAgent p){
 		super(p);
 		this.myPerson=p;
+		o=new Order(orderState.noOrder);
+	}
+	public DeliveryManRole(){
+		super();
+		o=new Order(orderState.noOrder);
 	}
 	//messages
 	public void msgTakeCustomer(Cook c,MarketAgent m){
 		cook=c;
 		Market=m;
+		o.s=orderState.askedForOrder;
 		stateChanged();
+		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice){
-		o=new Order(choice,orderState.waiting);
+		o.Choices=choice;
+		o.s=orderState.waiting;
 		stateChanged();
 	}
 	
@@ -66,7 +76,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
-		if(cook!=null&&o==null){
+		if(cook!=null&&o.s==orderState.askedForOrder){
 			askForOrder();
 			return true;
 		}
@@ -92,7 +102,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 
 	//actions
 	private void askForOrder(){
-		((CookRole) cook).msgCanIHelpYou((DeliveryMan) this,Market);
+		cook.msgCanIHelpYou((DeliveryMan) this,Market);
 	}
 	
 	private void fillOrder(){
