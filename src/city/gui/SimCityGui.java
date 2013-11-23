@@ -8,7 +8,10 @@ import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
 
+import market.interfaces.Clerk;
+import market.interfaces.DeliveryMan;
 import atHome.city.Home;
+import city.MarketAgent;
 import city.PersonAgent;
 import city.animationPanels.ApartmentAnimationPanel;
 import city.animationPanels.BankAnimationPanel;
@@ -52,6 +55,7 @@ public class SimCityGui extends JFrame implements ActionListener {
  
     List<Home> homes = new ArrayList<Home>();
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
+    List<MarketAgent> markets = new ArrayList<MarketAgent>();
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
     
     private JFrame bottomFrame = new JFrame();
@@ -193,8 +197,16 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	b.setInsideBuildingPanel(bp);
 	        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);
-	        	Restaurant r = new Restaurant((restaurant.interfaces.Host)(new HostRole()), (restaurant.interfaces.Cashier)(new CashierRole()), (restaurant.interfaces.Cook)(new CookRole()), 
-	        			new restaurant.interfaces.Waiter.Menu(), "Restaurant1CustomerRole", "Restaurant1", restaurantAnimationPanel, new Point(b.getX(),b.getY()), "Restaurant1WaiterRole");
+	        	Restaurant r = new Restaurant(
+	        						(restaurant.interfaces.Host)(new HostRole()), 
+	        						(restaurant.interfaces.Cashier)(new CashierRole()), 
+	        						(restaurant.interfaces.Cook)(new CookRole()), 
+	        						new restaurant.interfaces.Waiter.Menu(), 
+	        						"Restaurant1CustomerRole", 
+	        						"Restaurant1", 
+	        						restaurantAnimationPanel, 
+	        						new Point(b.getX(),b.getY()), 
+	        						"Restaurant1WaiterRole");
 	        	getRestaurants().add(r);
 	        	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
 	
@@ -232,6 +244,29 @@ public class SimCityGui extends JFrame implements ActionListener {
             	b.setInsideBuildingPanel(bp);
             	marketAnimationPanel.setInsideBuildingPanel(bp);
             	buildingsPanel.add(bp, "" + i);
+            	
+            	String name;
+            	if(i==8){
+            		name = "Vons";
+            	}else if(i==25){
+            		name = "Costco";
+            	}else if(i==40){
+            		name = "Ralphs";
+            	}else if(i==42){
+            		name = "Target";
+            	}else if(i==44){
+            		name = "Kmart";
+            	}else if(i==50){
+            		name = "ChadMart";
+            	}
+	        	
+            	/*MarketAgent marketAgent = new MarketAgent(
+            			Clerk Clerk,
+            			DeliveryMan DMR,
+            			new Point(b.getX(),b.getY()),
+            			name, 
+            			marketAnimationPanel);*/
+            	
 	    	}else if(b.type.equals("bank")){
 	            
 	        	RestaurantPanel restPanel = new RestaurantPanel(this);

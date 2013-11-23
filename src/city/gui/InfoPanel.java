@@ -31,21 +31,9 @@ public class InfoPanel extends JPanel implements KeyListener {
 	private static final int NROWS = 2;
 	private static final double PERSONS_DEFAULT_CASH = 200.00;
 	private static final double NO_CASH = 0.0;
-	
-    //Host, cook, waiters and customers
-  /*  private HostAgent host = new HostAgent("Sarah");
-    private HostGui hostGui = new HostGui(host);
-    private CookAgent cook = new CookAgent("David");
-    private CookGui cookGui = new CookGui(cook);
-    private CashierAgent cashier = new CashierAgent("Gabe");
-    private CashierGui cashierGui = new CashierGui(cashier);
-*/
 
     private JPanel restLabel = new JPanel();
     private ListPanel personPanel = new ListPanel(this, "Persons");
-
-    //private ListPanel waitersPanel = new ListPanel(this, "Waiters");
-    //private ListPanel tablesPanel = new ListPanel(this, "Tables");
     
     private JPanel group = new JPanel();
 
@@ -58,36 +46,13 @@ public class InfoPanel extends JPanel implements KeyListener {
         //markets.add(new MarketAgent("CostCo"));
         
         this.gui = gui;
-        /*host.setGui(hostGui, gui);
-        cashier.setGui(cashierGui);
-        cook.setCashier(cashier);
-        cook.setGui(cookGui);
-        for(MarketAgent m:markets){
-        	cook.addMarket(m);
-        	m.startThread();
-        }*/
-        
-       // gui.animationPanel.addGui(hostGui);
-       // gui.animationPanel.addGui(cashierGui);
-      //  gui.animationPanel.addGui(cookGui);
-        /*host.startThread();
-        cashier.startThread();
-        cook.startThread();*/
 
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
 
         add(personPanel);
 
-        //initRestLabel();
-        //add(restLabel);
-        //add(group);
-      //  add(waitersPanel);
-        //add(tablesPanel);
-        
-
         personPanel.getTypeNameHere().addKeyListener(this);
-    //    waitersPanel.getTypeNameHere().addKeyListener(this);
     }
 
     /**
@@ -108,27 +73,6 @@ public class InfoPanel extends JPanel implements KeyListener {
         restLabel.add(new JLabel("               "), BorderLayout.WEST);
     }
 
-    /**
-     * When a customer or waiter is clicked, this function calls
-     * updatedInfoPanel() from the main gui so that person's information
-     * will be shown
-     *
-     * @param type indicates whether the person is a customer or waiter
-     * @param name name of person
-     */
-   /* public void showInfo(String type, String name) {
-
-        if (type.equals("Customers")) {
-
-            for (int i = ZERO; i < customers.size(); i++) {
-                CustomerAgent temp = customers.get(i);
-                if (temp.getName() == name)
-        			//temp.getGui().setHungry();
-                    //gui.updateInfoPanel(temp);
-            }
-        }
-    }*/
-    
     public void setHungry(String type, String name) {
 
         if (type.equals("Persons")) {
@@ -621,13 +565,6 @@ public class InfoPanel extends JPanel implements KeyListener {
 					}
     			}
     		}
-    		if(name.equals("athomeguy"))
-			{
-				System.out.println("Making athomeguy" );
-				//p.addRole(new AtHomeRole(p));
-				//p.setHome(gui.getHomes().get(0));
-				
-			}
     		
     		PersonGui g = new PersonGui(p, gui);
     		g.setPresent(true);
@@ -655,24 +592,6 @@ public class InfoPanel extends JPanel implements KeyListener {
     		p.startThread();
     		gui.persons.add(p);
     	}
-    	
-    	/*if (type.equals("Waiters")) {
-    		WaiterAgent w = new WaiterAgent(name);	
-    		WaiterGui g = new WaiterGui(w, gui);
-
-    		gui.animationPanel.addGui(g);// dw
-    		w.setHost(host);
-    		w.setCashier(cashier);
-    		w.setGui(g);
-    		w.setCook(cook);
-    	
-    		if(isHungry)
-    			w.getGui().setWorking();
-    		
-    		waiters.add(w);
-    		w.startThread();
-    	}*/
-
     }
  /*  public void setCustomerEnabled(CustomerAgent c){
     	personPanel.setCustomerEnabled(c.getName());
@@ -726,18 +645,6 @@ public class InfoPanel extends JPanel implements KeyListener {
     	}
     	 tablesPanel.changePauseButton();     
     */}
-/*
-	public HostAgent getHost() {
-		return host;
-	}*/
-
-/*	public ListPanel getTablesPanel() {
-		return tablesPanel;
-	}
-
-	public void setTablesPanel(ListPanel tablesPanel) {
-		this.tablesPanel = tablesPanel;
-	}*/
 
 	public void setWaiterOnBreak(String name) {
 		//waitersPanel.setWaiterOnBreak(name);

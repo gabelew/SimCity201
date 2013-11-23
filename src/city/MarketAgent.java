@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.*;
 
 import agent.Agent;
+import city.animationPanels.InsideAnimationPanel;
 import city.roles.*;
 import market.interfaces.Market;
 import restaurant.interfaces.Cook;
@@ -13,6 +14,7 @@ import market.interfaces.*;
 
 public class MarketAgent extends Agent implements Market {
 public EventLog log = new EventLog();
+public InsideAnimationPanel insideAnimationPanel;
 public Point location;
 private String name;
 public List<MyCustomer>MyCustomers=new ArrayList<MyCustomer>();
@@ -44,11 +46,12 @@ public boolean clerkFree=true;
 public boolean deliveryFree=true;
 public Map<String, Integer> Inventory = new HashMap<String, Integer>();
 
-public MarketAgent(Clerk Clerk,DeliveryMan DMR,Point Location,String Name){
+public MarketAgent(Clerk Clerk,DeliveryMan DMR,Point Location,String Name, InsideAnimationPanel iap){
 	this.clerk=Clerk;
 	this.deliveryMan=DMR;
 	this.location=Location;
 	this.name=Name;
+	this.insideAnimationPanel = iap;
 }
 
 //messages to market
