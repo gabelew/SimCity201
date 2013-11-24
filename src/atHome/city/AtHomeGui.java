@@ -122,6 +122,23 @@ public class AtHomeGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
+		if(command == Command.LeaveHome)
+		{
+			
+			if (yPos < yDestination)
+				yPos++;
+			else if (yPos > yDestination)
+				yPos--;
+			if(yPos == yDestination)
+			{
+				if (xPos < xDestination)
+					xPos++;
+				else if (xPos > xDestination)
+					xPos--;
+			}
+		}
+		else
+		{
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
@@ -129,8 +146,8 @@ public class AtHomeGui implements Gui{
 			else if (yPos < yDestination)
 				yPos++;
 			else if (yPos > yDestination)
-			yPos--;
-	
+				yPos--;
+		}
 		if (xPos == xDestination && yPos == yDestination) 
 		{
 			if(command == Command.GoHome || command == Command.GoToFridge || command == Command.GoToGrill || command == Command.GoToCounter)
