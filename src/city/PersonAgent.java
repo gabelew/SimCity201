@@ -131,7 +131,7 @@ public class PersonAgent extends Agent
 	    
 	}
 	public void addAtHomeRole(){
-		AtHomeRole role = new AtHomeRole(this);
+		AtHomeRole role = new AtHomeRole(this, 2);
 	    role.active = false;
 	    roles.add(role);
 		AtHomeGui ahGui = new AtHomeGui(this, role);
