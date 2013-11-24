@@ -121,18 +121,18 @@ public class PersonAgent extends Agent
 	    if(this.name.toLowerCase().contains("car")){
 	    	car = true;
 	    }
-	    //AtHomeRole role = new AtHomeRole(this);
-	    //role.active = false;
-	    //roles.add(role);
+	    AtHomeRole role = new AtHomeRole(this);
+	    role.active = false;
+	    roles.add(role);
 	    this.busLeft = this.simCityGui.animationPanel.busLeft;
 	    this.busRight = this.simCityGui.animationPanel.busRight;
 	    
 
 		this.myHome = h;
-		//AtHomeGui ahGui = new AtHomeGui(this, role, simCityGui);
-		//role.setGui(ahGui);
-		//ahGui.setPresent(false);
-		//myHome.insideAnimationPanel.addGui(ahGui);
+		AtHomeGui ahGui = new AtHomeGui(this, role, simCityGui);
+		role.setGui(ahGui);
+		ahGui.setPresent(false);
+		myHome.insideAnimationPanel.addGui(ahGui);
 	}
 	
 /***********************
