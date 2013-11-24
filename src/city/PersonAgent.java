@@ -114,12 +114,22 @@ public class PersonAgent extends Agent
 	    	car = true;
 	    }
 	}
+	// for unit testing purposes, where gui is not needed
+	public PersonAgent(String name, double cash, Residence h) {
+		this.name = name;
+		this.cashOnHand = cash;
+	    if(this.name.toLowerCase().contains("car") || this.name.toLowerCase().contains("deliveryman")){
+	    	car = true;
+	    }
+
+		this.myHome = h;
+	}
 	
 	public PersonAgent(String name, double cash, SimCityGui simCityGui,Residence h) {
 	    this.name = name;
 	    this.cashOnHand = cash;
 	    this.simCityGui = simCityGui;
-	    if(this.name.toLowerCase().contains("car")){
+	    if(this.name.toLowerCase().contains("car") || this.name.toLowerCase().contains("deliveryman")){
 	    	car = true;
 	    }
 	    
@@ -127,9 +137,6 @@ public class PersonAgent extends Agent
 	    this.busRight = this.simCityGui.animationPanel.busRight;
 	    
 		this.myHome = h;
-		
-
-	    
 	}
 	public void addAtHomeRole(){
 		AtHomeRole role = null;

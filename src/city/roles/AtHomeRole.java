@@ -11,8 +11,9 @@ import java.util.concurrent.Semaphore;
 
 import atHome.city.AtHomeGui;
 import city.PersonAgent;
+import city.interfaces.AtHome;
 
-public class AtHomeRole extends Role
+public class AtHomeRole extends Role implements AtHome
 {	
 /*********************
  ***** DATA

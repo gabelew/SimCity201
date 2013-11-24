@@ -14,4 +14,9 @@ public class Residence
 		this.location = loc;
 	}
 	
+	//for testing purposes
+	public Residence(Point loc){
+		this.location = loc;
+	}
+	
 }
