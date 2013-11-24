@@ -914,6 +914,13 @@ public class PersonAgent extends Agent
 					personGui.doWalkToHome();
 					location = Location.AtHome;
 					state = State.inHome;
+					for(Role r: roles){
+						if(r instanceof AtHomeRole){
+							r.active = true;
+							((AtHomeRole) r).getGui().setPresent(true);
+							((AtHomeRole)r).goToHomePos();
+						}
+					}
 		    	}else{
 		    		goToBusStop();
 		    	} 
