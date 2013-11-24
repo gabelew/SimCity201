@@ -168,7 +168,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 			event = AgentEvent.none;
 			myPerson.releavedFromDuty(this);
 			restaurant.insideAnimationPanel.removeGui(waiterGui);
-			print("event == AgentEvent.releaveFromDuty  finshed");
+			print("event == AgentEvent.relieveFromDuty  finshed");
 			return true;
 		}
 		

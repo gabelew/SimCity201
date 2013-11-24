@@ -1,5 +1,8 @@
 package city.test;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import restaurant.RevolvingStandMonitor;
 import restaurant.gui.WaiterGui;
 import restaurant.test.mock.MockCustomer;
@@ -12,10 +15,10 @@ import junit.framework.TestCase;
 public class SharedDataWaiterRoleTest extends TestCase{
 	SharedDataWaiterRole waiter;
 	RevolvingStandMonitor revolvingStand;
-	//MockCook cook;
 	CookRole cook;
 	PersonAgent person;
 	MockCustomer customer;
+	Timer timer;
 	
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -28,12 +31,13 @@ public class SharedDataWaiterRoleTest extends TestCase{
 		customer = new MockCustomer("James");
 		revolvingStand = new RevolvingStandMonitor();
 		cook = new CookRole();
-		
+		timer = new Timer();
 	}	
 	
 	public void testPutInOrder() {
 		//setUp() runs first before this test!
 		waiter.setRevolvingStand(revolvingStand);
+		cook.setRevolvingStand(revolvingStand);
 		
 		// check preconditions
 		assertTrue("Revolving stand should have no orders in it. It does.", 0 == revolvingStand.getCount());
@@ -43,9 +47,70 @@ public class SharedDataWaiterRoleTest extends TestCase{
 		 */
 		waiter.customers.add(waiter.new MyCustomer(customer, 1, CustomerState.ordered, "chicken"));
 		
+		// check postconditions of step 1 and preconditions for step 2
 		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
 		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(0).s));
 		assertTrue("Revolving stand should have 1 order in it. It doesn't.", 1 == revolvingStand.getCount());
+		
+		/**
+		 * Step 2: Second customer order. Put order in revolving stand.
+		 */
+		waiter.customers.add(waiter.new MyCustomer(customer, 2, CustomerState.ordered, "steak"));
+		
+		// check postconditions for step 2 and preconditions for step 3
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(1).s));
+		assertTrue("Revolving stand should have 2 orders in it. It doesn't.", 2 == revolvingStand.getCount());
+				
+		/**
+		 * Step 3: Third customer order. Put order in revolving stand.
+		 */
+		waiter.customers.add(waiter.new MyCustomer(customer, 3, CustomerState.ordered, "cookie"));
+		
+		// check postconditions for step 3 and preconditions for step 4
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(2).s));
+		assertTrue("Revolving stand should have 3 orders in it. It doesn't.", 3 == revolvingStand.getCount());
+	
+		/**
+		 * Step 4: Fourth customer order. Put order in revolving stand.
+		 */
+		waiter.customers.add(waiter.new MyCustomer(customer, 4, CustomerState.ordered, "salad"));
+		
+		// check postconditions for step 4 and preconditions for step 5
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(3).s));
+		assertTrue("Revolving stand should have 4 orders in it. It doesn't.", 4 == revolvingStand.getCount());
+		
+		/**
+		 * Step 5: Fifth customer order. Put order in revolving stand.
+		 */
+		waiter.customers.add(waiter.new MyCustomer(customer, 5, CustomerState.ordered, "pizza"));
+		
+		// check postconditions for step 5 and preconditions for step 6
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(4).s));
+		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());
+
+		/**
+		 * Step 6: Set up a timer for the cook to remove an order from the stand after some time to allow an attempt for 6th order to be placed.
+		 */
+		timer.schedule(new TimerTask() {
+			public void run() {
+				cook.checkRevolvingStand();
+			}
+		}, 3000);
+		
+		/**
+		 * Step 7: Sixth customer order. Put order in revolving stand.
+		 */
+		waiter.customers.add(waiter.new MyCustomer(customer, 6, CustomerState.ordered, "chicken"));
+		
+		// check postconditions for step 7
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(5).s));
+		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());
+		
 		
 	}
 	
