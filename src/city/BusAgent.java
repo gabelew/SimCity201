@@ -85,13 +85,9 @@ public class BusAgent extends Agent{
 	//Messages
 	
 	public void msgWaitingForBus(PersonAgent p, Point location){
-		//for(MyBusStop b : busStops){
-			//if()
-			//if(b.location.getY() == busStop.getY()){
 		MyBusStop b = findBusStop(location);	
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
-			//}
-		///}
+		print("\t\t\t\t\t" +p.getName());
 		if(getStateChangePermits()==0)
 			stateChanged();
 	}

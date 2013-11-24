@@ -36,7 +36,7 @@ public class PersonAgent extends Agent
 	
 	//Various States
 	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak};
-	enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak };
+	enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
 	boolean isRenter;
@@ -351,6 +351,22 @@ public class PersonAgent extends Agent
 /***************************
  * ATHOME MESSAGES START
  ***************************/
+	public void msgDoneEatingAtHome(){
+		state = State.inHome;
+		stateChanged();
+	}
+	
+	public void msgHasLeftHome(){
+    	for(Role r: roles){
+			if(r instanceof AtHomeRole){
+				r.active = false;
+				((AtHomeRole) r).getGui().setPresent(false);
+			}
+    	}
+		location = Location.InCity;
+		state = State.doingNothing;
+		stateChanged();
+	}
 	
 	//RepairMan to Person that appliance is fixed
 	public void ApplianceFixed(String appliance, double price)
@@ -408,7 +424,12 @@ public class PersonAgent extends Agent
     {
         try {
         	Task temp = null;
-/*
+        	
+        	if(state == State.inHome && taskList.isEmpty() == false){
+        		state = State.leavingHome;
+        		leaveHouse();
+        	}
+        /*
         	for(Task t:taskList){
         		if(t == Task.doPayRent){
         			temp = t;
@@ -528,6 +549,8 @@ public class PersonAgent extends Agent
 	        return false;
         } catch(ConcurrentModificationException e){ return false; }
 	}
+
+
 
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
@@ -830,6 +853,8 @@ public class PersonAgent extends Agent
 		return closestBa;
 	}*/
 	private void goToBusStop() {
+		if(name.equals("richhome02"))
+			print("goToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStop");
     	personGui.doGoToBus();
 		this.transportState = TransportState.GoingToBus;	
 		try {
@@ -885,23 +910,22 @@ public class PersonAgent extends Agent
 	    		*/
 	    	
 	    		destination = myHome.location;
-				if(car == true || destination.y == personGui.yPos){
+				if(car == true || Math.abs(destination.y - personGui.yPos) <= 40){
 					personGui.doWalkToHome();
 					location = Location.AtHome;
-					
-					/*
-					for(Role r: roles){
-						if(r instanceof AtHomeRole){
-							r.active = true;
-							ahGui.setPresent(true);
-							((AtHomeRole)r).goToHomePos();
-						}
-					}*/
+					state = State.inHome;
 		    	}else{
 		    		goToBusStop();
 		    	} 
 
 		}
+	    private void leaveHouse() {
+	    	for(Role r: roles){
+				if(r instanceof AtHomeRole){
+					((AtHomeRole)r).msgGoLeaveHome();
+				}
+	    	}
+	    }
 	    
 	    //public void msgReenablePerson(){
 			//gui.setPresent();
