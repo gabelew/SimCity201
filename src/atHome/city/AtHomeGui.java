@@ -48,6 +48,7 @@ public class AtHomeGui implements Gui{
     static final int xFIDGE_OFFSET = 100;
     static final int yAPT_OFFSET = 310;
     static final int xAPT_OFFSET = 30;
+    static final int HOUSE_TABLEPOS = 150;
 	
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
 	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood};
@@ -100,6 +101,20 @@ public class AtHomeGui implements Gui{
 				//yDestination = yHomePosition;
 			}
 		}
+		
+		if(agent.myHome instanceof Home)
+		{
+				xHomePosition = 50;
+				yHomePosition = 50;
+				xKITCHEN_COUNTER_POSITION = xHomePosition;
+				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET;
+				xFRIDGE_POSITION = xHomePosition + xFIDGE_OFFSET;
+				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET;
+				xGRILL_POSITION = xHomePosition + xGRILL_RIGHT_OFFSET;
+				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET;
+				xTABLE_POS = HOUSE_TABLEPOS;
+				yTABLE_POS = HOUSE_TABLEPOS;
+		}
 		xPos = 0;
 		yPos = 200;
 	}
@@ -151,6 +166,7 @@ public class AtHomeGui implements Gui{
 	
 	public void draw(Graphics2D g) {
 		g.drawImage(personImg, xPos, yPos, null);
+		drawFood(g);
 	}
 
 	public void drawFood(Graphics2D g) {
@@ -195,7 +211,7 @@ public class AtHomeGui implements Gui{
 			yDestination = yGRILL_POSITION;
 			command = Command.GoToGrill;
 		}else{
-			//foods.add(new MyFood(new FoodIcon(order.choice+"g"), new Point(xFOOD_OFFSET, yFOOD_OFFSET), order));
+			foods.add(new MyFood(new FoodIcon(choice+"g"), new Point(xFOOD_OFFSET, yFOOD_OFFSET),choice));
 			xDestination = xKITCHEN_COUNTER_POSITION;
 			yDestination = yKITCHEN_COUNTER_POSITION;
 			command = Command.GoToCounter;
@@ -208,6 +224,11 @@ public class AtHomeGui implements Gui{
 		command = Command.EatFood;
 		xDestination = xTABLE_POS;
 		yDestination = yTABLE_POS;
+	}
+	
+	public void DoneEating()
+	{
+		foods.clear();
 	}
 
 /*****************

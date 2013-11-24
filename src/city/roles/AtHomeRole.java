@@ -24,6 +24,7 @@ public class AtHomeRole extends Role
 	enum OrderState {pending, cooking, done, eating}
 	EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
+	static final int EATING_TIME = 5000;
 	
 	Map<String, Food> findFood = new HashMap<String, Food>();
 	//Lists
@@ -46,7 +47,7 @@ public class AtHomeRole extends Role
 		//Adds it to list of choices and hashmap
 		for(String s : choices)
 		{
-			Food f = new Food(s, 5);
+			Food f = new Food(s, 2000);
 			foodInFridge.add(f);
 			findFood.put(s, f);
 		}
@@ -137,12 +138,18 @@ public class AtHomeRole extends Role
 		//repairMan.fixAppliance(myPerson, a.appliance);
 	}
 	
-	private void EatIt(Order o)
+	private void EatIt(final Order o)
 	{
 		o.state = OrderState.eating;
-		//DoPlating();
-		//DoEatFood();
-		orders.remove(o);
+		timer.schedule(new TimerTask() {
+			public void run() 
+			{
+				gui.DoneEating();
+				orders.remove(o);
+			}
+		},
+		EATING_TIME);
+		
 	}
 	
 	private void CookIt(final Order o)
