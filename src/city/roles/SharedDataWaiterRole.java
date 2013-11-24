@@ -22,6 +22,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty};
 	AgentEvent event = AgentEvent.none;
 	private RevolvingStandMonitor revolvingStand;
+	public boolean testingRevolvingMonitor = false;
 	
 	public class MyCustomer{
 		public Customer c;
@@ -299,21 +300,21 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	}
 
 	private void seatCustomer(MyCustomer c){
-			doGoToEntrance();
-			
-			StringBuilder msg = new StringBuilder("Follow me " + c.c.getName());
-			print(msg.toString());
-			c.c.msgFollowMeToTable(((Waiter)this), new Menu());
-			
-			DoSeatCustomer(c, c.table);
-			
-			try {
-				waitingResponse.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			c.s = CustomerState.seated;
+		doGoToEntrance();
+		
+		StringBuilder msg = new StringBuilder("Follow me " + c.c.getName());
+		print(msg.toString());
+		c.c.msgFollowMeToTable(((Waiter)this), new Menu());
+		
+		DoSeatCustomer(c, c.table);
+		
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		c.s = CustomerState.seated;
 	}
 
 	private void takeOrder(MyCustomer c) {
@@ -331,14 +332,17 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	}
 
 	private void putInOrder(MyCustomer c) {
-		//doGoToKitchen(c);
+		if(!testingRevolvingMonitor)
+			doGoToKitchen(c);
 		print("\t\t HERHER IM IN DA KITCH");
 		if(revolvingStand.getCount() < 5) {
 			c.s = CustomerState.orderPlaced;
 			print("\t\t Inserting order into revolving stand");
 			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
-			//waiterGui.placedOrder();
-			print("\t\t waiterGui.placedOrder");
+			if(!testingRevolvingMonitor) {
+				waiterGui.placedOrder();
+				print("\t\t waiterGui.placedOrder");
+			}
 		} else {
 			print("Revolving stand is full. I'll come back later.");
 		}
