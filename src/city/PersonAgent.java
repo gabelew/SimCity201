@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
+import bank.BankBuilding;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.gui.WaiterGui;
@@ -454,7 +455,7 @@ public class PersonAgent extends Agent
         		return true;
         	}
         
-        	/*for(Task t:taskList){
+        	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToBankNow){
         			temp = t;
         		}
@@ -464,7 +465,7 @@ public class PersonAgent extends Agent
         		goToBank();
         		taskList.remove(temp);
         		return true;
-        	}*/
+        	}
         
         	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goEatFood){
@@ -478,7 +479,7 @@ public class PersonAgent extends Agent
         		return true;
         	}
         
-        	/*for(Task t:taskList){
+        	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToBank){
         			temp = t;
         		}
@@ -488,7 +489,7 @@ public class PersonAgent extends Agent
         		goToBank();
         		taskList.remove(temp);
         		return true;
-        	}*/
+        	}
         
         	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToMarket){
@@ -549,6 +550,8 @@ public class PersonAgent extends Agent
 	        return false;
         } catch(ConcurrentModificationException e){ return false; }
 	}
+
+
 
 
 
@@ -799,7 +802,36 @@ public class PersonAgent extends Agent
     	role.gotHungry();
     }
     
-    private void goToMarket(){
+    private void goToBank() {
+    	state = State.goingToBank;
+	    BankBuilding m  = chooseClosestBank();
+	    destination = m.location;
+	    
+	    if(car == true || destination.y == personGui.yPos){
+    		personGui.DoWalkTo(destination);
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}else{
+    		goToBusStop();
+    	} 
+    }
+    
+    private void finishGoingToBank(){
+    	state  = State.banking;
+    	BankBuilding m = findBank(destination);
+    	personGui.DoWalkTo(destination); //animationStub
+    	/*MarketCustomerRole role = new MarketCustomerRole(this);
+    	roles.add(role);
+    	role.active = true;
+    	m.insideAnimationPanel.addGui(role.getMarketCustomerGui());
+    	role.getMarketCustomerGui().setPresent(true);
+    	role.startShopping(m, toOrderFromMarket);*/
+    }
+
+	private void goToMarket(){
     	state = State.goingToMarket;
 	    MarketAgent m  = chooseClosestMarket();
 	    destination = m.location;
@@ -840,18 +872,18 @@ public class PersonAgent extends Agent
 		return closestMa;
 	}
 
-    
-  /*  private MarketAgent chooseClosestBank() {
-    	MarketAgent closestBa = simCityGui.getBanks().get(0);
-    	for(MarketAgent m: simCityGui.getBanks()){
-			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
-				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
-					closestBa = m;
+    private BankBuilding chooseClosestBank() {
+    	BankBuilding closestBa = simCityGui.getBanks().get(0);
+    	for(BankBuilding b: simCityGui.getBanks()){
+			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(b.location.y - personGui.yPos)){
+				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
+					closestBa = b;
 				}
 			}
 		}
 		return closestBa;
-	}*/
+	}
+    
 	private void goToBusStop() {
 		if(name.equals("richhome02"))
 			print("goToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStop");
@@ -878,7 +910,16 @@ public class PersonAgent extends Agent
 		}
 		return null;
 	}
-
+    
+	private BankBuilding findBank(Point d) {
+		for(BankBuilding b: simCityGui.getBanks()){
+			if(b.location.equals(d)){
+				return b;
+			}
+		}
+		return null;
+	}
+    
 	public void msgAnimationFinshed() {
 		waitingResponse.release();	
 	}
@@ -901,14 +942,7 @@ public class PersonAgent extends Agent
  *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
  ******************^^^^^^^^^^^^^^^^*********************/
 	    private void goHome() 
-	    {
-	    		/* Old code here for reference
-	    		//personGui.DoWalkTo(myHome.location);
-				//print("i have "+roles.size());
-				//try {waitingResponse.acquire();} 
-				//catch (InterruptedException e) { e.printStackTrace(); }
-	    		*/
-	    	
+	    {	
 	    		destination = myHome.location;
 				if(car == true || Math.abs(destination.y - personGui.yPos) <= 40){
 					personGui.doWalkToHome();
