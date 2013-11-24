@@ -422,5 +422,10 @@ public class WaiterRole extends Role implements Waiter{
 		waitingResponse.release();
 		event = AgentEvent.relieveFromDuty;
 	}
+
+	@Override
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
 	
 }

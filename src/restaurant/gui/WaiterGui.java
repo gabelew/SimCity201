@@ -17,6 +17,7 @@ import city.animationPanels.RestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 import city.roles.CookRole;
+import city.roles.SharedDataWaiterRole;
 import city.roles.WaiterRole;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
@@ -25,7 +26,7 @@ import city.animationPanels.RestaurantAnimationPanel;
 
 public class WaiterGui implements Gui {
 
-	private WaiterRole role = null;
+	private Waiter role = null;
 	private boolean isPresent = false;
 	private static BufferedImage waiterImg = null;
 	
@@ -72,13 +73,12 @@ public class WaiterGui implements Gui {
     static final int xWAITING_OVERFLOW_POS = 335;
     static final int yWAITING_OVERFLOW_POS = 465;
     
-	public WaiterGui(WaiterRole w) {
+	public WaiterGui(Waiter w) {
 		try {
 		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
 		} catch (IOException e) {
 		}
-	    
-		role = w;
+	    role = w;
 		xPos = START_POSITION;
 		yPos = START_POSITION;
 		xDestination = START_POSITION;
@@ -134,9 +134,9 @@ public class WaiterGui implements Gui {
 	}
 
 	private void findASpotToRest() {	
-		for(int i = 0; i < ((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.size(); i++){
+		for(int i = 0; i < ((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.size(); i++){
 			if(waitingSeatNumber < 0){
-				if(((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(i).tryAcquire()){
+				if(((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(i).tryAcquire()){
 					System.out.println("\t\t\t\t\t\t"+ i);
 					waitingSeatNumber = i;
 					xDestination = seatMap.get(i).x;
@@ -175,11 +175,11 @@ public class WaiterGui implements Gui {
 	}
 
 	public void DoBringToTable(int t) {
-		xDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesXCoord(t) + WAITER_TABLE_OFFSET;
-    	yDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesYCoord(t) - WAITER_TABLE_OFFSET;
+		xDestination = ((RestaurantAnimationPanel) role.getRestaurant().insideAnimationPanel).getTablesXCoord(t) + WAITER_TABLE_OFFSET;
+    	yDestination = ((RestaurantAnimationPanel) role.getRestaurant().insideAnimationPanel).getTablesYCoord(t) - WAITER_TABLE_OFFSET;
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -193,15 +193,15 @@ public class WaiterGui implements Gui {
 	}
 
 	public void msgImReadyToBeSeated(CustomerGui c){
-	   xDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesXCoord(table) + WAITER_TABLE_OFFSET;
-	   yDestination = ((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesYCoord(table) - WAITER_TABLE_OFFSET;
+	   xDestination = ((RestaurantAnimationPanel) role.getRestaurant().insideAnimationPanel).getTablesXCoord(table) + WAITER_TABLE_OFFSET;
+	   yDestination = ((RestaurantAnimationPanel) role.getRestaurant().insideAnimationPanel).getTablesYCoord(table) - WAITER_TABLE_OFFSET;
 	    	
-	   c.msgGoSitAtTable(new Point(((RestaurantAnimationPanel) role.restaurant.insideAnimationPanel).getTablesXCoord(table), ((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).getTablesYCoord(table)));
+	   c.msgGoSitAtTable(new Point(((RestaurantAnimationPanel) role.getRestaurant().insideAnimationPanel).getTablesXCoord(table), ((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).getTablesYCoord(table)));
 
         
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -213,7 +213,7 @@ public class WaiterGui implements Gui {
         yDestination = yREST_POSITION;
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -229,7 +229,7 @@ public class WaiterGui implements Gui {
         yDestination = yCUST_PICKUP_LOCATION;
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -241,7 +241,7 @@ public class WaiterGui implements Gui {
         yDestination = yCOOK_DROPOFF_POSITION;
         
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -252,7 +252,7 @@ public class WaiterGui implements Gui {
         yDestination = yCOOK_PICKUP_POSITION;
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -277,7 +277,7 @@ public class WaiterGui implements Gui {
 
 	public void servingFood(Waiter w, String choice, int t){
 
-		((CookRole)role.restaurant.cook).cookGui.msgPickingUpMyOrder(w, choice, t);
+		((CookRole)role.getRestaurant().cook).cookGui.msgPickingUpMyOrder(w, choice, t);
 		food = new FoodIcon(choice);
 	}
 	
@@ -291,7 +291,7 @@ public class WaiterGui implements Gui {
         yDestination = yCASHIER_POSITION;
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -303,7 +303,7 @@ public class WaiterGui implements Gui {
         yDestination = START_POSITION;
 		
         if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
+			((RestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
