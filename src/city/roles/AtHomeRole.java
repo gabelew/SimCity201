@@ -45,6 +45,7 @@ public class AtHomeRole extends Role
 			foodInFridge.add(f);
 			findFood.put(s, f);
 		}
+		atHomeGui = new AtHomeGui(myPerson, this);
 	}
 	
 	public AtHomeGui getGui()
