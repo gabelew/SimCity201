@@ -115,6 +115,10 @@ public class AtHomeRole extends Role
 			}
 		}
 	}
+	public void GoLeaveHome()
+	{
+		gui.DoLeaveHome();
+	}
 /*********************
  ***** ACTIONS
  ********************/

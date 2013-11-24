@@ -190,6 +190,11 @@ public class AtHomeGui implements Gui{
 		}
 	}
 	
+	public void DoLeaveHome()
+	{
+		
+	}
+	
 /***********************************
  * Cooking at home animation calls
  **********************************/
