@@ -58,9 +58,28 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	// Messages
 	public void goingToBank() {
 		state = CustomerState.EnteringBank;
-		// default tasks in bank
+		// default check balance tasks in bank
 		tasks.add(new Task(BankingState.WantToCheckBalance, 0, "personal"));
 		tasks.add(new Task(BankingState.WantToCheckBalance, 0, "business"));
+		
+		// checks if they can pay back their loan
+		for(Loan l: loans) {
+			int payLoan;
+			if ("personal".equals(l.accountType))
+				payLoan = Double.compare(myPerson.cashOnHand - PERSONAL_BROKE_BORROW_AMOUNT, l.amount);
+			else
+				payLoan = Double.compare(myPerson.businessFunds - BUSINESS_BROKE_BORROW_AMOUNT, l.amount);
+			if(1 == payLoan)
+				tasks.add(new Task(BankingState.WantToPayBackLoan, l.amount, l.accountType));
+		}
+		
+		// deposit excess cash
+		int excessCash = Double.compare(myPerson.cashOnHand, 600);
+		if(1 == excessCash && 0 == loans.size()) {
+			double cash = myPerson.cashOnHand - 600;
+			cash = (Math.round(100*cash) / ((double)100));
+			tasks.add(new Task(BankingState.WantToDeposit, cash, "personal"));
+		}
 		stateChanged();
 	}
 	
@@ -238,16 +257,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			}
 		}
 		
-		for(Loan l: loans) {
-			int payLoan;
-			if ("personal".equals(l.accountType))
-				payLoan = Double.compare(myPerson.cashOnHand - PERSONAL_BROKE_BORROW_AMOUNT, l.amount);
-			else
-				payLoan = Double.compare(myPerson.businessFunds - BUSINESS_BROKE_BORROW_AMOUNT, l.amount);
-			if(1 == payLoan)
-				tasks.add(new Task(BankingState.WantToPayBackLoan, l.amount, l.accountType));
-			return true;
-		}
+		
 		
 		if(0 == tasks.size()) {
 			state = CustomerState.LeavingBank;

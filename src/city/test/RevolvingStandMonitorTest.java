@@ -12,7 +12,7 @@ import city.roles.SharedDataWaiterRole;
 import city.roles.SharedDataWaiterRole.CustomerState;
 import junit.framework.TestCase;
 
-public class SharedDataWaiterRoleTest extends TestCase{
+public class RevolvingStandMonitorTest extends TestCase{
 	SharedDataWaiterRole waiter;
 	RevolvingStandMonitor revolvingStand;
 	CookRole cook;
@@ -34,8 +34,13 @@ public class SharedDataWaiterRoleTest extends TestCase{
 		timer = new Timer();
 	}	
 	
-	public void testPutInOrder() {
+	/**
+	 * The test starts with an empty revolving stand. Waiter fills it to capacity and tries to add
+	 * another order but should not be able to until the cook has removed the order.
+	 */
+	public void testWaiterPutInOrderAtMaximumCapacity() {
 		//setUp() runs first before this test!
+		waiter.testingRevolvingMonitor = true;
 		waiter.setRevolvingStand(revolvingStand);
 		cook.setRevolvingStand(revolvingStand);
 		
@@ -94,7 +99,7 @@ public class SharedDataWaiterRoleTest extends TestCase{
 
 		
 		/**
-		 * Step 6: Sixth customer order. Attempt to put order in revolving stand.
+		 * Step 6: Sixth customer order. Attempt to put order in revolving stand but fails.
 		 */
 		waiter.customers.add(waiter.new MyCustomer(customer, 6, CustomerState.ordered, "chicken"));
 		
@@ -108,17 +113,55 @@ public class SharedDataWaiterRoleTest extends TestCase{
 		 */
 		cook.checkRevolvingStand();
 		
-		// check postconditions for step 7
+		// check postconditions for step 7 and preconditions for step 8
 		assertTrue("Revolving stand should have 4 orders in it. It doesn't.", 4 == revolvingStand.getCount());
 		
 		/**
 		 * Step 8: Call the waiter's schedule again for it to reattempt putting order in stand.
 		 */
 		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		
+		// check postconditions for step 8
 		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(5).s));
-		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());
+		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());	
 		
+	}
+	
+	/**
+	 * Cook tries to remove an order from an empty revolving stand but cannot until waiter has put in an order.
+	 */
+	public void testCookRemoveOrderWhenEmpty() {
+		//setUp() runs first before this test!
+		waiter.testingRevolvingMonitor = true;
+		waiter.setRevolvingStand(revolvingStand);
+		cook.setRevolvingStand(revolvingStand);
 		
+		// check preconditions
+		assertTrue("Revolving stand should have no orders in it. It does.", 0 == revolvingStand.getCount());
+		
+		/**
+		 * Step 1: Cook tries to take an order from the revolving stand but moves on because there is nothing to take
+		 */
+		cook.checkRevolvingStand();
+		
+		// check postconditions of step 1 and preconditions of step 2
+		assertTrue("Revolving stand should have no orders in it. It does.", 0 == revolvingStand.getCount());
+		assertTrue("Cook goes on to do other things.", cook.pickAndExecuteAnAction());
+		
+		/**
+		 * Step 2: Waiter adds an order
+		 */
+		waiter.customers.add(waiter.new MyCustomer(customer, 5, CustomerState.ordered, "pizza"));
+		
+		// check postconditions for step 2 and preconditions for step 3
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Revolving stand should have 1 order in it. It doesn't.", 1 == revolvingStand.getCount());
+		
+		/**
+		 * Step 3: Cook removes the order successfully
+		 */
+		cook.checkRevolvingStand();
+		assertTrue("Revolving stand should have no orders in it. It does.", 0 == revolvingStand.getCount());
 	}
 	
 }
