@@ -16,10 +16,12 @@ import restaurant.gui.FoodIcon;
 import city.PersonAgent;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.AtHomeRole;
 
 public class AtHomeGui implements Gui{
 	
 	private PersonAgent agent = null;
+	private AtHomeRole role = null;
 	private boolean isPresent = false;
 	
 	private static BufferedImage personImg = null;
@@ -32,17 +34,19 @@ public class AtHomeGui implements Gui{
 	private int yFRIDGE_POSITION = 0;
 	private int xGRILL_POSITION = 0;
 	private int yGRILL_POSITION = 0;
+	private int xTABLE_POS = 0;
+	private int yTABLE_POS = 0;
 	private int xKITCHEN_COUNTER_POSITION = 0;
 	private int yKITCHEN_COUNTER_POSITION = 0;
     static final int xFOOD_OFFSET = 10;
     static final int yFOOD_OFFSET = 4;
 	
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
-	private enum Command {noCommand, GoToFridge, GoToGrill, GoToCounter, GoToPlate, GoToRestPost, enterRestaurant, leaveRestaurant};
+	private enum Command {noCommand, GoToFridge, GoToGrill, GoToCounter, GoToRestPost};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
 	
-	public AtHomeGui(PersonAgent c, SimCityGui gui)
+	public AtHomeGui(PersonAgent c, AtHomeRole r, SimCityGui gui)
 	{
 		
 		try 
@@ -53,8 +57,13 @@ public class AtHomeGui implements Gui{
 		catch (IOException e) {}
 		
 		agent = c;
-		xPos = 75;
-		yPos = 103; //103+80*i
+		role = r;
+		if(agent.myHome instanceof Apartment)
+		{
+			int aptnum = ((Apartment)agent.myHome).renters.indexOf(agent);
+		}
+		xPos = 0;
+		yPos = 200; //103+80*i
 		xDestination = 75;
 		yDestination = 103;
         
@@ -154,7 +163,8 @@ public class AtHomeGui implements Gui{
 	
 	public void PlateAndEatFood()
 	{
-		
+		xDestination = xTABLE_POS;
+		yDestination = yTABLE_POS;
 	}
 
 /*****************

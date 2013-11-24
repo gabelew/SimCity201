@@ -78,9 +78,9 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	     g2.fillRect(0, 0, WINDOWX, WINDOWY);
 	     
 	     //make a hallway
-	     g2.setColor(Color.BLACK);
-	     g2.fillRect(0, 150, WALL_LENGTH, WALL_WIDTH);
-	     g2.fillRect(0, 300, WALL_LENGTH, WALL_WIDTH);
+	     //g2.setColor(Color.BLACK);
+	     //g2.fillRect(0, 150, WALL_LENGTH, WALL_WIDTH);
+	     //g2.fillRect(0, 300, WALL_LENGTH, WALL_WIDTH);
 	     
 	     g2.setColor(Color.GRAY);
 	     g2.fillRect(0, 160, WALL_LENGTH, 140);
