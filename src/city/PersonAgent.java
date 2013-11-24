@@ -10,6 +10,7 @@ import bank.BankBuilding;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.gui.WaiterGui;
+import restaurant.test.mock.EventLog;
 import agent.Agent;
 import atHome.city.AtHomeGui;
 import atHome.city.Home;
@@ -34,6 +35,8 @@ public class PersonAgent extends Agent
 	public Residence myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
+	public EventLog log = new EventLog();
+	public boolean testing = false;
 	
 	//Various States
 	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak};

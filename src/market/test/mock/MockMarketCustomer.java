@@ -3,6 +3,7 @@ package market.test.mock;
 import java.util.List;
 import java.util.Map;
 
+import city.MarketAgent;
 import city.roles.ClerkRole;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.gui.CustomerGui;
@@ -41,6 +42,12 @@ public class MockMarketCustomer extends Mock implements MarketCustomer {
 	
 	public void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf){
 		log.add(new LoggedEvent("Received msgHereIsOrder from clerk"));
+	}
+	@Override
+	public void startShopping(MarketAgent m,
+			Map<String, Integer> toOrderFromMarket) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

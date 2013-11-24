@@ -4,6 +4,7 @@ package market.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import city.MarketAgent;
 import city.roles.ClerkRole;
 import restaurant.gui.CustomerGui;
 
@@ -20,5 +21,7 @@ public interface MarketCustomer {
 	public abstract void msgHereIsPrice(double amount);
 	
 	public abstract void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf);
+	
+	public abstract void startShopping(MarketAgent m, Map<String, Integer> toOrderFromMarket);
 
 }
