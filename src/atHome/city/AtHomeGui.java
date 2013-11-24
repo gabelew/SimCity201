@@ -5,9 +5,14 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import restaurant.RoleOrder;
+import restaurant.gui.FoodIcon;
 import city.PersonAgent;
 import city.gui.Gui;
 import city.gui.SimCityGui;
@@ -21,10 +26,21 @@ public class AtHomeGui implements Gui{
 	public SimCityGui gui;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, walkToDestination, enterHome};
-	private Command command=Command.noCommand;
 	private int xHomePosition = 20;
 	private int yHomePosition = 20;
+	private int xFRIDGE_POSITION = 0;
+	private int yFRIDGE_POSITION = 0;
+	private int xGRILL_POSITION = 0;
+	private int yGRILL_POSITION = 0;
+	private int xKITCHEN_COUNTER_POSITION = 0;
+	private int yKITCHEN_COUNTER_POSITION = 0;
+    static final int xFOOD_OFFSET = 10;
+    static final int yFOOD_OFFSET = 4;
+	
+	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
+	private enum Command {noCommand, GoToFridge, GoToGrill, GoToCounter, GoToPlate, GoToRestPost, enterRestaurant, leaveRestaurant};
+	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
+	Command command = Command.noCommand;
 	
 	public AtHomeGui(PersonAgent c, SimCityGui gui)
 	{
@@ -58,27 +74,21 @@ public class AtHomeGui implements Gui{
 			else if (yPos > yDestination)
 			yPos--;
 		
-
+/*
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command == Command.walkToDestination){
 				command = Command.noCommand;
 				agent.msgAnimationFinshed();
 			}
 		}
-		
-	}
-
-	@Override
-	public void draw(Graphics2D g) 
-	{
-		g.drawImage(personImg, xPos, yPos, null);
+		*/
 	}
 
 	public void doEnterHome()
 	{
 	        xDestination = xHomePosition;
 	        yDestination = yHomePosition; 
-	        command = Command.enterHome;   	
+	        //command = Command.enterHome;   	
 	}
 	@Override
 	public boolean isPresent() {
@@ -88,12 +98,87 @@ public class AtHomeGui implements Gui{
 	public void setPresent(boolean p) {
 		isPresent = p;
 	}
+	
+	public void draw(Graphics2D g) {
+		g.drawImage(personImg, xPos, yPos, null);
+	}
 
-	public void DoWalkTo(Point destination) {
-		xDestination = destination.x;
-		yDestination = destination.y;
-		command = Command.walkToDestination;
+	public void drawFood(Graphics2D g) {
+
+		synchronized(foods)
+		{
+			for(MyFood f: foods)
+			{
+				if(f.food != null)
+				{
+					if(f.state == FoodState.PutFoodOnGrill || f.state == FoodState.PutFoodOnCounter )
+					{
+						g.drawImage(f.food.iconImg, xPos+f.point.x, yPos+f.point.y, null);
+					}
+					else 
+					{	
+						g.drawImage(f.food.iconImg, f.point.x, f.point.y, null);
+					}
+				}
+			}
+		}
+	}
+	
+/***********************************
+ * Cooking at home animation calls
+ **********************************/
+	public void DoGoToFridge() 
+	{
+		xDestination = xFRIDGE_POSITION;
+		yDestination = yFRIDGE_POSITION;
+		command = Command.GoToFridge;	
+	}
+	public void DoCookFood(RoleOrder order) 
+	{
+		// Grab food from fidge(already at fidge
+		// if burger,steak,chicken put on grill and set timer
+		// if salad or cookie, put on right
+		if(order.choice.equalsIgnoreCase("steak") || order.choice.equalsIgnoreCase("chicken") || order.choice.equalsIgnoreCase("burger")){
+			foods.add(new MyFood(new FoodIcon(order.choice+"g"), new Point(xFOOD_OFFSET, yFOOD_OFFSET), order));
+			xDestination = xGRILL_POSITION;
+			yDestination = yGRILL_POSITION;
+			command = Command.GoToGrill;
+		}else{
+			//foods.add(new MyFood(new FoodIcon(order.choice+"g"), new Point(xFOOD_OFFSET, yFOOD_OFFSET), order));
+			xDestination = xKITCHEN_COUNTER_POSITION;
+			yDestination = yKITCHEN_COUNTER_POSITION;
+			command = Command.GoToCounter;
+		}
+		
+	}
+	
+	public void PlateAndEatFood()
+	{
 		
 	}
 
+/*****************
+ * Utility Class 
+ ****************/
+	class MyFood
+	{
+		FoodIcon food;
+		Point point;
+		RoleOrder order;
+		FoodState state;
+		MyFood(FoodIcon f, Point p, RoleOrder o){
+			this.food = f;
+			this.point = p;
+			this.order = o;
+			
+			if(order.choice.equalsIgnoreCase("steak") || order.choice.equalsIgnoreCase("chicken"))
+			{
+				state = FoodState.PutFoodOnGrill;
+			}
+			else
+			{
+				state = FoodState.PutFoodOnCounter;
+			}
+		}
+	}
 }

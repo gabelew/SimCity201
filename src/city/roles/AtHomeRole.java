@@ -47,6 +47,10 @@ public class AtHomeRole extends Role
 		}
 	}
 	
+	public AtHomeGui getGui()
+	{
+		return atHomeGui;
+	}
 	public void setGui(AtHomeGui g)
 	{
 		this.atHomeGui = g;

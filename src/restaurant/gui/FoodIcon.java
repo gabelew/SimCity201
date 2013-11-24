@@ -11,7 +11,7 @@ public class FoodIcon {
 	public BufferedImage iconImg = null;
 	public String type;
 
-	FoodIcon(String t)
+	public FoodIcon(String t)
 	{
 		try {
 				StringBuilder path = new StringBuilder("imgs/" + t.toLowerCase()+".png");
