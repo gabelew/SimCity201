@@ -68,12 +68,13 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	public void actionPerformed(ActionEvent arg0) 
 	{
 
-		for(Gui gui : getGuis()) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
-		
+		synchronized(guis){
+			for(Gui gui : getGuis()) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+		}
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();  //Will have paintComponent called
 		
@@ -102,6 +103,13 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
          for(int i = 0; i < 2; i++)
         	 g.drawImage(couchImg, 600+ 100*i,300, null);
          g.drawImage(tvImg, 600, 400, null);
-		
+         
+         synchronized(guis){
+				for(Gui gui : getGuis()) {
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+		        }
+			}
 	}
 }

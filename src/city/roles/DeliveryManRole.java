@@ -112,7 +112,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			orderDone();
 			return true;
 		}
-		
+		print("DELIVERYMANNNNNN");
 		return false;
 	}
 
