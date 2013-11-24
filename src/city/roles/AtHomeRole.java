@@ -118,6 +118,9 @@ public class AtHomeRole extends Role
 	public void msgGoLeaveHome()
 	{
 		gui.DoLeaveHome();
+		try { busy.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		myPerson.msgDoneEatingAtHome();
 	}
 /*********************
  ***** ACTIONS
@@ -291,7 +294,7 @@ public class AtHomeRole extends Role
 	{
 		busy.release();
 	}
-	private void goToHomePos()
+	public void goToHomePos()
 	{
 		state = state.none;
 		gui.doEnterHome();
