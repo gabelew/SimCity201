@@ -487,4 +487,48 @@ public class BankTest extends TestCase{
 		assertEquals("Bank should have no transactions in it. It does.", bank.transactions.size(), 0);
 		assertFalse("Bank scheduler should return false with nothing left to do. It doesn't.", bank.pickAndExecuteAnAction());	
 	}
+	
+	public void testOneCustomerDepositIntoSpecificAccount() {
+		//setUp() runs first before this test!
+
+		// check preconditions
+		assertEquals("Bank should have no accounts in it. It does.", bank.accounts.size(), 0);
+		assertEquals("MockBankCustomer's log should be empty before bank's scheduler returns true. Instead, it reads: " + customer.log.toString(), 0, customer.log.size());
+		assertEquals("Bank should have no transactions in it. It does.", bank.transactions.size(), 0);
+		assertFalse("Bank scheduler should return false. It doesn't.", bank.pickAndExecuteAnAction());
+		
+		/**
+		 * Step 1: Bank gets a message from a customer to open an account.		
+		 */
+		bank.msgOpenAccount(customer, 150.86, "business");
+		
+		// check postconditions for step 1 and preconditions for step 2
+		assertFalse("Bank scheduler should return false since account is opened in the message. It doesn't.", bank.pickAndExecuteAnAction());	
+		assertEquals("Bank should have 1 account in it. It doesn't.", bank.accounts.size(), 1);	
+		assertTrue("Account should belong to the customer. It doesnt.", customer.equals(bank.accounts.get(0).accountHolder));
+		assertTrue("Account should be of account type business. It isn't.", "business".equals(bank.accounts.get(0).accountType));
+		assertTrue("Account balance should contain 150.86 in it. It doesn't.", 0 == Double.compare(150.86, bank.accounts.get(0).currentBalance));
+		assertEquals("Bank should have no transactions in it. It does.", bank.transactions.size(), 0);
+		assertEquals("MockBankCustomer's log should be empty before bank's scheduler returns true. Instead, it reads: " + customer.log.toString(), 0, customer.log.size());
+		
+		/**
+		 * Step 2: Bank gets a message from a customer to deposit money
+		 */
+		bank.msgDepositToAccount(customer, bank.accounts.get(0), 32.0);
+		
+		// check postconditions for step 2
+		assertEquals("Bank should have 1 transaction in it. It doesn't.", bank.transactions.size(), 1);
+		assertTrue("Transaction should have a state deposit. It doesn't.", TransactionState.deposit.equals(bank.transactions.get(0).ts));
+		assertTrue("Transaction should belong to customer. It doesn't.", customer.equals(bank.transactions.get(0).customer.accountHolder));
+		assertTrue("Bank scheduler should return true. It needs to withdraw from customer's account. It doesn't.", bank.pickAndExecuteAnAction());
+		
+		assertTrue("Customer's account should have 182.86 in it. It doesn't.", 0 == Double.compare(182.86, bank.accounts.get(0).currentBalance));
+		
+		assertTrue("MockBankCustomer should have logged \"Received msgDepositSuccessful\" but didn't. His log reads instead: " 
+				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received msgDepositSuccessful from Bank for amount: " 
+				+ "32.0 for account type: business Remaining balance: 182.86"));
+		assertEquals("Bank should have no transactions in it. It does.", bank.transactions.size(), 0);
+		assertFalse("Bank scheduler should return false with nothing left to do. It doesn't.", bank.pickAndExecuteAnAction());	
+				
+	}
 }

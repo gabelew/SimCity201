@@ -15,7 +15,7 @@ public class BankAgent extends Agent implements Bank{
 		public BankCustomer accountHolder;
 		public double owed = 0.0;
 		public String accountType;
-		BankAccount(BankCustomer bcr, double initialDeposit, String accountType) {
+		public BankAccount(BankCustomer bcr, double initialDeposit, String accountType) {
 			this.accountHolder = bcr;
 			this.currentBalance = initialDeposit;
 			this.accountType = accountType;
@@ -37,11 +37,21 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	public class Transaction {
+		public BankCustomer bc;
 		public BankAccount customer;
 		public BankAccount recipient;
 		public double amount;
 		public TransactionState ts;
 		public String purpose;
+		Transaction(TransactionState ts, double amount, BankAccount customer, BankAccount recipient, String purpose,
+				BankCustomer b) {
+			this.bc = b;
+			this.ts = ts;
+			this.amount = amount;
+			this.customer = customer;
+			this.recipient = recipient;
+			this.purpose = purpose;
+		}
 		Transaction(TransactionState ts, double amount, BankAccount customer, BankAccount recipient, String purpose) {
 			this.ts = ts;
 			this.amount = amount;
@@ -104,10 +114,17 @@ public class BankAgent extends Agent implements Bank{
 	public void msgDepositMoney(BankCustomer bcr, double amount, String accountType) {
 		BankAccount account = findBankAccount(bcr,accountType);
 		if(account != null) {
-			transactions.add(new Transaction(TransactionState.deposit, amount, account, null, "deposit"));
+			transactions.add(new Transaction(TransactionState.deposit, amount, account, null, "deposit", bcr));
 		}
 		if(0 == getStateChangePermits())
 			stateChanged();
+	}
+	
+	public void msgDepositToAccount(BankCustomer bc, BankAccount businessAccount, double amount) {
+		BankAccount account = findAccount(businessAccount);
+		if(account != null) {
+			transactions.add(new Transaction(TransactionState.deposit, amount, account, null, "deposit", bc));
+		}
 	}
 	
 	public void msgWithdrawMoney(BankCustomer bcr, double amount, String accountType) {
@@ -220,15 +237,15 @@ public class BankAgent extends Agent implements Bank{
 	private void customerDeposit(Transaction t) {
 		t.customer.deposit(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
-		t.customer.accountHolder.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
-		transactions.remove(findTransactionIndex(t));
+		t.bc.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
+		transactions.remove(t);
 	}
 	
 	private void customerWithdrawal(Transaction t) {
 		double withdrew = t.customer.withdraw(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.customer.accountHolder.msgHereIsMoney(withdrew, t.customer.accountType, t.customer.currentBalance);
-		transactions.remove(findTransactionIndex(t));
+		transactions.remove(t);
 	}
 	
 	private void customerLoanPayment(Transaction t) {
@@ -241,7 +258,7 @@ public class BankAgent extends Agent implements Bank{
 			t.customer.owed = 0;
 		}
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
-		transactions.remove(findTransactionIndex(t));
+		transactions.remove(t);
 	}
 	
 	private void customerAutoLoanPayment(Transaction t) {
@@ -255,7 +272,7 @@ public class BankAgent extends Agent implements Bank{
 			t.customer.owed = 0;
 		}
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
-		transactions.remove(findTransactionIndex(t));
+		transactions.remove(t);
 	}
 	
 	private void customerLoanRequest(Transaction t) {
@@ -277,7 +294,7 @@ public class BankAgent extends Agent implements Bank{
 			fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 			t.customer.accountHolder.msgLoanApproved(t.customer.owed, t.customer.accountType);
 		}
-		transactions.remove(findTransactionIndex(t));
+		transactions.remove(t);
 	}
 	
 	private void customerTransfer(Transaction t) {
@@ -294,7 +311,7 @@ public class BankAgent extends Agent implements Bank{
 			r.getPersonAgent().msgTransferCompleted(r.getPersonAgent(), t.amount, t.purpose);
 			r.getPersonAgent().msgTransferSuccessful(r.getPersonAgent(), t.amount, t.purpose);
 		}
-		transactions.remove(findTransactionIndex(t));
+		transactions.remove(t);
 	}
 	
 	private void customerBalance(Transaction t) {
@@ -304,10 +321,20 @@ public class BankAgent extends Agent implements Bank{
 		} else {
 			t.customer.accountHolder.msgHereIsBalance(t.customer.currentBalance, t.customer.accountType);
 		}
-		transactions.remove(findTransactionIndex(t));
+		transactions.remove(t);
 	}
 	
 	// Utilities
+	
+	private BankAccount findAccount(BankAccount b) {
+		BankAccount ba = null;
+		for (BankAccount a : accounts) {
+			if(b.equals(a)) {
+				ba = a;
+			}
+		}
+		return ba;
+	}
 	
 	private BankAccount findBankAccount(BankCustomer bc, String accountType) {
 		BankAccount ba = null;
@@ -328,15 +355,5 @@ public class BankAgent extends Agent implements Bank{
 			}
 		}
 		return ba;
-	}
-	
-	private int findTransactionIndex(Transaction t) {
-		int transactionIndex = -1;
-		for(int i = 0; i < transactions.size(); i++) {
-			if(t.equals(transactions.get(i))) {
-				transactionIndex = i;
-			}
-		}
-		return transactionIndex;
 	}
 }

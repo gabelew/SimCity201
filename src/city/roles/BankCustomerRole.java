@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
 import city.BankAgent;
+import city.BankAgent.BankAccount;
 import city.PersonAgent;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
@@ -39,8 +40,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public List<Task> tasks = new CopyOnWriteArrayList<Task>();
 	public Bank bankTeller;
 	enum BankingState{WantToCheckBalance, WantToOpenAccount, WantToDeposit, WantToWithdraw, 
-		WantToGetALoan, WantToPayBackLoan, WantToAutoPayLoan, CheckingBalance, OpeningAccount, Depositing, Withdrawing, 
-		RequestingALoan, PayingLoan };
+		WantToGetALoan, WantToPayBackLoan, WantToAutoPayLoan, WantToDepositToBusiness, CheckingBalance, 
+		OpeningAccount, Depositing, DepositingBusiness, Withdrawing, RequestingALoan, PayingLoan };
 	public enum CustomerState {None, EnteringBank, InBank, FindingATM, AtAtm, LeavingBank};
 	public CustomerState state = CustomerState.None;
 	private BankCustomerGui customerGui;
@@ -49,6 +50,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	static final int BUSINESS_BROKE_AMOUNT = 500;
 	static final int PERSONAL_BROKE_BORROW_AMOUNT = 200;
 	static final int BUSINESS_BROKE_BORROW_AMOUNT = 700;
+	BankAccount personalAccount;
+	BankAccount businessAccount;
 	
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
@@ -105,6 +108,10 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	public void msgIWantToPayBackLoan(double amount, String accountType) {
 		tasks.add(new Task(BankingState.WantToPayBackLoan, amount, accountType));
+	}
+	
+	public void msgIWantToDepositInBusinessAccount(double amount) {
+		tasks.add(new Task(BankingState.WantToDepositToBusiness, amount, "business"));
 	}
 	
 	public void msgHereIsMoney(double amount, String accountType, double remainingBalance) {
@@ -223,6 +230,13 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				}
 			}
 			for(Task t : tasks) {
+				if(BankingState.WantToDepositToBusiness.equals(t.bs)){
+					t.bs = BankingState.Depositing;
+					DepositToBusiness(t);
+					return true;
+				}
+			}
+			for(Task t : tasks) {
 				if(BankingState.WantToWithdraw.equals(t.bs)){
 					t.bs = BankingState.Withdrawing;
 					WithdrawMoney(t);
@@ -301,11 +315,11 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	private void CheckBalance(Task t) {
 		bankTeller.msgCheckBalance(this, t.accountType);
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
 	private void OpenAccount(Task t) {
 		bankTeller.msgOpenAccount(this, t.amount, t.accountType);
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
 	private void DepositMoney(Task t) {
 		int cashLimit = 0;
@@ -324,16 +338,23 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				myPerson.businessFunds -= t.amount;
 			}
 		}
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
 	private void WithdrawMoney(Task t) {
 		bankTeller.msgWithdrawMoney(this, t.amount, t.accountType);
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
 	private void RequestLoan(Task t) {
 		bankTeller.msgRequestLoan(this, t.amount, t.accountType);
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
+	
+	private void DepositToBusiness(Task t) {
+		bankTeller.msgDepositToAccount(this, businessAccount, t.amount);
+		myPerson.businessFunds -= t.amount;
+		tasks.remove(t);
+	}
+	
 	private void PayLoan(Task t) {
 		int cashLimit = 0;
 		if("personal".equals(t.accountType)) {
@@ -351,24 +372,15 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				myPerson.businessFunds -= t.amount;
 			}
 		}
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
 	
 	private void AutoPayLoan(Task t) {
 		bankTeller.msgAutoPayLoan(this, t.amount, t.accountType);
-		tasks.remove(findTaskIndex(t));
+		tasks.remove(t);
 	}
 	
 	// Utilities
-	private int findTaskIndex(Task t) {
-		int taskIndex = -1;
-		for(int i = 0; i < tasks.size(); i++) {
-			if(t.equals(tasks.get(i))) {
-				taskIndex = i;
-			}
-		}
-		return taskIndex;
-	}
 	
 	private int findLoanIndex(double amount, String accountType) {
 		int loanIndex = -1;
@@ -384,7 +396,15 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		return customerGui;
 	}
 	public void setGui(BankCustomerGui g) {
-		customerGui = g;
+		this.customerGui = g;
+	}
+	
+	public void setBusinessAccount(BankAccount b) {
+		this.businessAccount = b;
+	}
+	
+	public void setPersonalAccount(BankAccount p) {
+		this.personalAccount = p;
 	}
 	
 	public void setBankTeller(BankAgent b) {

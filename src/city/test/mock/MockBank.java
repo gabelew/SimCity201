@@ -3,6 +3,7 @@ package city.test.mock;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import restaurant.test.mock.Mock;
+import city.BankAgent.BankAccount;
 import city.PersonAgent;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
@@ -70,6 +71,11 @@ public class MockBank extends Mock implements Bank{
 		log.add(new LoggedEvent("Received msgAutoPayLoan from BankCustomer for amount: " 
 			+ amount + " and account type: " + accountType));
 		
+	}
+
+	@Override
+	public void msgDepositToAccount(BankCustomer bc, BankAccount businessAccount, double amount) {
+		log.add(new LoggedEvent("Received msgDepositToAccount from BankCustomerRole for amount: " + amount));
 	}
 	
 }

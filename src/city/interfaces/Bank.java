@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.BankAgent.BankAccount;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
 
@@ -15,4 +16,6 @@ public interface Bank {
 			String senderAccountType, String recipientAccountType, String purpose);
 	public abstract void msgAutoPayLoan(BankCustomer bc,
 			double amount, String accountType);
+	public abstract void msgDepositToAccount(BankCustomer bc, BankAccount businessAccount,
+			double amount);
 }

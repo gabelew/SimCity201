@@ -1,6 +1,8 @@
 package city.test;
 
 import junit.framework.TestCase;
+import city.BankAgent;
+import city.BankAgent.BankAccount;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
 import city.roles.BankCustomerRole.CustomerState;
@@ -11,6 +13,8 @@ public class BankCustomerRoleTest extends TestCase{
 	BankCustomerRole customer;
 	MockBank bank;
 	PersonAgent person;
+	BankAccount businessAccount;
+	BankAgent b;
 	
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -21,7 +25,34 @@ public class BankCustomerRoleTest extends TestCase{
 		person = new PersonAgent("Stanley", 550.0, 1000.0);
 		customer = new BankCustomerRole(person);	
 		bank = new MockBank("BankOfSimCity");
+		b = new BankAgent("BankAccounts");
+		businessAccount = b.new BankAccount(customer, 0, "business");
 	}	
+	
+	public void testDepositToBusiness() {
+		//setUp() runs first before this test!
+		customer.bankTeller = bank;
+		customer.setBusinessAccount(businessAccount);
+		// check preconditions
+		assertEquals("BankCustomerRole should have no tasks in it. It doesn't.", customer.tasks.size(), 0);
+		assertEquals("MockBank's log should be empty before customer's scheduler is called. Instead, it reads: " + bank.log.toString(), 0, bank.log.size());
+		customer.state = CustomerState.AtAtm; // assume customer is at the bank atm already.
+		
+		/**
+		 * Step 1: Customer has a task to deposit money into the business account
+		 */
+		customer.msgIWantToDepositInBusinessAccount(800);
+		// check postconditions for step 1 and preconditions for step 2
+		assertEquals("BankCustomerRole should have 1 task in it. It doesn't.", customer.tasks.size(), 1);
+		
+		assertTrue("Customer's scheduler should have returned true. It needs to open an account with the bank. It doesn't.", customer.pickAndExecuteAnAction());
+		
+		assertTrue("MockBank should have logged \"Received msgDepositToAccount\" but didn't. His log reads instead: " 
+				+ bank.log.getLastLoggedEvent().toString(), bank.log.containsString("Received msgDepositToAccount from "
+						+ "BankCustomerRole for amount: 800.0"));
+		
+		assertEquals("BankCustomerRole should have no tasks in it. It doesn't.", customer.tasks.size(), 0);
+	}
 	
 	public void testOpenAccountAndDeposit() {
 		//setUp() runs first before this test!
