@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
+import market.interfaces.Market;
 import bank.BankBuilding;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
@@ -29,10 +30,9 @@ public class PersonAgent extends Agent
  ******************^^^^^^^^^^^^^^^^*********************/
 	private List<Role> roles = new ArrayList<Role>();
 	private List<Restaurant> restaurants = new ArrayList<Restaurant>();//hacked in upon creation 
-	private List<MyBank> banks = new ArrayList<MyBank>(); 
-	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
-	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
-	private List<Task> taskList = new ArrayList<Task>(); 
+	private List<BankBuilding> banks = new ArrayList<BankBuilding>(); 
+	private List<Market> markets = new ArrayList<Market>(); 
+	public List<Task> taskList = new ArrayList<Task>(); 
 	public Residence myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
@@ -44,8 +44,8 @@ public class PersonAgent extends Agent
 	enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
-	boolean isRenter;
-	boolean isManager;
+	public boolean isRenter;
+	public boolean isManager;
 	
 	public String name;
 	public boolean car = false;
@@ -55,7 +55,7 @@ public class PersonAgent extends Agent
 	private State state = State.doingNothing;
 	private Location location = Location.InCity;
 	private TransportState transportState = TransportState.none;
-	private Point destination;
+	public Point destination;
 	
 	Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
 	
@@ -170,7 +170,14 @@ public class PersonAgent extends Agent
 	public void addRestaurant(Restaurant r) {
 		restaurants.add(r);
 	}
-	
+	public void addMarket(Market m) {
+		markets.add(m);
+		
+	}
+	public void addBank(BankBuilding b) {
+		banks.add(b);
+		
+	}
 	public void setName(String name){
         this.name = name;
 	}
@@ -426,7 +433,7 @@ public class PersonAgent extends Agent
 			taskList.add(Task.goToMarket);
 		}
 		
-		log.add(new LoggedEvent("Received msgGetFoodFromMarket added "));
+		log.add(new LoggedEvent("Received msgGetFoodFromMarket added goToMarket to tasklist"));
 		stateChanged();
 	}
 	
@@ -701,7 +708,7 @@ public class PersonAgent extends Agent
             	role.active = true;
     		}
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
-    		MarketAgent ma = findMarket(destination);
+    		MarketAgent ma = (MarketAgent) findMarket(destination);
     		if(job.type.equalsIgnoreCase("clerk")){
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
@@ -724,8 +731,8 @@ public class PersonAgent extends Agent
     	}
     }
 
-	private MarketAgent findMarket(Point p) {
-		for(MarketAgent ma:simCityGui.getMarkets()){
+	private Market findMarket(Point p) {
+		for(Market ma: markets){
 			if(ma.location.equals(p)){
 				return ma;
 			}
@@ -870,19 +877,24 @@ public class PersonAgent extends Agent
 	    
 	    if(car == true || destination.y == personGui.yPos){
     		personGui.DoWalkTo(destination);
-			try {
-				waitingResponse.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+    		
+    		if(!testing){
+				try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    		}
     	}else{
     		goToBusStop();
     	} 
+	    
+	    log.add(new LoggedEvent("Called goToMarket from scheduler going to closest market"));
     }
     
     private void finishGoingToMarket(){
     	state  = State.shopping;
-    	MarketAgent m = findMarket(destination);
+    	MarketAgent m = (MarketAgent) findMarket(destination);
     	personGui.DoWalkTo(destination); //animationStub
     	MarketCustomerRole role = new MarketCustomerRole(this);
     	roles.add(role);
@@ -893,11 +905,11 @@ public class PersonAgent extends Agent
     }
 
     private MarketAgent chooseClosestMarket() {
-    	MarketAgent closestMa = simCityGui.getMarkets().get(0);
-    	for(MarketAgent m: simCityGui.getMarkets()){
+    	MarketAgent closestMa = (MarketAgent) markets.get(0);
+    	for(Market m: markets){
 			if(Math.abs(closestMa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
 				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
-					closestMa = m;
+					closestMa = (MarketAgent) m;
 				}
 			}
 		}
@@ -905,8 +917,8 @@ public class PersonAgent extends Agent
 	}
 
     private BankBuilding chooseClosestBank() {
-    	BankBuilding closestBa = simCityGui.getBanks().get(0);
-    	for(BankBuilding b: simCityGui.getBanks()){
+    	BankBuilding closestBa = banks.get(0);
+    	for(BankBuilding b: banks){
 			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(b.location.y - personGui.yPos)){
 				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
 					closestBa = b;
@@ -944,7 +956,7 @@ public class PersonAgent extends Agent
 	}
     
 	private BankBuilding findBank(Point d) {
-		for(BankBuilding b: simCityGui.getBanks()){
+		for(BankBuilding b: banks){
 			if(b.location.equals(d)){
 				return b;
 			}
@@ -1018,5 +1030,6 @@ public class PersonAgent extends Agent
 			}
 			stateChanged();
 		}
+
 
 }

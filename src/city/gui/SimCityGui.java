@@ -486,7 +486,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public List<Home> getHomes() {
 		return homes;
 	}
-
+	
 	public boolean apartmentsAvaiable() {
 		for(Apartment a: apartments){
 			if(a.noVacancies == false){

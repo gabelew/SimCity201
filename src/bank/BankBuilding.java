@@ -13,4 +13,8 @@ public class BankBuilding{
 		this.insideAnimationPanel = iap;
 		this.location = loc;
 	}
+
+	public BankBuilding(Point point) {
+		this.location = point;
+	}
 }

@@ -4,6 +4,7 @@ import restaurant.Restaurant;
 
 import javax.swing.*;
 
+import bank.BankBuilding;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import atHome.city.Residence;
@@ -967,6 +968,12 @@ public class InfoPanel extends JPanel implements KeyListener {
     		
     		for(Restaurant r: gui.getRestaurants()){
     			p.addRestaurant(r);
+    		}
+    		for(MarketAgent m: gui.getMarkets()){
+    			p.addMarket(m);
+    		}
+    		for(BankBuilding b: gui.getBanks()){
+    			p.addBank(b);
     		}
     		
     		p.setGui(g);

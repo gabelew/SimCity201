@@ -4,8 +4,10 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
+import bank.BankBuilding;
 import market.test.mock.MockClerk;
 import market.test.mock.MockDeliveryMan;
+import market.test.mock.MockMarket;
 import market.test.mock.MockMarketCustomer;
 import atHome.city.Residence;
 import junit.framework.TestCase;
@@ -13,12 +15,15 @@ import city.PersonAgent;
 import city.test.mock.*;
 
 public class PersonAgentTest extends TestCase{
+	MockMarket market;
 	PersonAgent person;
 	MockBankCustomer bankCustomer;
 	MockMarketCustomer marketCustomer;
 	MockAtHomeRole atHomeRole;
 	MockDeliveryMan deliveryManRole;
 	MockClerk clerkRole;
+	BankBuilding bankBuilding = new BankBuilding(new Point(337,68));
+	
 	
 	Residence h;
 	//MockPerson person
@@ -31,13 +36,15 @@ public class PersonAgentTest extends TestCase{
 		super.setUp();		
 
 		h = new MockHome(new Point(297,68));
-		
+		market = new MockMarket("mockMarket");
 		person = new PersonAgent("personAgent",100, h );	
 		marketCustomer = new MockMarketCustomer("personMarketCustomeRole");
 		bankCustomer = new MockBankCustomer("personBankCustomerRole");
 		atHomeRole = new MockAtHomeRole("personAtHomeRole");
 		deliveryManRole = new MockDeliveryMan("personDeliveryManJob");
 		clerkRole = new MockClerk("personClerkJob");
+		
+		person.addMarket(market);
 	}
 	public void testMarketCustomerIntoandOutOfMarketTest(){
 		//setUp() runs first before this test!
@@ -57,9 +64,28 @@ public class PersonAgentTest extends TestCase{
 		assertEquals("personMarketCustomeRole should have an empty event log before the personAgents's getFoodFromMarket is called. Instead, the personMarketCustomeRole's event log reads: "
 				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
 
-		assertTrue("personAgent should have logged \"Received getFoodFromMarket\" but didn't. His log reads instead: " 
-				+ marketCustomer.log.getLastLoggedEvent().toString(), marketCustomer.log.containsString("Received msgHereIsBalance from "
-						+ "Bank for account type: personal Current balance: 480.55"));
+		assertTrue("personAgent should have logged \"Received msgGetFoodFromMarket added goToMarket to tasklist\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Received msgGetFoodFromMarket added goToMarket to tasklist"));
+		
+		assertEquals("personAgent should have 1 item in task list. Instead, the personAgents task list has: "
+				+ person.taskList.size(), 1, person.taskList.size());
+		
+		//Run Person agents scheduler
+		person.pickAndExecuteAnAction();
+		
+		assertEquals("personMarketCustomeRole should have an empty event log after the personAgents's scheduler is called. Instead, the personMarketCustomeRole's event log reads: "
+				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
+		
+		assertTrue("personAgent should have logged \"Called goToMarket\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Called goToMarket from scheduler going to closest market"));
+		
+		assertEquals("personAgent should be going to closest market. Instead, the personAgents destination is: ("
+				+ person.destination.x + ", " + person.destination.y + ")" , new Point(417, 68), person.destination);
+		
+
+		//Run Person agents scheduler
+		person.pickAndExecuteAnAction();
+
 	}
 	public void testBankCustomerIntoandOutOfBankTest(){
 		//setUp() runs first before this test!
