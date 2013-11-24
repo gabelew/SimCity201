@@ -92,21 +92,28 @@ public class SharedDataWaiterRoleTest extends TestCase{
 		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(4).s));
 		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());
 
-		/**
-		 * Step 6: Set up a timer for the cook to remove an order from the stand after some time to allow an attempt for 6th order to be placed.
-		 */
-		timer.schedule(new TimerTask() {
-			public void run() {
-				cook.checkRevolvingStand();
-			}
-		}, 3000);
 		
 		/**
-		 * Step 7: Sixth customer order. Put order in revolving stand.
+		 * Step 6: Sixth customer order. Attempt to put order in revolving stand.
 		 */
 		waiter.customers.add(waiter.new MyCustomer(customer, 6, CustomerState.ordered, "chicken"));
 		
+		// check postconditions for step 6 and preconditions for step 7
+		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
+		assertTrue("Customer state should be ordered since stand is full.", CustomerState.ordered.equals(waiter.customers.get(5).s));
+		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());
+		
+		/**
+		 * Step 7: Cook takes an order out of the revolving stand.
+		 */
+		cook.checkRevolvingStand();
+		
 		// check postconditions for step 7
+		assertTrue("Revolving stand should have 4 orders in it. It doesn't.", 4 == revolvingStand.getCount());
+		
+		/**
+		 * Step 8: Call the waiter's schedule again for it to reattempt putting order in stand.
+		 */
 		assertTrue("Waiter scheduler should return true.", waiter.pickAndExecuteAnAction());
 		assertTrue("Customer state should be order placed.", CustomerState.orderPlaced.equals(waiter.customers.get(5).s));
 		assertTrue("Revolving stand should have 5 orders in it. It doesn't.", 5 == revolvingStand.getCount());

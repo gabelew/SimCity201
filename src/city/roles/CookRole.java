@@ -422,9 +422,11 @@ public class CookRole extends Role implements Cook {
 //Actions
 	
 	public void checkRevolvingStand() {
-		RoleOrder order = revolvingStand.remove();
-		if(order != null) {
-			orders.add(order);
+		if(revolvingStand.getCount() > 0) {
+			RoleOrder order = revolvingStand.remove();
+			if(order != null) {
+				orders.add(order);
+			}
 		}
 		checkStand = false;
 		timer.schedule(new TimerTask() {
