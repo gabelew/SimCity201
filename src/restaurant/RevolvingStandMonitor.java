@@ -54,4 +54,8 @@ public class RevolvingStandMonitor extends Object{
 		orders.removeElementAt(0);
 		return order;
 	}
+	
+	public int getCount() {
+		return count;
+	}
 }

@@ -23,14 +23,14 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	AgentEvent event = AgentEvent.none;
 	private RevolvingStandMonitor revolvingStand;
 	
-	private class MyCustomer{
-		private Customer c;
-		private int table;
-		private CustomerState s;
-		private String choice;
-		private double check;
+	public class MyCustomer{
+		public Customer c;
+		public int table;
+		public CustomerState s;
+		public String choice;
+		public double check;
 
-		MyCustomer(Customer nc, int t, CustomerState ns, String nchoice){
+		public MyCustomer(Customer nc, int t, CustomerState ns, String nchoice){
 			c = nc;
 			table = t;
 			s = ns;
@@ -42,6 +42,10 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	public SharedDataWaiterRole(PersonAgent p, Restaurant r) {
 		super(p);
 		restaurant = r;
+	}
+	
+	public SharedDataWaiterRole(PersonAgent p) {
+		super(p);
 	}
 
 	public void goesToWork(){ //from gui
@@ -327,12 +331,12 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	}
 
 	private void putInOrder(MyCustomer c) {
-		doGoToKitchen(c);
+		//doGoToKitchen(c);
 		print("\t\t HERHER IM IN DA KITCH");
 		c.s = CustomerState.orderPlaced;
 		print("\t\t Inserting order into revolving stand");
 		revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
-		waiterGui.placedOrder();
+		//waiterGui.placedOrder();
 		print("\t\t waiterGui.placedOrder");
 	}
 
@@ -446,5 +450,10 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		print("msgLeftTheRestaurant");
 		waitingResponse.release();
 		event = AgentEvent.relieveFromDuty;
+	}
+
+	@Override
+	public Restaurant getRestaurant() {
+		return restaurant;
 	}
 }

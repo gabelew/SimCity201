@@ -1,5 +1,6 @@
 package restaurant.test.mock;
 
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 public class MockWaiter extends Mock implements Waiter{
@@ -65,5 +66,53 @@ public class MockWaiter extends Mock implements Waiter{
 	public String getName(){
 		log.add(new LoggedEvent("Received getName from host."));
 		return "name";
+	}
+
+	@Override
+	public void msgAtEntrance() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgLeftTheRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAtTable() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAtCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAtKitchen() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Restaurant getRestaurant() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAskForBreak() {
+		// TODO Auto-generated method stub
+		
 	}
 }
