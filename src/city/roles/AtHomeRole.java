@@ -51,7 +51,17 @@ public class AtHomeRole extends Role
 			foodInFridge.add(f);
 			findFood.put(s, f);
 		}
-		findFood.get("steak").amount = foodAmount;
+		if(foodAmount == 0)
+		{
+			for(Food f: foodInFridge)
+			{
+				f.amount = 0;
+			}
+		}
+		else
+		{
+			findFood.get("steak").amount = foodAmount;
+		}
 		this.gui = new AtHomeGui(myPerson, this);
 	}
 	
@@ -196,9 +206,9 @@ public class AtHomeRole extends Role
 			timer.schedule(new TimerTask() {
 				public void run() 
 				{
-					gui.PlateFood();
-					try { busy.acquire();} 
-					catch (InterruptedException e) {e.printStackTrace();}
+					//gui.PlateFood();
+					//try { busy.acquire();} 
+					//catch (InterruptedException e) {e.printStackTrace();}
 					gui.SitDownAndEatFood();
 					try { busy.acquire();} 
 					catch (InterruptedException e) {e.printStackTrace();}

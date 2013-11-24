@@ -170,10 +170,12 @@ public class AtHomeGui implements Gui{
 						if(f.state == FoodState.PutFoodOnGrill)
 						{
 							f.state = FoodState.FoodOnGrill;
+							f.CookingPoint = new Point(xGRILL_POSITION, yGRILL_POSITION);
 						}
 						else if (f.state == FoodState.PutFoodOnGrill)
 						{
 							f.state = FoodState.FoodOnCounter;
+							f.CookingPoint = new Point(xKITCHEN_COUNTER_POSITION,yKITCHEN_COUNTER_POSITION);
 						}
 					}
 					
@@ -230,9 +232,9 @@ public class AtHomeGui implements Gui{
 					{
 						g.drawImage(f.food.iconImg, xPos+f.point.x, yPos+f.point.y, null);
 					}
-					else 
+					else if(f.state == FoodState.FoodOnGrill || f.state == FoodState.FoodOnCounter)
 					{	
-						g.drawImage(f.food.iconImg, f.point.x, f.point.y, null);
+						g.drawImage(f.food.iconImg, f.CookingPoint.x, f.CookingPoint.y, null);
 					}
 				}
 			}
@@ -315,6 +317,7 @@ public class AtHomeGui implements Gui{
 	{
 		FoodIcon food;
 		Point point;
+		Point CookingPoint;
 		FoodState state;
 		String choice;
 		MyFood(FoodIcon f, Point p, String c){
