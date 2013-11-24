@@ -122,18 +122,18 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("waiter01day");
     	infoPanel.getPersonPanel().addPerson("waiter01daycar");
     	infoPanel.getPersonPanel().addPerson("waiter01nightcar");
-    	infoPanel.getPersonPanel().addPerson("waiter01night");
+    	infoPanel.getPersonPanel().addPerson("waiter01nightpoor");
     	infoPanel.getPersonPanel().addPerson("waiter02day");
     	infoPanel.getPersonPanel().addPerson("waiter02daycar");
-    	infoPanel.getPersonPanel().addPerson("waiter02night");
+    	infoPanel.getPersonPanel().addPerson("waiter02nightpoor");
     	infoPanel.getPersonPanel().addPerson("waiter02nightcar");
     	infoPanel.getPersonPanel().addPerson("waiter03day");
     	infoPanel.getPersonPanel().addPerson("waiter03daycar");
-    	infoPanel.getPersonPanel().addPerson("waiter03night");
+    	infoPanel.getPersonPanel().addPerson("waiter03nightpoor");
     	infoPanel.getPersonPanel().addPerson("waiter03nightcar");
     	infoPanel.getPersonPanel().addPerson("waiter04day");
     	infoPanel.getPersonPanel().addPerson("waiter04daycar");
-    	infoPanel.getPersonPanel().addPerson("waiter04night");
+    	infoPanel.getPersonPanel().addPerson("waiter04nightpoor");
     	infoPanel.getPersonPanel().addPerson("waiter04nightcar");
     	infoPanel.getPersonPanel().addPerson("waiter05day");
     	infoPanel.getPersonPanel().addPerson("waiter05daycar");
@@ -142,25 +142,25 @@ public class SimCityGui extends JFrame implements ActionListener {
     	
     	infoPanel.getPersonPanel().addPerson("host01day");
     	infoPanel.getPersonPanel().addPerson("host01nightcar");
-    	infoPanel.getPersonPanel().addPerson("host02day");
+    	infoPanel.getPersonPanel().addPerson("host02daypoor");
     	infoPanel.getPersonPanel().addPerson("host02nightcar");
     	infoPanel.getPersonPanel().addPerson("host03daycar");
     	infoPanel.getPersonPanel().addPerson("host03night");
-    	infoPanel.getPersonPanel().addPerson("host04day");
-    	infoPanel.getPersonPanel().addPerson("host04nightcar");
+    	infoPanel.getPersonPanel().addPerson("host04daypoor");
+    	infoPanel.getPersonPanel().addPerson("host04nightcarpoor");
     	infoPanel.getPersonPanel().addPerson("host05daycar");
     	infoPanel.getPersonPanel().addPerson("host05night");
     	
-    	infoPanel.getPersonPanel().addPerson("cook01day");
+    	infoPanel.getPersonPanel().addPerson("cook01daypoor");
     	infoPanel.getPersonPanel().addPerson("cook01nightcar");
     	infoPanel.getPersonPanel().addPerson("cook02daycar");
-    	infoPanel.getPersonPanel().addPerson("cook02night");
+    	infoPanel.getPersonPanel().addPerson("cook02nightpoor");
     	infoPanel.getPersonPanel().addPerson("cook03day");
-    	infoPanel.getPersonPanel().addPerson("cook03nightcar");
+    	infoPanel.getPersonPanel().addPerson("cook03nightcarpoor");
     	infoPanel.getPersonPanel().addPerson("cook04daycar");
     	infoPanel.getPersonPanel().addPerson("cook04night");
     	infoPanel.getPersonPanel().addPerson("cook05day");
-    	infoPanel.getPersonPanel().addPerson("cook05nightcar");
+    	infoPanel.getPersonPanel().addPerson("cook05nightcarpoor");
     	
     	infoPanel.getPersonPanel().addPerson("cashier01day");
     	infoPanel.getPersonPanel().addPerson("cashier01nightcar");

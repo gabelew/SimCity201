@@ -700,6 +700,7 @@ public class PersonAgent extends Agent
 	}
 
 	private void finishGoingToHomeToEat() {
+		print("eatin at home");
 		personGui.DoWalkTo(destination);
     	try {
 			waitingResponse.acquire();
@@ -713,8 +714,8 @@ public class PersonAgent extends Agent
 				((AtHomeRole)r).getGui().setPresent(true);
 			}
 		}
+		
     	/*
-		 
 		role.setGui(new CustomerGui(role));
     	roles.add(role);
     	role.active = true;

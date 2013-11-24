@@ -123,6 +123,8 @@ public class InfoPanel extends JPanel implements KeyListener {
     		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
     				|| name.toLowerCase().contains("ditch") || name.toLowerCase().contains("broke")){
     			p = new PersonAgent(name, NO_CASH,gui, residence);   			
+    		}else if(name.toLowerCase().contains("poor")){
+    			p = new PersonAgent(name, 50,gui, residence);   			
     		}else{
     			p = new PersonAgent(name, PERSONS_DEFAULT_CASH, gui, residence);
     		}
