@@ -11,6 +11,7 @@ import restaurant.gui.CustomerGui;
 import restaurant.gui.WaiterGui;
 import agent.Agent;
 import atHome.city.Home;
+import atHome.city.Residence;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.roles.*;
@@ -28,7 +29,7 @@ public class PersonAgent extends Agent
 	private List<MyMarket> markets = new ArrayList<MyMarket>(); 
 	private List<MyBusStop> busStops = new ArrayList<MyBusStop>(); 
 	private List<Task> taskList = new ArrayList<Task>(); 
-	private Home myHome;
+	public Residence myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	private PersonGui personGui;
 	
@@ -91,7 +92,7 @@ public class PersonAgent extends Agent
 			this.shift = s;
 		}
 	}
-	public void setHome(Home h)
+	public void setHome(Residence h)
 	{
 		this.myHome = h;
 	}
@@ -806,7 +807,7 @@ public class PersonAgent extends Agent
 	    private void goHome() 
 	    {
 	    		//location = Location.AtHome;
-				personGui.DoWalkTo(new Point(75,68)); //CHange to special go home method and remove semaphore
+				personGui.DoWalkTo(myHome.location); //CHange to special go home method and remove semaphore
 				//print("i have "+roles.size());
 				try {waitingResponse.acquire();} 
 				catch (InterruptedException e) { e.printStackTrace(); }

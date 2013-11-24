@@ -1,9 +1,14 @@
 package city.gui;
 
 import restaurant.Restaurant;
+
 import javax.swing.*;
+
+import atHome.city.Apartment;
+import atHome.city.Home;
 import city.MarketAgent;
 import city.PersonAgent;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -925,20 +930,26 @@ public class InfoPanel extends JPanel implements KeyListener {
     			p.addRestaurant(r);
     		}
     		
-    		/*for(Home h : gui.getHomes())
-    		{
-    			if(h.people.size() == 0 && gui.getHomes().indexOf(h) != 32)
-    			{
-    			p.setHome(h);
-    			h.addPerson(p);
-    			System.out.println("my home is house #" + gui.getHomes().indexOf(h) +" " + gui.getHomes().size());
+    		if(gui.apartmentsAvaiable()){
+    			for(Apartment a: gui.apartments){
+    				if(a.noVacancies == false && p.myHome == null){
+    					p.setHome(a);
+    					a.addRenter(p);
+	        			break;
+    				}
     			}
-    			if(gui.getHomes().indexOf(h) == 31)
-    			{
-    				p.setHome(h);
-        			h.addPerson(p);
-    			}
-    		}*/
+    		}else if(gui.persons.size() <= 160){
+    			for(Home h : gui.getHomes())
+        		{
+	        		if(h.owner == null && p.myHome == null){
+	        			p.setHome(h);
+	        			h.owner = p;
+	        			break;
+        			}
+        		}
+        			
+    		}
+    		
     		p.setGui(g);
     			
     		p.startThread();

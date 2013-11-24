@@ -343,6 +343,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 				b.setInsideBuildingPanel(bp);
 				apartmentAnimationPanel.setInsideBuildingPanel(bp);
 				buildingsPanel.add(bp, "" + i);
+				apartments.add(new Apartment(apartmentAnimationPanel, new Point(b.getX(),b.getY())));
 	        }
 		}
         
@@ -465,6 +466,15 @@ public class SimCityGui extends JFrame implements ActionListener {
 	
 	public List<Home> getHomes() {
 		return homes;
+	}
+
+	public boolean apartmentsAvaiable() {
+		for(Apartment a: apartments){
+			if(a.noVacancies == false){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
