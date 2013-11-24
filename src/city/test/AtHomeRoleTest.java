@@ -19,7 +19,7 @@ public class AtHomeRoleTest extends TestCase
 		role = new AtHomeRole(person, 4);
 		person.addRole(role);
 	}
-	/*
+	
 	public void testNormalAtHome()
 	{
 		role.testing = true;
@@ -40,8 +40,6 @@ public class AtHomeRoleTest extends TestCase
 		try { Thread.sleep(4000); } 
 		catch(InterruptedException ex) { Thread.currentThread().interrupt();}
 		role.pickAndExecuteAnAction();
-		try { Thread.sleep(7000); } 
-		catch(InterruptedException ex) { Thread.currentThread().interrupt();}
 		assertEquals("Finished eating food, no orders left", role.orders.size(), 0);
 	}
 	
@@ -67,7 +65,7 @@ public class AtHomeRoleTest extends TestCase
 		assertEquals("should have one order to cook", role.orders.size(), 1);
 		assertEquals("salad state should be ordered",  role.foodInFridge.get(0).state,role.foodInFridge.get(0).state.ordered );
 	
-	}*/
+	}
 	
 	/**
 	 * If there is no food at home, the person leaves the house
@@ -79,8 +77,16 @@ public class AtHomeRoleTest extends TestCase
 		role.testing = true;
 		assertEquals("Choices should be empty", role.choices.size(), 0);
 		
+		//hungry looks for food, but no food
 		role.ImHungry();
 		assertEquals("Choices should be empty", role.choices.size(), 0);
+		
+		assertEquals("Role's state is goingHome",  role.state, role.state.goingHome );
+		role.pickAndExecuteAnAction();
+		assertEquals("Role's state is outOfFood",  role.state, role.state.OutOfFood );
+		
+		
+		
 		
 		
 		

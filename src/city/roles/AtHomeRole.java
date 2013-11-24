@@ -21,9 +21,9 @@ public class AtHomeRole extends Role implements AtHome
 	//States for Orders
 	public enum FoodOrderState {none, ordered};
 	enum AppState {working, broken, repairRequested, payRepairman};
-	enum EventState {none, leavingHome, goingHome, makingFood, goToFridge, goToCounter, goToGrill, OutOfFood};
+	public enum EventState {none, leavingHome, goingHome, makingFood, goToFridge, goToCounter, goToGrill, OutOfFood};
 	enum OrderState {pending, cooking, done, eating}
-	EventState state = EventState.none;
+	public EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
 	static final int EATING_TIME = 5000;
 	static final int COOKTIME = 1000;
@@ -91,6 +91,7 @@ public class AtHomeRole extends Role implements AtHome
 		if(myPerson.getName().equals("salad"))
 		{
 			Order o = new Order("salad");
+			orders.add(o);
 		}
 		else if(choices.size() != 0)
 		{
@@ -179,15 +180,22 @@ public class AtHomeRole extends Role implements AtHome
 	private void EatIt(final Order o)
 	{
 		o.state = OrderState.eating;
-		timer.schedule(new TimerTask() {
-			public void run() 
-			{
-				gui.DoneEating();
-				orders.remove(o);
-				myPerson.msgDoneEatingAtHome();
-			}
-		},
-		EATING_TIME);
+		if(!testing)
+		{
+			timer.schedule(new TimerTask() {
+				public void run() 
+				{
+					gui.DoneEating();
+					orders.remove(o);
+					myPerson.msgDoneEatingAtHome();
+				}
+			},
+			EATING_TIME);
+		}
+		else
+		{
+			orders.remove(o);
+		}
 		
 	}
 	
