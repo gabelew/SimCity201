@@ -239,11 +239,13 @@ public class AtHomeRole extends Role implements AtHome
 			timer.schedule(new TimerTask() {
 				public void run() 
 				{
-					//gui.PlateFood();
-					//try { busy.acquire();} 
-					//catch (InterruptedException e) {e.printStackTrace();}
 					if(!testing)
 					{
+						//gets food from grill
+						gui.PlateFood();
+						try { busy.acquire();} 
+						catch (InterruptedException e) {e.printStackTrace();}
+						//sits and eats food
 						gui.SitDownAndEatFood();
 						try { busy.acquire();} 
 						catch (InterruptedException e) {e.printStackTrace();}

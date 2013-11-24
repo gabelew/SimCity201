@@ -49,9 +49,10 @@ public class AtHomeGui implements Gui{
     static final int yAPT_OFFSET = 310;
     static final int xAPT_OFFSET = 30;
     static final int HOUSE_TABLEPOS = 150;
+    static final int COOKING_OFFSET = 15;
 	
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
-	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood, LeaveHome};
+	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood, LeaveHome, GetFoodFromCounter, GetFoodFromGrill};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
 	
@@ -158,7 +159,7 @@ public class AtHomeGui implements Gui{
 				yDestination = yHomePosition;
 			}
 			else if(command == Command.GoToGrill || command == Command.GoToCounter)
-			{
+			{	
 				command = Command.noCommand;
 				role.msgAnimationFinshed();
 				xDestination = xHomePosition;
@@ -170,15 +171,22 @@ public class AtHomeGui implements Gui{
 						if(f.state == FoodState.PutFoodOnGrill)
 						{
 							f.state = FoodState.FoodOnGrill;
-							f.CookingPoint = new Point(xGRILL_POSITION, yGRILL_POSITION);
+							f.CookingPoint = new Point(xGRILL_POSITION + COOKING_OFFSET, yGRILL_POSITION + COOKING_OFFSET);
 						}
-						else if (f.state == FoodState.PutFoodOnGrill)
+						else if (f.state == FoodState.PutFoodOnCounter)
 						{
 							f.state = FoodState.FoodOnCounter;
-							f.CookingPoint = new Point(xKITCHEN_COUNTER_POSITION,yKITCHEN_COUNTER_POSITION);
+							f.CookingPoint = new Point(xKITCHEN_COUNTER_POSITION + COOKING_OFFSET,yKITCHEN_COUNTER_POSITION + COOKING_OFFSET);
 						}
 					}
-					
+				}
+			}
+			else if(command == command.GetFoodFromGrill || command == command.GetFoodFromCounter)
+			{
+				command = Command.noCommand;
+				role.msgAnimationFinshed();
+				for(MyFood f : foods)
+				{
 					if(f.state == FoodState.FoodOnGrill)
 					{
 						f.state = FoodState.PickUpFromGrill;
@@ -188,8 +196,6 @@ public class AtHomeGui implements Gui{
 						f.state = FoodState.PickUpFromCounter;
 					}
 				}
-				
-				
 			}
 			else if(command == Command.EatFood || command == Command.LeaveHome)
 			{
@@ -291,13 +297,13 @@ public class AtHomeGui implements Gui{
 			{
 				if(f.state == FoodState.FoodOnGrill)
 				{
-					command = Command.GoToGrill;
+					command = Command.GetFoodFromGrill;
 					xDestination = xGRILL_POSITION;
 					yDestination = yGRILL_POSITION;
 				}
-				else if (f.state == FoodState.FoodOnCounter)
+				if (f.state == FoodState.FoodOnCounter)
 				{
-					command = Command.GoToCounter;
+					command = Command.GetFoodFromCounter;
 					xDestination = xKITCHEN_COUNTER_POSITION;
 					yDestination = yKITCHEN_COUNTER_POSITION;
 				}
