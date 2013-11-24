@@ -107,6 +107,14 @@ public class BankAgent extends Agent implements Bank{
 	
 	public void msgOpenAccount(BankCustomer bcr, double initialDeposit, String accountType) {
 		accounts.add(new BankAccount(bcr,initialDeposit,accountType));
+		if(bcr instanceof BankCustomerRole) {
+			BankCustomerRole bc = (BankCustomerRole) bcr;
+			BankAccount b = findBankAccount(bcr, accountType);
+			if("personal".equals(accountType))
+				bc.setPersonalAccount(b);
+			else
+				bc.setBusinessAccount(b);
+		}
 		if(0 == getStateChangePermits())
 			stateChanged();
 	}

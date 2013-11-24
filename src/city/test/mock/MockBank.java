@@ -7,7 +7,6 @@ import city.BankAgent.BankAccount;
 import city.PersonAgent;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
-import city.roles.BankCustomerRole;
 
 public class MockBank extends Mock implements Bank{
 	
