@@ -20,7 +20,7 @@ public class AtHomeRole extends Role
 	//States for Orders
 	public enum FoodOrderState {none, ordered};
 	enum AppState {working, broken, repairRequested, payRepairman};
-	enum EventState {none, goingHome, goToFridge, goToCounter, goToGrill};
+	enum EventState {none, goingHome, makingFood, goToFridge, goToCounter, goToGrill, OutOfFood};
 	enum OrderState {pending, cooking, done, eating}
 	EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
@@ -57,6 +57,7 @@ public class AtHomeRole extends Role
 			{
 				f.amount = 0;
 			}
+			choices.clear();
 		}
 		else
 		{
@@ -78,11 +79,8 @@ public class AtHomeRole extends Role
  ********************/
 	public void ImHungry()
 	{
-		if(myPerson.name.equals("salad"))
-		{
-			orders.add(new Order("salad"));
-		}
-		else
+		this.state = EventState.makingFood;
+		if(choices.size() != 0)
 		{
 			int choice = (new Random()).nextInt(choices.size());
 			Order o = new Order( choices.get(choice) );
@@ -224,22 +222,27 @@ public class AtHomeRole extends Role
 			if(choices.size() > 0)
 			{
 				choices.remove(o.choice);
-				ImHungry();
+				if(choices.size() == 0)
+				{
+					myPerson.msgNoMoreFood();
+					myPerson.msgDoneEatingAtHome();
+				}
+				else
+				{
+					ImHungry();
+				}
 			}
 			else
 			{
 				myPerson.msgNoMoreFood();
+				myPerson.msgDoneEatingAtHome();
 			}
 			if(food.state != FoodOrderState.ordered)
 			{
 				makeMarketList();
 			}
 			
-			if(choices.size() == 0)
-			{
-				myPerson.msgNoMoreFood();
-			}
-			orders.remove(o);
+			orders.clear();
 		}
 		
 	}
@@ -257,6 +260,11 @@ public class AtHomeRole extends Role
 		}
 		myPerson.msgGetFoodFromMarket(groceryList);
 	}
+	private void ImOutOfFood()
+	{
+		myPerson.msgNoMoreFood();
+		myPerson.msgDoneEatingAtHome();
+	}
 /*********************
  ***** SCHEDULER
  ********************/
@@ -265,6 +273,11 @@ public class AtHomeRole extends Role
 		if(state == EventState.goingHome)
 		{
 			goToHomePos();
+		}
+		if(state == EventState.makingFood && choices.size() == 0)
+		{
+			this.state = EventState.OutOfFood;
+			ImOutOfFood();
 		}
 		for(Appliance a : appliances)
 		{
