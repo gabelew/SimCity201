@@ -92,7 +92,8 @@ public class BusAgent extends Agent{
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
 			//}
 		///}
-		stateChanged();
+		if(getStateChangePermits()==0)
+			stateChanged();
 	}
 	
 	private MyBusStop findBusStop(Point location) {
@@ -121,7 +122,8 @@ public class BusAgent extends Agent{
 		
 		b.passengers.add(new MyPassenger(p, StopEvent.dropOff));
 		state = State.none;
-		stateChanged();
+		if(getStateChangePermits()==0)
+			stateChanged();
 		
 	}
 	
@@ -147,8 +149,9 @@ public class BusAgent extends Agent{
 				}
 			}
 		}
-		
-		stateChanged();
+
+		if(getStateChangePermits()==0)
+			stateChanged();
 	}
 	
 	//Scheduler

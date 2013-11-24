@@ -118,6 +118,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 		     g2.drawImage(bed, 150+(i*217), 420, null);
 
 		 }
+	     
 	     synchronized(guis){
 				for(Gui gui : getGuis()) {
 		            if (gui.isPresent()) {

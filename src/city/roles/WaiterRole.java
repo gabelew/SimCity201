@@ -278,7 +278,7 @@ public class WaiterRole extends Role implements Waiter{
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			
 		}
 	}
 
@@ -296,7 +296,7 @@ public class WaiterRole extends Role implements Waiter{
 			try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				
 			}
 			
 			c.s = CustomerState.seated;
@@ -311,7 +311,7 @@ public class WaiterRole extends Role implements Waiter{
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			
 		}
 	}
 
@@ -371,7 +371,7 @@ public class WaiterRole extends Role implements Waiter{
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -397,7 +397,7 @@ public class WaiterRole extends Role implements Waiter{
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -406,7 +406,7 @@ public class WaiterRole extends Role implements Waiter{
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			
 		}
 	}
 	private void doGoToCashier() {
@@ -414,7 +414,7 @@ public class WaiterRole extends Role implements Waiter{
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			
 		}
 	}
 
