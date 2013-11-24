@@ -20,7 +20,7 @@ public class AtHomeRole extends Role
 	//States for Orders
 	public enum FoodOrderState {none, ordered};
 	enum AppState {working, broken, repairRequested, payRepairman};
-	enum EventState {none, goingHome, makingFood, goToFridge, goToCounter, goToGrill, OutOfFood};
+	enum EventState {none, leavingHome, goingHome, makingFood, goToFridge, goToCounter, goToGrill, OutOfFood};
 	enum OrderState {pending, cooking, done, eating}
 	EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
@@ -126,14 +126,20 @@ public class AtHomeRole extends Role
 	}
 	public void msgGoLeaveHome()
 	{
+		this.state = EventState.leavingHome;
+	}
+/*********************
+ ***** ACTIONS
+ ********************/
+	private void LeavingHomeAction()
+	{
+		this.state = EventState.none;
 		gui.DoLeaveHome();
 		try { busy.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
 		myPerson.msgHasLeftHome();
 	}
-/*********************
- ***** ACTIONS
- ********************/
+	
 	private void PayForRepairs(Appliance a)
 	{
 		a.state = AppState.working;
@@ -270,14 +276,21 @@ public class AtHomeRole extends Role
  ********************/
 	public boolean pickAndExecuteAnAction() 
 	{
+		if(state == EventState.leavingHome)
+		{
+			LeavingHomeAction();
+			return true;
+		}
 		if(state == EventState.goingHome)
 		{
 			goToHomePos();
+			return true;
 		}
 		if(state == EventState.makingFood && choices.size() == 0)
 		{
 			this.state = EventState.OutOfFood;
 			ImOutOfFood();
+			return true;
 		}
 		for(Appliance a : appliances)
 		{
