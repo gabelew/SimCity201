@@ -120,7 +120,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 
     private void createDefaultPeople() {
     	infoPanel.getPersonPanel().addPerson("waiter01day");
-    	/*infoPanel.getPersonPanel().addPerson("waiter01daycar");
+    	infoPanel.getPersonPanel().addPerson("waiter01daycar");
     	infoPanel.getPersonPanel().addPerson("waiter01nightcar");
     	infoPanel.getPersonPanel().addPerson("waiter01night");
     	infoPanel.getPersonPanel().addPerson("waiter02day");
@@ -138,10 +138,10 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("waiter05day");
     	infoPanel.getPersonPanel().addPerson("waiter05daycar");
     	infoPanel.getPersonPanel().addPerson("waiter05night");
-    	infoPanel.getPersonPanel().addPerson("waiter05nightcar");*/
+    	infoPanel.getPersonPanel().addPerson("waiter05nightcar");
     	
     	infoPanel.getPersonPanel().addPerson("host01day");
-    	/*infoPanel.getPersonPanel().addPerson("host01nightcar");
+    	infoPanel.getPersonPanel().addPerson("host01nightcar");
     	infoPanel.getPersonPanel().addPerson("host02day");
     	infoPanel.getPersonPanel().addPerson("host02nightcar");
     	infoPanel.getPersonPanel().addPerson("host03daycar");
@@ -149,10 +149,10 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("host04day");
     	infoPanel.getPersonPanel().addPerson("host04nightcar");
     	infoPanel.getPersonPanel().addPerson("host05daycar");
-    	infoPanel.getPersonPanel().addPerson("host05night");*/
+    	infoPanel.getPersonPanel().addPerson("host05night");
     	
     	infoPanel.getPersonPanel().addPerson("cook01day");
-    	/*infoPanel.getPersonPanel().addPerson("cook01nightcar");
+    	infoPanel.getPersonPanel().addPerson("cook01nightcar");
     	infoPanel.getPersonPanel().addPerson("cook02daycar");
     	infoPanel.getPersonPanel().addPerson("cook02night");
     	infoPanel.getPersonPanel().addPerson("cook03day");
@@ -160,10 +160,10 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("cook04daycar");
     	infoPanel.getPersonPanel().addPerson("cook04night");
     	infoPanel.getPersonPanel().addPerson("cook05day");
-    	infoPanel.getPersonPanel().addPerson("cook05nightcar");*/
+    	infoPanel.getPersonPanel().addPerson("cook05nightcar");
     	
     	infoPanel.getPersonPanel().addPerson("cashier01day");
-    	/*infoPanel.getPersonPanel().addPerson("cashier01nightcar");
+    	infoPanel.getPersonPanel().addPerson("cashier01nightcar");
     	infoPanel.getPersonPanel().addPerson("cashier02daycar");
     	infoPanel.getPersonPanel().addPerson("cashier02night");
     	infoPanel.getPersonPanel().addPerson("cashier03day");
@@ -171,7 +171,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("cashier04daycar");
     	infoPanel.getPersonPanel().addPerson("cashier04night");
     	infoPanel.getPersonPanel().addPerson("cashier05daycar");
-    	infoPanel.getPersonPanel().addPerson("cashier05nightcar");*/
+    	infoPanel.getPersonPanel().addPerson("cashier05nightcar");
     	
     	infoPanel.getPersonPanel().addPerson("clerk01daycar");
     	infoPanel.getPersonPanel().addPerson("clerk02daycar");

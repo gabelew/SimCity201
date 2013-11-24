@@ -44,10 +44,10 @@ public class PersonGui implements Gui{
 		}
 		
 		agent = c;
-		xPos = 75;
-		yPos = 103; //103+80*i
-		xDestination = 75;
-		yDestination = 103;
+		xPos = agent.myHome.location.x;
+		yPos = agent.myHome.location.y; //103+80*i
+		xDestination = agent.myHome.location.x;
+		yDestination = agent.myHome.location.y;
         
 		this.gui = gui;
 		

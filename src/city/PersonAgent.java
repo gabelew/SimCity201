@@ -10,6 +10,7 @@ import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.gui.WaiterGui;
 import agent.Agent;
+import atHome.city.AtHomeGui;
 import atHome.city.Home;
 import atHome.city.Residence;
 import city.gui.PersonGui;
@@ -92,10 +93,7 @@ public class PersonAgent extends Agent
 			this.shift = s;
 		}
 	}
-	public void setHome(Residence h)
-	{
-		this.myHome = h;
-	}
+
 /***********************
  *  UTILITY CLASSES END
  ***********************/
@@ -116,15 +114,25 @@ public class PersonAgent extends Agent
 	    }
 	}
 	
-	public PersonAgent(String name, double cash, SimCityGui simCityGui) {
+	public PersonAgent(String name, double cash, SimCityGui simCityGui,Residence h) {
 	    this.name = name;
 	    this.cashOnHand = cash;
 	    this.simCityGui = simCityGui;
 	    if(this.name.toLowerCase().contains("car")){
 	    	car = true;
 	    }
+	    AtHomeRole role = new AtHomeRole(this);
+	    role.active = false;
+	    roles.add(role);
 	    this.busLeft = this.simCityGui.animationPanel.busLeft;
 	    this.busRight = this.simCityGui.animationPanel.busRight;
+	    
+
+		this.myHome = h;
+		AtHomeGui ahGui = new AtHomeGui(this, simCityGui);
+		((AtHomeRole)role).setGui(ahGui);
+		ahGui.setPresent(false);
+		myHome.insideAnimationPanel.addGui(ahGui);
 	}
 	
 /***********************
@@ -487,11 +495,11 @@ public class PersonAgent extends Agent
 				finishGoingToRestaurant();
 				return true;
 			}
-			/*if(transportState == TransportState.none && state == State.goingHomeToEat){
-				finishGoingToHome();
+			if(transportState == TransportState.none && state == State.goingHomeToEat){
+				finishGoingToHomeToEat();
 				return true;
 			}
-			if(transportState == TransportState.none && state == State.goingToBank){
+			/*if(transportState == TransportState.none && state == State.goingToBank){
 				finishGoingToBank();
 				return true;
 			}*/
@@ -516,11 +524,6 @@ public class PersonAgent extends Agent
 	        return false;
         } catch(ConcurrentModificationException e){ return false; }
 	}
-    
-
-
-
-
 
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
@@ -676,11 +679,66 @@ public class PersonAgent extends Agent
 
 	//Remember to add functionality so person can decide to eat at home
     private void goEatFood() {
-    	state = State.goingOutToEat;
-    	goToRestaurant();
+		if(youAreRich()){
+	    	state = State.goingOutToEat;
+    		goToRestaurant();
+		}else{
+			state = State.goingHomeToEat;
+			destination = myHome.location;
+			goToHouseToEat();
+		}
     }
     
-    private void goToRestaurant() {
+    private void goToHouseToEat() {
+    	location = Location.AtHome;
+
+    	destination = myHome.location;
+    	if(car == true || destination.y == personGui.yPos){
+    		personGui.DoWalkTo(destination);
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}else{
+    		goToBusStop();
+    	}		
+	}
+
+	private void finishGoingToHomeToEat() {
+		personGui.DoWalkTo(destination);
+    	try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    	state = State.eating;
+		for(Role r:roles){
+			if(r instanceof AtHomeRole){
+				r.active = true;
+				((AtHomeRole)r).getGui().setPresent(true);
+			}
+		}
+    	/*
+		 
+		role.setGui(new CustomerGui(role));
+    	roles.add(role);
+    	role.active = true;
+    	r.insideAnimationPanel.addGui(role.getGui());
+    	role.getGui().setPresent(true);
+    	role.gotHungry();
+		 
+		 */
+		
+	}
+	private boolean youAreRich() {
+		if(cashOnHand >= 100){
+			return true;
+		}
+		return false;
+	}
+
+	private void goToRestaurant() {
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
     	
@@ -806,16 +864,18 @@ public class PersonAgent extends Agent
  ******************^^^^^^^^^^^^^^^^*********************/
 	    private void goHome() 
 	    {
-	    		//location = Location.AtHome;
+	    		location = Location.AtHome;
 				personGui.DoWalkTo(myHome.location); //CHange to special go home method and remove semaphore
 				//print("i have "+roles.size());
 				try {waitingResponse.acquire();} 
 				catch (InterruptedException e) { e.printStackTrace(); }
-				//AtHomeRole role = new AtHomeRole(this);
-				//role.setGui(personGui);
-				//myHome.insideAnimationPanel.addGui(personGui);
-				personGui.setPresent(true);
-				//personGui.doEnterHome();
+				/*
+				for(Role r: roles){
+					if(r instanceof AtHomeRole){
+						r.active = true;
+						ahGui.setPresent(true);
+					}
+				}*/
 		}
 	    
 	    public void msgReenablePerson(){

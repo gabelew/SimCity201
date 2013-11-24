@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import atHome.city.Apartment;
 import atHome.city.Home;
+import atHome.city.Residence;
 import city.MarketAgent;
 import city.PersonAgent;
 
@@ -87,19 +88,50 @@ public class InfoPanel extends JPanel implements KeyListener {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      */
+    private  Residence findOpenHome(){
+		if(gui.apartmentsAvaiable()){
+			for(Apartment a: gui.apartments){
+				if(a.noVacancies == false){
+					/*p.setHome(a);
+					a.addRenter(p);
+        			break;*/
+					return a;
+				}
+			}
+		}else if(gui.persons.size() <= 160){
+			for(Home h : gui.getHomes())
+    		{
+        		if(h.owner == null){
+        			/*
+        			p.setHome(h);
+        			h.owner = p;
+        			break;*/
+        			return h;
+    			}
+    		}
+    			
+		}
+		return null;
+    }
        public void addPerson(String type, String name) {
 
     	if (type.equals("Persons")) {
     		PersonAgent p = null;
+    		Residence residence = findOpenHome();
     		if(stringIsDouble(name)){
-    			p = new PersonAgent(name, Double.valueOf(name),gui);
+    			p = new PersonAgent(name, Double.valueOf(name),gui, residence);
     		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
     				|| name.toLowerCase().contains("ditch") || name.toLowerCase().contains("broke")){
-    			p = new PersonAgent(name, NO_CASH,gui);   			
+    			p = new PersonAgent(name, NO_CASH,gui, residence);   			
     		}else{
-    			p = new PersonAgent(name, PERSONS_DEFAULT_CASH, gui);
+    			p = new PersonAgent(name, PERSONS_DEFAULT_CASH, gui, residence);
     		}
     		
+    		if(residence instanceof Apartment){
+    			((Apartment)residence).addRenter(p);
+    		}else{
+    			((Home)residence).owner = p;
+    		}
     		if(name.toLowerCase().contains("waiter") && name.toLowerCase().contains("day")){
     			if(name.toLowerCase().contains("01")){
     				Restaurant r = gui.restaurants.get(0);
@@ -917,37 +949,12 @@ public class InfoPanel extends JPanel implements KeyListener {
     		}
     		
     		
-    		
-    		
-    		
-    		
-    		
     		PersonGui g = new PersonGui(p, gui);
     		g.setPresent(true);
     		gui.animationPanel.addGui(g);// dw
     		
     		for(Restaurant r: gui.getRestaurants()){
     			p.addRestaurant(r);
-    		}
-    		
-    		if(gui.apartmentsAvaiable()){
-    			for(Apartment a: gui.apartments){
-    				if(a.noVacancies == false && p.myHome == null){
-    					p.setHome(a);
-    					a.addRenter(p);
-	        			break;
-    				}
-    			}
-    		}else if(gui.persons.size() <= 160){
-    			for(Home h : gui.getHomes())
-        		{
-	        		if(h.owner == null && p.myHome == null){
-	        			p.setHome(h);
-	        			h.owner = p;
-	        			break;
-        			}
-        		}
-        			
     		}
     		
     		p.setGui(g);
