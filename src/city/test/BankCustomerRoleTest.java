@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
 import city.roles.BankCustomerRole.CustomerState;
-import city.roles.BankCustomerRole.Loan;
 import city.test.mock.MockBank;
 
 
@@ -26,7 +25,7 @@ public class BankCustomerRoleTest extends TestCase{
 	
 	public void testOpenAccountAndDeposit() {
 		//setUp() runs first before this test!
-		customer.bank = bank;
+		customer.bankTeller = bank;
 		
 		// check preconditions
 		assertEquals("BankCustomerRole should have no tasks in it. It doesn't.", customer.tasks.size(), 0);
@@ -69,7 +68,7 @@ public class BankCustomerRoleTest extends TestCase{
 	
 	public void testCheckBalanceAndWithdraw() {
 		//setUp() runs first before this test!
-		customer.bank = bank;
+		customer.bankTeller = bank;
 				
 		// check preconditions
 		assertEquals("BankCustomerRole should have no tasks in it. It doesn't.", customer.tasks.size(), 0);
@@ -119,7 +118,7 @@ public class BankCustomerRoleTest extends TestCase{
 	
 	public void testCustomerRequestLoanAndLoanApproved() {
 		//setUp() runs first before this test!
-		customer.bank = bank;
+		customer.bankTeller = bank;
 						
 		// check preconditions
 		assertEquals("BankCustomerRole should have no loans in it. It does.", customer.loans.size(), 0);
@@ -157,7 +156,7 @@ public class BankCustomerRoleTest extends TestCase{
 	
 	public void testCustomerPayBackLoan() {
 		//setUp() runs first before this test!
-		customer.bank = bank;
+		customer.bankTeller = bank;
 						
 		// check preconditions
 		assertEquals("BankCustomerRole should have no loans in it. It does.", customer.loans.size(), 0);
@@ -219,7 +218,7 @@ public class BankCustomerRoleTest extends TestCase{
 	
 	public void testCustomerPayBackLoanIfHaveEnoughMoney() {
 		//setUp() runs first before this test!
-		customer.bank = bank;
+		customer.bankTeller = bank;
 						
 		// check preconditions
 		assertEquals("BankCustomerRole should have no loans in it. It does.", customer.loans.size(), 0);
@@ -281,7 +280,7 @@ public class BankCustomerRoleTest extends TestCase{
 	
 	public void testAutoRequestLoan() {
 		person.cashOnHand = 50;
-		customer.bank = bank;
+		customer.bankTeller = bank;
 		
 		// check preconditions
 		assertEquals("BankCustomerRole should have no tasks in it. It does.", customer.tasks.size(), 0);
@@ -302,7 +301,7 @@ public class BankCustomerRoleTest extends TestCase{
 	}
 	
 	public void testNoAutoRequestLoan() {
-		customer.bank = bank;
+		customer.bankTeller = bank;
 		
 		// check preconditions
 		assertEquals("BankCustomerRole should have no loans in it. It does.", customer.loans.size(), 0);

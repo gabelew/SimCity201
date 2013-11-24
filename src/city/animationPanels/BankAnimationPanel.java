@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
@@ -29,6 +31,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	
 	private SimCityGui simCityGui;
 	private BufferedImage atmImg = null;
+	public List<Semaphore> atms = new ArrayList<Semaphore>();
 	
 	public BankAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
@@ -47,7 +50,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
         simCityGui.animationPanel.timer.addActionListener(this);
     	
     	for(int i = 0; i < NATMS; i++) {
-    		BankCustomerGui.atms.add(new Semaphore(1,true));
+    		atms.add(new Semaphore(1,true));
     	}
 		
 	}

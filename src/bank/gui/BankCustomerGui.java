@@ -13,6 +13,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import city.animationPanels.BankAnimationPanel;
 import city.gui.Gui;
 import city.roles.BankCustomerRole;
 
@@ -20,7 +21,6 @@ public class BankCustomerGui implements Gui{
 
 	private BankCustomerRole role = null;
 	private boolean isPresent = false;
-	
 	private static BufferedImage customerImg = null;
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
@@ -29,7 +29,7 @@ public class BankCustomerGui implements Gui{
 	private enum Command {noCommand, WaitForATM, GoToATM, LeaveBank};
 	private Command command = Command.noCommand;
 	private int atmNumber = -1;
-	public static List<Semaphore> atms = new ArrayList<Semaphore>();
+	
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
 	
 	static final int CUST_START_POS = -40;
@@ -103,6 +103,10 @@ public class BankCustomerGui implements Gui{
 	public void DoLeaveBank() {
 		xDestination = CUST_START_POS;
 		yDestination = CUST_START_POS;
+		if(atmNumber >= 0) {
+			((BankAnimationPanel)role.bank.insideAnimationPanel).atms.get(atmNumber).release();
+			atmNumber = -1;
+		}
 		command = Command.LeaveBank;
 	}
 	
@@ -112,9 +116,9 @@ public class BankCustomerGui implements Gui{
 	}
 	
 	private void findATM() {
-		for(int i = 0; i < atms.size(); i++) {
+		for(int i = 0; i < ((BankAnimationPanel)role.bank.insideAnimationPanel).atms.size(); i++) {
 			if(atmNumber < 0) {
-				if(atms.get(i).tryAcquire()) {
+				if(((BankAnimationPanel)role.bank.insideAnimationPanel).atms.get(i).tryAcquire()) {
 					atmNumber = i;
 					xDestination = atmMap.get(i).x;
 					yDestination = atmMap.get(i).y;
