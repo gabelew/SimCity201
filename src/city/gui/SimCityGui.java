@@ -9,6 +9,7 @@ import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
 
+import bank.BankBuilding;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.MarketAgent;
@@ -57,6 +58,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     List<Apartment> apartments = new ArrayList<Apartment>();
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
     List<MarketAgent> markets = new ArrayList<MarketAgent>();
+    List<BankBuilding> banks = new ArrayList<BankBuilding>();
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
     
     private RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
@@ -317,6 +319,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, restPanel);
 	        	b.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);
+
+				banks.add(new BankBuilding(bankAnimationPanel, new Point(b.getX(),b.getY())));
 			}else if(b.type.equals("house")){
 		        
 		    	JPanel APanel = new JPanel();

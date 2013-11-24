@@ -87,7 +87,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
-		print("DELIVERY??????????????????????????????????????????????");
 		if(event == AgentEvent.GoToWork){
 			event = AgentEvent.none;
 			((MarketAgent)Market).addDeliveryMan(((DeliveryMan)this));
@@ -113,7 +112,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			orderDone();
 			return true;
 		}
-		print("DELIVERYMANNNNNN");
 		return false;
 	}
 

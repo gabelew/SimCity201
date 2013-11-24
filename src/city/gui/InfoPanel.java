@@ -88,8 +88,8 @@ public class InfoPanel extends JPanel implements KeyListener {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      */
-    private  Residence findOpenHome(){
-		if(gui.apartmentsAvaiable()){
+    private  Residence findOpenHome(String name){
+		if(gui.apartmentsAvaiable() && !(name.toLowerCase().contains("home")) ){
 			for(Apartment a: gui.apartments){
 				if(a.noVacancies == false){
 					/*p.setHome(a);
@@ -109,7 +109,14 @@ public class InfoPanel extends JPanel implements KeyListener {
         			return h;
     			}
     		}
-    			
+			for(Apartment a: gui.apartments){
+				if(a.noVacancies == false){
+					/*p.setHome(a);
+					a.addRenter(p);
+        			break;*/
+					return a;
+				}
+			}
 		}
 		return null;
     }
@@ -117,7 +124,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 
     	if (type.equals("Persons")) {
     		PersonAgent p = null;
-    		Residence residence = findOpenHome();
+    		Residence residence = findOpenHome(name);
     		if(stringIsDouble(name)){
     			p = new PersonAgent(name, Double.valueOf(name),gui, residence);
     		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
@@ -964,8 +971,8 @@ public class InfoPanel extends JPanel implements KeyListener {
     		
     		p.setGui(g);
     			
-    		p.startThread();
     		gui.persons.add(p);
+    		p.startThread();
     	}
     }
  /*  public void setCustomerEnabled(CustomerAgent c){

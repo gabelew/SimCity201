@@ -521,7 +521,7 @@ public class PersonAgent extends Agent
 	        	}
 	        }
 	        
-	        if(state == State.doingNothing){
+	        if(transportState == TransportState.none && state == State.doingNothing){
 	        	goHome();
         	}
 	        
@@ -817,6 +817,18 @@ public class PersonAgent extends Agent
 		return closestMa;
 	}
 
+    
+  /*  private MarketAgent chooseClosestBank() {
+    	MarketAgent closestBa = simCityGui.getBanks().get(0);
+    	for(MarketAgent m: simCityGui.getBanks()){
+			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
+				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
+					closestBa = m;
+				}
+			}
+		}
+		return closestBa;
+	}*/
 	private void goToBusStop() {
     	personGui.doGoToBus();
 		this.transportState = TransportState.GoingToBus;	
@@ -865,18 +877,30 @@ public class PersonAgent extends Agent
  ******************^^^^^^^^^^^^^^^^*********************/
 	    private void goHome() 
 	    {
-	    		location = Location.AtHome;
-				personGui.DoWalkTo(myHome.location); //CHange to special go home method and remove semaphore
+	    		/* Old code here for reference
+	    		//personGui.DoWalkTo(myHome.location);
 				//print("i have "+roles.size());
-				try {waitingResponse.acquire();} 
-				catch (InterruptedException e) { e.printStackTrace(); }
-				/*
-				for(Role r: roles){
-					if(r instanceof AtHomeRole){
-						r.active = true;
-						ahGui.setPresent(true);
-					}
-				}*/
+				//try {waitingResponse.acquire();} 
+				//catch (InterruptedException e) { e.printStackTrace(); }
+	    		*/
+	    	
+	    		destination = myHome.location;
+				if(car == true || destination.y == personGui.yPos){
+					personGui.doWalkToHome();
+					location = Location.AtHome;
+					
+					/*
+					for(Role r: roles){
+						if(r instanceof AtHomeRole){
+							r.active = true;
+							ahGui.setPresent(true);
+							((AtHomeRole)r).goToHomePos();
+						}
+					}*/
+		    	}else{
+		    		goToBusStop();
+		    	} 
+
 		}
 	    
 	    //public void msgReenablePerson(){

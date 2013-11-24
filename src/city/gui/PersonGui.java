@@ -232,5 +232,8 @@ public class PersonGui implements Gui{
 		}
 		
 	}
-
+	public void doWalkToHome(){
+		xDestination = agent.myHome.location.x;
+		yDestination = agent.myHome.location.y;		
+	}
 }
