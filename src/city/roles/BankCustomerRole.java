@@ -24,15 +24,29 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		}
 	}
 	
+	public class Loan {
+		public double amount;
+		public String accountType;	
+		public Loan(double amount, String at) {
+			this.amount = amount;
+			this.accountType = at;
+		}
+	}
+	
+	public List<Loan> loans = new CopyOnWriteArrayList<Loan>();
 	public List<Task> tasks = new CopyOnWriteArrayList<Task>();
 	public Bank bank;
 	enum BankingState{WantToCheckBalance, WantToOpenAccount, WantToDeposit, WantToWithdraw, 
-		WantToGetALoan, WantToPayBackLoan, CheckingBalance, OpeningAccount, Depositing, Withdrawing, 
+		WantToGetALoan, WantToPayBackLoan, WantToAutoPayLoan, CheckingBalance, OpeningAccount, Depositing, Withdrawing, 
 		RequestingALoan, PayingLoan };
 	public enum CustomerState {None, EnteringBank, InBank, FindingATM, AtAtm, LeavingBank};
 	public CustomerState state = CustomerState.None;
 	private BankCustomerGui customerGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
+	static final int PERSONAL_BROKE_AMOUNT = 100;
+	static final int BUSINESS_BROKE_AMOUNT = 500;
+	static final int PERSONAL_BROKE_BORROW_AMOUNT = 200;
+	static final int BUSINESS_BROKE_BORROW_AMOUNT = 700;
 	
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
@@ -81,6 +95,30 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	public void msgHereIsBalance(double balance, String accountType) {
 		print("Current balance for " + accountType + " account is: $" + balance);
+		int balanceBroke;
+		int onHandBroke;
+		if("personal".equals(accountType)) {
+			balanceBroke = Double.compare(balance, PERSONAL_BROKE_AMOUNT);
+			onHandBroke = Double.compare(myPerson.cashOnHand, PERSONAL_BROKE_AMOUNT);
+			if(-1 == balanceBroke && -1 == onHandBroke) {
+				tasks.add(new Task(BankingState.WantToGetALoan, PERSONAL_BROKE_BORROW_AMOUNT, accountType));
+			}
+		} else {
+			balanceBroke = Double.compare(balance, BUSINESS_BROKE_AMOUNT);
+			onHandBroke = Double.compare(myPerson.businessFunds, BUSINESS_BROKE_AMOUNT);
+			if(-1 == balanceBroke && -1 == onHandBroke) {
+				tasks.add(new Task(BankingState.WantToGetALoan, BUSINESS_BROKE_BORROW_AMOUNT, accountType));
+			}
+		}
+		for(Loan l: loans) {
+			int payLoan;
+			if ("personal".equals(l.accountType))
+				payLoan = Double.compare(balance - PERSONAL_BROKE_BORROW_AMOUNT, l.amount);
+			else
+				payLoan = Double.compare(balance - BUSINESS_BROKE_BORROW_AMOUNT, l.amount);
+			if(1 == payLoan)
+				tasks.add(new Task(BankingState.WantToAutoPayLoan, l.amount, l.accountType));
+		}
 		stateChanged();
 	}
 	
@@ -95,12 +133,14 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		} else {
 			myPerson.businessFunds += amount;
 		}
+		loans.add(new Loan(amount, accountType));
 		print("$" + amount + " loan for " + accountType + " account was approved.");
 		stateChanged();
 	}
 	
 	public void msgLoanPaid(double amount, String accountType) {
 		print("$" + amount + " loan for " + accountType + " account was paid.");
+		loans.remove(findLoanIndex(amount, accountType));
 		stateChanged();
 	}
 	
@@ -182,6 +222,25 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		} else if(CustomerState.LeavingBank.equals(state)) {
 			state = CustomerState.None;
 			LeaveBank();
+			return true;
+		}
+		
+		for(Task t: tasks) {
+			if(BankingState.WantToAutoPayLoan.equals(t.bs)) {
+				t.bs = BankingState.PayingLoan;
+				AutoPayLoan(t);
+				return true;
+			}
+		}
+		
+		for(Loan l: loans) {
+			int payLoan;
+			if ("personal".equals(l.accountType))
+				payLoan = Double.compare(myPerson.cashOnHand - PERSONAL_BROKE_BORROW_AMOUNT, l.amount);
+			else
+				payLoan = Double.compare(myPerson.businessFunds - BUSINESS_BROKE_BORROW_AMOUNT, l.amount);
+			if(1 == payLoan)
+				tasks.add(new Task(BankingState.WantToPayBackLoan, l.amount, l.accountType));
 			return true;
 		}
 		
@@ -268,7 +327,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			cashLimit = Double.compare(myPerson.businessFunds, t.amount);
 		}	
 		if(-1 == cashLimit) {
-			print("Insufficient funds to deposit");
+			print("Insufficient funds to pay off loan");
 		} else {
 			bank.msgPayLoan(this, t.amount, t.accountType);
 			if("personal".equals(t.accountType)) {
@@ -277,6 +336,11 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				myPerson.businessFunds -= t.amount;
 			}
 		}
+		tasks.remove(findTaskIndex(t));
+	}
+	
+	private void AutoPayLoan(Task t) {
+		bank.msgAutoPayLoan(this, t.amount, t.accountType);
 		tasks.remove(findTaskIndex(t));
 	}
 	
@@ -290,11 +354,26 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		}
 		return taskIndex;
 	}
+	
+	private int findLoanIndex(double amount, String accountType) {
+		int loanIndex = -1;
+		for(int i = 0; i < loans.size(); i++) {
+			if(amount == loans.get(i).amount && accountType.equals(loans.get(i).accountType)) {
+				loanIndex = i;
+			}
+		}
+		return loanIndex;
+	}
+	
 	public BankCustomerGui getGui() {
 		return customerGui;
 	}
 	public void setGui(BankCustomerGui g) {
 		customerGui = g;
+	}
+	
+	public void setBank(BankAgent b) {
+		this.bank = b;
 	}
 	
 }

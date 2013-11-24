@@ -13,4 +13,6 @@ public interface Bank {
 	public abstract void msgPayLoan(BankCustomer bcr, double amount, String accountType);
 	public abstract void msgTransferFunds(PersonAgent sender, PersonAgent recipient, double amount, 
 			String senderAccountType, String recipientAccountType, String purpose);
+	public abstract void msgAutoPayLoan(BankCustomer bc,
+			double amount, String accountType);
 }

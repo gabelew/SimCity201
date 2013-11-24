@@ -51,7 +51,7 @@ public class BankAgent extends Agent implements Bank{
 		}
 	}
 	
-	public enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, loanPayment};
+	public enum TransactionState {none, checkBalance, withdraw, deposit, transfer, loanRequested, autoLoanPayment, loanPayment};
 	public List<BankAccount> accounts = new CopyOnWriteArrayList<BankAccount>();
 	public List<Transaction> transactions = new CopyOnWriteArrayList<Transaction>();
 	String name;
@@ -77,7 +77,8 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.checkBalance, 0, account, null, "balance"));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	/**
@@ -90,12 +91,14 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.checkBalance, 0, account, null, "pbalance"));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	public void msgOpenAccount(BankCustomer bcr, double initialDeposit, String accountType) {
 		accounts.add(new BankAccount(bcr,initialDeposit,accountType));
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	public void msgDepositMoney(BankCustomer bcr, double amount, String accountType) {
@@ -103,7 +106,8 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.deposit, amount, account, null, "deposit"));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	public void msgWithdrawMoney(BankCustomer bcr, double amount, String accountType) {
@@ -111,7 +115,8 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.withdraw, amount, account, null, "withdraw"));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	public void msgRequestLoan(BankCustomer bcr, double amount, String accountType) {
@@ -119,7 +124,8 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.loanRequested, amount, account, null, "requestLoan"));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	public void msgPayLoan(BankCustomer bcr, double amount, String accountType) {
@@ -127,8 +133,19 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.loanPayment, amount, account, null, "payLoan"));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
+	
+	public void msgAutoPayLoan(BankCustomer bcr, double amount, String accountType) {
+		BankAccount account = findBankAccount(bcr,accountType);
+		if(account != null) {
+			transactions.add(new Transaction(TransactionState.autoLoanPayment, amount, account, null, "payLoan"));
+		}
+		if(0 == getStateChangePermits())
+			stateChanged();
+	}
+	
 	
 	public void msgTransferFunds(PersonAgent sender, PersonAgent recipient, 
 			double amount, String senderAccountType, 
@@ -138,7 +155,8 @@ public class BankAgent extends Agent implements Bank{
 		if(senderAccount != null && recipientAccount != null) {
 			transactions.add(new Transaction(TransactionState.transfer, amount, senderAccount, recipientAccount, purpose));
 		}
-		stateChanged();
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 
 
@@ -147,36 +165,49 @@ public class BankAgent extends Agent implements Bank{
 	public boolean pickAndExecuteAnAction() {
 		for(Transaction t : transactions) {
 			if(TransactionState.deposit == t.ts) {
+				t.ts = TransactionState.none;
 				customerDeposit(t);
 				return true;
 			}
 		}
 		for(Transaction t : transactions) {
 			if(TransactionState.withdraw == t.ts) {
+				t.ts = TransactionState.none;
 				customerWithdrawal(t);
 				return true;
 			}
 		}
 		for(Transaction t : transactions) {
 			if(TransactionState.loanPayment == t.ts) {
+				t.ts = TransactionState.none;
 				customerLoanPayment(t);
 				return true;
 			}
 		}
 		for(Transaction t : transactions) {
+			if(TransactionState.autoLoanPayment == t.ts) {
+				t.ts = TransactionState.none;
+				customerAutoLoanPayment(t);
+				return true;
+			}
+		}
+		for(Transaction t : transactions) {
 			if(TransactionState.loanRequested == t.ts) {
+				t.ts = TransactionState.none;
 				customerLoanRequest(t);
 				return true;
 			}
 		}
 		for(Transaction t : transactions) {
 			if(TransactionState.transfer == t.ts) {
+				t.ts = TransactionState.none;
 				customerTransfer(t);
 				return true;
 			}
 		}
 		for(Transaction t : transactions) {
 			if(TransactionState.checkBalance == t.ts) {
+				t.ts = TransactionState.none;
 				customerBalance(t);
 				return true;
 			}
@@ -187,7 +218,6 @@ public class BankAgent extends Agent implements Bank{
 	// Actions
 	
 	private void customerDeposit(Transaction t) {
-		t.ts = TransactionState.none;
 		t.customer.deposit(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.customer.accountHolder.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
@@ -195,7 +225,6 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerWithdrawal(Transaction t) {
-		t.ts = TransactionState.none;
 		double withdrew = t.customer.withdraw(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.customer.accountHolder.msgHereIsMoney(withdrew, t.customer.accountType, t.customer.currentBalance);
@@ -203,7 +232,20 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerLoanPayment(Transaction t) {
-		t.ts = TransactionState.none;
+		fundsAvailable += t.amount;
+		fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
+		t.customer.owed -= t.amount;
+		t.customer.owed = (Math.round(100*t.customer.owed) / ((double)100));
+		int owedBalance = Double.compare(t.customer.owed, 0);
+		if(-1 == owedBalance) {
+			t.customer.owed = 0;
+		}
+		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
+		transactions.remove(findTransactionIndex(t));
+	}
+	
+	private void customerAutoLoanPayment(Transaction t) {
+		t.customer.currentBalance -= t.amount;
 		fundsAvailable += t.amount;
 		fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 		t.customer.owed -= t.amount;
@@ -217,7 +259,6 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerLoanRequest(Transaction t) {
-		t.ts = TransactionState.none;
 		double canLoan = 0.0;
 		if("personal".equals(t.customer.accountType)) {
 			canLoan = customerLoanMax - t.customer.owed;
@@ -229,17 +270,17 @@ public class BankAgent extends Agent implements Bank{
 		if(-1 == loanLimit || -1 == bankLimit) {
 			t.customer.accountHolder.msgLoanDenied(t.amount, t.customer.accountType);
 		} else{
+			t.amount = (Math.round(100*t.amount) / ((double)100));
 			t.customer.owed += t.amount;
 			t.customer.owed = (Math.round(100*t.customer.owed) / ((double)100));
 			fundsAvailable -= t.amount;
 			fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
-			t.customer.accountHolder.msgLoanApproved(t.amount, t.customer.accountType);
+			t.customer.accountHolder.msgLoanApproved(t.customer.owed, t.customer.accountType);
 		}
 		transactions.remove(findTransactionIndex(t));
 	}
 	
 	private void customerTransfer(Transaction t) {
-		t.ts = TransactionState.none;
 		int customerAccountLimit = Double.compare(t.customer.currentBalance, t.amount);
 		if(-1 == customerAccountLimit) {
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
@@ -257,7 +298,6 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerBalance(Transaction t) {
-		t.ts = TransactionState.none;
 		if("pbalance".equals(t.purpose)) {
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
 			r.getPersonAgent().msgHereIsBalance(t.customer.currentBalance, t.customer.accountType);

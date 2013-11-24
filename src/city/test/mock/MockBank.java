@@ -63,5 +63,13 @@ public class MockBank extends Mock implements Bank{
 		log.add(new LoggedEvent("Received msgTransferFunds from PersonAgent for amount: " + amount + " and account type: " + senderAccountType
 				+ "to " + recipient.getName() + " with account type: " + recipientAccountType + " for " + purpose));
 	}
+
+	@Override
+	public void msgAutoPayLoan(BankCustomer bc, double amount,
+			String accountType) {
+		log.add(new LoggedEvent("Received msgAutoPayLoan from BankCustomer for amount: " 
+			+ amount + " and account type: " + accountType));
+		
+	}
 	
 }
