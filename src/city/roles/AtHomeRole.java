@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import atHome.city.AtHomeGui;
 import city.PersonAgent;
@@ -19,7 +20,11 @@ public class AtHomeRole extends Role
 	//States for Orders
 	public enum FoodOrderState {none, ordered};
 	enum AppState {working, broken, repairRequested, payRepairman};
+	enum EventState {none, goingHome, goToFridge, goToCounter, goToGrill};
 	enum OrderState {pending, cooking, done, eating}
+	EventState state = EventState.none;
+	private Semaphore busy = new Semaphore(0,true);
+	
 	Map<String, Food> findFood = new HashMap<String, Food>();
 	//Lists
 	public List<Food> foodInFridge = new ArrayList<Food>();
@@ -28,7 +33,7 @@ public class AtHomeRole extends Role
 	public List<String> choices = new ArrayList<String>();
 	Timer timer = new Timer(); //Timer for Cooking Food
 	public PersonAgent myPerson = null;//PersonAgent that has this role
-	AtHomeGui atHomeGui;
+	AtHomeGui gui;
 	public AtHomeRole(PersonAgent p) 
 	{
 		super(p);
@@ -45,16 +50,16 @@ public class AtHomeRole extends Role
 			foodInFridge.add(f);
 			findFood.put(s, f);
 		}
-		atHomeGui = new AtHomeGui(myPerson, this);
+		this.gui = new AtHomeGui(myPerson, this);
 	}
 	
 	public AtHomeGui getGui()
 	{
-		return atHomeGui;
+		return gui;
 	}
 	public void setGui(AtHomeGui g)
 	{
-		this.atHomeGui = g;
+		this.gui = g;
 	}
 /*********************
  ***** MESSAGES
@@ -71,6 +76,7 @@ public class AtHomeRole extends Role
 			Order o = new Order( choices.get(choice) );
 			orders.add(o);
 		}
+		state = EventState.goingHome;
 	}
 	
 	public void restockFridge(Map<String,Integer> orderList)
@@ -142,13 +148,18 @@ public class AtHomeRole extends Role
 	private void CookIt(final Order o)
 	{
 		o.state = OrderState.cooking;
-		//DoGoToFridge();
-		//Break the fridge randomly
+		//Gets food from fridge
+		gui.DoGoToFridge();
+		try { busy.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		//Break the fridge randomly -> V2 Implementation
+		/*
 		int fridgeBroken = (new Random()).nextInt(100)+1;
 		if(fridgeBroken == 66)
 		{
 			appliances.add( new Appliance("fridge") );
 		}
+		*/
 		Food food = findFood.get(o.choice);
 		//Cooks Food if has it on hand
 		//adds to marketOrder if low on food
@@ -156,6 +167,10 @@ public class AtHomeRole extends Role
 		{
 			myPerson.print("Cooking Food");
 			food.amount--;
+			//puts food on grill
+			gui.DoCookFood(o.choice);
+			try { busy.acquire();} 
+			catch (InterruptedException e) {e.printStackTrace();}
 			if(food.amount <= food.low)
 			{
 				makeMarketList();
@@ -214,6 +229,10 @@ public class AtHomeRole extends Role
  ********************/
 	public boolean pickAndExecuteAnAction() 
 	{
+		if(state == EventState.goingHome)
+		{
+			goToHomePos();
+		}
 		for(Appliance a : appliances)
 		{
 			if(a.state == AppState.broken)
@@ -250,6 +269,24 @@ public class AtHomeRole extends Role
 		return false;
 	}
 
+/*******************
+ * Animation Methods START
+ *******************/
+	public void msgAnimationFinshed()
+	{
+		busy.release();
+	}
+	private void goToHomePos()
+	{
+		state = state.none;
+		gui.doEnterHome();
+		try { busy.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+/*******************
+ * Animation Methods END
+ *******************/
 	//Order for food cooked at home
 	public class Order 
 	{

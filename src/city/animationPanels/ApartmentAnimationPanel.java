@@ -35,6 +35,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
     static final int xGRILL_RIGHT_OFFSET = 52;
     static final int yFIDGE_OFFSET = 15;
     static final int xFIDGE_OFFSET = 100;
+    static final int xAPT_OFFSET = 30;
     
 	public ApartmentAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
@@ -108,9 +109,9 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 		     g2.drawImage(bed, 150+(i*217), 100, null);
 		     
 		     //bottom 4
-		     g2.drawImage(kitchen, xCOOK_POSITION+(i*217),310+ yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
-	 		 g2.drawImage(grill, xCOOK_POSITION+xGRILL_RIGHT_OFFSET+(i*217), 310+yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
-	 		 g2.drawImage(fridge, xCOOK_POSITION+xFIDGE_OFFSET+(i*217),310+ yCOOK_POSITION+yFIDGE_OFFSET, null);
+		     g2.drawImage(kitchen, xAPT_OFFSET + xCOOK_POSITION+(i*217),310+ yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
+	 		 g2.drawImage(grill, xAPT_OFFSET + xCOOK_POSITION+xGRILL_RIGHT_OFFSET+(i*217), 310+yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
+	 		 g2.drawImage(fridge, xAPT_OFFSET + xCOOK_POSITION+xFIDGE_OFFSET+(i*217),310+ yCOOK_POSITION+yFIDGE_OFFSET, null);
 		     //g2.drawImage(grill, (i*217) ,320,null);
 		     //g2.drawImage(kitchen, 15+(i*217), 320, null);
 		     //g2.drawImage(fridge, 100+(i*217), 310, null);
