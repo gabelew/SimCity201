@@ -120,7 +120,7 @@ public class AtHomeRole extends Role
 		gui.DoLeaveHome();
 		try { busy.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
-		myPerson.msgDoneEatingAtHome();
+		myPerson.msgHasLeftHome();
 	}
 /*********************
  ***** ACTIONS
@@ -153,6 +153,7 @@ public class AtHomeRole extends Role
 			{
 				gui.DoneEating();
 				orders.remove(o);
+				myPerson.msgDoneEatingAtHome();
 			}
 		},
 		EATING_TIME);

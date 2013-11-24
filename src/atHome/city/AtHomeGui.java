@@ -51,7 +51,7 @@ public class AtHomeGui implements Gui{
     static final int HOUSE_TABLEPOS = 150;
 	
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
-	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood};
+	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood, LeaveHome};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
 	
@@ -140,7 +140,7 @@ public class AtHomeGui implements Gui{
 				xDestination = xHomePosition;
 				yDestination = yHomePosition;
 			}
-			else if(command == Command.EatFood)
+			else if(command == Command.EatFood || command == Command.LeaveHome)
 			{
 				command = Command.noCommand;
 				role.msgAnimationFinshed();
@@ -192,7 +192,9 @@ public class AtHomeGui implements Gui{
 	
 	public void DoLeaveHome()
 	{
-		
+		command = Command.LeaveHome;
+		xDestination = -20;
+		yDestination = 200;
 	}
 	
 /***********************************
