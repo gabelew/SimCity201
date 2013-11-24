@@ -180,7 +180,6 @@ public class CookRole extends Role implements Cook {
 	{
 		orders.add(new RoleOrder(w, choice, table));
 		stateChanged();
-		print("order received!!");
 	}
 	public void msgFoodDone(RoleOrder o)
 	{
@@ -197,7 +196,6 @@ public class CookRole extends Role implements Cook {
 		}
 	}
 	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, List<String>outOf,double amountOwed){
-		print("msgHereIsOrderFromMarket");
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
 				order.price=amountOwed;
@@ -424,10 +422,8 @@ public class CookRole extends Role implements Cook {
 //Actions
 	
 	private void checkRevolvingStand() {
-		print("Checking stand for any orders");
 		RoleOrder order = revolvingStand.remove();
 		if(order != null) {
-			print("Removed order from stand");
 			orders.add(order);
 		}
 		checkStand = false;
@@ -448,7 +444,6 @@ public class CookRole extends Role implements Cook {
 			e.printStackTrace();
 		}
 		if(o.state == OrderState.DONE){
-			print("order ready");
 			o.waiter.msgOrderIsReady(o.choice, o.table);
 			orders.remove(o);
 		}
@@ -464,7 +459,6 @@ public class CookRole extends Role implements Cook {
 		}
 		Food food = findFood(o.choice.toLowerCase());
 		if(food.amount > 0){
-			print("cooking");
 			food.amount--;
 			if(food.amount <= food.low){
 				orderFoodFromMarket();

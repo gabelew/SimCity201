@@ -160,7 +160,6 @@ public class WaiterRole extends Role implements Waiter{
 			event = AgentEvent.none;
 			myPerson.releavedFromDuty(this);
 			restaurant.insideAnimationPanel.removeGui(waiterGui);
-			print("event == AgentEvent.releaveFromDuty  finshed");
 			return true;
 		}
 		
@@ -168,7 +167,6 @@ public class WaiterRole extends Role implements Waiter{
 				(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
 				(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
 			leaveWork();
-			print("leaveWork finshed");
 			return true;
 		}
 		if(event == AgentEvent.gotToWork)
@@ -275,7 +273,6 @@ public class WaiterRole extends Role implements Waiter{
 
 
 	private void leaveWork() {
-		print("leaveWork");
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
 		try {
@@ -286,15 +283,12 @@ public class WaiterRole extends Role implements Waiter{
 	}
 
 	private void tellHost() {
-		print("Reporting for Duty");
 		restaurant.host.msgReadyToWork(this);
 	}
 
 	private void seatCustomer(MyCustomer c){
 			doGoToEntrance();
 			
-			StringBuilder msg = new StringBuilder("Follow me " + c.c.getName());
-			print(msg.toString());
 			c.c.msgFollowMeToTable(((Waiter)this), new Menu());
 			
 			DoSeatCustomer(c, c.table);
@@ -313,7 +307,6 @@ public class WaiterRole extends Role implements Waiter{
 		
 		c.c.msgWhatWouldYouLike();
 		c.s = CustomerState.asked;
-		print("What would you like to order?");
 		
 		try {
 			waitingResponse.acquire();
@@ -324,19 +317,14 @@ public class WaiterRole extends Role implements Waiter{
 
 	private void putInOrder(MyCustomer c) {
 		doGoToKitchen(c);
-		print("\t\t HERHER IM IN DA KITCH");
 		c.s = CustomerState.orderPlaced;
-		print("\t\t BEFORE THE PAUSE msgHereIsOrder");
 		restaurant.cook.msgHereIsOrder(this, c.choice, c.table);
-		print("\t\t msgHereIsOrder");
 		waiterGui.placedOrder();
-		print("\t\t waiterGui.placedOrder");
 	}
 
 	private void serveOrder(MyCustomer c) {
 		doGoToTable(c.table);
 		c.s = CustomerState.orderServed;
-		print("serving food");
 		c.c.msgHereIsYourFood();
 		waiterGui.doneServingOrder();
 		//doGoToCashier();
@@ -344,7 +332,6 @@ public class WaiterRole extends Role implements Waiter{
 	}
 
 	private void pickUpOrder(MyCustomer c){
-		print("Waiter grabbing food");
 		doGoToKitchen(c);
 		waiterGui.servingFood(this, c.choice, c.table);
 		c.s = CustomerState.servingOrder;
@@ -357,14 +344,12 @@ public class WaiterRole extends Role implements Waiter{
 	}
 	
 	public void askForBreak(){
-		print(restaurant.host.getName() + ", can I go on break?");
 		restaurant.host.msgCanIBreak(this);
 	}
 	private void tellBadNews(MyCustomer c) {
 		doGoToTable(c.table);
 		c.s = CustomerState.seated;
 		c.c.msgOutOfOrder(c.choice);
-		print(c.c.getName() + ", we are out of " + c.choice);
 	}
 	
 	private void dropOffCheck(MyCustomer c) {
@@ -378,8 +363,6 @@ public class WaiterRole extends Role implements Waiter{
 	private void DoSeatCustomer(MyCustomer customer, int table) {
 		//Notice how we print "customer" directly. It's toString method will do it.
 		//Same with "table"
-		StringBuilder msg = new StringBuilder("Seating " + customer + " at " + table);
-		print(msg.toString());
 		waiterGui.DoBringToTable(customer.c, table); 
 	}
 	
@@ -436,7 +419,6 @@ public class WaiterRole extends Role implements Waiter{
 	}
 
 	public void msgLeftTheRestaurant() {
-		print("msgLeftTheRestaurant");
 		waitingResponse.release();
 		event = AgentEvent.relieveFromDuty;
 	}

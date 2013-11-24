@@ -609,7 +609,6 @@ public class PersonAgent extends Agent
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CookRole role = (CookRole)(r.cook);
     			if(role.getPerson() != null){
-        			print("role.getPerson() != null");
     				role.msgRelieveFromDuty(this);
     				try {
     					waitingResponse.acquire();
@@ -617,8 +616,6 @@ public class PersonAgent extends Agent
     					e.printStackTrace();
     				}
     			}
-
-    			print("roles switched");
     			roles.add(role);
     			role.setPerson(this);
             	role.active = true;
@@ -626,10 +623,7 @@ public class PersonAgent extends Agent
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
     			CashierRole role = (CashierRole)(r.cashier);
-    			print("CashierRole role = (CashierRole)(r.cashier);");
     			if(role.getPerson() != null){
-
-        			print("role.getPerson() != null");
     				role.msgReleaveFromDuty(this);
     				try {
     					waitingResponse.acquire();

@@ -59,12 +59,13 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-
-		for(Gui gui : getGuis()) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
+		synchronized(guis){
+			for(Gui gui : getGuis()) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+		}
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();  //Will have paintComponent called
 		
@@ -117,6 +118,12 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 		     g2.drawImage(bed, 150+(i*217), 420, null);
 
 		 }
-		
+	     synchronized(guis){
+				for(Gui gui : getGuis()) {
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+		        }
+			}
 	}
 }

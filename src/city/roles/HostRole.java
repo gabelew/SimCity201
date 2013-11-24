@@ -84,7 +84,6 @@ public class HostRole extends Role implements Host {
 	public void goesToWork() {
 		state = State.goToWork;
 		this.stateChanged();
-		print("role goesToWork");
 	}
 
 	public void msgReleaveFromDuty(PersonAgent p) {
@@ -343,14 +342,12 @@ public class HostRole extends Role implements Host {
 		w.state = wState.idle;
 		w.w.msgGoOnBreak();
 		simCityGui.setWaiterOnBreak(w.w.getName());
-		print(w.w.getName() + ", go on break.");
 	}
 
 	private void dontLetWaiterBreak(MyWaiter w) {
 		w.state = wState.working;
 		w.w.msgDontGoOnBreak();
 		simCityGui.setWaiterCantBreak(w.w.getName());
-		print(w.w.getName() + ", we don't have enough working waiters to break.");
 	}
 	
 	private void assignWaiter(MyCustomer c, Table t)

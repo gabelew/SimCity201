@@ -147,7 +147,6 @@ public class CustomerRole extends Role implements Customer {
 	public void msgOutOfOrder(String c) {
 		MENUINDEXEND--;
 
-		print("msgOutOfOrder " + c + " MenuIndexEnd " + MENUINDEXEND);
 		myMenu.remove(c);
 		
 		if(MENUINDEXEND < 0)
@@ -260,7 +259,6 @@ public class CustomerRole extends Role implements Customer {
 
 	// Actions
 	private void reactivatePerson() {
-		print("reactivatePerson");
 		myPerson.msgDoneEatingAtRestaurant();
 		restaurant.insideAnimationPanel.removeGui(customerGui);
 	}
@@ -329,7 +327,6 @@ public class CustomerRole extends Role implements Customer {
 		if(myMenu.menuItems.isEmpty()){
 			state = AgentState.WaitigForTable;
 			event = AgentEvent.leavingEarly;
-			print("Everything is too expensive. I'm out of here.");
 		}
 		else{
 			timer.schedule(new TimerTask() {
@@ -349,8 +346,6 @@ public class CustomerRole extends Role implements Customer {
 	}
 	
 	private void giveOrder(){
-		StringBuilder msg = new StringBuilder("I want to order " + choice);
-		print(msg.toString());
 		waiter.msgHereIsMyOrder(this, choice);
 		customerGui.doneOrderingFood();
 	}
@@ -375,14 +370,11 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	private void leaveTable() {
-		StringBuilder msg = new StringBuilder("Done eating, " + choice);
-		print(msg.toString());
 		customerGui.doneEatingFood();
 		waiter.msgDoneEatingAndLeaving(this);
 		waiter = null;
 		myPerson.hungerLevel = 0;
 		doGoToCashier();
-		print(myPerson.cashOnHand - check + " = " + myPerson.cashOnHand + " - " + check);
 		
 		if((myPerson.cashOnHand - check) > 0){
 			myPerson.cashOnHand = myPerson.cashOnHand - check;
@@ -451,7 +443,6 @@ public class CustomerRole extends Role implements Customer {
 		public void remove(String c) {
 			MenuItem removeIt = null;
 			for(MenuItem i: menuItems){
-				print("\t\t " + i.item + " = " + c);
 				if(i.item.equalsIgnoreCase(c)){
 					removeIt = i;
 				}
