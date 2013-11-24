@@ -56,6 +56,9 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	// Messages
 	public void goingToBank() {
 		state = CustomerState.EnteringBank;
+		// default tasks in bank
+		tasks.add(new Task(BankingState.WantToCheckBalance, 0, "personal"));
+		tasks.add(new Task(BankingState.WantToCheckBalance, 0, "business"));
 		stateChanged();
 	}
 	
