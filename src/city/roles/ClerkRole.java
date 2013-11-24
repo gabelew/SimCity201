@@ -45,34 +45,26 @@ public class ClerkRole extends Role implements Clerk {
 	//messages
 	public void goesToWork(){
 		event = AgentEvent.GoToWork;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	public void msgTakeCustomer(MarketCustomer CR,Market m){
 		MCR=CR;
 		Market=m;
 		o.s=(orderState.askedForOrder);
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	public void msgPlaceOrder(Map<String,Integer> choice){
 		o.Choices=choice;
 		o.s=orderState.waiting;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	public void msgHereIsPayment(double money){
 		if(money==o.amountOwed)
 			o.s=orderState.payed;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {

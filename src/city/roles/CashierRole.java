@@ -85,17 +85,13 @@ public class CashierRole extends Role implements Cashier {
 
 	public void goesToWork() {
 		state = State.goToWork;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 
 	public void msgReleaveFromDuty(PersonAgent p) {
 		replacementPerson = p;
 		state = State.leaving;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		this.stateChanged();
 	}
 	public void msgAnimationHasLeftRestaurant() {
 		state = State.releaveFromDuty;
@@ -104,9 +100,7 @@ public class CashierRole extends Role implements Cashier {
 	public void msgProduceCheck(Waiter w, Customer c, String choice)
 	{
 		orders.add(new Order(w, c, choice, OrderState.requested));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 		print("order recieved!!");
 		log.add(new LoggedEvent("Received msgProduceCheck from waiter. Choice = "+ choice));
 	}
@@ -126,9 +120,7 @@ public class CashierRole extends Role implements Cashier {
 		orders.remove(deleteIt);
 		o.state = OrderState.deliverCheck;
 		log.add(new LoggedEvent("Received msgCheckPrinted from cashier. Total of check = "+ o.check));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	public void msgPayment(Customer c, double cash) {
@@ -136,32 +128,24 @@ public class CashierRole extends Role implements Cashier {
 		order.cashIn = cash;
 		order.state = OrderState.paymentRecieved;
 		log.add(new LoggedEvent("Received msgPayment from customer. Total cash in = "+ cash));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 
 	public void msgHereIsInvoice(double price,DeliveryMan DMR) {
 		bills.add(new Bill(DMR,price,BillState.informed));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	@Override
 	public void msgHereIsBill(DeliveryMan DM, double bill) {
 		bills.add( new Bill(DM, bill, BillState.requested));
 		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}	
+		stateChanged();	
 	}
 	/*public void msgHereIsBill(Market m, double bill) {
 		bills.add( new Bill(m, bill, BillState.requested));
 		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}	*/
 	
 	private Order findOrder(Customer c) {

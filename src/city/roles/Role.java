@@ -33,7 +33,9 @@ public abstract class Role
 	public void stateChanged()
 	{
 		if(this.myPerson != null){
-			this.myPerson.stateChanged();
+			if(this.myPerson.getStateChangePermits()==0){
+				this.myPerson.stateChanged();
+			}
 		}
 	}
 	public boolean isActive() {

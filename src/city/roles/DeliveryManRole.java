@@ -63,34 +63,26 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 
 	public void goesToWork() {
 		event = AgentEvent.GoToWork;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();	
 	}
 	public void msgTakeCustomer(Cook c,MarketAgent m){
 		cook=c;
 		Market=m;
 		o.s=orderState.askedForOrder;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice){
 		o.Choices=choice;
 		o.s=orderState.waiting;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	public void msgHereIsPayment(double payment, Cashier ca){
 		cashier=ca;
 		o.s=orderState.payed;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	//scheduler

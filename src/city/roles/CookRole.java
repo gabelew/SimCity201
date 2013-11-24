@@ -164,37 +164,27 @@ public class CookRole extends Role implements Cook {
 
 	public void goesToWork() {
 		state = State.goToWork;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	public void msgRelieveFromDuty(PersonAgent p) {
 		replacementPerson = p;
 		state = State.leaving;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		this.stateChanged();
 	}
 	public void msgAnimationHasLeftRestaurant() {
 		state = State.relieveFromDuty;
 		waitingResponse.release();
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		this.stateChanged();
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
 		orders.add(new RoleOrder(w, choice, table));
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	public void msgFoodDone(RoleOrder o)
 	{
 		o.state = OrderState.DONE;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	
 	public void msgCanIHelpYou(DeliveryMan DMR,MarketAgent m){
@@ -244,9 +234,7 @@ public class CookRole extends Role implements Cook {
 			food.os = OrderingState.none;
 		}
 		
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}*
 
 	public void msgOutOfOrder(MarketAgent m, List<MarketAgent.MyFood> orderList) {
@@ -269,9 +257,7 @@ public class CookRole extends Role implements Cook {
 			orderFromMarket = true;
 		}
 		
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}*/
 	
 	public void msgIncompleteOrder(DeliveryMan m,List<String> outOf){
@@ -289,9 +275,7 @@ public class CookRole extends Role implements Cook {
 			reorder=false;
 			orderFromMarket=true;
 		}
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 		
 	}
 	
@@ -315,9 +299,7 @@ public class CookRole extends Role implements Cook {
 				}
 			}
 		}
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();
 	}
 	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o) {
 		//From animation
@@ -448,9 +430,7 @@ public class CookRole extends Role implements Cook {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				checkStand = true;
-				if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+				stateChanged();
 			}
 		}, CHECK_STAND_TIME);
 	}
