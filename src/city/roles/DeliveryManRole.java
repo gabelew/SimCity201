@@ -48,7 +48,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	Cashier cashier;
 	public Cook cook;
 	public MarketAgent Market;
-	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,waitingForPayment,payed,done};
+	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,givingBill,waitingForPayment,payed,done};
 	public enum AgentEvent{none,GoToWork};
 	AgentEvent event = AgentEvent.none;
 	public DeliveryManRole(PersonAgent p){
@@ -167,6 +167,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.waitingForPayment;
 	}
 	private void giveBill(){
+		o.s=orderState.givingBill;
 		for(Restaurant r:myPerson.simCityGui.getRestaurants()){
 			if(r.cook.equals(cook)){
 				r.cashier.msgHereIsBill((DeliveryMan) this, o.amountOwed);
