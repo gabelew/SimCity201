@@ -83,13 +83,17 @@ public class HostRole extends Role implements Host {
 	// Messages
 	public void goesToWork() {
 		state = State.goToWork;
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgReleaveFromDuty(PersonAgent p) {
 		replacementPerson = p;
 		state = State.leaving;
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgAnimationHasLeftRestaurant() {
 		state = State.releaveFromDuty;
@@ -125,7 +129,9 @@ public class HostRole extends Role implements Host {
 			waiters.add(new MyWaiter(w, wState.working, ZERO));
 		}
 		
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	public void msgIWantToEat(Customer cust) {
@@ -143,7 +149,9 @@ public class HostRole extends Role implements Host {
 			customers.add(new MyCustomer(cust, cState.waiting));
 		}
 		
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgLeavingRestaurant(Customer cust) {
@@ -158,7 +166,9 @@ public class HostRole extends Role implements Host {
 		}
 		
 		customers.remove(deleteC);
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	public void msgTableIsFree(Waiter waiter, int msgerT){
@@ -180,7 +190,9 @@ public class HostRole extends Role implements Host {
 				((RestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
 			    	
 			   
-				this.stateChanged();
+				if(myPerson.getStateChangePermits()==0){
+					stateChanged();	
+				}
 			}
 		}		
 		}
@@ -189,7 +201,9 @@ public class HostRole extends Role implements Host {
 	public void msgCanIBreak(Waiter w) {
 		MyWaiter mw = findWaiter(w);
 		mw.state = wState.askedForBreak;
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	private MyWaiter findWaiter(Waiter w) {
@@ -387,7 +401,9 @@ public class HostRole extends Role implements Host {
 
 	public void addNewTable() {
 		tables.add(new Table(NTABLES++));
-		this.stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	public void setGui(HostGui gui) {

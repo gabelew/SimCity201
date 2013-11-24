@@ -43,24 +43,32 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 			Map<String, Integer> toOrderFromMarket) {
 		this.market = m;
 		o = new Order(toOrderFromMarket, orderState.waiting);
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgCanIHelpYou(ClerkRole clerk){
 		Clerk=clerk;
 		o.s=orderState.ordering;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgHereIsPrice(double amount){
 		o.amountOwed=amount;
 		o.s=orderState.paymentReceived;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf){
 		o.s=orderState.done;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	//scheduler

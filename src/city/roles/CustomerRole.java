@@ -74,12 +74,16 @@ public class CustomerRole extends Role implements Customer {
 			goToATM = false;
 			myPerson.cashOnHand += ATM_WITHDRAWAL_AMOUNT;
 		}
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgWaitForOpenTable() {
 		event = AgentEvent.noTables;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	public void msgTableIsReady() {
@@ -92,7 +96,9 @@ public class CustomerRole extends Role implements Customer {
 		waiter = w;
 		myMenu = new MyMenu(m);
 		event = AgentEvent.followWaiter;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgAnimationFinishedDoEnterRestaurant() {
 		//from animation
@@ -105,7 +111,9 @@ public class CustomerRole extends Role implements Customer {
 	public void msgAnimationFinishedGoToSeat() {
 		//from animation
 		event = AgentEvent.seated;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	private void msgChoiceMade(String c){
 		choice = c;
@@ -127,7 +135,9 @@ public class CustomerRole extends Role implements Customer {
 		}
 		
 		event = AgentEvent.decided;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	private boolean isAvailable(String choice) {
 		for(MenuItem m: myMenu.menuItems)
@@ -142,7 +152,9 @@ public class CustomerRole extends Role implements Customer {
 
 	public void msgWhatWouldYouLike(){
 		event = AgentEvent.askedToOrder;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgOutOfOrder(String c) {
 		MENUINDEXEND--;
@@ -159,35 +171,49 @@ public class CustomerRole extends Role implements Customer {
 			state = AgentState.BeingSeated;
 			event = AgentEvent.seated;
 		}
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgHereIsYourFood(){
 		event = AgentEvent.startEating;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgHereIsCheck(double check) {
 		recievedCheck = true;
 		this.check = check;
-		stateChanged();	
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}	
 	}
 	public void msgFinishedEating(){
 		event = AgentEvent.doneEating;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgChange(double cashBack) {
 		myPerson.cashOnHand += cashBack;
 		event = AgentEvent.payedCheck;
-		stateChanged();	
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}	
 	}
 	public void msgPayMeLater() {
 		goToATM = true;
 		event = AgentEvent.payedCheck;
-		stateChanged();	
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}	
 	}
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
 		event = AgentEvent.doneLeaving;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	/**
@@ -276,7 +302,9 @@ public class CustomerRole extends Role implements Customer {
 						if(leaveEarly.tryAcquire()){
 							if(state == AgentState.WaitigForTable){
 								event = AgentEvent.leavingEarly;
-								stateChanged();
+								if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 							}else{
 								leaveEarly.release();
 							}

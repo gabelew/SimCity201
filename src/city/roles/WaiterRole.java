@@ -42,18 +42,24 @@ public class WaiterRole extends Role implements Waiter{
 
 	public void goesToWork(){ //from gui
 		event = AgentEvent.gotToWork;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgSitAtTable(Customer c, int table){
 		customers.add(new MyCustomer(c, table, CustomerState.waiting, null));
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgImReadyToOrder(Customer c){
 		MyCustomer mc = findCustomer(c);
 		mc.s = CustomerState.askedToOrder;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgHereIsMyOrder(Customer c, String choice){
@@ -61,65 +67,89 @@ public class WaiterRole extends Role implements Waiter{
 		mc.choice = choice;
 		mc.s = CustomerState.ordered;
 		waitingResponse.release();// = true;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgOrderIsReady(String choice, int table){
 		MyCustomer mc = findCustomer(table);
 		mc.s = CustomerState.orderReady;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	public void msgDoneEatingAndLeaving(Customer c){
 		MyCustomer mc = findCustomer(c);
 		mc.s = CustomerState.leaving;		
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgAskForBreak() {//from gui
 		event = AgentEvent.goingToAskForBreak;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	
 	public void msgGoOnBreak() {
 		event = AgentEvent.goingOnBreak;
-		stateChanged();		
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}		
 	}
 	
 	public void msgDontGoOnBreak() {
 		event = AgentEvent.none;
-		stateChanged();		
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}		
 	}
 
 	public void msgOutOfOrder(String choice, int table) {
 		MyCustomer mc = findCustomer(table);
 		mc.s = CustomerState.outOfOrder;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgHereIsCheck(Customer c, double check) {
 		MyCustomer mc = findCustomer(c);
 		mc.check = check;
 		mc.s = CustomerState.needsCheck;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	
 	//GUI animation msgs
 	public void msgAtEntrance(){//from animation
 		waitingResponse.release();// = true;
-		stateChanged();	
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}	
 	}
 
 	public void msgAtTable() {//from animation
 		waitingResponse.release();// = true;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 	public void msgAtKitchen(){//from animation
 		waitingResponse.release();// = true;
-		stateChanged();	
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}	
 	}
 	public void msgAtCashier() {//from animation
 		waitingResponse.release();// = true;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}	
 	
 	public void setGui(WaiterGui g) {
@@ -335,7 +365,9 @@ public class WaiterRole extends Role implements Waiter{
 		doGoToKitchen(c);
 		waiterGui.servingFood(this, c.choice, c.table);
 		c.s = CustomerState.servingOrder;
-		stateChanged();
+		if(myPerson.getStateChangePermits()==0){
+			stateChanged();	
+		}
 	}
 
 	private void tableFree(MyCustomer c) {

@@ -72,13 +72,17 @@ public MarketAgent(Point Location,String Name, InsideAnimationPanel iap){
 //messages to market
 public void msgPlaceOrder(MarketCustomer CR){
 	MyCustomers.add(new MyCustomer(CR, customerState.waiting));
-	stateChanged();
+	if(getStateChangePermits()==0){
+			stateChanged();	
+		}
 	log.add(new LoggedEvent("Received msgPlaceOrder from MarketCustomer."));
 }
 
 public void msgPlaceDeliveryOrder(Cook cook){
 	MyCooks.add(new MyCook(cook, cookState.waiting));
-	stateChanged();
+	if(getStateChangePermits()==0){
+			stateChanged();	
+		}
 	log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
 }
 
@@ -91,7 +95,9 @@ public void msgClerkDone(Clerk c){
 				cl.clerkState=state.free;
 		}
 	}
-	stateChanged();
+	if(getStateChangePermits()==0){
+			stateChanged();	
+		}
 	log.add(new LoggedEvent("Received msgClerkDone from clerk."));
 }
 
@@ -104,7 +110,9 @@ public void msgDeliveryDone(DeliveryMan D){
 				de.deliveryState=state.free;
 		}
 	}
-	stateChanged();
+	if(getStateChangePermits()==0){
+			stateChanged();	
+		}
 	log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 }
 
@@ -182,12 +190,16 @@ public void setInventory(int cars, int chicken,int steak,int salad, int cookie){
 
 public void addClerk(Clerk c){
 	clerks.add(new clerk(c,state.free));
-	stateChanged();
+	if(getStateChangePermits()==0){
+			stateChanged();	
+		}
 }
 
 public void addDeliveryMan(DeliveryMan DM){
 	deliverys.add(new delivery(DM,state.free));
-	stateChanged();
+	if(getStateChangePermits()==0){
+			stateChanged();	
+		}
 }
 
 public void offWork(Clerk c){
