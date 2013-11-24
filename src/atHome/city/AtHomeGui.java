@@ -122,32 +122,66 @@ public class AtHomeGui implements Gui{
 
 	
 	@Override
-	public void updatePosition() {
-		if(command == Command.LeaveHome)
+	public void updatePosition() 
+	{
+		//moving within house
+		if(agent.myHome instanceof Home)
 		{
-			
+			if(command == Command.LeaveHome)
+			{
+				
+				if (yPos < yDestination)
+					yPos++;
+				else if (yPos > yDestination)
+					yPos--;
+				if(yPos == yDestination)
+				{
+					if (xPos < xDestination)
+						xPos++;
+					else if (xPos > xDestination)
+						xPos--;
+				}
+			}
+			else
+			{
 			if (yPos < yDestination)
 				yPos++;
 			else if (yPos > yDestination)
 				yPos--;
-			if(yPos == yDestination)
+			if (xPos < xDestination)
+				xPos++;
+			else if (xPos > xDestination)
+				xPos--;
+			}
+		}
+		else //moving within apt
+		{
+			if(command == Command.LeaveHome)
+			{
+				
+				if (yPos < yDestination)
+					yPos++;
+				else if (yPos > yDestination)
+					yPos--;
+				if(yPos == yDestination)
+				{
+					if (xPos < xDestination)
+						xPos++;
+					else if (xPos > xDestination)
+						xPos--;
+				}
+			}
+			else
 			{
 				if (xPos < xDestination)
 					xPos++;
 				else if (xPos > xDestination)
 					xPos--;
+				else if (yPos < yDestination)
+					yPos++;
+				else if (yPos > yDestination)
+					yPos--;
 			}
-		}
-		else
-		{
-			if (xPos < xDestination)
-				xPos++;
-			else if (xPos > xDestination)
-				xPos--;
-			else if (yPos < yDestination)
-				yPos++;
-			else if (yPos > yDestination)
-				yPos--;
 		}
 		if (xPos == xDestination && yPos == yDestination) 
 		{
