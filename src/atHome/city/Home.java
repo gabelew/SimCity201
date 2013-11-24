@@ -9,13 +9,12 @@ public class Home extends Residence
 {
 	public Point location;
 	public InsideAnimationPanel insideAnimationPanel;
-	public PersonAgent owner;
+	public PersonAgent owner = null;
 	
-	public Home(InsideAnimationPanel iap, Point loc, PersonAgent p)
+	public Home(InsideAnimationPanel iap, Point loc)
 	{
 		super(iap,loc);
 		this.insideAnimationPanel = iap;
 		this.location = loc;
-		this.owner = p;
 	}
 }

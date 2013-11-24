@@ -9,6 +9,7 @@ import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
 
+import atHome.city.Apartment;
 import atHome.city.Home;
 import city.MarketAgent;
 import city.PersonAgent;
@@ -53,6 +54,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private InfoPanel infoPanel = new InfoPanel(this);
  
     List<Home> homes = new ArrayList<Home>();
+    List<Apartment> apartments = new ArrayList<Apartment>();
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
     List<MarketAgent> markets = new ArrayList<MarketAgent>();
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());

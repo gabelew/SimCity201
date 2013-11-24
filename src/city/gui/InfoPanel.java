@@ -924,6 +924,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		for(Restaurant r: gui.getRestaurants()){
     			p.addRestaurant(r);
     		}
+    		
     		/*for(Home h : gui.getHomes())
     		{
     			if(h.people.size() == 0 && gui.getHomes().indexOf(h) != 32)

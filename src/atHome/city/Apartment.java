@@ -13,6 +13,8 @@ public class Apartment extends Residence
 	public InsideAnimationPanel insideAnimationPanel;
 	public List<PersonAgent> renters = new ArrayList<PersonAgent>();
 	public PersonAgent owner = null;
+	public static final int MAX_RENTERS = 8;
+	public boolean noVacancies = false;
 	
 	public void setOwner(PersonAgent p)
 	{
@@ -20,7 +22,13 @@ public class Apartment extends Residence
 	}
 	public void addRenter(PersonAgent p)
 	{
-		renters.add(p);
+		if(renters.size() < MAX_RENTERS){
+			renters.add(p);
+		}
+		
+		if(renters.size() == MAX_RENTERS){
+			noVacancies = true;
+		}
 	}
 	public Apartment(InsideAnimationPanel iap, Point loc)
 	{
