@@ -29,7 +29,7 @@ public class AtHomeGui implements Gui{
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private int xHomePosition = 20;
-	private int yHomePosition = 20;
+	private int yHomePosition = 30;
 	private int xFRIDGE_POSITION = 0;
 	private int yFRIDGE_POSITION = 0;
 	private int xGRILL_POSITION = 0;
@@ -40,6 +40,12 @@ public class AtHomeGui implements Gui{
 	private int yKITCHEN_COUNTER_POSITION = 0;
     static final int xFOOD_OFFSET = 10;
     static final int yFOOD_OFFSET = 4;
+    static final int yKITCHEN_COUNTER_OFFSET = 30;
+    static final int yGRILL_RIGHT_OFFSET = 30;
+    static final int xGRILL_RIGHT_OFFSET = 52;
+    static final int yFIDGE_OFFSET = 15;
+    static final int xFIDGE_OFFSET = 100;
+    static final int yAPT_OFFSET = 310;
 	
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
 	private enum Command {noCommand, GoToFridge, GoToGrill, GoToCounter, GoToRestPost};
@@ -61,6 +67,24 @@ public class AtHomeGui implements Gui{
 		if(agent.myHome instanceof Apartment)
 		{
 			int aptnum = ((Apartment)agent.myHome).renters.indexOf(agent);
+			if(aptnum < 4)//top 4 apartments
+			{
+				xKITCHEN_COUNTER_POSITION = xHomePosition + aptnum*217;
+				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET;
+				xFRIDGE_POSITION = xHomePosition + xFIDGE_OFFSET + aptnum*217;;
+				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET;
+				xGRILL_POSITION = xHomePosition + xGRILL_RIGHT_OFFSET + aptnum*217;
+				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET;
+			}
+			else //bottom 4 apartments
+			{
+				xKITCHEN_COUNTER_POSITION = xHomePosition + aptnum*217;
+				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET + yAPT_OFFSET;
+				xFRIDGE_POSITION = xHomePosition + xFIDGE_OFFSET + aptnum*217;;
+				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET + yAPT_OFFSET;
+				xGRILL_POSITION = xHomePosition + xGRILL_RIGHT_OFFSET + aptnum*217;
+				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET + yAPT_OFFSET;
+			}
 		}
 		xPos = 0;
 		yPos = 200; //103+80*i
