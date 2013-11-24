@@ -25,7 +25,6 @@ public class AtHomeGui implements Gui{
 	private boolean isPresent = false;
 	
 	private static BufferedImage personImg = null;
-	public SimCityGui gui;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private int xHomePosition = 20;
@@ -52,7 +51,7 @@ public class AtHomeGui implements Gui{
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
 	
-	public AtHomeGui(PersonAgent c, AtHomeRole r, SimCityGui gui)
+	public AtHomeGui(PersonAgent c, AtHomeRole r)
 	{
 		
 		try 
@@ -88,10 +87,8 @@ public class AtHomeGui implements Gui{
 		}
 		xPos = 0;
 		yPos = 200; //103+80*i
-		xDestination = 75;
-		yDestination = 103;
-        
-		this.gui = gui;
+		xDestination = 200;
+		yDestination = 200;
 		
 	}
 

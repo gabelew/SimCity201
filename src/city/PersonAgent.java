@@ -129,7 +129,7 @@ public class PersonAgent extends Agent
 	    
 
 		this.myHome = h;
-		AtHomeGui ahGui = new AtHomeGui(this, role, simCityGui);
+		AtHomeGui ahGui = new AtHomeGui(this, role);
 		role.setGui(ahGui);
 		ahGui.setPresent(false);
 		myHome.insideAnimationPanel.addGui(ahGui);
