@@ -26,6 +26,9 @@ public class AtHomeRole extends Role implements AtHome
 	EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
 	static final int EATING_TIME = 5000;
+	static final int COOKTIME = 1000;
+	public boolean testing = false;
+	boolean NoMoreFood = false;
 	
 	Map<String, Food> findFood = new HashMap<String, Food>();
 	//Lists
@@ -40,18 +43,19 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		super(p);
 		this.myPerson = p;
+		
 		//Adds initial food
-		choices.add("salad");
-		choices.add("steak");
-		choices.add("cookie");
-		choices.add("chicken");
-		//Adds it to list of choices and hashmap
-		for(String s : choices)
+		foodInFridge.add(new Food("salad", 2*COOKTIME));
+		foodInFridge.add(new Food("steak", 4*COOKTIME));
+		foodInFridge.add(new Food("cookie", COOKTIME));
+		foodInFridge.add(new Food("chicken", 3*COOKTIME));
+		//Adds to Hashmap for searching
+		for(Food f : foodInFridge)
 		{
-			Food f = new Food(s, 2000);
-			foodInFridge.add(f);
-			findFood.put(s, f);
+			findFood.put(f.choice, f);
 		}
+		
+		//hack for no food
 		if(foodAmount == 0)
 		{
 			for(Food f: foodInFridge)
@@ -62,7 +66,11 @@ public class AtHomeRole extends Role implements AtHome
 		}
 		else
 		{
-			findFood.get("steak").amount = foodAmount;
+			for(Food f : foodInFridge)
+			{
+				if(f.amount > 0)
+					choices.add(f.choice);
+			}
 		}
 		this.gui = new AtHomeGui(myPerson, this);
 	}
@@ -80,12 +88,19 @@ public class AtHomeRole extends Role implements AtHome
  ********************/
 	public void ImHungry()
 	{
-		this.state = EventState.makingFood;
-		if(choices.size() != 0)
+		if(myPerson.getName().equals("salad"))
+		{
+			Order o = new Order("salad");
+		}
+		else if(choices.size() != 0)
 		{
 			int choice = (new Random()).nextInt(choices.size());
-			Order o = new Order( choices.get(choice) );
+			Order o = new Order(choices.get(choice) );
 			orders.add(o);
+		}
+		else if(choices.size() == 0)
+		{
+			NoMoreFood = true;
 		}
 		state = EventState.goingHome;
 	}
@@ -180,9 +195,12 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		o.state = OrderState.cooking;
 		//Gets food from fridge
-		gui.DoGoToFridge();
-		try { busy.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}
+		if(!testing)
+		{
+			gui.DoGoToFridge();
+			try { busy.acquire();} 
+			catch (InterruptedException e) {e.printStackTrace();}
+		}
 		//Break the fridge randomly -> V2 Implementation
 		/*
 		int fridgeBroken = (new Random()).nextInt(100)+1;
@@ -199,10 +217,12 @@ public class AtHomeRole extends Role implements AtHome
 			myPerson.print("Cooking Food");
 			food.amount--;
 			//puts food on grill
-			gui.DoCookFood(o.choice);
-			try { busy.acquire();} 
-			catch (InterruptedException e) {e.printStackTrace();}
-			
+			if(!testing)
+			{
+				gui.DoCookFood(o.choice);
+				try { busy.acquire();} 
+				catch (InterruptedException e) {e.printStackTrace();}
+			}
 			if(food.amount <= food.low)
 			{
 				makeMarketList();
@@ -214,9 +234,12 @@ public class AtHomeRole extends Role implements AtHome
 					//gui.PlateFood();
 					//try { busy.acquire();} 
 					//catch (InterruptedException e) {e.printStackTrace();}
-					gui.SitDownAndEatFood();
-					try { busy.acquire();} 
-					catch (InterruptedException e) {e.printStackTrace();}
+					if(!testing)
+					{
+						gui.SitDownAndEatFood();
+						try { busy.acquire();} 
+						catch (InterruptedException e) {e.printStackTrace();}
+					}
 					myPerson.print("Food is Done!!!");
 					o.state = OrderState.done;
 				}
@@ -269,6 +292,8 @@ public class AtHomeRole extends Role implements AtHome
 	}
 	private void ImOutOfFood()
 	{
+		NoMoreFood = false;
+		this.state = EventState.OutOfFood;
 		myPerson.msgNoMoreFood();
 		myPerson.msgDoneEatingAtHome();
 	}
@@ -282,14 +307,13 @@ public class AtHomeRole extends Role implements AtHome
 			LeavingHomeAction();
 			return true;
 		}
-		if(state == EventState.goingHome)
+		if(state == EventState.goingHome && !testing)
 		{
 			goToHomePos();
 			return true;
 		}
-		if(state == EventState.makingFood && choices.size() == 0)
+		if(NoMoreFood)
 		{
-			this.state = EventState.OutOfFood;
 			ImOutOfFood();
 			return true;
 		}
