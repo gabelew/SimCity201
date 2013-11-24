@@ -11,6 +11,7 @@ import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.gui.WaiterGui;
 import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
 import agent.Agent;
 import atHome.city.AtHomeGui;
 import atHome.city.Home;
@@ -415,6 +416,17 @@ public class PersonAgent extends Agent
 		}else{
 			this.toOrderFromMarket = toOrderFromMarket;
 		}
+		
+		boolean inList = false;
+		for(Task t: taskList){
+			if(t == Task.goToMarket)
+				inList = true;
+		}
+		if(!inList){
+			taskList.add(Task.goToMarket);
+		}
+		
+		log.add(new LoggedEvent("Received msgGetFoodFromMarket added "));
 		stateChanged();
 	}
 	
