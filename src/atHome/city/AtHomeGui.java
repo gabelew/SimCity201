@@ -33,10 +33,12 @@ public class AtHomeGui implements Gui{
 	private int yFRIDGE_POSITION = 0;
 	private int xGRILL_POSITION = 0;
 	private int yGRILL_POSITION = 0;
-	private int xTABLE_POS = 0;
-	private int yTABLE_POS = 0;
+	private int xTABLE_POS = 57;
+	private int yTABLE_POS = 70;
 	private int xKITCHEN_COUNTER_POSITION = 0;
 	private int yKITCHEN_COUNTER_POSITION = 0;
+	static final int yTABLE_OFFSET = 300;
+	static final int xKITCHEN_OFFSET = 217;
     static final int xFOOD_OFFSET = 10;
     static final int yFOOD_OFFSET = 4;
     static final int yKITCHEN_COUNTER_OFFSET = 30;
@@ -48,7 +50,7 @@ public class AtHomeGui implements Gui{
     static final int xAPT_OFFSET = 30;
 	
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
-	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost};
+	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
 	Command command = Command.noCommand;
 	
@@ -70,27 +72,29 @@ public class AtHomeGui implements Gui{
 			//System.out.println("MY APT NUMBER IS: " + aptnum);
 			if(aptnum < 4)//top 4 apartments
 			{
-				xKITCHEN_COUNTER_POSITION = xHomePosition + aptnum*217;
+				xKITCHEN_COUNTER_POSITION = xHomePosition + aptnum*xKITCHEN_OFFSET;
 				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET;
-				xFRIDGE_POSITION = xHomePosition + xFIDGE_OFFSET + aptnum*217;;
+				xFRIDGE_POSITION = xHomePosition + xFIDGE_OFFSET + aptnum*xKITCHEN_OFFSET;
 				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET;
-				xGRILL_POSITION = xHomePosition + xGRILL_RIGHT_OFFSET + aptnum*217;
+				xGRILL_POSITION = xHomePosition + xGRILL_RIGHT_OFFSET + aptnum*xKITCHEN_OFFSET;
 				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET;
-				
-				xHomePosition = xHomePosition + aptnum*217; 
+				xTABLE_POS += xKITCHEN_OFFSET*aptnum;
+				xHomePosition = xHomePosition + aptnum*xKITCHEN_OFFSET; 
 				//xDestination = xHomePosition;
 				//yDestination = yHomePosition;
 			}
 			else //bottom 4 apartments
 			{
-				xKITCHEN_COUNTER_POSITION = xAPT_OFFSET + xHomePosition + (aptnum-4)*217;
+				xKITCHEN_COUNTER_POSITION = xAPT_OFFSET + xHomePosition + (aptnum-4)*xKITCHEN_OFFSET;
 				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET + yAPT_OFFSET;
-				xFRIDGE_POSITION = xAPT_OFFSET + xHomePosition + xFIDGE_OFFSET + (aptnum-4)*217;
+				xFRIDGE_POSITION = xAPT_OFFSET + xHomePosition + xFIDGE_OFFSET + (aptnum-4)*xKITCHEN_OFFSET;
 				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET + yAPT_OFFSET;
-				xGRILL_POSITION = xAPT_OFFSET + xHomePosition + xGRILL_RIGHT_OFFSET + (aptnum-4)*217;
+				xGRILL_POSITION = xAPT_OFFSET + xHomePosition + xGRILL_RIGHT_OFFSET + (aptnum-4)*xKITCHEN_OFFSET;
 				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET + yAPT_OFFSET;
+				xTABLE_POS = xAPT_OFFSET*2 + xKITCHEN_OFFSET*(aptnum-4);
+				yTABLE_POS += yTABLE_OFFSET;
 				
-				xHomePosition = xHomePosition + (aptnum-4)*217;
+				xHomePosition = xHomePosition + (aptnum-4)*xKITCHEN_OFFSET;
 				yHomePosition = yHomePosition + yAPT_OFFSET;
 				//xDestination = xHomePosition;
 				//yDestination = yHomePosition;
@@ -114,7 +118,14 @@ public class AtHomeGui implements Gui{
 	
 		if (xPos == xDestination && yPos == yDestination) 
 		{
-			if(command == Command.GoHome)
+			if(command == Command.GoHome || command == Command.GoToFridge || command == Command.GoToGrill || command == Command.GoToCounter)
+			{
+				command = Command.noCommand;
+				role.msgAnimationFinshed();
+				xDestination = xHomePosition;
+				yDestination = yHomePosition;
+			}
+			else if(command == Command.EatFood)
 			{
 				command = Command.noCommand;
 				role.msgAnimationFinshed();
@@ -150,7 +161,7 @@ public class AtHomeGui implements Gui{
 			{
 				if(f.food != null)
 				{
-					if(f.state == FoodState.PutFoodOnGrill || f.state == FoodState.PutFoodOnCounter )
+					if(f.state == FoodState.PutFoodOnGrill || f.state == FoodState.PutFoodOnCounter)
 					{
 						g.drawImage(f.food.iconImg, xPos+f.point.x, yPos+f.point.y, null);
 					}
@@ -172,6 +183,7 @@ public class AtHomeGui implements Gui{
 		yDestination = yFRIDGE_POSITION;
 		command = Command.GoToFridge;	
 	}
+	
 	public void DoCookFood(String choice) 
 	{
 		// Grab food from fidge(already at fidge
@@ -193,6 +205,7 @@ public class AtHomeGui implements Gui{
 	
 	public void PlateAndEatFood()
 	{
+		command = Command.EatFood;
 		xDestination = xTABLE_POS;
 		yDestination = yTABLE_POS;
 	}

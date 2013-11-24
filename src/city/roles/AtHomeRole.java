@@ -171,6 +171,7 @@ public class AtHomeRole extends Role
 			gui.DoCookFood(o.choice);
 			try { busy.acquire();} 
 			catch (InterruptedException e) {e.printStackTrace();}
+			
 			if(food.amount <= food.low)
 			{
 				makeMarketList();
@@ -179,6 +180,9 @@ public class AtHomeRole extends Role
 			timer.schedule(new TimerTask() {
 				public void run() 
 				{
+					gui.PlateAndEatFood();
+					try { busy.acquire();} 
+					catch (InterruptedException e) {e.printStackTrace();}
 					myPerson.print("Food is Done!!!");
 					o.state = OrderState.done;
 				}
