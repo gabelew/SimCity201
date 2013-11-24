@@ -16,7 +16,6 @@ import restaurant.interfaces.Cook;
 public interface Market {
 	
 	public Map<String, Integer> Inventory = new HashMap<String, Integer>();
-	public Point location = null;
 
 	public abstract void msgPlaceOrder(MarketCustomer CR);
 	

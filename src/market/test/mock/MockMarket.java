@@ -1,6 +1,7 @@
 package market.test.mock;
 
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class MockMarket extends Mock implements Market {
 
 	public Map<String, Integer> Inventory = new HashMap<String, Integer>();
 	public EventLog log = new EventLog();
+	public Point location = null;
 	
 	public MockMarket(String name) {
 		super(name);

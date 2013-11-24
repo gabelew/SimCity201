@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
-import market.interfaces.Market;
 import bank.BankBuilding;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
@@ -31,7 +30,7 @@ public class PersonAgent extends Agent
 	private List<Role> roles = new ArrayList<Role>();
 	private List<Restaurant> restaurants = new ArrayList<Restaurant>();//hacked in upon creation 
 	private List<BankBuilding> banks = new ArrayList<BankBuilding>(); 
-	private List<Market> markets = new ArrayList<Market>(); 
+	private List<MarketAgent> markets = new ArrayList<MarketAgent>(); 
 	public List<Task> taskList = new ArrayList<Task>(); 
 	public Residence myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
@@ -170,7 +169,7 @@ public class PersonAgent extends Agent
 	public void addRestaurant(Restaurant r) {
 		restaurants.add(r);
 	}
-	public void addMarket(Market m) {
+	public void addMarket(MarketAgent m) {
 		markets.add(m);
 		
 	}
@@ -708,7 +707,7 @@ public class PersonAgent extends Agent
             	role.active = true;
     		}
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
-    		MarketAgent ma = (MarketAgent) findMarket(destination);
+    		MarketAgent ma = findMarket(destination);
     		if(job.type.equalsIgnoreCase("clerk")){
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
@@ -731,8 +730,8 @@ public class PersonAgent extends Agent
     	}
     }
 
-	private Market findMarket(Point p) {
-		for(Market ma: markets){
+	private MarketAgent findMarket(Point p) {
+		for(MarketAgent ma: markets){
 			if(ma.location.equals(p)){
 				return ma;
 			}
@@ -894,7 +893,7 @@ public class PersonAgent extends Agent
     
     private void finishGoingToMarket(){
     	state  = State.shopping;
-    	MarketAgent m = (MarketAgent) findMarket(destination);
+    	MarketAgent m = findMarket(destination);
     	personGui.DoWalkTo(destination); //animationStub
     	MarketCustomerRole role = new MarketCustomerRole(this);
     	roles.add(role);
@@ -905,11 +904,11 @@ public class PersonAgent extends Agent
     }
 
     private MarketAgent chooseClosestMarket() {
-    	MarketAgent closestMa = (MarketAgent) markets.get(0);
-    	for(Market m: markets){
+    	MarketAgent closestMa = markets.get(0);
+    	for(MarketAgent m: markets){
 			if(Math.abs(closestMa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
 				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
-					closestMa = (MarketAgent) m;
+					closestMa = m;
 				}
 			}
 		}

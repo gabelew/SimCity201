@@ -11,7 +11,10 @@ import market.test.mock.MockMarket;
 import market.test.mock.MockMarketCustomer;
 import atHome.city.Residence;
 import junit.framework.TestCase;
+import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.PersonGui;
+import city.gui.SimCityGui;
 import city.test.mock.*;
 
 public class PersonAgentTest extends TestCase{
@@ -22,7 +25,10 @@ public class PersonAgentTest extends TestCase{
 	MockAtHomeRole atHomeRole;
 	MockDeliveryMan deliveryManRole;
 	MockClerk clerkRole;
+	
 	BankBuilding bankBuilding = new BankBuilding(new Point(337,68));
+	
+	SimCityGui simCityGui= new SimCityGui();
 	
 	
 	Residence h;
@@ -37,18 +43,23 @@ public class PersonAgentTest extends TestCase{
 
 		h = new MockHome(new Point(297,68));
 		market = new MockMarket("mockMarket");
-		person = new PersonAgent("personAgent",100, h );	
+		person = new PersonAgent("personAgent",100, simCityGui, h );
+
+		PersonGui pgui = new PersonGui(person, simCityGui);
+		person.setGui(pgui);
+		
 		marketCustomer = new MockMarketCustomer("personMarketCustomeRole");
 		bankCustomer = new MockBankCustomer("personBankCustomerRole");
 		atHomeRole = new MockAtHomeRole("personAtHomeRole");
 		deliveryManRole = new MockDeliveryMan("personDeliveryManJob");
 		clerkRole = new MockClerk("personClerkJob");
-		
-		person.addMarket(market);
+
+		for(MarketAgent m: simCityGui.getMarkets()){
+			person.addMarket(m);
+		}
 	}
 	public void testMarketCustomerIntoandOutOfMarketTest(){
 		//setUp() runs first before this test!
-		
 		// check preconditions
 		assertEquals("personMarketCustomeRole should have an empty event log before the personAgents's getFoodFromMarket is called. Instead, the personMarketCustomeRole's event log reads: "
 				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
@@ -72,7 +83,7 @@ public class PersonAgentTest extends TestCase{
 		
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
-		
+	
 		assertEquals("personMarketCustomeRole should have an empty event log after the personAgents's scheduler is called. Instead, the personMarketCustomeRole's event log reads: "
 				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
 		
