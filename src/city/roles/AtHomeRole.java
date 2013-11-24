@@ -35,7 +35,7 @@ public class AtHomeRole extends Role
 	Timer timer = new Timer(); //Timer for Cooking Food
 	public PersonAgent myPerson = null;//PersonAgent that has this role
 	AtHomeGui gui;
-	public AtHomeRole(PersonAgent p) 
+	public AtHomeRole(PersonAgent p, int foodAmount) 
 	{
 		super(p);
 		this.myPerson = p;
@@ -51,6 +51,7 @@ public class AtHomeRole extends Role
 			foodInFridge.add(f);
 			findFood.put(s, f);
 		}
+		findFood.get("steak").amount = foodAmount;
 		this.gui = new AtHomeGui(myPerson, this);
 	}
 	
@@ -195,7 +196,10 @@ public class AtHomeRole extends Role
 			timer.schedule(new TimerTask() {
 				public void run() 
 				{
-					gui.PlateAndEatFood();
+					gui.PlateFood();
+					try { busy.acquire();} 
+					catch (InterruptedException e) {e.printStackTrace();}
+					gui.SitDownAndEatFood();
 					try { busy.acquire();} 
 					catch (InterruptedException e) {e.printStackTrace();}
 					myPerson.print("Food is Done!!!");

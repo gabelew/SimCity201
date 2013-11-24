@@ -16,7 +16,7 @@ public class AtHomeRoleTest extends TestCase
 	{
 		super.setUp();		
 		person = new PersonAgent("AtHomeGuy1", 550.0, 1000.0);
-		role = new AtHomeRole(person);
+		role = new AtHomeRole(person, 4);
 		person.addRole(role);
 	}
 	

@@ -133,13 +133,14 @@ public class PersonAgent extends Agent
 	}
 	public void addAtHomeRole(){
 		AtHomeRole role = null;
-		if(name.toLowerCase().contains("nofood"){
+		if(name.toLowerCase().contains("nofood")){
 			role = new AtHomeRole(this,0);
-		}else if(name.toLowerCase().contains("lowsteak"){
+		}else if(name.toLowerCase().contains("lowsteak")){
 			role = new AtHomeRole(this,1);
 		}else{
-			role = new AtHomeRole(this);
+			role = new AtHomeRole(this,3);
 		}
+		
 	    role.active = false;
 	    roles.add(role);
 		AtHomeGui ahGui = new AtHomeGui(this, role);

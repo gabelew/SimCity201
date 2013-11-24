@@ -150,12 +150,44 @@ public class AtHomeGui implements Gui{
 		}
 		if (xPos == xDestination && yPos == yDestination) 
 		{
-			if(command == Command.GoHome || command == Command.GoToFridge || command == Command.GoToGrill || command == Command.GoToCounter)
+			if(command == Command.GoHome || command == Command.GoToFridge)
 			{
 				command = Command.noCommand;
 				role.msgAnimationFinshed();
 				xDestination = xHomePosition;
 				yDestination = yHomePosition;
+			}
+			else if(command == Command.GoToGrill || command == Command.GoToCounter)
+			{
+				command = Command.noCommand;
+				role.msgAnimationFinshed();
+				xDestination = xHomePosition;
+				yDestination = yHomePosition;
+				for(MyFood f: foods)
+				{
+					if(f.food != null)
+					{
+						if(f.state == FoodState.PutFoodOnGrill)
+						{
+							f.state = FoodState.FoodOnGrill;
+						}
+						else if (f.state == FoodState.PutFoodOnGrill)
+						{
+							f.state = FoodState.FoodOnCounter;
+						}
+					}
+					
+					if(f.state == FoodState.FoodOnGrill)
+					{
+						f.state = FoodState.PickUpFromGrill;
+					}
+					else if (f.state == FoodState.FoodOnCounter)
+					{
+						f.state = FoodState.PickUpFromCounter;
+					}
+				}
+				
+				
 			}
 			else if(command == Command.EatFood || command == Command.LeaveHome)
 			{
@@ -194,7 +226,7 @@ public class AtHomeGui implements Gui{
 			{
 				if(f.food != null)
 				{
-					if(f.state == FoodState.PutFoodOnGrill || f.state == FoodState.PutFoodOnCounter)
+					if(f.state == FoodState.PutFoodOnGrill || f.state == FoodState.PutFoodOnCounter || f.state == FoodState.PickUpFromCounter || f.state == FoodState.PickUpFromGrill)
 					{
 						g.drawImage(f.food.iconImg, xPos+f.point.x, yPos+f.point.y, null);
 					}
@@ -243,11 +275,32 @@ public class AtHomeGui implements Gui{
 		
 	}
 	
-	public void PlateAndEatFood()
+	public void SitDownAndEatFood()
 	{
 		command = Command.EatFood;
 		xDestination = xTABLE_POS;
 		yDestination = yTABLE_POS;
+	}
+	public void PlateFood()
+	{
+		for(MyFood f: foods)
+		{
+			if(f.food != null)
+			{
+				if(f.state == FoodState.FoodOnGrill)
+				{
+					command = Command.GoToGrill;
+					xDestination = xGRILL_POSITION;
+					yDestination = yGRILL_POSITION;
+				}
+				else if (f.state == FoodState.FoodOnCounter)
+				{
+					command = Command.GoToCounter;
+					xDestination = xKITCHEN_COUNTER_POSITION;
+					yDestination = yKITCHEN_COUNTER_POSITION;
+				}
+			}
+		}
 	}
 	
 	public void DoneEating()
