@@ -134,6 +134,9 @@ public class InfoPanel extends JPanel implements KeyListener {
     		}else{
     			((Home)residence).owner = p;
     		}
+    		
+    		p.addAtHomeRole();
+    		
     		if(name.toLowerCase().contains("waiter") && name.toLowerCase().contains("day")){
     			if(name.toLowerCase().contains("01")){
     				Restaurant r = gui.restaurants.get(0);

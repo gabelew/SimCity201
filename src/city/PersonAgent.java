@@ -121,20 +121,24 @@ public class PersonAgent extends Agent
 	    if(this.name.toLowerCase().contains("car")){
 	    	car = true;
 	    }
-	    AtHomeRole role = new AtHomeRole(this);
-	    role.active = false;
-	    roles.add(role);
+	    
 	    this.busLeft = this.simCityGui.animationPanel.busLeft;
 	    this.busRight = this.simCityGui.animationPanel.busRight;
 	    
-
 		this.myHome = h;
+		
+
+	    
+	}
+	public void addAtHomeRole(){
+		AtHomeRole role = new AtHomeRole(this);
+	    role.active = false;
+	    roles.add(role);
 		AtHomeGui ahGui = new AtHomeGui(this, role);
 		role.setGui(ahGui);
 		ahGui.setPresent(false);
 		myHome.insideAnimationPanel.addGui(ahGui);
 	}
-	
 /***********************
  *  ACCESSOR METHODS START
  ***********************/
