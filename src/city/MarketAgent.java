@@ -76,7 +76,7 @@ public MarketAgent(Point Location,String Name, InsideAnimationPanel iap){
 	this.location=Location;
 	this.name=Name;
 	this.insideAnimationPanel = iap;
-	for (int i=0;i<8;i++){
+	for (int i=0;i<10;i++){
 		chairs.add(new chair(i,true));
 	}
 }

@@ -115,7 +115,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	private void giveOrder(){
 		marketCGui.DoGoToClerk();
-		market.chairs.get(numChair).free=false;
+		market.chairs.get(numChair).free=true;
 	    try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
