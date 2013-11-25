@@ -36,7 +36,6 @@ public class ClerkRole extends Role implements Clerk {
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
 	public enum AgentEvent{none,GoToWork,offWork};
 	AgentEvent event = AgentEvent.none;
-	PersonAgent myPerson; 
 	public ClerkRole(){
 		super();
 		o=new Order(orderState.noOrder);
