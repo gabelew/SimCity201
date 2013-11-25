@@ -34,6 +34,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public EventLog log = new EventLog();
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
+	private DeliveryManDrivingGui drivingGui=new DeliveryManDrivingGui(this,myPerson.simCityGui);
 	private String name;
 	public Order o;
 	Point location;
@@ -49,16 +50,18 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	Cashier cashier;
 	public Cook cook;
 	public MarketAgent Market;
-	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,givingBill,waitingForPayment,payed,done};
+	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,onMyWay,atRestaurant,givingBill,waitingForPayment,payed,backAtMarket,done};
 	public enum AgentEvent{none,GoToWork,offWork};
 	AgentEvent event = AgentEvent.none;
 	public DeliveryManRole(PersonAgent p){
 		super(p);
 		o=new Order(orderState.noOrder);
+		myPerson.simCityGui.animationPanel.addGui(drivingGui);
 	}
 	public DeliveryManRole(){
 		super();
 		o=new Order(orderState.noOrder);
+		myPerson.simCityGui.animationPanel.addGui(drivingGui);
 	}
 	//messages
 
@@ -92,6 +95,16 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		stateChanged();
 	}
 	
+	public void msgAnimationAtRestaurant(){
+		o.s=orderState.atRestaurant;
+		stateChanged();
+	}
+	
+	public void msgAnimationAtMarket(){
+		o.s=orderState.backAtMarket;
+		stateChanged();
+	}
+	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.GoToWork){
@@ -116,12 +129,20 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			giveOrder();
 			return true;
 		}
+		if(o.s==orderState.atRestaurant){
+			atRestaurant();
+			return true;
+		}
 		if(o.s==orderState.waitingForPayment){
 			giveBill();
 			return true;
 		}
 		if (o.s==orderState.payed){
 			orderDone();
+			return true;
+		}
+		if (o.s==orderState.backAtMarket){
+			backAtMarket();
 			return true;
 		}
 		return false;
@@ -151,7 +172,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	        	Integer temp=o.Choices.get(pairs.getKey());
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
-	        //it.remove(); // avoids a ConcurrentModificationException
 	    }
 
 	    deliveryGui.DoGoGetFood(o.Choices);
@@ -177,9 +197,18 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			
 		}
 		}
-		//deliveryGui.DoGoDeliver(location);
-		//DeliveryManDrivingGui driving = new DeliveryManDrivingGui(this, myPerson.simCityGui);
-		//driving.setPresent(true);
+		drivingGui.setStartPos();
+		for (Restaurant r: myPerson.simCityGui.getRestaurants()){
+			if(r.cook==cook){
+				drivingGui.setPresent(true);
+				drivingGui.DoGoDeliver(r.location);
+				print("ON MY WAY!");
+			}
+		}
+		o.s=orderState.onMyWay;
+	}
+	
+	private void atRestaurant(){
 		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
 	}
@@ -195,15 +224,14 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	private void orderDone(){
 		o.s=orderState.noOrder;
 		cook=null;
-		deliveryGui.DoGoBack();
-		if(notTesting){
-	    try {
-			atShelf.acquire();
-		} catch (InterruptedException e) {
-			
-		}
-		}
+		drivingGui.setPresent(true);
+		drivingGui.DoGoBack();
+	}
+	
+	private void backAtMarket(){
 		Market.msgDeliveryDone(this);
+		o.s=orderState.done;
+		deliveryGui.DoGoToStand();
 	}
 	
 	private void leaveWork(){
@@ -219,6 +247,10 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	public DeliveryManGui getDeliveryManGui() {
 		return deliveryGui;
+	}
+	
+	public DeliveryManDrivingGui getDeliveryDrivingManGui() {
+		return drivingGui;
 	}
 	
 	public void atDest(){

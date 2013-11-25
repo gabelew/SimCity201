@@ -216,9 +216,21 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		            }
 	        }
     	}
+    	synchronized(guis){		
+	        for(Gui gui : guis) {
+	        	if(gui instanceof DeliveryManDrivingGui)
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
     }
     
 	public void addGui(PersonGui gui) {
+        guis.add(gui);
+	}
+    
+	public void addGui(DeliveryManDrivingGui gui) {
         guis.add(gui);
 	}
     

@@ -40,7 +40,7 @@ public class DeliveryManGui implements Gui{
 	public DeliveryManGui(DeliveryManRole role) {
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
-			deliveryImg = ImageIO.read(new File(path.toString() + "host_v1.png"));
+			deliveryImg = ImageIO.read(new File(path.toString() + "deliveryMan.png"));
 		} catch(IOException e) {
 			
 		}
@@ -121,15 +121,16 @@ public class DeliveryManGui implements Gui{
 		yDestination=CUST_START_POS;
 		deliveryState=state.givingFood;
 	}
-	
-	public void DoGoDeliver(Point Location){
-		
-	}
 
 	public void DoLeaveWork(){
 		xDestination=CUST_START_POS;
 		yDestination=CUST_START_POS;
 		deliveryState=state.leaving;
+	}
+	
+	public void DoGoToStand(){
+		xDestination=xWAITING_START;
+		yDestination=yWAITING_START;
 	}
 	
 	public void setPresent(boolean b) {
