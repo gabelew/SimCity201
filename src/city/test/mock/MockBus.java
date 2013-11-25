@@ -5,6 +5,7 @@ import java.awt.Point;
 import city.PersonAgent;
 import city.gui.BusGui;
 import city.interfaces.Bus;
+import city.interfaces.Person;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import restaurant.test.mock.Mock;
@@ -18,13 +19,13 @@ public class MockBus extends Mock implements Bus{
 	}
 
 	@Override
-	public void msgWaitingForBus(PersonAgent p, Point location) {
+	public void msgWaitingForBus(Person p, Point location) {
 		log.add(new LoggedEvent("Recieved msgWaitingForBus from the PersonAgent at locatoin " + location));
 		
 	}
 
 	@Override
-	public void msgComingAboard(PersonAgent p, Point Destination) {
+	public void msgComingAboard(Person p, Point Destination) {
 		log.add(new LoggedEvent("Recieved msgComingAboard from the PersonAgent with destination " + Destination));
 		
 	}
