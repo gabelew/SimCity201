@@ -50,8 +50,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	static final int BUSINESS_BROKE_AMOUNT = 500;
 	static final int PERSONAL_BROKE_BORROW_AMOUNT = 200;
 	static final int BUSINESS_BROKE_BORROW_AMOUNT = 700;
-	BankAccount personalAccount;
-	BankAccount businessAccount;
+	BankAccount personalAccount = null;
+	BankAccount businessAccount = null;
 	
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
@@ -62,8 +62,15 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public void goingToBank() {
 		state = CustomerState.EnteringBank;
 		// default check balance tasks in bank
-		tasks.add(new Task(BankingState.WantToCheckBalance, 0, "personal"));
-		tasks.add(new Task(BankingState.WantToCheckBalance, 0, "business"));
+		if(personalAccount != null) {
+			tasks.add(new Task(BankingState.WantToCheckBalance, 0, "personal"));
+		} else {
+			tasks.add(new Task(BankingState.WantToOpenAccount, 0, "personal"));
+		}
+			
+		if(businessAccount != null && myPerson.isManager) {
+			tasks.add(new Task(BankingState.WantToCheckBalance, 0, "business"));
+		}
 		
 		// checks if they can pay back their loan
 		for(Loan l: loans) {

@@ -49,8 +49,8 @@ public class AtHomeGui implements Gui{
     static final int yAPT_OFFSET = 310;
     static final int xAPT_OFFSET = 30;
     static final int HOUSE_TABLEPOS = 150;
-    static final int COOKING_OFFSET = 15;
-	
+    static final int COOKING_OFFSET = 0;
+	static final int KITCHEN_OFFSET = 15;
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
 	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood, LeaveHome, GetFoodFromCounter, GetFoodFromGrill};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
@@ -75,11 +75,11 @@ public class AtHomeGui implements Gui{
 			if(aptnum < 4)//top 4 apartments
 			{
 				xKITCHEN_COUNTER_POSITION = xHomePosition + aptnum*xKITCHEN_OFFSET;
-				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET;
+				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET + KITCHEN_OFFSET;
 				xFRIDGE_POSITION = xHomePosition + xFIDGE_OFFSET + aptnum*xKITCHEN_OFFSET;
-				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET;
+				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET- KITCHEN_OFFSET;
 				xGRILL_POSITION = xHomePosition + xGRILL_RIGHT_OFFSET + aptnum*xKITCHEN_OFFSET;
-				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET;
+				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET+ KITCHEN_OFFSET;
 				xTABLE_POS += xKITCHEN_OFFSET*aptnum;
 				xHomePosition = xHomePosition + aptnum*xKITCHEN_OFFSET; 
 				//xDestination = xHomePosition;
@@ -88,11 +88,11 @@ public class AtHomeGui implements Gui{
 			else //bottom 4 apartments
 			{
 				xKITCHEN_COUNTER_POSITION = xAPT_OFFSET + xHomePosition + (aptnum-4)*xKITCHEN_OFFSET;
-				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET + yAPT_OFFSET;
+				yKITCHEN_COUNTER_POSITION = yHomePosition - yKITCHEN_COUNTER_OFFSET + yAPT_OFFSET+ KITCHEN_OFFSET;
 				xFRIDGE_POSITION = xAPT_OFFSET + xHomePosition + xFIDGE_OFFSET + (aptnum-4)*xKITCHEN_OFFSET;
-				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET + yAPT_OFFSET;
+				yFRIDGE_POSITION = yHomePosition + yFIDGE_OFFSET + yAPT_OFFSET- KITCHEN_OFFSET;
 				xGRILL_POSITION = xAPT_OFFSET + xHomePosition + xGRILL_RIGHT_OFFSET + (aptnum-4)*xKITCHEN_OFFSET;
-				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET + yAPT_OFFSET;
+				yGRILL_POSITION = yHomePosition -yGRILL_RIGHT_OFFSET + yAPT_OFFSET+ KITCHEN_OFFSET;
 				xTABLE_POS = xAPT_OFFSET*2 + xKITCHEN_OFFSET*(aptnum-4);
 				yTABLE_POS += yTABLE_OFFSET;
 				
