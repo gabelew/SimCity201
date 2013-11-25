@@ -17,6 +17,8 @@ public class MarketAgent extends Agent implements Market {
 public EventLog log = new EventLog();
 public InsideAnimationPanel insideAnimationPanel;
 public Point location;
+private int NUM_CHAIRS=8;
+private int waitChair=1;
 private String name;
 public List<MyCustomer>MyCustomers=new ArrayList<MyCustomer>();
 public List<MyCook>MyCooks= new ArrayList<MyCook>();
@@ -37,7 +39,7 @@ public class MyCook{
 	public cookState cookstate;
 }
 
-public enum customerState{waiting, clerkGettingFood,done};
+public enum customerState{waiting,assigned, clerkGettingFood,done};
 public enum cookState{waiting,deliveryGettingFood,done};
 
 public List<clerk>clerks=new ArrayList<clerk>();
@@ -124,7 +126,7 @@ public boolean pickAndExecuteAnAction() {
 		for(clerk c:clerks){
 			if(c.clerkState==state.free){
 				for (MyCustomer MC:MyCustomers){
-					if (MC.state==customerState.waiting){
+					if (MC.state==customerState.assigned){
 						giveToClerk(c,MC);
 						return true;
 					}
@@ -132,6 +134,12 @@ public boolean pickAndExecuteAnAction() {
 			}
 			else if(c.clerkState==state.offWork){
 				clerkDone(c);
+				return true;
+			}
+		}
+		for (MyCustomer MC:MyCustomers){
+			if (MC.state==customerState.waiting){
+				wait(MC);
 				return true;
 			}
 		}
@@ -174,6 +182,10 @@ private void clerkDone(clerk c){
 	clerks.remove(c);
 }
 
+private void wait(MyCustomer cust){
+	cust.state=customerState.assigned;
+	cust.MC.msgWait(waitChair);
+}
 private void deliveryDone(delivery d){
 	deliverys.remove(d);
 }

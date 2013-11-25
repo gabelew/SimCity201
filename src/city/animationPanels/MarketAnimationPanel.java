@@ -95,9 +95,9 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
 	     g.drawImage(deliveryStandImg,xDELIVERY_POSITION,yDELIVERY_POSITION,null);
 	    
 	     //chair waiting area
-	     for (int i=ZERO;i<NUM_CHAIR;i++){
-	    	 g.drawImage(chairImg, xCHAIR_POSITION+i*50, yCHAIR_POSITION, null); 
-	     }
+	     //for (int i=ZERO;i<NUM_CHAIR;i++){
+	    //	 g.drawImage(chairImg, xCHAIR_POSITION+i*50, yCHAIR_POSITION, null); 
+	     //}
 	     
 
 	}

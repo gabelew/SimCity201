@@ -24,4 +24,6 @@ public interface MarketCustomer {
 	
 	public abstract void startShopping(MarketAgent m, Map<String, Integer> toOrderFromMarket);
 
+	public abstract void msgWait(int waitChair);
+
 }

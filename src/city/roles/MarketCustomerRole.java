@@ -14,6 +14,7 @@ import java.util.Map;
 
 import java.util.concurrent.Semaphore;
 
+import restaurant.test.mock.LoggedEvent;
 import market.gui.MarketCustomerGui;
 import market.interfaces.MarketCustomer;
 import city.MarketAgent;
@@ -25,6 +26,8 @@ import city.PersonAgent;
 public class MarketCustomerRole extends Role implements MarketCustomer {
 	private MarketCustomerGui marketCGui=new MarketCustomerGui(this);
 	private Semaphore atShelf=new Semaphore(0,true);
+	private int wait;
+	boolean waiting=false;
 	MarketAgent market;
 	PersonAgent myPerson; 
 	ClerkRole Clerk;
@@ -50,27 +53,21 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 			Map<String, Integer> toOrderFromMarket) {
 		this.market = m;
 		o = new Order(toOrderFromMarket, orderState.waiting);
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
-		print("placing market order");
+		stateChanged();	
 		market.msgPlaceOrder(this);
+		myPerson.log.add(new LoggedEvent("received start shopping from person"));
 	}
 
 	public void msgCanIHelpYou(ClerkRole clerk){
 		Clerk=clerk;
 		o.s=orderState.ordering;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();	
 	}
 
 	public void msgHereIsPrice(double amount){
 		o.amountOwed=amount;
 		o.s=orderState.paymentReceived;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();	
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf){
@@ -78,9 +75,12 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		o.Choices=choice;
 		if(outOf!=null)
 			o.outOf=outOf;
-		if(myPerson.getStateChangePermits()==0){
-			stateChanged();	
-		}
+		stateChanged();	
+	}
+	
+	public void msgWait(int num){
+		wait=num;
+		waiting=true;
 	}
 	
 	//scheduler
@@ -98,6 +98,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 				receivedOrder();
 				return true;
 			}
+		}
+		if(waiting){
+			waiting=false;
+			marketCGui.DoWait(wait);
+			return true;
 		}
 		return false;
 	}
