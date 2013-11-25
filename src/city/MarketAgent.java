@@ -194,6 +194,7 @@ private void clerkDone(clerk c){
 }
 
 private void deliveryDone(delivery d){
+	d.deliveryMan.msgDoneWithShift();
 	deliverys.remove(d);
 }
 
@@ -226,6 +227,14 @@ public void addClerk(Clerk c){
 }
 
 public void addDeliveryMan(DeliveryMan DM){
+	for (delivery dl:deliverys){
+		if(dl.deliveryState==state.busy){
+			dl.deliveryState=state.wantOffWork;
+		}
+		if(dl.deliveryState==state.free){
+			dl.deliveryState=state.offWork;
+		}
+	}
 	deliverys.add(new delivery(DM,state.free));
 	if(getStateChangePermits()==0){
 			stateChanged();	

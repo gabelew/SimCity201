@@ -50,7 +50,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public Cook cook;
 	public MarketAgent Market;
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,givingBill,waitingForPayment,payed,done};
-	public enum AgentEvent{none,GoToWork};
+	public enum AgentEvent{none,GoToWork,offWork};
 	AgentEvent event = AgentEvent.none;
 	public DeliveryManRole(PersonAgent p){
 		super(p);
@@ -87,11 +87,21 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		stateChanged();
 	}
 	
+	public void msgDoneWithShift(){
+		event=AgentEvent.offWork;
+		stateChanged();
+	}
+	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.GoToWork){
 			event = AgentEvent.none;
 			((MarketAgent)Market).addDeliveryMan(((DeliveryMan)this));
+			return true;
+		}
+		if(event==AgentEvent.offWork){
+			event=AgentEvent.none;
+			leaveWork();
 			return true;
 		}
 		if(cook!=null&&o.s==orderState.askedForOrder){
@@ -194,6 +204,18 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		}
 		}
 		Market.msgDeliveryDone(this);
+	}
+	
+	private void leaveWork(){
+		deliveryGui.DoLeaveWork();
+		if(notTesting){
+		try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		}
+		myPerson.releavedFromDuty(this);
 	}
 	public DeliveryManGui getDeliveryManGui() {
 		return deliveryGui;

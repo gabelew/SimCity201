@@ -28,7 +28,7 @@ public class DeliveryManGui implements Gui{
 	
 	public static List<Semaphore> atms = new ArrayList<Semaphore>();
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
-	private enum state{waiting,gettingFood,givingFood,delivering,delivered};
+	private enum state{waiting,gettingFood,givingFood,delivering,delivered,leaving};
 	state deliveryState;
 	
 	static final int CUST_START_POS = -40;
@@ -67,6 +67,10 @@ public class DeliveryManGui implements Gui{
 			deliveryState=state.delivering;
 		}
 		if(xPos==xDestination&&yPos==yDestination&&deliveryState==state.delivered){
+			role.atDest();
+			deliveryState=state.waiting;
+		}
+		if(xPos==xDestination&&yPos==yDestination&&deliveryState==state.leaving){
 			role.atDest();
 			deliveryState=state.waiting;
 		}
@@ -122,6 +126,12 @@ public class DeliveryManGui implements Gui{
 		
 	}
 
+	public void DoLeaveWork(){
+		xDestination=CUST_START_POS;
+		yDestination=CUST_START_POS;
+		deliveryState=state.leaving;
+	}
+	
 	public void setPresent(boolean b) {
 		isPresent = b;
 	}

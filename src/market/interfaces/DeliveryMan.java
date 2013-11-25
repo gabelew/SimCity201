@@ -21,4 +21,6 @@ public interface DeliveryMan {
 	
 	public abstract void msgHereIsPayment(double payment, Cashier ca);
 
+	public abstract void msgDoneWithShift();
+
 }
