@@ -295,15 +295,15 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	}
 
 	private void tellHost() {
-		print("Reporting for Duty");
+		//print("Reporting for Duty");
 		restaurant.host.msgReadyToWork(this);
 	}
 
 	private void seatCustomer(MyCustomer c){
 		doGoToEntrance();
 		
-		StringBuilder msg = new StringBuilder("Follow me " + c.c.getName());
-		print(msg.toString());
+		//StringBuilder msg = new StringBuilder("Follow me " + c.c.getName());
+		//print(msg.toString());
 		c.c.msgFollowMeToTable(((Waiter)this), new Menu());
 		
 		DoSeatCustomer(c, c.table);
@@ -322,7 +322,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		
 		c.c.msgWhatWouldYouLike();
 		c.s = CustomerState.asked;
-		print("What would you like to order?");
+		//print("What would you like to order?");
 		
 		try {
 			waitingResponse.acquire();
@@ -334,14 +334,14 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	private void putInOrder(MyCustomer c) {
 		if(!testingRevolvingMonitor)
 			doGoToKitchen(c);
-		print("\t\t HERHER IM IN DA KITCH");
+		//print("\t\t HERHER IM IN DA KITCH");
 		if(revolvingStand.getCount() < 5) {
 			c.s = CustomerState.orderPlaced;
 			print("\t\t Inserting order into revolving stand");
 			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
 			if(!testingRevolvingMonitor) {
 				waiterGui.placedOrder();
-				print("\t\t waiterGui.placedOrder");
+				//print("\t\t waiterGui.placedOrder");
 			}
 		} else {
 			print("Revolving stand is full. I'll come back later.");

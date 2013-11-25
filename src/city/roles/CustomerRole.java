@@ -151,7 +151,7 @@ public class CustomerRole extends Role implements Customer {
 		
 		if(MENUINDEXEND < 0)
 		{
-			print("There is no more food that I can afford!");
+			//print("There is no more food that I can afford!");
 			state = AgentState.WaitigForTable;
 			event = AgentEvent.leavingEarly;
 		}

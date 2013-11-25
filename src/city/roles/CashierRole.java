@@ -102,7 +102,6 @@ public class CashierRole extends Role implements Cashier {
 	{
 		orders.add(new Order(w, c, choice, OrderState.requested));
 		stateChanged();
-		print("order recieved!!");
 		log.add(new LoggedEvent("Received msgProduceCheck from waiter. Choice = "+ choice));
 	}
 	
@@ -302,8 +301,6 @@ public class CashierRole extends Role implements Cashier {
 	private void processPayment(Order o) {
 		double cashOut = o.cashIn - o.check;
 		cashOut = (Math.round(100*cashOut) / ((double)100));
-		
-		print(cashOut + " = " + o.cashIn + " - " + o.check);
 
 		log.add(new LoggedEvent("Performed processPayment. Cash out, "+ cashOut + ", = o.cashIn, " + o.cashIn + ", - o.check, "+ o.check));
 		
@@ -317,7 +314,7 @@ public class CashierRole extends Role implements Cashier {
 			}
 			
 			o.state = OrderState.inDebt;
-			print("You can pay us on your next visit");
+			//print("You can pay us on your next visit");
 			o.customer.msgPayMeLater();
 		}else{
 			bank += o.check;

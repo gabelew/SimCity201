@@ -299,6 +299,12 @@ public class PersonAgent extends Agent implements Person
 				}
 				if(!inList){
 					taskList.add(Task.goToBankNow);
+					BankCustomerRole bcr = null;
+	    			for(Role role : roles) {
+	    				if(role instanceof BankCustomerRole)
+	    					bcr = (BankCustomerRole)role;
+	    			}
+	    			bcr.msgIWantToWithdraw(100, "personal");
 				}
 			}
 			
@@ -464,6 +470,12 @@ public class PersonAgent extends Agent implements Person
 			}
 			if(!inList){
 				taskList.add(Task.goToBank);
+				BankCustomerRole bcr = null;
+    			for(Role role : roles) {
+    				if(role instanceof BankCustomerRole)
+    					bcr = (BankCustomerRole)role;
+    			}
+    			bcr.msgIWantToWithdraw(100, "personal");
 			}
 		}
 		
@@ -872,7 +884,7 @@ public class PersonAgent extends Agent implements Person
 		
 	}
 	private boolean youAreRich() {
-		if(cashOnHand >= 100){
+		if(personalAccount.currentBalance > 200){
 			return true;
 		}
 		return false;

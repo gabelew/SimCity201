@@ -487,7 +487,7 @@ public class CookRole extends Role implements Cook {
 			}
 		}
 		else{
-			print("msgOutOfOrder");
+			//print("msgOutOfOrder");
 			o.waiter.msgOutOfOrder(o.choice, o.table);
 			
 			Food f = findFood(o.choice);
@@ -542,11 +542,11 @@ public class CookRole extends Role implements Cook {
 						if(f.amount <= f.low && m.foodInventoryMap.get(f.getChoice().toLowerCase()) == InventoryState.POSSIBLE  
 								&& f.os != OrderingState.ordered){
 							f.os = OrderingState.ordered;
-							print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
+							//print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
 							m.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.ATTEMPTING);
 							foodsToOrder.put(f.choice,20);
 							placeOrder = true;
-							print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
+							//print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
 						} 
 					}
 				}

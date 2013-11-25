@@ -30,7 +30,7 @@ public class InfoPanel extends JPanel implements KeyListener {
 	private static final int GROUP_NCOLUMNS = 1;
 	private static final int NCOLUMNS = 1;
 	private static final int NROWS = 2;
-	private static final double PERSONS_DEFAULT_CASH = 200.00;
+	private static final double PERSONS_DEFAULT_CASH = 99.00;
 	private static final double NO_CASH = 0.0;
 
     private ListPanel personPanel = new ListPanel(this, "Persons");
@@ -147,14 +147,22 @@ public class InfoPanel extends JPanel implements KeyListener {
     					bcr = (BankCustomerRole)role;
     			}
     			gui.bankAgent.msgOpenAccount(bcr, 200, "personal");
-    		}else{
+    		} else if(name.toLowerCase().contains("rich")) {
+    			p = new PersonAgent(name, 110,gui, residence);
+    			BankCustomerRole bcr = null;
+    			for(Role role : p.roles) {
+    				if(role instanceof BankCustomerRole)
+    					bcr = (BankCustomerRole)role;
+    			}
+    			gui.bankAgent.msgOpenAccount(bcr, 10000, "personal");
+    		} else{
     			p = new PersonAgent(name, PERSONS_DEFAULT_CASH, gui, residence);
     			BankCustomerRole bcr = null;
     			for(Role role : p.roles) {
     				if(role instanceof BankCustomerRole)
     					bcr = (BankCustomerRole)role;
     			}
-    			gui.bankAgent.msgOpenAccount(bcr, 500, "personal");
+    			gui.bankAgent.msgOpenAccount(bcr, 800, "personal");
     		}
     		
     		
