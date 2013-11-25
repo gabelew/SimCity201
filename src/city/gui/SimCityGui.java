@@ -333,6 +333,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	            restPanel.setMaximumSize(restDim);
 	
 	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, restPanel);
+	        	bankAnimationPanel.setInsideBuildingPanel(bp);
 	        	b.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);
 
