@@ -5,16 +5,22 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import city.BusAgent;
+import city.BusAgent.MyBusStop;
 
 public class BusGui implements Gui{
 	
 	private BusAgent agent = null;
 	private boolean isPresent = false;
 	private char type;
+	private List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
+
 	
 	private static BufferedImage bus_back = null;
 	private static BufferedImage bus_front = null;
@@ -34,7 +40,7 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
-		b.getBusStops();
+		busStops = b.getBusStops();
 		this.type = type;
 		
 		if(type == 'B'){
@@ -62,9 +68,9 @@ public class BusGui implements Gui{
 				yPos++;
 			}else if (yPos != yDestination && type == 'B' && yPos > -50){
 				yPos--;
-			}else if(type == 'B' && yPos <= -50){
-				yPos = 400;
-			}else if(type == 'F' && yPos >= 420){
+			}else if(type == 'B' && yPos <= -40){
+				yPos = 410;
+			}else if(type == 'F' && yPos >= 410){
 				yPos = -40;
 			}
 
@@ -99,10 +105,63 @@ public class BusGui implements Gui{
 		isPresent = p;
 	}
 	
-	public void GoToBusStop(Point p){
-		xDestination = p.x;
-		yDestination = p.y;
+	public void GoToNextBusStop(){
+		
+		//xDestination = NextX();
+		if(type == 'B'){yDestination = NextBY();}
+		else if(type == 'F'){yDestination = NextFY();}
+
+		//NextY();
 		command = Command.atBusStop;
+	}
+	
+	
+	public int NextBY(){
+		int y = 0;
+		if(type == 'B'){
+			y = 0;
+		switch(yPos){
+		case 410: y = 305;
+		break;
+		
+		case 305: y = 225;
+		break;
+		
+		case 225: y = 145;
+		break;
+		
+		case 145: y = 65;
+		break;
+		
+		case 65: y = 305;
+		break;
+		}
+		}
+		return y;
+	}
+	
+	public int NextFY(){
+		int y = -40;
+		if(type == 'F'){
+		switch(yPos){
+		case -40: y = 65;
+		break;
+		
+		case 65: y = 145;
+		break;
+		
+		case 145: y = 225;
+		break;
+		
+		case 225: y = 305;
+		break;
+		
+		case 305: y = -40;
+		break;
+		}
+		}
+		
+		return y;
 	}
 	
 	public void doGoToRest() {
