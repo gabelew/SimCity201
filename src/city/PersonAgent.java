@@ -483,15 +483,6 @@ public class PersonAgent extends Agent implements Person
 		//restockFidge with purchased food
 		toPutInFridge = purchasedFood;
 		
-		/*boolean inList = false;
-		for(Task t: taskList){
-			if(t == Task.goToHomeWithFood)
-				inList = true;
-		}
-		if(!inList){
-			taskList.add(Task.goToHomeWithFood);
-		}*/
-		
 		MarketCustomerRole removeRole = null;
 		for(Role r: roles){
 			if(r instanceof MarketCustomerRole){
@@ -502,6 +493,10 @@ public class PersonAgent extends Agent implements Person
 			}
 		}
 		roles.remove(removeRole);
+		
+		state = State.doingNothing;
+		location = Location.InCity;
+		stateChanged();
 	}
 	public void marketNotStocked(MarketAgent market){
 		markets.remove(market);
