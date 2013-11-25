@@ -37,6 +37,11 @@ public class MockDeliveryMan extends Mock implements DeliveryMan {
 	public void msgHereIsPayment(double payment, Cashier ca){
 		log.add(new LoggedEvent("Received msgHereIsPayment from cook"));
 	}
+
+	@Override
+	public void msgDoneWithShift() {
+		log.add(new LoggedEvent("Received msgDoneWithShift"));
+	}
 	
 	
 }
