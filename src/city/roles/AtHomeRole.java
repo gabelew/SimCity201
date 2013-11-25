@@ -304,7 +304,7 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		NoMoreFood = false;
 		this.state = EventState.OutOfFood;
-		myPerson.msgNoMoreFood();
+		makeMarketList();
 		myPerson.msgDoneEatingAtHome();
 	}
 /*********************
