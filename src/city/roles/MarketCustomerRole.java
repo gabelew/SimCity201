@@ -139,10 +139,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			
 		}
-	    /*
 	    if(o.outOf==null||o.outOf.size()==0)
 	    	myPerson.marketNotStocked(market);
-	    myPerson.doneShopping(o.Choices,market);*/
+	    myPerson.doneShopping(o.Choices,market);
 		o=null;
 	}
 	

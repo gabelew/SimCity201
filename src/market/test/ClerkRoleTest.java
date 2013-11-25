@@ -34,7 +34,7 @@ public class ClerkRoleTest extends TestCase
 	MockCook cook,cook2,cook3;
 	MockCashier cashier,cashier2,cashier3;
 	Map<String,Integer> choice;
-	double normAmount=30;
+	double normAmount=6;
 	Integer amountLeft=8;
 	
 	/**
@@ -67,6 +67,7 @@ public class ClerkRoleTest extends TestCase
 		choice.put("cookie", 2);
 		choice.put("salad",2);
 		market.setInventory(10, 10, 10, 10, 10);
+		clerk.notTesting=false;
 		/*
 		 * Normal one customer coming into store.
 		 */
@@ -132,14 +133,6 @@ public class ClerkRoleTest extends TestCase
 		assertFalse("Clerk's scheduler should have returned false (nothing to do).", 
 				clerk.pickAndExecuteAnAction());
 	}
-	public void testOneNormalCookCustomerScenario()
-	{
-		/*
-		 * Normal one cook delivery and customer coming into store.
-		 */
-		//pre-initializing checks
-		
-		
-	}
+
 
 }

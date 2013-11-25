@@ -48,7 +48,7 @@ public class MyCook{
 
 public enum customerState{waiting,assigned, clerkGettingFood,done};
 public enum cookState{waiting,deliveryGettingFood,done};
-
+public Map<String,Double> Prices=new HashMap<String,Double>();
 public List<clerk>clerks=new ArrayList<clerk>();
 public class clerk{
 	public clerk(Clerk c, state free) {
@@ -79,6 +79,11 @@ public MarketAgent(Point Location,String Name, InsideAnimationPanel iap){
 	for (int i=0;i<10;i++){
 		chairs.add(new chair(i,true));
 	}
+	Prices.put("steak",2.00);
+	Prices.put("car", 200.00);
+	Prices.put("cookie",.25);
+	Prices.put("chicken", 1.50);
+	Prices.put("salad",.75);
 }
 
 //messages to market

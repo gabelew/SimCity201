@@ -21,6 +21,7 @@ public class ClerkRole extends Role implements Clerk {
 	private Semaphore atShelf=new Semaphore(0,true);
 	private ClerkGui clerkGui=new ClerkGui(this);
 	public Order o;
+	public boolean notTesting=true;
 	public class Order{
 		public Order(orderState state) {
 			s=state;
@@ -36,7 +37,6 @@ public class ClerkRole extends Role implements Clerk {
 	public enum AgentEvent{none,GoToWork};
 	AgentEvent event = AgentEvent.none;
 	PersonAgent myPerson; 
-	double Price=5;
 	public ClerkRole(){
 		super();
 		o=new Order(orderState.noOrder);
@@ -94,12 +94,14 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	//actions
 	private void askForOrder(){
+		o.s=orderState.waitingForOrder;
+		if(notTesting){
 		try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		o.s=orderState.waitingForOrder;
+		}
 		MCR.msgCanIHelpYou(this);
 	}
 	
@@ -113,31 +115,35 @@ public class ClerkRole extends Role implements Clerk {
 	        }
 	        else if(o.Choices.get(pairs.getKey())>((MarketAgent)Market).Inventory.get(pairs.getKey())){
 	        	o.Choices.put(pairs.getKey().toString(), ((MarketAgent)Market).Inventory.get(pairs.getKey()));
-	        	o.amountOwed=o.amountOwed+((MarketAgent)Market).Inventory.get(pairs.getKey())*Price;
+	        	o.amountOwed=o.amountOwed+((MarketAgent)Market).Inventory.get(pairs.getKey())*((MarketAgent)Market).Prices.get(pairs.getKey());
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(), 0);
 	        }
 	        else{
-	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*Price;
+	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*((MarketAgent)Market).Prices.get(pairs.getKey());
 	        	Integer temp=o.Choices.get(pairs.getKey());
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
 	    }
 	    clerkGui.DoGoGetFood(o.Choices);
+	    if(notTesting){
 		try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	    }
 	    MCR.msgHereIsPrice(o.amountOwed);
 	    o.s=orderState.waitingForPayment;
 	}
 	
 	private void giveOrder(){
 		clerkGui.DoGoGiveOrder();
+		if(notTesting){
 		try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
 		}
 		MCR.msgHereIsOrder(o.Choices,o.outOf);
 		o.s=orderState.done;
@@ -151,7 +157,9 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	
 	public void atShelf(){
+		if(notTesting){
 		atShelf.release();
+		}
 	}
 	public ClerkGui getClerkGui(){
 		return clerkGui;
