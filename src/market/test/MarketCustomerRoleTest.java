@@ -68,14 +68,4 @@ public class MarketCustomerRoleTest extends TestCase
 		//pre-initializing checks
 		
 	}
-	public void testOneNormalCookCustomerScenario()
-	{
-		/*
-		 * Normal one cook delivery and customer coming into store.
-		 */
-		//pre-initializing checks
-		
-		
-	}
-
 }

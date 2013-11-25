@@ -27,7 +27,7 @@ public class DeliveryManRoleTest extends TestCase
 	MockCook cook,cook2,cook3;
 	MockCashier cashier,cashier2,cashier3;
 	Map<String,Integer> choice;
-	double normAmount=30;
+	double normAmount=6;
 	Integer amountLeft=8;
 	
 	/**
@@ -61,6 +61,7 @@ public class DeliveryManRoleTest extends TestCase
 		choice.put("cookie", 2);
 		choice.put("salad",2);
 		market.setInventory(10, 10, 10, 10, 10);
+		deliveryMan.notTesting=false;
 		/*
 		 * Normal one customer coming into store.
 		 */

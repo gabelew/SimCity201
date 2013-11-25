@@ -119,7 +119,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultBuildingPanels();
         
         setVisible(true);
-        
+        bankAgent.startThread();
         createDefaultPeople();
     }
 

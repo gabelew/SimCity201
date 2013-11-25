@@ -59,7 +59,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	// Messages
 	public void goingToBank() {
-		state = CustomerState.EnteringBank;
 		// default check balance tasks in bank
 		if(myPerson.personalAccount != null) {
 			tasks.add(new Task(BankingState.WantToCheckBalance, 0, "personal"));
@@ -76,8 +75,9 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		
 		if(myPerson.businessAccount != null) {
 			int excessCash = Double.compare(myPerson.businessFunds, 0);
-			if(1 == excessCash)
+			if(1 == excessCash){
 				tasks.add(new Task(BankingState.WantToDepositToBusiness, myPerson.businessFunds, "business"));
+			}
 		}
 		if(myPerson.businessAccount != null && myPerson.isManager) {
 			tasks.add(new Task(BankingState.WantToCheckBalance, 0, "business"));
@@ -93,7 +93,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			if(1 == payLoan)
 				tasks.add(new Task(BankingState.WantToPayBackLoan, l.amount, l.accountType));
 		}
-		
+		state = CustomerState.EnteringBank;
 		stateChanged();
 	}
 	
@@ -192,20 +192,17 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	public void msgAtATM() {
-		print("I'm at the atm!");
 		waitingResponse.release();
 		state = CustomerState.AtAtm;
 		stateChanged();
 	}
 	
 	public void msgAnimationFinishedEnterBank() {
-		print("Finished entering bank.");
 		waitingResponse.release();
 		stateChanged();
 	}
 	
 	public void msgLeftBank() {
-		print("Left the bank.");
 		waitingResponse.release();
 		stateChanged();
 	}
@@ -245,7 +242,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			}
 			for(Task t : tasks) {
 				if(BankingState.WantToDepositToBusiness.equals(t.bs)){
-					print("Task to deposit to business!");
 					t.bs = BankingState.Depositing;
 					DepositToBusiness(t);
 					return true;

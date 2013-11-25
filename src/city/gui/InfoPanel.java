@@ -132,12 +132,31 @@ public class InfoPanel extends JPanel implements KeyListener {
     			p = new PersonAgent(name, Double.valueOf(name),gui, residence);
     		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
     				|| name.toLowerCase().contains("ditch") || name.toLowerCase().contains("broke")){
-    			p = new PersonAgent(name, NO_CASH,gui, residence);   			
+    			p = new PersonAgent(name, NO_CASH,gui, residence);   
+    			BankCustomerRole bcr = null;
+    			for(Role role : p.roles) {
+    				if(role instanceof BankCustomerRole)
+    					bcr = (BankCustomerRole)role;
+    			}
+    			gui.bankAgent.msgOpenAccount(bcr, 0, "personal");
     		}else if(name.toLowerCase().contains("poor")){
-    			p = new PersonAgent(name, 50,gui, residence);   			
+    			p = new PersonAgent(name, 50,gui, residence);
+    			BankCustomerRole bcr = null;
+    			for(Role role : p.roles) {
+    				if(role instanceof BankCustomerRole)
+    					bcr = (BankCustomerRole)role;
+    			}
+    			gui.bankAgent.msgOpenAccount(bcr, 200, "personal");
     		}else{
     			p = new PersonAgent(name, PERSONS_DEFAULT_CASH, gui, residence);
+    			BankCustomerRole bcr = null;
+    			for(Role role : p.roles) {
+    				if(role instanceof BankCustomerRole)
+    					bcr = (BankCustomerRole)role;
+    			}
+    			gui.bankAgent.msgOpenAccount(bcr, 500, "personal");
     		}
+    		
     		
     		if(residence instanceof Apartment){
     			((Apartment)residence).addRenter(p);
