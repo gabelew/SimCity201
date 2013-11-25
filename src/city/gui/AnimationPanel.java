@@ -28,7 +28,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
     List<BuildingIcon> buildings = Collections.synchronizedList(new ArrayList<BuildingIcon>());
     
-    static final int TIMERDELAY = 10;
+    static final int TIMERDELAY = 20;
     static final int xREST_POSITION = 350;  
     static final int yREST_POSITION = 400; 
     static final int xCOOK_POSITION = 340;  

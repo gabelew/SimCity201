@@ -131,9 +131,10 @@ public class BankAgent extends Agent implements Bank{
 	public void msgDepositToAccount(BankCustomer bc, BankAccount businessAccount, double amount) {
 		BankAccount account = findAccount(businessAccount);
 		if(account != null) {
-			print("Received deposit request!");
 			transactions.add(new Transaction(TransactionState.deposit, amount, account, null, "deposit", bc));
 		}
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	public void msgWithdrawMoney(BankCustomer bcr, double amount, String accountType) {
@@ -244,7 +245,6 @@ public class BankAgent extends Agent implements Bank{
 	// Actions
 	
 	private void customerDeposit(Transaction t) {
-		print("Successful deposit!");
 		t.customer.deposit(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.bc.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
