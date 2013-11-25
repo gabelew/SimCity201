@@ -189,6 +189,7 @@ public class AtHomeRole extends Role implements AtHome
 				{
 					gui.DoneEating();
 					orders.remove(o);
+					myPerson.hungerLevel = 0;
 					myPerson.msgDoneEatingAtHome();
 				}
 			},

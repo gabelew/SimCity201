@@ -49,13 +49,25 @@ public class PersonAgentTest extends TestCase{
 		person.setGui(pgui);
 		pgui.setPresent(true);
 		simCityGui.animationPanel.addGui(pgui);
+
+		PersonGui pgui2 = new PersonGui(person2, simCityGui);
+		person2.setGui(pgui2);
+		pgui2.setPresent(true);
+		simCityGui.animationPanel.addGui(pgui2);
 		
 		deliveryManRole = new MockDeliveryMan("personDeliveryManJob");
 		clerkRole = new MockClerk("personClerkJob");
 
 		for(MarketAgent m: simCityGui.getMarkets()){
 			person.addMarket(m);
+			person2.addMarket(m);
 		}
+
+		for(BankBuilding b: simCityGui.getBanks()){
+			person.addBank(b);
+			person2.addBank(b);
+		}
+		
 		person.testing = true;
 	}
 	public void testMarketCustomerIntoMarket(){
@@ -160,6 +172,9 @@ public class PersonAgentTest extends TestCase{
 		
 		//check post conditions and pre conditions
 		assertEquals( "personAgent should be in state goingToBank", person2.state == State.goingToBank);
+		
+		assertEquals("personAgent should be at to closest bank. Instead, the personAgents location is: ("
+				+ person2.destination.x + ", " + person2.destination.y + ")" , new Point(377, 68), new Point(person2.personGui.xPos,person.personGui.yPos) );
 		
 	}
 	public void testPersonIntoAndOutOfHomeToRest() {
