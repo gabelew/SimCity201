@@ -1,6 +1,7 @@
 package city.roles;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	Order o;
 	class Order{
 		Map<String, Integer> Choices = new HashMap<String, Integer>();
+		List<String> outOf=new ArrayList<String>();
 		orderState s;
 		double amountOwed;
 		Order(Map<String, Integer> c, orderState s){
@@ -37,7 +39,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 			this.s = s;
 		}
 	}
-	private enum orderState{waiting, ordering,ordered,paymentReceived, payed,done};
+	private enum orderState{waiting, ordering,ordered,paymentReceived, payed,done,left};
 	public MarketCustomerRole(PersonAgent p){
 		super(p);
 		this.myPerson=p;
@@ -73,6 +75,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	public void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf){
 		o.s=orderState.done;
+		o.Choices=choice;
+		if(outOf!=null)
+			o.outOf=outOf;
 		if(myPerson.getStateChangePermits()==0){
 			stateChanged();	
 		}
@@ -123,6 +128,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			
 		}
+	    /*myPerson.doneShopping(o.Choices);
+	     * if(o.outOf==null||o.outOf.size()==0)
+	    //myPerson.marketNotStocked(o.Choices,market);*/
 		o=null;
 	}
 	
@@ -133,6 +141,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public void atSpot(){
 		atShelf.release();
 	}
-
+	
 }
 
