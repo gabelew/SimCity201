@@ -22,15 +22,12 @@ public class PersonGui implements Gui{
 	public int xPos;
 	public int yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, walkToDestination, enterHome, walkingToBus, walkingOnToBus, waitingForBus};
+	private enum Command {noCommand, walkToDestination, enterHome, walkingToBus, walkingOnToBus, waitingForBus, walkingHome};
 	private Command command=Command.noCommand;
 	private enum DrivingDirection {up,down,right};
 	DrivingDirection drivingDirection = DrivingDirection.right;
 	private int xHomePosition = 20;
 	private int yHomePosition = 20;
-	
-	private enum State {walking, driving};
-	private State state = State.walking;
 	
 	public PersonGui(PersonAgent c, SimCityGui gui){ //HostAgent m) {
 		
@@ -120,6 +117,9 @@ public class PersonGui implements Gui{
 			}else if(command == Command.walkingOnToBus){
 				isPresent = false;
 				agent.msgAnimationFinshed();
+				command = Command.noCommand;
+			}else if(command == Command.walkingHome){
+				agent.msgWalkingHomeAnimationFinshed();
 				command = Command.noCommand;
 			}
 		}
@@ -235,5 +235,6 @@ public class PersonGui implements Gui{
 	public void doWalkToHome(){
 		xDestination = agent.myHome.location.x;
 		yDestination = agent.myHome.location.y;		
+		command = Command.walkingHome;
 	}
 }

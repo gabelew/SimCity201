@@ -836,6 +836,9 @@ public class PersonAgent extends Agent implements Person
 				r.active = true;
 				((AtHomeRole)r).getGui().setPresent(true);
 				((AtHomeRole)r).ImHungry();
+				if(toPutInFridge != null)
+					((AtHomeRole)r).restockFridge(this.toPutInFridge);
+				toPutInFridge = null;
 				break;
 			}
 		}
@@ -1042,6 +1045,10 @@ public class PersonAgent extends Agent implements Person
 		waitingResponse.release();	
 	}
 
+	public void msgWalkingHomeAnimationFinshed() {
+		waitingResponse.release();	
+		stateChanged();
+	}
 	public PersonGui getGui() {
 		return personGui;
 	}
@@ -1064,6 +1071,13 @@ public class PersonAgent extends Agent implements Person
 	    		destination = myHome.location;
 				if(car == true || Math.abs(destination.y - personGui.yPos) <= 40){
 					personGui.doWalkToHome();
+					if(!testing){
+			        	try {
+			    			waitingResponse.acquire();
+			    		} catch (InterruptedException e) {
+			    			e.printStackTrace();
+			    		}
+			    	}
 					location = Location.AtHome;
 					state = State.inHome;
 					for(Role r: roles){
@@ -1071,6 +1085,9 @@ public class PersonAgent extends Agent implements Person
 							r.active = true;
 							((AtHomeRole) r).getGui().setPresent(true);
 							((AtHomeRole)r).goToHomePos();
+							if(toPutInFridge != null)
+								((AtHomeRole)r).restockFridge(this.toPutInFridge);
+							toPutInFridge = null;
 						}
 					}
 		    	}else{
