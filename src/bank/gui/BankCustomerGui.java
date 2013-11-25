@@ -24,7 +24,7 @@ public class BankCustomerGui implements Gui{
 	private static BufferedImage customerImg = null;
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
-	private int xDestination = CUST_START_POS, yDestination = CUST_START_POS;
+	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
 	
 	private enum Command {noCommand, WaitForATM, GoToATM, LeaveBank};
 	private Command command = Command.noCommand;
@@ -35,10 +35,10 @@ public class BankCustomerGui implements Gui{
 	static final int CUST_START_POS = -40;
 	static final int xWAITING_START = 50;
 	static final int yWAITING_START = 70;
-	static final int NATMS = 9;
-	static final int NATMS_ROWS = 3;
-	static final int NATMS_COLUMNS = 3;
-	static final int ATM_X_START = 300;
+	static final int NATMS = 16;
+	static final int NATMS_ROWS = 4;
+	static final int NATMS_COLUMNS = 4;
+	static final int ATM_X_START = 200;
 	static final int ATM_Y_START = 40;
 	static final int ATM_X_GAP = 100;
 	static final int ATM_Y_GAP = 90;
@@ -54,7 +54,7 @@ public class BankCustomerGui implements Gui{
 		
 		for(int i = 0; i < NATMS/NATMS_ROWS; i++) {
 			for(int j = 0; j < NATMS/NATMS_COLUMNS; j++) {
-				atmMap.put(j+i*3, new Point(i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START));
+				atmMap.put(j+i*4, new Point(i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START));
 			}
 		}
 		
@@ -120,8 +120,8 @@ public class BankCustomerGui implements Gui{
 			if(atmNumber < 0) {
 				if(((BankAnimationPanel)role.bank.insideAnimationPanel).atms.get(i).tryAcquire()) {
 					atmNumber = i;
-					xDestination = atmMap.get(i).x - 3;
-					yDestination = atmMap.get(i).y - 3;
+					xDestination = atmMap.get(i).x - 9;
+					yDestination = atmMap.get(i).y + 4;
 				}
 			}
 		}

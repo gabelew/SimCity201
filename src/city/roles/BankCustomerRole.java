@@ -1,6 +1,8 @@
 package city.roles;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 
@@ -51,6 +53,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	static final int BUSINESS_BROKE_AMOUNT = 500;
 	static final int PERSONAL_BROKE_BORROW_AMOUNT = 200;
 	static final int BUSINESS_BROKE_BORROW_AMOUNT = 700;
+	static final int AT_ATM_TIME = 2500;
+	Timer timer = new Timer();
 
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
@@ -137,7 +141,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		} else {
 			myPerson.businessFunds += amount;
 		}
-		print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
+		//print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
 		stateChanged();
 	}
 	
@@ -289,7 +293,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		
 		
 		
-		if(0 == tasks.size()) {
+		if(0 == tasks.size() && !CustomerState.None.equals(state)) {
 			state = CustomerState.LeavingBank;
 			return true;
 		}
@@ -299,7 +303,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	//Actions
 	private void EnterBank() {
-		Do("Entering bank");
 		customerGui.DoEnterBank();
 		try {
 			waitingResponse.acquire();
@@ -309,7 +312,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	private void FindATM() {
-		Do("Going to ATM");
 		customerGui.DoGoToATM();
 		try {
 			waitingResponse.acquire();
@@ -318,15 +320,19 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		}
 	}
 	
-	private void LeaveBank() {
-		Do("Leaving bank.");
-		customerGui.DoLeaveBank();
-		try {
-			waitingResponse.acquire();
-		} catch(InterruptedException e) {
-			e.printStackTrace();
-		}
-		myPerson.msgDoneAtBank();
+	private void LeaveBank() {	
+		timer.schedule(new TimerTask() {
+			public void run() {
+				customerGui.DoLeaveBank();
+				try {
+					waitingResponse.acquire();
+				} catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+				myPerson.msgDoneAtBank();
+			}
+		}, AT_ATM_TIME);
+		
 	}
 	
 	private void CheckBalance(Task t) {

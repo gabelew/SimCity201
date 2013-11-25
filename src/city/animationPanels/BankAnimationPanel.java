@@ -7,10 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
@@ -21,17 +20,18 @@ import city.gui.SimCityGui;
 public class BankAnimationPanel extends InsideAnimationPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	static final int NATMS = 9;
-	static final int NATMS_ROWS = 3;
-	static final int NATMS_COLUMNS = 3;
-	static final int ATM_X_START = 300;
+	static final int NATMS = 16;
+	static final int NATMS_ROWS = 4;
+	static final int NATMS_COLUMNS = 4;
+	static final int ATM_X_START = 200;
 	static final int ATM_Y_START = 40;
 	static final int ATM_X_GAP = 100;
 	static final int ATM_Y_GAP = 90;
 	
 	private SimCityGui simCityGui;
 	private BufferedImage atmImg = null;
-	public List<Semaphore> atms = new ArrayList<Semaphore>();
+	private BufferedImage fountainImg = null;
+	public List<Semaphore> atms = new CopyOnWriteArrayList<Semaphore>();
 	
 	public BankAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
@@ -39,6 +39,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
 			atmImg = ImageIO.read(new File(path.toString() + "atmMirror.png"));
+			fountainImg = ImageIO.read(new File(path.toString() + "fountain.png"));
 		} catch (IOException e){
 			
 		}
@@ -57,11 +58,13 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		for(Gui gui : getGuis()) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
+		synchronized(guis) {
+			for(Gui gui : getGuis()) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+		}
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();  //Will have paintComponent called
 		
@@ -80,9 +83,13 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 			} 
 		}
 		
-		for(Gui gui : getGuis()) {
-			if(gui.isPresent()) {
-				gui.draw(g2);;
+		g.drawImage(fountainImg, 340, 140, null);
+		
+		synchronized(guis) {
+			for(Gui gui : getGuis()) {
+				if(gui.isPresent()) {
+					gui.draw(g2);;
+				}
 			}
 		}
 
