@@ -16,6 +16,7 @@ import agent.Agent;
 import atHome.city.AtHomeGui;
 import atHome.city.Home;
 import atHome.city.Residence;
+import city.BankAgent.BankAccount;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.interfaces.Bus;
@@ -28,7 +29,7 @@ public class PersonAgent extends Agent
  *                       DATA 
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  ******************^^^^^^^^^^^^^^^^*********************/
-	private List<Role> roles = new ArrayList<Role>();
+	public List<Role> roles = new ArrayList<Role>();
 	private List<Restaurant> restaurants = new ArrayList<Restaurant>();//hacked in upon creation 
 	private List<BankBuilding> banks = new ArrayList<BankBuilding>(); 
 	private List<MarketAgent> markets = new ArrayList<MarketAgent>(); 
@@ -65,6 +66,9 @@ public class PersonAgent extends Agent
 	
 	public int hungerLevel = 51;
 	public double cashOnHand = 0, businessFunds = 0;
+	public BankAccount personalAccount = null;
+	public BankAccount businessAccount = null;
+	
 	public SimCityGui simCityGui; 
 	
 	private static final int halfScreen = 417;
@@ -103,7 +107,7 @@ public class PersonAgent extends Agent
  *  UTILITY CLASSES END
  ***********************/
 	
-	public enum Shift {day, night}
+	public enum Shift {day, night, none}
 	
 	/**
 	 * Constructor
@@ -141,6 +145,9 @@ public class PersonAgent extends Agent
 	    this.busRight = this.simCityGui.animationPanel.busRight;
 	    
 		this.myHome = h;
+		BankCustomerRole bc = new BankCustomerRole(this);
+		roles.add(bc);
+		bc.active = false;
 	}
 	public void addAtHomeRole(){
 		AtHomeRole role = null;
@@ -177,6 +184,12 @@ public class PersonAgent extends Agent
 	public void addBank(BankBuilding b) {
 		banks.add(b);
 		
+	}
+	public void setBusinessAccount(BankAccount b) {
+		this.businessAccount = b;
+	}
+	public void setPersonalAccount(BankAccount p) {
+		this.personalAccount = p;
 	}
 	public void setName(String name){
         this.name = name;
