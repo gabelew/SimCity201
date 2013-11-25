@@ -389,12 +389,13 @@ public class PersonAgent extends Agent implements Person
 		stateChanged();
 	}
 	public void msgAtYourStop(int xPos, int yPos){
-		personGui.xPos = xPos;
 
 		if(personGui.xPos < halfScreen){
-			personGui.yPos = yPos+16;
+			personGui.yPos = yPos+20;
+			personGui.xPos = xPos+5;
 		}else{
-			personGui.yPos = yPos-24;
+			personGui.yPos = yPos+20;
+			personGui.xPos = xPos+5;
 		}
 		transportState = TransportState.GettingOffBus;
 		stateChanged();
@@ -702,11 +703,13 @@ public class PersonAgent extends Agent implements Person
     	destination = job.location;
     	if(car == true || destination.y == personGui.yPos){
 	    	personGui.DoWalkTo(destination);
-	    	try {
-				waitingResponse.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+	    	if(!testing){
+		    	try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	    	}
     	}else{
     		goToBusStop();
     	}
@@ -874,8 +877,10 @@ public class PersonAgent extends Agent implements Person
 		
 	}
 	private boolean youAreRich() {
-		if(personalAccount.currentBalance > 200){
-			return true;
+		if(personalAccount != null){
+			if(personalAccount.currentBalance > 200){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -1036,6 +1041,8 @@ public class PersonAgent extends Agent implements Person
 		}
 		if(personGui.xPos < halfScreen){
 			busLeft.msgWaitingForBus(this, new Point(personGui.xPos, personGui.yPos));
+
+    		log.add(new LoggedEvent("Going to bus stop left"));
 		}else{
 			busRight.msgWaitingForBus(this, new Point(personGui.xPos, personGui.yPos));
 		}

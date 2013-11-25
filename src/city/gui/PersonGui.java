@@ -170,23 +170,23 @@ public class PersonGui implements Gui{
 	public void doGoToBus() {
 		if(xPos < 432){
 			xDestination = 67;
-			if(yPos >= 68 && yPos <= 68+60)
+			if(yPos <= 68+60)
 				yDestination = 85;
-			else if(yPos >= 68+80 && yPos <= 68+80+60)
+			else if(yPos <= 68+80+60)
 				yDestination = 85+80;
-			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+			else if(yPos <= 68+80*2+60)
 				yDestination = 85+80*2;
-			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+			else if(yPos <= 68+80*3+60)
 				yDestination = 85+80*3;
 		}else{
 			xDestination = 797;
-			if(yPos >= 68 && yPos <= 68+60)
+			if(yPos <= 68+60)
 				yDestination = 85;
-			else if(yPos >= 68+80 && yPos <= 68+80+60)
+			else if(yPos <= 68+80+60)
 				yDestination = 85+80;
-			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+			else if(yPos <= 68+80*2+60)
 				yDestination = 85+80*2;
-			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+			else if(yPos <= 68+80*3+60)
 				yDestination = 85+80*3;
 		}
 		command = Command.walkingToBus;
@@ -196,11 +196,11 @@ public class PersonGui implements Gui{
 	public void doGetOnBus() {
 
 		if(xPos < 432){
-			xDestination = agent.busLeft.getBusGui().xPos;
-			yDestination = agent.busLeft.getBusGui().yPos;
+			xDestination = agent.busLeft.getBusGui().xPos+5;
+			yDestination = agent.busLeft.getBusGui().yPos+20;
 		}else{
-			xDestination = agent.busRight.getBusGui().xPos;
-			yDestination = agent.busRight.getBusGui().yPos;
+			xDestination = agent.busRight.getBusGui().xPos+5;
+			yDestination = agent.busRight.getBusGui().yPos+20;
 		}
 		
 		command = Command.walkingOnToBus;
@@ -211,23 +211,23 @@ public class PersonGui implements Gui{
 		this.isPresent = true;
 		if(xPos < 432){
 			xDestination = 67;
-			if(yPos >= 68 && yPos <= 68+60)
+			if( yPos <= 68+60)
 				yDestination = 85;
-			else if(yPos >= 68+80 && yPos <= 68+80+60)
+			else if(yPos <= 68+80+60)
 				yDestination = 85+80;
-			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+			else if(yPos <= 68+80*2+60)
 				yDestination = 85+80*2;
-			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+			else if(yPos <= 68+80*3+60)
 				yDestination = 85+80*3;
 		}else{
 			xDestination = 797;
-			if(yPos >= 68 && yPos <= 68+60)
+			if(yPos <= 68+60)
 				yDestination = 85;
-			else if(yPos >= 68+80 && yPos <= 68+80+60)
+			else if(yPos <= 68+80+60)
 				yDestination = 85+80;
-			else if(yPos >= 68+80*2 && yPos <= 68+80*2+60)
+			else if( yPos <= 68+80*2+60)
 				yDestination = 85+80*2;
-			else if(yPos >= 68+80*3 && yPos <= 68+80*3+60)
+			else if(yPos <= 68+80*3+60)
 				yDestination = 85+80*3;
 		}
 		
