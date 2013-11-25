@@ -50,11 +50,10 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	static final int BUSINESS_BROKE_AMOUNT = 500;
 	static final int PERSONAL_BROKE_BORROW_AMOUNT = 200;
 	static final int BUSINESS_BROKE_BORROW_AMOUNT = 700;
-	BankAccount personalAccount = null;
-	BankAccount businessAccount = null;
-	
+
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
+		this.bankTeller = p.simCityGui.bankAgent;
 	}
 	
 	
@@ -62,13 +61,25 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public void goingToBank() {
 		state = CustomerState.EnteringBank;
 		// default check balance tasks in bank
-		if(personalAccount != null) {
+		if(myPerson.personalAccount != null) {
 			tasks.add(new Task(BankingState.WantToCheckBalance, 0, "personal"));
+			// deposit excess cash
+			int excessCash = Double.compare(myPerson.cashOnHand, 600);
+			if(1 == excessCash && 0 == loans.size()) {
+				double cash = myPerson.cashOnHand - 600;
+				cash = (Math.round(100*cash) / ((double)100));
+				tasks.add(new Task(BankingState.WantToDeposit, cash, "personal"));
+			}
 		} else {
 			tasks.add(new Task(BankingState.WantToOpenAccount, 0, "personal"));
 		}
-			
-		if(businessAccount != null && myPerson.isManager) {
+		
+		if(myPerson.businessAccount != null) {
+			int excessCash = Double.compare(myPerson.businessFunds, 0);
+			if(1 == excessCash)
+				tasks.add(new Task(BankingState.WantToDepositToBusiness, myPerson.businessFunds, "business"));
+		}
+		if(myPerson.businessAccount != null && myPerson.isManager) {
 			tasks.add(new Task(BankingState.WantToCheckBalance, 0, "business"));
 		}
 		
@@ -83,13 +94,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				tasks.add(new Task(BankingState.WantToPayBackLoan, l.amount, l.accountType));
 		}
 		
-		// deposit excess cash
-		int excessCash = Double.compare(myPerson.cashOnHand, 600);
-		if(1 == excessCash && 0 == loans.size()) {
-			double cash = myPerson.cashOnHand - 600;
-			cash = (Math.round(100*cash) / ((double)100));
-			tasks.add(new Task(BankingState.WantToDeposit, cash, "personal"));
-		}
 		stateChanged();
 	}
 	
@@ -188,18 +192,22 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	public void msgAtATM() {
-		waitingResponse.release();
+		print("I'm at the atm!");
+		if(0 == waitingResponse.availablePermits())
+			waitingResponse.release();
 		state = CustomerState.AtAtm;
 		stateChanged();
 	}
 	
 	public void msgAnimationFinishedEnterBank() {
-		waitingResponse.release();
+		if(0 == waitingResponse.availablePermits())
+			waitingResponse.release();
 		stateChanged();
 	}
 	
 	public void msgLeftBank() {
-		waitingResponse.release();
+		if(0 == waitingResponse.availablePermits())
+			waitingResponse.release();
 		stateChanged();
 	}
 	
@@ -357,7 +365,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	private void DepositToBusiness(Task t) {
-		bankTeller.msgDepositToAccount(this, businessAccount, t.amount);
+		bankTeller.msgDepositToAccount(this, myPerson.businessAccount, t.amount);
 		myPerson.businessFunds -= t.amount;
 		tasks.remove(t);
 	}
@@ -406,14 +414,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		this.customerGui = g;
 	}
 	
-	public void setBusinessAccount(BankAccount b) {
-		this.businessAccount = b;
-	}
-	
-	public void setPersonalAccount(BankAccount p) {
-		this.personalAccount = p;
-	}
-	
 	public void setBankTeller(BankAgent b) {
 		this.bankTeller = b;
 	}
@@ -421,5 +421,14 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public void setBankBuilding(BankBuilding b) {
 		this.bank = b;
 	}
+	
+	public void setBusinessAccount(BankAccount b) {
+		myPerson.businessAccount = b;
+	}
+	
+	public void setPersonalAccount(BankAccount p) {
+		myPerson.personalAccount = p;
+	}
+	
 	
 }

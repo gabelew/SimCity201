@@ -10,6 +10,8 @@ import atHome.city.Home;
 import atHome.city.Residence;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.roles.BankCustomerRole;
+import city.roles.Role;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -465,6 +467,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
@@ -478,6 +481,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
@@ -491,6 +495,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
@@ -504,6 +509,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
@@ -517,6 +523,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.day);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}    			
     		}else if(name.toLowerCase().contains("cashier") && name.toLowerCase().contains("night")){
@@ -532,6 +539,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
@@ -546,6 +554,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("03")){
     				Restaurant r = gui.restaurants.get(2);
@@ -559,6 +568,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("04")){
     				Restaurant r = gui.restaurants.get(3);
@@ -572,6 +582,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}else if(name.toLowerCase().contains("05")){
     				Restaurant r = gui.restaurants.get(4);
@@ -585,6 +596,7 @@ public class InfoPanel extends JPanel implements KeyListener {
         			}
     				if(!hasCashier){
 						p.job = p.new MyJob(r.location , "cashier", PersonAgent.Shift.night);
+						p.businessAccount = r.getRestaurantAccount();
 					}
     			}
     		}else if(name.toLowerCase().contains("clerk") && name.toLowerCase().contains("day")){
@@ -959,6 +971,113 @@ public class InfoPanel extends JPanel implements KeyListener {
 						p.job = p.new MyJob(m.location , "deliveryman", PersonAgent.Shift.night);
 					}
     			}    			
+    		} else if(name.toLowerCase().contains("rmanager")) {
+    			if(name.toLowerCase().contains("01")) {
+    				Restaurant r = gui.restaurants.get(0);
+    				boolean hasManager = false;
+    				for(PersonAgent currentP: gui.persons) {
+    					if(currentP.job!=null){
+    						if(currentP.job.location == r.location && currentP.job.type.equalsIgnoreCase("manager")){
+    							hasManager = true;
+    						}
+    					}
+    				}
+    				if(!hasManager) {
+    					p.job = p.new MyJob(r.location, "manager", PersonAgent.Shift.none);
+    					p.isManager = true;
+    					BankCustomerRole bcr = null;
+    					for(Role role : p.roles) {
+    						if(role instanceof BankCustomerRole)
+    							bcr = (BankCustomerRole)role;
+    					}
+    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					r.setRestaurantAccount(p.businessAccount);
+    				}
+    			} else if(name.toLowerCase().contains("02")) {
+    				Restaurant r = gui.restaurants.get(1);
+    				boolean hasManager = false;
+    				for(PersonAgent currentP: gui.persons) {
+    					if(currentP.job!=null){
+    						if(currentP.job.location == r.location && currentP.job.type.equalsIgnoreCase("manager")){
+    							hasManager = true;
+    						}
+    					}
+    				}
+    				if(!hasManager) {
+    					p.job = p.new MyJob(r.location, "manager", PersonAgent.Shift.none);
+    					p.isManager = true;
+    					BankCustomerRole bcr = null;
+    					for(Role role : p.roles) {
+    						if(role instanceof BankCustomerRole)
+    							bcr = (BankCustomerRole)role;
+    					}
+    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					r.setRestaurantAccount(p.businessAccount);
+    				}
+    			} else if(name.toLowerCase().contains("03")) {
+    				Restaurant r = gui.restaurants.get(2);
+    				boolean hasManager = false;
+    				for(PersonAgent currentP: gui.persons) {
+    					if(currentP.job!=null){
+    						if(currentP.job.location == r.location && currentP.job.type.equalsIgnoreCase("manager")){
+    							hasManager = true;
+    						}
+    					}
+    				}
+    				if(!hasManager) {
+    					p.job = p.new MyJob(r.location, "manager", PersonAgent.Shift.none);
+    					p.isManager = true;
+    					BankCustomerRole bcr = null;
+    					for(Role role : p.roles) {
+    						if(role instanceof BankCustomerRole)
+    							bcr = (BankCustomerRole)role;
+    					}
+    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					r.setRestaurantAccount(p.businessAccount);
+    				}
+    			} else if(name.toLowerCase().contains("04")) {
+    				Restaurant r = gui.restaurants.get(3);
+    				boolean hasManager = false;
+    				for(PersonAgent currentP: gui.persons) {
+    					if(currentP.job!=null){
+    						if(currentP.job.location == r.location && currentP.job.type.equalsIgnoreCase("manager")){
+    							hasManager = true;
+    						}
+    					}
+    				}
+    				if(!hasManager) {
+    					p.job = p.new MyJob(r.location, "manager", PersonAgent.Shift.none);
+    					p.isManager = true;
+    					BankCustomerRole bcr = null;
+    					for(Role role : p.roles) {
+    						if(role instanceof BankCustomerRole)
+    							bcr = (BankCustomerRole)role;
+    					}
+    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					r.setRestaurantAccount(p.businessAccount);
+    				}
+    			} else if(name.toLowerCase().contains("05")) {
+    				Restaurant r = gui.restaurants.get(4);
+    				boolean hasManager = false;
+    				for(PersonAgent currentP: gui.persons) {
+    					if(currentP.job!=null){
+    						if(currentP.job.location == r.location && currentP.job.type.equalsIgnoreCase("manager")){
+    							hasManager = true;
+    						}
+    					}
+    				}
+    				if(!hasManager) {
+    					p.job = p.new MyJob(r.location, "manager", PersonAgent.Shift.none);
+    					p.isManager = true;
+    					BankCustomerRole bcr = null;
+    					for(Role role : p.roles) {
+    						if(role instanceof BankCustomerRole)
+    							bcr = (BankCustomerRole)role;
+    					}
+    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					r.setRestaurantAccount(p.businessAccount);
+    				}
+    			}
     		}
     		
     		

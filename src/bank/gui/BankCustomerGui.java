@@ -119,6 +119,7 @@ public class BankCustomerGui implements Gui{
 		for(int i = 0; i < ((BankAnimationPanel)role.bank.insideAnimationPanel).atms.size(); i++) {
 			if(atmNumber < 0) {
 				if(((BankAnimationPanel)role.bank.insideAnimationPanel).atms.get(i).tryAcquire()) {
+					System.out.println("Found atm");
 					atmNumber = i;
 					xDestination = atmMap.get(i).x;
 					yDestination = atmMap.get(i).y;
@@ -127,9 +128,15 @@ public class BankCustomerGui implements Gui{
 		}
 		
 		if(atmNumber < 0) {
+			System.out.println("Couldn't find atm");
 			xDestination = xWAITING_START;
 			yDestination = yWAITING_START;
 		}
+	}
+
+	public void setPresent(boolean b) {
+		isPresent = b;
+		
 	}
 
 }

@@ -2,6 +2,7 @@ package city.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import restaurant.Restaurant;
@@ -175,6 +176,8 @@ public class CashierRole extends Role implements Cashier {
 		}
 		if(state == State.leaving){
 			state = State.none;
+			if(!"Saturday".equals(myPerson.dayOfWeek) || !"Sunday".equals(myPerson.dayOfWeek))
+				DepositBusinessCash();
 			cashierGui.DoLeaveRestaurant();
 			try {
 				waitingResponse.acquire();
@@ -268,6 +271,17 @@ public class CashierRole extends Role implements Cashier {
 		print("payed bill");
 	}
 	*/
+	
+	private void DepositBusinessCash() {
+		double cash = bank - 1500;
+		cash = (Math.round(100*cash) / ((double)100));
+		int balance = Double.compare(cash, 0);
+		if(1 == balance) {
+			bank -= cash;
+			myPerson.businessFunds += cash;
+			myPerson.msgDepositBusinessCash();
+		}
+	}
 	
 	private void payBill(Bill billFromDman, Bill invoiceFromCook){
 		if(billFromDman.bill == invoiceFromCook.bill){

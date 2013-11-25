@@ -2,6 +2,7 @@ package restaurant;
 
 import java.awt.Point;
 
+import city.BankAgent.BankAccount;
 import city.animationPanels.InsideAnimationPanel;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
@@ -18,6 +19,7 @@ public class Restaurant {
 	public String type;
 	public InsideAnimationPanel insideAnimationPanel;
 	public String waiterRole;
+	public BankAccount restaurantAccount;
 	
 	public Restaurant(Host h, Cashier c, Cook co, Menu m, String cr, String t, InsideAnimationPanel iap, Point p, String wr){
 		this.host = h;
@@ -28,5 +30,13 @@ public class Restaurant {
 		this.insideAnimationPanel = iap;
 		this.location = p;
 		this.waiterRole = wr;
+	}
+	
+	public void setRestaurantAccount(BankAccount b) {
+		this.restaurantAccount = b;
+	}
+	
+	public BankAccount getRestaurantAccount() {
+		return this.restaurantAccount;
 	}
 }

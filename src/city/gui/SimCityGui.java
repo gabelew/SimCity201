@@ -12,6 +12,7 @@ import javax.swing.*;
 import bank.BankBuilding;
 import atHome.city.Apartment;
 import atHome.city.Home;
+import city.BankAgent;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.animationPanels.ApartmentAnimationPanel;
@@ -59,6 +60,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     List<Restaurant> restaurants = new ArrayList<Restaurant>();
     List<MarketAgent> markets = new ArrayList<MarketAgent>();
     List<BankBuilding> banks = new ArrayList<BankBuilding>();
+    public BankAgent bankAgent = new BankAgent("SimCityBank");
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
     
     private RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
@@ -117,6 +119,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultBuildingPanels();
         
         setVisible(true);
+        
         createDefaultPeople();
     }
 
@@ -133,6 +136,13 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("richhome02");
     	infoPanel.getPersonPanel().addPerson("poorhome03NoFood");
     	infoPanel.getPersonPanel().addPerson("poorhome04LowSteak");
+    	
+    	infoPanel.getPersonPanel().addPerson("rmanager01carhome");
+    	infoPanel.getPersonPanel().addPerson("rmanager02carhome");
+    	infoPanel.getPersonPanel().addPerson("rmanager03carhome");
+    	infoPanel.getPersonPanel().addPerson("rmanager04carhome");
+    	infoPanel.getPersonPanel().addPerson("rmanager05carhome");
+    	
     	infoPanel.getPersonPanel().addPerson("waiter01day");
     	infoPanel.getPersonPanel().addPerson("waiter01daycar");
     	infoPanel.getPersonPanel().addPerson("waiter01nightcar");
@@ -199,6 +209,8 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("deliveryMan04daycar");
     	infoPanel.getPersonPanel().addPerson("deliveryMan05daycar");
     	infoPanel.getPersonPanel().addPerson("deliveryMan06daycar");
+    	
+
     }
 
 	private void createDefaultBuildingPanels() {
