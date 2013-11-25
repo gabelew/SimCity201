@@ -3,11 +3,14 @@ package city.roles;
 
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+
 import market.gui.ClerkGui;
 import market.interfaces.*;
 import city.MarketAgent;
@@ -27,7 +30,7 @@ public class ClerkRole extends Role implements Clerk {
 			s=state;
 		}
 		public Map<String, Integer> Choices = new HashMap<String, Integer>();
-		public List<String> outOf;
+		public List<String> outOf=new ArrayList<String>();
 		public orderState s;
 		public double amountOwed;
 	}
