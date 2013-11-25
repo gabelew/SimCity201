@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import restaurant.test.mock.LoggedEvent;
 import atHome.city.AtHomeGui;
 import city.PersonAgent;
 import city.interfaces.AtHome;
@@ -154,8 +155,10 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		this.state = EventState.none;
 		gui.DoLeaveHome();
-		try { busy.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}
+		if(!myPerson.testing){
+			try { busy.acquire();} 
+			catch (InterruptedException e) {e.printStackTrace();}
+		}
 		myPerson.msgHasLeftHome();
 	}
 	
@@ -377,8 +380,11 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		state = state.none;
 		gui.doEnterHome();
-		try { busy.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}
+		if(!myPerson.testing){
+			try { busy.acquire();} 
+			catch (InterruptedException e) {e.printStackTrace();}
+		}
+		myPerson.log.add(new LoggedEvent("Recieved goToHomePos from myPerson."));
 	}
 	
 /*******************

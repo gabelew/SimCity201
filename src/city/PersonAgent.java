@@ -45,7 +45,7 @@ public class PersonAgent extends Agent implements Person
 	//Various States
 	public enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
 	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
-	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
+	public enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
 	public boolean isRenter;
 	public boolean isManager;
@@ -56,7 +56,7 @@ public class PersonAgent extends Agent implements Person
 	public Bus busRight;
 	public MyJob job;
 	public State state = State.doingNothing;
-	private Location location = Location.InCity;
+	public Location location = Location.InCity;
 	private TransportState transportState = TransportState.none;
 	public Point destination;
 	
@@ -166,7 +166,9 @@ public class PersonAgent extends Agent implements Person
 		AtHomeGui ahGui = new AtHomeGui(this, role);
 		role.setGui(ahGui);
 		ahGui.setPresent(false);
-		myHome.insideAnimationPanel.addGui(ahGui);
+		if(!testing){
+			myHome.insideAnimationPanel.addGui(ahGui);
+		}
 	}
 /***********************
  *  ACCESSOR METHODS START
@@ -425,6 +427,8 @@ public class PersonAgent extends Agent implements Person
 		location = Location.InCity;
 		state = State.doingNothing;
 		stateChanged();
+
+		log.add(new LoggedEvent("Received msgHasLeftHome from atHome Role."));
 	}
 	
 	//RepairMan to Person that appliance is fixed
