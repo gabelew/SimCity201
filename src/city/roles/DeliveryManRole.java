@@ -34,7 +34,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public EventLog log = new EventLog();
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
-	private DeliveryManDrivingGui drivingGui=new DeliveryManDrivingGui(this,myPerson.simCityGui);
+	private DeliveryManDrivingGui drivingGui;
 	private String name;
 	public Order o;
 	Point location;
@@ -56,12 +56,12 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public DeliveryManRole(PersonAgent p){
 		super(p);
 		o=new Order(orderState.noOrder);
+		drivingGui=new DeliveryManDrivingGui(this,myPerson.simCityGui);
 		myPerson.simCityGui.animationPanel.addGui(drivingGui);
 	}
 	public DeliveryManRole(){
 		super();
 		o=new Order(orderState.noOrder);
-		myPerson.simCityGui.animationPanel.addGui(drivingGui);
 	}
 	//messages
 
@@ -197,13 +197,14 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			
 		}
 		}
+		if(notTesting){
 		drivingGui.setStartPos();
 		for (Restaurant r: myPerson.simCityGui.getRestaurants()){
 			if(r.cook==cook){
 				drivingGui.setPresent(true);
 				drivingGui.DoGoDeliver(r.location);
-				print("ON MY WAY!");
 			}
+		}
 		}
 		o.s=orderState.onMyWay;
 	}
@@ -224,8 +225,10 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	private void orderDone(){
 		o.s=orderState.noOrder;
 		cook=null;
-		drivingGui.setPresent(true);
-		drivingGui.DoGoBack();
+		if(notTesting){
+			drivingGui.setPresent(true);
+			drivingGui.DoGoBack();
+		}
 	}
 	
 	private void backAtMarket(){

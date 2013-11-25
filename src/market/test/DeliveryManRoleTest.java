@@ -109,7 +109,7 @@ public class DeliveryManRoleTest extends TestCase
 		assertEquals("Delivery order state should be ordered",deliveryMan.o.s,orderState.ordered);
 		assertTrue("Dellvery man's scheduler should have returned false (waiting for payment).", 
 				deliveryMan.pickAndExecuteAnAction());
-		assertEquals("Delivery order state should be waiting for payment",deliveryMan.o.s,orderState.waitingForPayment);
+		assertEquals("Delivery order state should be on my way",deliveryMan.o.s,orderState.onMyWay);
 		//customer sends payment message
 		deliveryMan.msgHereIsPayment(normAmount,cashier);
 		//check post-conditions of message
