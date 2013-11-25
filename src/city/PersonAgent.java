@@ -20,9 +20,10 @@ import city.BankAgent.BankAccount;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.interfaces.Bus;
+import city.interfaces.Person;
 import city.roles.*;
 
-public class PersonAgent extends Agent 
+public class PersonAgent extends Agent implements Person
 {
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<

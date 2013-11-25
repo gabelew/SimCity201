@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore;
 
 import city.gui.BusGui;
 import city.interfaces.Bus;
+import city.interfaces.Person;
 import agent.Agent;
 
 public class BusAgent extends Agent implements Bus{
@@ -37,10 +38,10 @@ public class BusAgent extends Agent implements Bus{
 	}
 	
 	class MyPassenger{
-		PersonAgent person;
+		Person person;
 		StopEvent stopEvent;
 		
-		MyPassenger(PersonAgent p, StopEvent se){
+		MyPassenger(Person p, StopEvent se){
 			person = p;
 			stopEvent = se;
 		}
@@ -86,7 +87,7 @@ public class BusAgent extends Agent implements Bus{
 	
 	//Messages
 	
-	public void msgWaitingForBus(PersonAgent p, Point location){
+	public void msgWaitingForBus(Person p, Point location){
 		MyBusStop b = findBusStop(location);	
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
 		print("\t\t\t\t\t" +p.getName());
@@ -114,7 +115,7 @@ public class BusAgent extends Agent implements Bus{
 			return busStops.get(3);
 		}
 	}
-	public void msgComingAboard(PersonAgent p, Point Destination){
+	public void msgComingAboard(Person p, Point Destination){
 
 		MyBusStop b = findBusStop(Destination);	
 		

@@ -7,9 +7,9 @@ import city.gui.BusGui;
 
 public interface Bus {
 	
-	public abstract void msgWaitingForBus(PersonAgent p, Point location);
+	public abstract void msgWaitingForBus(Person p, Point location);
 	
-	public abstract void msgComingAboard(PersonAgent p, Point Destination);
+	public abstract void msgComingAboard(Person p, Point Destination);
 	
 	public abstract void msgAtStop(Point busStop);
 	
