@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bank.BankBuilding;
+import market.interfaces.MarketCustomer;
 import market.test.mock.MockClerk;
 import market.test.mock.MockDeliveryMan;
 import market.test.mock.MockMarket;
@@ -15,14 +16,12 @@ import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.roles.MarketCustomerRole;
+import city.roles.Role;
 import city.test.mock.*;
 
 public class PersonAgentTest extends TestCase{
-	MockMarket market;
 	PersonAgent person;
-	MockBankCustomer bankCustomer;
-	MockMarketCustomer marketCustomer;
-	MockAtHomeRole atHomeRole;
 	MockDeliveryMan deliveryManRole;
 	MockClerk clerkRole;
 	
@@ -32,7 +31,6 @@ public class PersonAgentTest extends TestCase{
 	
 	
 	Residence h;
-	//MockPerson person
 	
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -42,15 +40,13 @@ public class PersonAgentTest extends TestCase{
 		super.setUp();		
 
 		h = new MockHome(new Point(297,68));
-		market = new MockMarket("mockMarket");
 		person = new PersonAgent("personAgent",100, simCityGui, h );
 
 		PersonGui pgui = new PersonGui(person, simCityGui);
 		person.setGui(pgui);
+		pgui.setPresent(true);
+		simCityGui.animationPanel.addGui(pgui);
 		
-		marketCustomer = new MockMarketCustomer("personMarketCustomeRole");
-		bankCustomer = new MockBankCustomer("personBankCustomerRole");
-		atHomeRole = new MockAtHomeRole("personAtHomeRole");
 		deliveryManRole = new MockDeliveryMan("personDeliveryManJob");
 		clerkRole = new MockClerk("personClerkJob");
 
@@ -59,12 +55,9 @@ public class PersonAgentTest extends TestCase{
 		}
 		person.testing = true;
 	}
-	public void testMarketCustomerIntoandOutOfMarketTest(){
+	public void testMarketCustomerIntoMarket(){
 		//setUp() runs first before this test!
 		// check preconditions
-		assertEquals("personMarketCustomeRole should have an empty event log before the personAgents's getFoodFromMarket is called. Instead, the personMarketCustomeRole's event log reads: "
-				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
-
 		assertEquals("personAgent should have an empty event log before the personAgent's getFoodFromMarket is called. Instead, the personAgent's event log reads: "
 				+ person.log.toString(), 0, person.log.size());
 		
@@ -72,9 +65,6 @@ public class PersonAgentTest extends TestCase{
 		toOrderFromMarket.put("steak", 4);
 		
 		person.msgGetFoodFromMarket(toOrderFromMarket);
-
-		assertEquals("personMarketCustomeRole should have an empty event log before the personAgents's getFoodFromMarket is called. Instead, the personMarketCustomeRole's event log reads: "
-				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
 
 		assertTrue("personAgent should have logged \"Received msgGetFoodFromMarket added goToMarket to tasklist\" but didn't. His log reads instead: " 
 				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Received msgGetFoodFromMarket added goToMarket to tasklist"));
@@ -84,21 +74,53 @@ public class PersonAgentTest extends TestCase{
 		
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
-
-		assertEquals("personMarketCustomeRole should have an empty event log after the personAgents's scheduler is called. Instead, the personMarketCustomeRole's event log reads: "
-				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
 		
+		//Check post scheduler conditions and pre scheduler conditions
 		assertTrue("personAgent should have logged \"Called goToMarket\" but didn't. His log reads instead: " 
 				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Called goToMarket from scheduler going to closest market"));
 		
 		assertEquals("personAgent should be going to closest market. Instead, the personAgents destination is: ("
 				+ person.destination.x + ", " + person.destination.y + ")" , new Point(417, 68), person.destination);
 		
-
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
+		
+		assertTrue("personAgent should have logged \"Received startShopping in MarketCustomer role.\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("received start shopping from person"));
 
+		assertEquals("personAgent should be in state Shopping. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.shopping);
+		int i =0;
+		while(person.personGui.xPos != 417 || person.personGui.yPos != 68){
+			if(i==100){
+				assertTrue("We never recieved mgCheckPrinted.", false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+		assertEquals("personAgent should be at to closest market. Instead, the personAgents location is: ("
+				+ person.destination.x + ", " + person.destination.y + ")" , new Point(417, 68), new Point(person.personGui.xPos,person.personGui.yPos) );
+		
+		MarketCustomerRole mcr = null;
+		boolean hasMarketRole = false;
+		for(Role r: person.roles){
+			if(r instanceof MarketCustomerRole){
+				mcr = (MarketCustomerRole) r;
+				hasMarketRole = true;
+			}
+		}
+		
+		if(hasMarketRole){
+			assertTrue("personAgent's Market customer role should be active. Instead it is false", mcr.active);
+			assertTrue("personAgent's Market customer role gui should be present. Instead it is false", mcr.getMarketCustomerGui().isPresent());
+		}else{
+			assertTrue("No marketCustomer was added.", false);
+		}
 	}
+	
 	public void testBankCustomerIntoandOutOfBankTest(){
 		//setUp() runs first before this test!
 		
@@ -109,9 +131,6 @@ public class PersonAgentTest extends TestCase{
 		//setUp() runs first before this test!
 		
 		// check preconditions
-		assertEquals("personAtHomeRole should have an empty event log before the personAgents's nextHour is called. Instead, the personAtHomeRole's event log reads: "
-				+ atHomeRole.log.toString(), 0, atHomeRole.log.size());
-
 		assertEquals("personAgent should have an empty event log before the personAgent's nextHour is called. Instead, the personAgent's event log reads: "
 				+ person.log.toString(), 0, person.log.size());
 

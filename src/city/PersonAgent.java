@@ -43,7 +43,7 @@ public class PersonAgent extends Agent implements Person
 	public boolean testing = false;
 	
 	//Various States
-	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak};
+	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
 	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
@@ -61,6 +61,7 @@ public class PersonAgent extends Agent implements Person
 	public Point destination;
 	
 	Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
+	Map<String, Integer> toPutInFridge = null;
 	
 	public int currentHour;
 	public String dayOfWeek;
@@ -468,7 +469,40 @@ public class PersonAgent extends Agent implements Person
 /***************************
  * ATHOME MESSAGES END
  ***************************/
-	
+
+/***************************
+ * MARKET CUSTOMER MESSAGES END
+ ***************************/
+	public void doneShopping(Map<String,Integer> purchasedFood,MarketAgent m){
+		//restockFidge with purchased food
+		toPutInFridge = purchasedFood;
+		
+		/*boolean inList = false;
+		for(Task t: taskList){
+			if(t == Task.goToHomeWithFood)
+				inList = true;
+		}
+		if(!inList){
+			taskList.add(Task.goToHomeWithFood);
+		}*/
+		
+		MarketCustomerRole removeRole = null;
+		for(Role r: roles){
+			if(r instanceof MarketCustomerRole){
+				m.insideAnimationPanel.removeGui(((MarketCustomerRole) r).getMarketCustomerGui());
+		    	((MarketCustomerRole) r).getMarketCustomerGui().setPresent(false);
+				r.active = false;
+				removeRole = (MarketCustomerRole) r;
+			}
+		}
+		roles.remove(removeRole);
+	}
+	public void marketNotStocked(MarketAgent market){
+		markets.remove(market);
+	}
+/***************************
+ * MARKET CUSTOMER MESSAGES END
+ ***************************/
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  *                    SCHEDULER 
