@@ -18,7 +18,7 @@ public class ClerkGui implements Gui{
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
 	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
-	private enum state{waiting,gettingFood,givingFood};
+	private enum state{gettingToStand,waiting,gettingFood,givingFood};
 	state clerkState;
 	
 	static final int CUST_START_POS = -40;
@@ -35,6 +35,7 @@ public class ClerkGui implements Gui{
 			
 		}
 		this.role = role;
+		clerkState=state.gettingToStand;
 	}
 	
 	public void setRole(ClerkRole Role) {
@@ -52,12 +53,16 @@ public class ClerkGui implements Gui{
 		else if (yPos > yDestination)
 			yPos--;
 		if (xPos==xDestination&&yPos==yDestination&&clerkState==state.gettingFood){
-			role.atShelf();
 			clerkState=state.waiting;
+			role.atShelf();
 		}
 		if(xPos==xDestination&&yPos==yDestination&&clerkState==state.givingFood){
-			role.atShelf();
 			clerkState=state.waiting;
+			role.atShelf();
+		}
+		if(xPos==xDestination&&yPos==yDestination&&clerkState==state.gettingToStand){
+			clerkState=state.waiting;
+			role.atShelf();
 		}
 	}
 
@@ -77,22 +82,22 @@ public class ClerkGui implements Gui{
 			yDestination=ySHELF1;
 			clerkState=state.gettingFood;
 		}
-		if(Food=="chicken"){
+		else if(Food=="chicken"){
 			xDestination=xSHELF1+50;
 			yDestination=ySHELF1+50;
 			clerkState=state.gettingFood;
 		}
-		if(Food=="pizza"){
+		else if(Food=="pizza"){
 			xDestination=xSHELF1+100;
 			yDestination=ySHELF1+100;
 			clerkState=state.gettingFood;
 		}
-		if(Food=="cookie"){
+		else if(Food=="cookie"){
 			xDestination=xSHELF1+150;
 			yDestination=ySHELF1+150;
 			clerkState=state.gettingFood;
 		}
-		if(Food=="car"){
+		else{
 			xDestination=xSHELF1+200;
 			yDestination=ySHELF1+200;
 			clerkState=state.gettingFood;
@@ -113,6 +118,10 @@ public class ClerkGui implements Gui{
 		clerkState=state.givingFood;
 	}
 
+	public void DoDoneWithOrder(){
+		clerkState=state.gettingToStand;
+	}
+	
 	public void setPresent(boolean b) {
 		isPresent = true;
 	}

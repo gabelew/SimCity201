@@ -91,8 +91,9 @@ public void msgClerkDone(Clerk c){
 		if(cl.clerk==c){
 			if(cl.clerkState==state.wantOffWork)
 				cl.clerkState=state.offWork;
-			else
+			else{
 				cl.clerkState=state.free;
+			}
 		}
 	}
 	if(getStateChangePermits()==0){
@@ -131,6 +132,7 @@ public boolean pickAndExecuteAnAction() {
 			}
 			else if(c.clerkState==state.offWork){
 				clerkDone(c);
+				return true;
 			}
 		}
 		for(delivery d: deliverys){
@@ -144,6 +146,7 @@ public boolean pickAndExecuteAnAction() {
 			}
 			else if(d.deliveryState==state.offWork){
 				deliveryDone(d);
+				return true;
 			}
 		}
 		

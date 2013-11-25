@@ -29,10 +29,11 @@ public class MarketCustomerGui implements Gui{
 	
 	public static List<Semaphore> atms = new ArrayList<Semaphore>();
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
-	
+	public enum state{waiting,ordering};
+	state customerState;
 	static final int CUST_START_POS = -40;
-	static final int xWAITING_START = 50;
-	static final int yWAITING_START = 70;
+	static final int xWAITING_START = 150;
+	static final int yWAITING_START = 230;
 	
 	public MarketCustomerGui(MarketCustomerRole role) {
 		try {
@@ -55,6 +56,11 @@ public class MarketCustomerGui implements Gui{
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
+		
+		if(xPos==xDestination&&yPos==yDestination&&customerState==state.ordering){
+			customerState=state.waiting;
+			role.atSpot();
+		}
 	}
 
 	@Override
@@ -68,13 +74,14 @@ public class MarketCustomerGui implements Gui{
 	}
 	
 	public void DoLeaveMarket(){
-		xDestination=-5;
-		yDestination=-5;
+		xDestination=CUST_START_POS;
+		yDestination=CUST_START_POS;
 	}
 
 	public void DoGoToClerk() {
 		xDestination=xWAITING_START-5;
 		yDestination=yWAITING_START;
+		customerState=state.ordering;
 		
 	}
 

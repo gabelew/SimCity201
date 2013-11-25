@@ -18,7 +18,7 @@ import city.PersonAgent;
  */
 public class ClerkRole extends Role implements Clerk {
 	public EventLog log = new EventLog();
-	private Semaphore atShelf=new Semaphore(1,true);
+	private Semaphore atShelf=new Semaphore(0,true);
 	private ClerkGui clerkGui=new ClerkGui(this);
 	public Order o;
 	public class Order{
@@ -94,6 +94,11 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	//actions
 	private void askForOrder(){
+		try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		o.s=orderState.waitingForOrder;
 		MCR.msgCanIHelpYou(this);
 	}
@@ -139,6 +144,7 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	
 	private void orderDone(){
+		clerkGui.DoDoneWithOrder();
 		o.s=orderState.noOrder;
 		MCR=null;
 		Market.msgClerkDone(this);

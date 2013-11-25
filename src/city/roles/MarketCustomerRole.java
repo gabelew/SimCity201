@@ -9,6 +9,10 @@ import java.util.Map;
 
 
 
+
+
+import java.util.concurrent.Semaphore;
+
 import market.gui.MarketCustomerGui;
 import market.interfaces.MarketCustomer;
 import city.MarketAgent;
@@ -19,6 +23,7 @@ import city.PersonAgent;
  */
 public class MarketCustomerRole extends Role implements MarketCustomer {
 	private MarketCustomerGui marketCGui=new MarketCustomerGui(this);
+	private Semaphore atShelf=new Semaphore(0,true);
 	MarketAgent market;
 	PersonAgent myPerson; 
 	ClerkRole Clerk;
@@ -46,6 +51,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		if(myPerson.getStateChangePermits()==0){
 			stateChanged();	
 		}
+		print("placing market order");
+		market.msgPlaceOrder(this);
 	}
 
 	public void msgCanIHelpYou(ClerkRole clerk){
@@ -93,6 +100,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	//actions
 	private void giveOrder(){
 		marketCGui.DoGoToClerk();
+	    try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			
+		}
 		Clerk.msgPlaceOrder(o.Choices);
 		o.s=orderState.ordered;
 	}
@@ -106,11 +118,20 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void receivedOrder(){
 		marketCGui.DoLeaveMarket();
+	    try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			
+		}
 		o=null;
 	}
 	
 	public MarketCustomerGui getMarketCustomerGui(){
 		return marketCGui;
+	}
+	
+	public void atSpot(){
+		atShelf.release();
 	}
 
 }
