@@ -186,18 +186,18 @@ public class BusAgent extends Agent implements Bus{
 		}
 		
 		
-		/*for(MyBusStop b : busStops){
+		for(MyBusStop b : busStops){
 			if(!b.passengers.isEmpty() && state != State.goingToStop){
 				state = State.goingToStop;
 				GoToNextBusStop();
 				return true;
 			}
-		}*/
+		}
 		
 		/*if(state == State.none)
 			goToRest();*/
-		//if(state == State.none)
-			GoToNextBusStop();
+		if(state == State.none)
+			goToRest();
 		
 		return false;
 	}
@@ -211,6 +211,7 @@ public class BusAgent extends Agent implements Bus{
 		
 	}
 	private void GoToNextBusStop(){
+		print("going to next stop");
 		busGui.GoToNextBusStop();
 	}
 	
@@ -221,6 +222,11 @@ public class BusAgent extends Agent implements Bus{
 			}
 		}, 
 		4000);
+		for(MyBusStop b: busStops){
+		for(MyPassenger p : b.passengers){
+			print("\t\t\t\t"+p.person.getName());
+		}
+		}
 		List<MyPassenger> removePs = Collections.synchronizedList(new ArrayList<MyPassenger>());
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){

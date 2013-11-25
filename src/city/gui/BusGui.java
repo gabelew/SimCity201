@@ -68,9 +68,9 @@ public class BusGui implements Gui{
 				yPos++;
 			}else if (yPos != yDestination && type == 'B' && yPos > -50){
 				yPos--;
-			}else if(type == 'B' && yPos <= -40){
+			}else if(yPos != yDestination && type == 'B' && yPos <= -40){
 				yPos = 410;
-			}else if(type == 'F' && yPos >= 410){
+			}else if(yPos != yDestination && type == 'F' && yPos >= 410){
 				yPos = -40;
 			}
 
@@ -119,45 +119,38 @@ public class BusGui implements Gui{
 	public int NextBY(){
 		int y = -40;
 		if(type == 'B'){
-		switch(yPos){
-		case 410: y = 305;
-		break;
-		
-		case 305: y = 225;
-		break;
-		
-		case 225: y = 145;
-		break;
-		
-		case 145: y = 65;
-		break;
-		
-		case 65: y = 305;
-		break;
+			
+			if(yPos>305){
+				y=305;
+			}else if(yPos>225){
+				y=225;
+			}else if(yPos>145){
+				y=145;
+			}else if(yPos>65){
+				y=65;
+			}else{
+				y=305;
+			}
 		}
-		}
-		return y;
+			 
+			
+			return y;
 	}
 	
 	public int NextFY(){
 		int y = 410;
 		if(type == 'F'){
-		switch(yPos){
-		case -40: y = 65;
-		break;
-		
-		case 65: y = 145;
-		break;
-		
-		case 145: y = 225;
-		break;
-		
-		case 225: y = 305;
-		break;
-		
-		case 305: y = 65;
-		break;
-		}
+			if(yPos<65){
+				y=65;
+			}else if(yPos<145){
+				y=145;
+			}else if (yPos<225){
+				y=225;
+			}else if(yPos<305){
+				y=305;
+			}else{
+				y=65;
+			}
 		}
 		
 		return y;
