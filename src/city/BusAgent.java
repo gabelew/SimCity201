@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.BusAgent.MyBusStop;
 import city.gui.BusGui;
 import city.interfaces.Bus;
 import city.interfaces.Person;
@@ -34,6 +35,10 @@ public class BusAgent extends Agent implements Bus{
 		
 		public Point getLocation(){
 			return location;
+		}
+
+		public List<MyPassenger> getPassengers() {
+			return passengers;
 		}	
 	}
 	
