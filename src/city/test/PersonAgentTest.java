@@ -57,6 +57,7 @@ public class PersonAgentTest extends TestCase{
 		for(MarketAgent m: simCityGui.getMarkets()){
 			person.addMarket(m);
 		}
+		person.testing = true;
 	}
 	public void testMarketCustomerIntoandOutOfMarketTest(){
 		//setUp() runs first before this test!
@@ -83,7 +84,7 @@ public class PersonAgentTest extends TestCase{
 		
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
-	
+
 		assertEquals("personMarketCustomeRole should have an empty event log after the personAgents's scheduler is called. Instead, the personMarketCustomeRole's event log reads: "
 				+ marketCustomer.log.toString(), 0, marketCustomer.log.size());
 		

@@ -861,6 +861,13 @@ public class PersonAgent extends Agent
     	state  = State.banking;
     	BankBuilding m = findBank(destination);
     	personGui.DoWalkTo(destination); //animationStub
+    	if(!testing){
+        	try {
+    			waitingResponse.acquire();
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
     	/*MarketCustomerRole role = new MarketCustomerRole(this);
     	roles.add(role);
     	role.active = true;
@@ -895,6 +902,13 @@ public class PersonAgent extends Agent
     	state  = State.shopping;
     	MarketAgent m = findMarket(destination);
     	personGui.DoWalkTo(destination); //animationStub
+    	if(!testing){
+        	try {
+    			waitingResponse.acquire();
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
     	MarketCustomerRole role = new MarketCustomerRole(this);
     	roles.add(role);
     	role.active = true;
