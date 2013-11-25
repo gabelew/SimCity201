@@ -42,13 +42,17 @@ public class BusAgent extends Agent implements Bus{
 		}	
 	}
 	
-	class MyPassenger{
+	public class MyPassenger{
 		Person person;
 		StopEvent stopEvent;
 		
 		MyPassenger(Person p, StopEvent se){
 			person = p;
 			stopEvent = se;
+		}
+		
+		public StopEvent getStopEvent(){
+			return stopEvent;
 		}
 	}
 	
@@ -160,7 +164,7 @@ public class BusAgent extends Agent implements Bus{
 	
 	//Scheduler
 	
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		
 		if(state == State.atStop0){
 			transferPeople(busStops.get(0));
