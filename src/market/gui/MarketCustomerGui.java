@@ -26,7 +26,7 @@ public class MarketCustomerGui implements Gui{
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
 	private int xDestination = 20, yDestination = 20;
-	
+	private int chairSpot;
 	public static List<Semaphore> atms = new ArrayList<Semaphore>();
 	private Map<Integer, Point> atmMap = new HashMap<Integer, Point>();
 	public enum state{waiting,ordering,leaving};
@@ -90,6 +90,7 @@ public class MarketCustomerGui implements Gui{
 	}
 	
 	public void DoWait(int chair){
+		chairSpot=chair;
 		xDestination=140+chair*50;
 		yDestination=370;
 		customerState=state.waiting;

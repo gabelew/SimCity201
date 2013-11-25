@@ -6,12 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
-
-
 import java.util.concurrent.Semaphore;
 
 import restaurant.test.mock.LoggedEvent;
@@ -26,8 +20,7 @@ import city.PersonAgent;
 public class MarketCustomerRole extends Role implements MarketCustomer {
 	private MarketCustomerGui marketCGui=new MarketCustomerGui(this);
 	private Semaphore atShelf=new Semaphore(0,true);
-	private int wait;
-	boolean waiting=false;
+	private int numChair;
 	MarketAgent market;
 	PersonAgent myPerson; 
 	ClerkRole Clerk;
@@ -42,7 +35,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 			this.s = s;
 		}
 	}
-	private enum orderState{waiting, ordering,ordered,paymentReceived, payed,done,left};
+	private enum orderState{waiting,entered, ordering,ordered,paymentReceived, payed,done,left};
 	public MarketCustomerRole(PersonAgent p){
 		super(p);
 		this.myPerson=p;
@@ -59,6 +52,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 
 	public void msgCanIHelpYou(ClerkRole clerk){
+		print("can I");
 		Clerk=clerk;
 		o.s=orderState.ordering;
 		stateChanged();	
@@ -78,10 +72,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		stateChanged();	
 	}
 	
-	public void msgWait(int num){
-		wait=num;
-		waiting=true;
-	}
 	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
@@ -98,18 +88,34 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 				receivedOrder();
 				return true;
 			}
-		}
-		if(waiting){
-			waiting=false;
-			marketCGui.DoWait(wait);
-			return true;
+			if(o.s==orderState.waiting){
+				o.s=orderState.entered;
+				findPlaceToWait();
+				return true;
+			}
 		}
 		return false;
 	}
 
 	//actions
+	private void findPlaceToWait(){
+		boolean trying=false;
+		for(int i=0;i<market.chairs.size();i++)
+		{
+			if(market.chairs.get(i).free==true&&!trying){
+				market.chairs.get(i).free=false;
+				marketCGui.DoWait(i);
+				trying=true;
+				numChair=i;
+			}
+		}
+		if(!trying){
+			marketCGui.DoWait(1);
+		}
+	}
 	private void giveOrder(){
 		marketCGui.DoGoToClerk();
+		market.chairs.get(numChair).free=true;
 	    try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
@@ -133,9 +139,10 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			
 		}
-	    /*myPerson.doneShopping(o.Choices);
-	     * if(o.outOf==null||o.outOf.size()==0)
-	    //myPerson.marketNotStocked(o.Choices,market);*/
+	    /*
+	    if(o.outOf==null||o.outOf.size()==0)
+	    	myPerson.marketNotStocked(market);
+	    myPerson.doneShopping(o.Choices,market);*/
 		o=null;
 	}
 	

@@ -121,8 +121,8 @@ public class BankCustomerGui implements Gui{
 				if(((BankAnimationPanel)role.bank.insideAnimationPanel).atms.get(i).tryAcquire()) {
 					System.out.println("Found atm");
 					atmNumber = i;
-					xDestination = atmMap.get(i).x;
-					yDestination = atmMap.get(i).y;
+					xDestination = atmMap.get(i).x - 3;
+					yDestination = atmMap.get(i).y - 3;
 				}
 			}
 		}

@@ -193,21 +193,20 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	public void msgAtATM() {
 		print("I'm at the atm!");
-		if(0 == waitingResponse.availablePermits())
-			waitingResponse.release();
+		waitingResponse.release();
 		state = CustomerState.AtAtm;
 		stateChanged();
 	}
 	
 	public void msgAnimationFinishedEnterBank() {
-		if(0 == waitingResponse.availablePermits())
-			waitingResponse.release();
+		print("Finished entering bank.");
+		waitingResponse.release();
 		stateChanged();
 	}
 	
 	public void msgLeftBank() {
-		if(0 == waitingResponse.availablePermits())
-			waitingResponse.release();
+		print("Left the bank.");
+		waitingResponse.release();
 		stateChanged();
 	}
 	
@@ -246,6 +245,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			}
 			for(Task t : tasks) {
 				if(BankingState.WantToDepositToBusiness.equals(t.bs)){
+					print("Task to deposit to business!");
 					t.bs = BankingState.Depositing;
 					DepositToBusiness(t);
 					return true;

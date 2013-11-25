@@ -228,7 +228,13 @@ public class PersonAgent extends Agent implements Person
 	}
 	
 	public void msgDoneAtBank() {
-		// make Bank Role inactive
+		state = State.doingNothing;
+		for(Role role: roles) {
+    		if (role instanceof BankCustomerRole) {
+    			role.active = false;
+    		}
+		}
+		stateChanged();
 	}
 	
 /***************************

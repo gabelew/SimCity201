@@ -17,8 +17,15 @@ public class MarketAgent extends Agent implements Market {
 public EventLog log = new EventLog();
 public InsideAnimationPanel insideAnimationPanel;
 public Point location;
-private int NUM_CHAIRS=8;
-private int waitChair=1;
+public List<chair>chairs=new ArrayList<chair>();
+public class chair{
+	public chair(int i, boolean b) {
+		number=i;
+		free=b;
+	}
+	public int number;
+	public boolean free;
+}
 private String name;
 public List<MyCustomer>MyCustomers=new ArrayList<MyCustomer>();
 public List<MyCook>MyCooks= new ArrayList<MyCook>();
@@ -69,6 +76,9 @@ public MarketAgent(Point Location,String Name, InsideAnimationPanel iap){
 	this.location=Location;
 	this.name=Name;
 	this.insideAnimationPanel = iap;
+	for (int i=0;i<10;i++){
+		chairs.add(new chair(i,true));
+	}
 }
 
 //messages to market
@@ -126,7 +136,7 @@ public boolean pickAndExecuteAnAction() {
 		for(clerk c:clerks){
 			if(c.clerkState==state.free){
 				for (MyCustomer MC:MyCustomers){
-					if (MC.state==customerState.assigned){
+					if (MC.state==customerState.waiting){
 						giveToClerk(c,MC);
 						return true;
 					}
@@ -134,12 +144,6 @@ public boolean pickAndExecuteAnAction() {
 			}
 			else if(c.clerkState==state.offWork){
 				clerkDone(c);
-				return true;
-			}
-		}
-		for (MyCustomer MC:MyCustomers){
-			if (MC.state==customerState.waiting){
-				wait(MC);
 				return true;
 			}
 		}
@@ -182,10 +186,6 @@ private void clerkDone(clerk c){
 	clerks.remove(c);
 }
 
-private void wait(MyCustomer cust){
-	cust.state=customerState.assigned;
-	cust.MC.msgWait(waitChair);
-}
 private void deliveryDone(delivery d){
 	deliverys.remove(d);
 }
