@@ -134,5 +134,5 @@ public class ClerkRoleTest extends TestCase
 				clerk.pickAndExecuteAnAction());
 	}
 
-
 }
+
