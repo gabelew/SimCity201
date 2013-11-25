@@ -43,7 +43,7 @@ public class PersonAgent extends Agent implements Person
 	public boolean testing = false;
 	
 	//Various States
-	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
+	public enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
 	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
@@ -922,11 +922,13 @@ public class PersonAgent extends Agent implements Person
 	    
 	    if(car == true || destination.y == personGui.yPos){
     		personGui.DoWalkTo(destination);
-			try {
-				waitingResponse.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+    		if(!testing){
+				try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    		}
     	}else{
     		goToBusStop();
     	} 

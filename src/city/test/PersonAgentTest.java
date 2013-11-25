@@ -14,6 +14,8 @@ import atHome.city.Residence;
 import junit.framework.TestCase;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.PersonAgent.State;
+import city.PersonAgent.Task;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.roles.MarketCustomerRole;
@@ -21,7 +23,7 @@ import city.roles.Role;
 import city.test.mock.*;
 
 public class PersonAgentTest extends TestCase{
-	PersonAgent person;
+	PersonAgent person, person2;
 	MockDeliveryMan deliveryManRole;
 	MockClerk clerkRole;
 	
@@ -41,6 +43,7 @@ public class PersonAgentTest extends TestCase{
 
 		h = new MockHome(new Point(297,68));
 		person = new PersonAgent("personAgent",100, simCityGui, h );
+		person2 = new PersonAgent("personAgent",20, simCityGui, h );
 
 		PersonGui pgui = new PersonGui(person, simCityGui);
 		person.setGui(pgui);
@@ -60,10 +63,14 @@ public class PersonAgentTest extends TestCase{
 		// check preconditions
 		assertEquals("personAgent should have an empty event log before the personAgent's getFoodFromMarket is called. Instead, the personAgent's event log reads: "
 				+ person.log.toString(), 0, person.log.size());
+		assertEquals("personAgent should have 0 items in task list. Instead, the personAgents task list has: "
+				+ person.taskList.size(), 0, person.taskList.size());
 		
+		//set up msgGetFoodFromMarket
 		Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
 		toOrderFromMarket.put("steak", 4);
 		
+		//call msgGetFoodFromMarket
 		person.msgGetFoodFromMarket(toOrderFromMarket);
 
 		assertTrue("personAgent should have logged \"Received msgGetFoodFromMarket added goToMarket to tasklist\" but didn't. His log reads instead: " 
@@ -71,6 +78,7 @@ public class PersonAgentTest extends TestCase{
 		
 		assertEquals("personAgent should have 1 item in task list. Instead, the personAgents task list has: "
 				+ person.taskList.size(), 1, person.taskList.size());
+		
 		
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
@@ -84,6 +92,7 @@ public class PersonAgentTest extends TestCase{
 		
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
+		
 		
 		assertTrue("personAgent should have logged \"Received startShopping in MarketCustomer role.\" but didn't. His log reads instead: " 
 				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("received start shopping from person"));
@@ -101,6 +110,7 @@ public class PersonAgentTest extends TestCase{
 			    Thread.currentThread().interrupt();
 			}
 		}
+		
 		assertEquals("personAgent should be at to closest market. Instead, the personAgents location is: ("
 				+ person.destination.x + ", " + person.destination.y + ")" , new Point(417, 68), new Point(person.personGui.xPos,person.personGui.yPos) );
 		
@@ -121,10 +131,35 @@ public class PersonAgentTest extends TestCase{
 		}
 	}
 	
-	public void testBankCustomerIntoandOutOfBankTest(){
+	public void testBankCustomerIntoBankTest(){
 		//setUp() runs first before this test!
 		
 		// check preconditions
+		assertEquals("personAgent should have an empty event log before the personAgent's getFoodFromMarket is called. Instead, the personAgent's event log reads: "
+				+ person2.log.toString(), 0, person2.log.size());
+		assertEquals("personAgent should have 0 items in task list. Instead, the personAgents task list has: "
+				+ person2.taskList.size(), 0, person2.taskList.size());
+		
+		//set up msgGetFoodFromMarket
+		Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
+		toOrderFromMarket.put("steak", 4);
+				
+		//call msgGetFoodFromMarket
+		person2.msgGetFoodFromMarket(toOrderFromMarket);
+
+		//check post msg call and prescheduler conditions
+		assertTrue("personAgent should have logged \"Received msgGetFoodFromMarket added goToMarket to tasklist\" but didn't. His log reads instead: " 
+						+ person2.log.getLastLoggedEvent().toString(), person2.log.containsString("Received msgGetFoodFromMarket added goToMarket to tasklist"));
+		
+		assertEquals("personAgent should have 2 items in task list. Instead, the personAgents task list has: "
+						+ person2.taskList.size(), 2, person2.taskList.size());
+	
+		
+		//run scheduler
+		person2.pickAndExecuteAnAction();
+		
+		//check post conditions and pre conditions
+		assertEquals( "personAgent should be in state goingToBank", person2.state == State.goingToBank);
 		
 	}
 	public void testPersonIntoAndOutOfHomeToRest() {
@@ -133,7 +168,8 @@ public class PersonAgentTest extends TestCase{
 		// check preconditions
 		assertEquals("personAgent should have an empty event log before the personAgent's nextHour is called. Instead, the personAgent's event log reads: "
 				+ person.log.toString(), 0, person.log.size());
-
+		assertEquals("personAgent should have 0 items in task list. Instead, the personAgents task list has: "
+				+ person.taskList.size(), 0, person.taskList.size());
 		
 		/**
 		 * Step 1: Bank gets a message from a customer to open an account.		
