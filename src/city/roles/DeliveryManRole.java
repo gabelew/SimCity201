@@ -168,8 +168,8 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		}
 		}
 		//deliveryGui.DoGoDeliver(location);
-		DeliveryManDrivingGui driving = new DeliveryManDrivingGui(this, myPerson.simCityGui);
-		driving.setPresent(true);
+		//DeliveryManDrivingGui driving = new DeliveryManDrivingGui(this, myPerson.simCityGui);
+		//driving.setPresent(true);
 		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
 	}
