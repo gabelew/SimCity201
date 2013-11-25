@@ -161,6 +161,7 @@ public class ClerkRole extends Role implements Clerk {
 	private void orderDone(){
 		clerkGui.DoDoneWithOrder();
 		o.s=orderState.noOrder;
+		o.amountOwed=0;
 		MCR=null;
 		Market.msgClerkDone(this);
 	}
