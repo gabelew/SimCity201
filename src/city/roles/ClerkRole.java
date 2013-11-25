@@ -68,6 +68,7 @@ public class ClerkRole extends Role implements Clerk {
 	
 	public void msgDoneWithShift(){
 		event=AgentEvent.offWork;
+		stateChanged();
 	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
