@@ -117,9 +117,8 @@ public class BusGui implements Gui{
 	
 	
 	public int NextBY(){
-		int y = 0;
+		int y = -40;
 		if(type == 'B'){
-			y = 0;
 		switch(yPos){
 		case 410: y = 305;
 		break;
@@ -141,7 +140,7 @@ public class BusGui implements Gui{
 	}
 	
 	public int NextFY(){
-		int y = -40;
+		int y = 410;
 		if(type == 'F'){
 		switch(yPos){
 		case -40: y = 65;
@@ -156,7 +155,7 @@ public class BusGui implements Gui{
 		case 225: y = 305;
 		break;
 		
-		case 305: y = -40;
+		case 305: y = 65;
 		break;
 		}
 		}

@@ -196,8 +196,8 @@ public class BusAgent extends Agent implements Bus{
 		
 		/*if(state == State.none)
 			goToRest();*/
-		
-		GoToNextBusStop();
+		//if(state == State.none)
+			GoToNextBusStop();
 		
 		return false;
 	}
