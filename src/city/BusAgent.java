@@ -5,9 +5,10 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.gui.BusGui;
+import city.interfaces.Bus;
 import agent.Agent;
 
-public class BusAgent extends Agent{
+public class BusAgent extends Agent implements Bus{
 	public List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
 	private BusGui busGui;
 	private char type;
@@ -173,7 +174,6 @@ public class BusAgent extends Agent{
 			transferPeople(busStops.get(3));
 			return true;
 		}
-		
 		
 		
 		for(MyBusStop b : busStops){

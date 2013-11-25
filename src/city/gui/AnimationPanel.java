@@ -24,7 +24,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 	private final int WINDOWX = 865;
     private final int WINDOWY = 467;
-    private static int timeIncrementer = 1400;
+    private static int timeIncrementer = 1000;
 
     List<BuildingIcon> buildings = Collections.synchronizedList(new ArrayList<BuildingIcon>());
     
