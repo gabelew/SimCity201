@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-import city.BusAgent.MyBusStop;
 import city.gui.BusGui;
 import city.interfaces.Bus;
 import city.interfaces.Person;
@@ -187,16 +186,19 @@ public class BusAgent extends Agent implements Bus{
 		}
 		
 		
-		for(MyBusStop b : busStops){
+		/*for(MyBusStop b : busStops){
 			if(!b.passengers.isEmpty() && state != State.goingToStop){
 				state = State.goingToStop;
-				GoToBusStop(b);
+				GoToNextBusStop();
 				return true;
 			}
-		}
+		}*/
 		
-		if(state == State.none)
-			goToRest();
+		/*if(state == State.none)
+			goToRest();*/
+		
+		GoToNextBusStop();
+		
 		return false;
 	}
 	
@@ -208,12 +210,8 @@ public class BusAgent extends Agent implements Bus{
 		busGui.doGoToRest();
 		
 	}
-	private void GoToBusStop(MyBusStop mbs){
-		DoGoToBusStop(mbs.location);
-	}
-	
-	private void DoGoToBusStop(Point p){
-		busGui.GoToBusStop(p);
+	private void GoToNextBusStop(){
+		busGui.GoToNextBusStop();
 	}
 	
 	private void transferPeople(MyBusStop ms){
