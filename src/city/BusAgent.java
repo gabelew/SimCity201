@@ -14,6 +14,7 @@ public class BusAgent extends Agent implements Bus{
 	private char type;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	Timer timer = new Timer();
+	
 	public BusGui getBusGui() {
 		return busGui;
 	}

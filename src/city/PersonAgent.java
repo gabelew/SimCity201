@@ -18,6 +18,7 @@ import atHome.city.Home;
 import atHome.city.Residence;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.interfaces.Bus;
 import city.roles.*;
 
 public class PersonAgent extends Agent 
@@ -48,8 +49,8 @@ public class PersonAgent extends Agent
 	
 	public String name;
 	public boolean car = false;
-	public BusAgent busLeft;
-	public BusAgent busRight;
+	public Bus busLeft;
+	public Bus busRight;
 	public MyJob job;
 	private State state = State.doingNothing;
 	private Location location = Location.InCity;
