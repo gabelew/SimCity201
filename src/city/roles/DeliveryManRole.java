@@ -29,6 +29,7 @@ import restaurant.test.mock.LoggedEvent;
  */
 public class DeliveryManRole extends Role implements DeliveryMan{
 	private Semaphore atShelf=new Semaphore(0,true);
+	public boolean notTesting=true;
 	public EventLog log = new EventLog();
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
@@ -44,7 +45,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		public orderState s;
 		public double amountOwed;
 	}
-	double Price=5;
 	Cashier cashier;
 	public Cook cook;
 	public MarketAgent Market;
@@ -131,11 +131,11 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	        }
 	        else if(o.Choices.get(pairs.getKey())>Market.Inventory.get(pairs.getKey())){
 	        	o.Choices.put(pairs.getKey().toString(), Market.Inventory.get(pairs.getKey()));
-	        	o.amountOwed=o.amountOwed+Market.Inventory.get(pairs.getKey())*Price;
+	        	o.amountOwed=o.amountOwed+Market.Inventory.get(pairs.getKey())*((MarketAgent)Market).Prices.get(pairs.getKey());
 	        	Market.Inventory.put(pairs.getKey().toString(), 0);
 	        }
 	        else{
-	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*Price;
+	        	o.amountOwed=o.amountOwed+o.Choices.get(pairs.getKey().toString())*((MarketAgent)Market).Prices.get(pairs.getKey());
 	        	Integer temp=o.Choices.get(pairs.getKey());
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
@@ -143,11 +143,13 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	    }
 
 	    deliveryGui.DoGoGetFood(o.Choices);
+	    if(notTesting){
 	    try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
 			
 		}
+	    }
 	    if(o.outOf!=null)
 	    	cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
 	    //cook.msgHereIsPrice(o.amountOwed,this);
@@ -156,10 +158,12 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	private void giveOrder(){
 		deliveryGui.DoGoPutOnTruck();
+		if(notTesting){
 	    try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
 			
+		}
 		}
 		deliveryGui.DoGoDeliver(location);
 		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
@@ -178,10 +182,12 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.noOrder;
 		cook=null;
 		deliveryGui.DoGoBack();
+		if(notTesting){
 	    try {
 			atShelf.acquire();
 		} catch (InterruptedException e) {
 			
+		}
 		}
 		Market.msgDeliveryDone(this);
 	}
@@ -190,7 +196,9 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	
 	public void atDest(){
+		if(notTesting){
 		atShelf.release();
+		}
 	}
 }
 
