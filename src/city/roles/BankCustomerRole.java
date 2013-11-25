@@ -69,6 +69,10 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				cash = (Math.round(100*cash) / ((double)100));
 				tasks.add(new Task(BankingState.WantToDeposit, cash, "personal"));
 			}
+			int lessCash = Double.compare(myPerson.cashOnHand, 100);
+			if(-1 == lessCash) {
+				tasks.add(new Task(BankingState.WantToWithdraw, 100, "personal"));
+			}
 		} else {
 			tasks.add(new Task(BankingState.WantToOpenAccount, 0, "personal"));
 		}
@@ -131,12 +135,11 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		} else {
 			myPerson.businessFunds += amount;
 		}
-		print("Withdraw for $" + amount + " from " + accountType + " account was successful. Remaining balance is: " + remainingBalance);
+		print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
 		stateChanged();
 	}
 	
 	public void msgHereIsBalance(double balance, String accountType) {
-		print("Current balance for " + accountType + " account is: $" + balance);
 		int balanceBroke;
 		int onHandBroke;
 		if("personal".equals(accountType)) {

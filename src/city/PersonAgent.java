@@ -299,12 +299,6 @@ public class PersonAgent extends Agent implements Person
 				}
 				if(!inList){
 					taskList.add(Task.goToBankNow);
-					BankCustomerRole bcr = null;
-	    			for(Role role : roles) {
-	    				if(role instanceof BankCustomerRole)
-	    					bcr = (BankCustomerRole)role;
-	    			}
-	    			bcr.msgIWantToWithdraw(100, "personal");
 				}
 			}
 			
@@ -470,12 +464,6 @@ public class PersonAgent extends Agent implements Person
 			}
 			if(!inList){
 				taskList.add(Task.goToBank);
-				BankCustomerRole bcr = null;
-    			for(Role role : roles) {
-    				if(role instanceof BankCustomerRole)
-    					bcr = (BankCustomerRole)role;
-    			}
-    			bcr.msgIWantToWithdraw(100, "personal");
 			}
 		}
 		
