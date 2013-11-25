@@ -23,7 +23,4 @@ public interface MarketCustomer {
 	public abstract void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf);
 	
 	public abstract void startShopping(MarketAgent m, Map<String, Integer> toOrderFromMarket);
-
-	public abstract void msgWait(int waitChair);
-
 }
