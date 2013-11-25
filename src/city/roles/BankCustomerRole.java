@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 
+import restaurant.test.mock.LoggedEvent;
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
 import city.BankAgent;
@@ -99,6 +100,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		}
 		state = CustomerState.EnteringBank;
 		stateChanged();
+		myPerson.log.add(new LoggedEvent("Recieved goingToBank from person Agent."));
 	}
 	
 	public void msgIWantToCheckBalance(String accountType) {

@@ -18,6 +18,7 @@ import city.PersonAgent.State;
 import city.PersonAgent.Task;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.roles.BankCustomerRole;
 import city.roles.MarketCustomerRole;
 import city.roles.Role;
 import city.test.mock.*;
@@ -105,7 +106,7 @@ public class PersonAgentTest extends TestCase{
 		//Run Person agents scheduler
 		person.pickAndExecuteAnAction();
 		
-		
+		//Check post scheduler conditions
 		assertTrue("personAgent should have logged \"Received startShopping in MarketCustomer role.\" but didn't. His log reads instead: " 
 				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("received start shopping from person"));
 
@@ -113,7 +114,7 @@ public class PersonAgentTest extends TestCase{
 		int i =0;
 		while(person.personGui.xPos != 417 || person.personGui.yPos != 68){
 			if(i==100){
-				assertTrue("We never recieved mgCheckPrinted.", false);
+				assertTrue("We never recieved destination.", false);
 			}
 			i++;
 			try {
@@ -171,10 +172,50 @@ public class PersonAgentTest extends TestCase{
 		person2.pickAndExecuteAnAction();
 		
 		//check post conditions and pre conditions
-		assertEquals( "personAgent should be in state goingToBank", person2.state == State.goingToBank);
+		assertEquals( "personAgent should be in state goingToBank", person2.state, State.goingToBank);
 		
 		assertEquals("personAgent should be at to closest bank. Instead, the personAgents location is: ("
 				+ person2.destination.x + ", " + person2.destination.y + ")" , new Point(377, 68), new Point(person2.personGui.xPos,person.personGui.yPos) );
+				
+		//Run Person agents scheduler
+		person2.pickAndExecuteAnAction();
+
+		//Check post scheduler conditions
+		assertTrue("personAgent should have logged \"Recieved goingToBank from person Agent.\" but didn't. His log reads instead: " 
+				+ person2.log.getLastLoggedEvent().toString(), person2.log.containsString("Recieved goingToBank from person Agent."));
+
+		assertEquals("personAgent should be in state banking. Instead, his state is " + person2.state.toString(), person2.state, PersonAgent.State.banking);
+		int i =0;
+		while(person2.personGui.xPos != 377 || person2.personGui.yPos != 68){
+			if(i==100){
+				assertTrue("We never reached destination.", false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+				
+		assertEquals("personAgent should be at to closest bank. Instead, the personAgents location is: ("
+				+ person2.destination.x + ", " + person2.destination.y + ")" , new Point(377, 68), new Point(person2.personGui.xPos,person2.personGui.yPos) );
+				
+		BankCustomerRole mcr = null;
+		boolean hasBankRole = false;
+		for(Role r: person2.roles){
+			if(r instanceof BankCustomerRole){
+				mcr = (BankCustomerRole) r;
+				hasBankRole = true;
+			}
+		}
+				
+		if(hasBankRole){
+			assertTrue("personAgent's Bank customer role should be active. Instead it is false", mcr.active);
+			assertTrue("personAgent's Bank customer role gui should be present. Instead it is false", mcr.getGui().isPresent());
+		}else{
+			assertTrue("No bankCustomer was added.", false);
+		}
 		
 	}
 	public void testPersonIntoAndOutOfHomeToRest() {
