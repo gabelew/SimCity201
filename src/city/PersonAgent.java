@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 import bank.BankBuilding;
+import bank.gui.BankCustomerGui;
 import restaurant.Restaurant;
 import restaurant.gui.CustomerGui;
 import restaurant.gui.WaiterGui;
@@ -37,13 +38,13 @@ public class PersonAgent extends Agent implements Person
 	public List<Task> taskList = new ArrayList<Task>(); 
 	public Residence myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
-	private PersonGui personGui;
+	public PersonGui personGui;
 	public EventLog log = new EventLog();
 	public boolean testing = false;
 	
 	//Various States
 	enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak};
-	enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
+	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
 	public boolean isRenter;
@@ -54,16 +55,15 @@ public class PersonAgent extends Agent implements Person
 	public Bus busLeft;
 	public Bus busRight;
 	public MyJob job;
-	private State state = State.doingNothing;
+	public State state = State.doingNothing;
 	private Location location = Location.InCity;
 	private TransportState transportState = TransportState.none;
 	public Point destination;
 	
 	Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
 	
-	//Time currentTime;
 	public int currentHour;
-	String dayOfWeek;
+	public String dayOfWeek;
 	
 	public int hungerLevel = 51;
 	public double cashOnHand = 0, businessFunds = 0;
@@ -578,10 +578,10 @@ public class PersonAgent extends Agent implements Person
 				finishGoingToHomeToEat();
 				return true;
 			}
-			/*if(transportState == TransportState.none && state == State.goingToBank){
+			if(transportState == TransportState.none && state == State.goingToBank){
 				finishGoingToBank();
 				return true;
-			}*/
+			}
 			if(transportState == TransportState.none && state == State.goingToMarket){
 				finishGoingToMarket();
 				return true;
@@ -874,7 +874,7 @@ public class PersonAgent extends Agent implements Person
     
     private void finishGoingToBank(){
     	state  = State.banking;
-    	BankBuilding m = findBank(destination);
+    	BankBuilding b = findBank(destination);
     	personGui.DoWalkTo(destination); //animationStub
     	if(!testing){
         	try {
@@ -883,12 +883,18 @@ public class PersonAgent extends Agent implements Person
     			e.printStackTrace();
     		}
     	}
-    	/*MarketCustomerRole role = new MarketCustomerRole(this);
-    	roles.add(role);
-    	role.active = true;
-    	m.insideAnimationPanel.addGui(role.getMarketCustomerGui());
-    	role.getMarketCustomerGui().setPresent(true);
-    	role.startShopping(m, toOrderFromMarket);*/
+    	for(Role role: roles) {
+    		if (role instanceof BankCustomerRole) {
+    			role.active = true;
+    			((BankCustomerRole) role).setGui(new BankCustomerGui((BankCustomerRole) role));
+    	    	((BankCustomerRole) role).getGui().setPresent(true);
+    	    	b.insideAnimationPanel.addGui(((BankCustomerRole) role).getGui());
+    	    	((BankCustomerRole) role).bank = b;
+    	    	((BankCustomerRole) role).goingToBank();
+    	    	
+    		}
+    	}
+    	
     }
 
 	private void goToMarket(){
