@@ -319,14 +319,34 @@ public class PersonAgentTest extends TestCase{
 		//send NextHour msg
 		person.msgNextHour(1, "Monday");
 	
+		//check post msg conditions and pre scheduler conditions
 		assertEquals("personAgent should have 2 items in task list. Instead, the personAgents task list has: "
 				+ person.taskList.size(), 2, person.taskList.size());
 		assertTrue("personAgent should have goToWork in task list, but it doesn't.", person.taskList.get(0)== PersonAgent.Task.goToWork );
 		assertTrue("personAgent should have goEatFood in task list, but it doesn't.", person.taskList.get(1)== PersonAgent.Task.goEatFood );
 		
+		//run scheduler 
 		assertTrue("Person's scheduler should have returned true , but didn't.", 
 				person.pickAndExecuteAnAction());
 
+		assertTrue("personAgent should have logged \"preforming Go to bus stop\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("preforming Go to bus stop"));
+		assertEquals("personAgent should be in state going to work. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.goingToWork);
 		
+		int i =0;
+		while(person.personGui.xPos != 67 || person.personGui.yPos != 85){
+			if(i==100){
+				assertTrue("We never reached destination. Instead, the current position is : (" + person.personGui.xPos + ", " + person.personGui.yPos + ")" , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+		
+		assertEquals("personAgent should be in transportation state going to bus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.WaitingForBus);
+
 	}
 }

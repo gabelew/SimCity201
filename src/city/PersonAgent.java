@@ -46,7 +46,7 @@ public class PersonAgent extends Agent implements Person
 	public enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
 	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	public enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
-	enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
+	public enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
 	public boolean isRenter;
 	public boolean isManager;
 	
@@ -57,7 +57,7 @@ public class PersonAgent extends Agent implements Person
 	public MyJob job;
 	public State state = State.doingNothing;
 	public Location location = Location.InCity;
-	private TransportState transportState = TransportState.none;
+	public TransportState transportState = TransportState.none;
 	public Point destination;
 	
 	Map<String, Integer> toOrderFromMarket = new HashMap<String, Integer>();
@@ -1033,7 +1033,10 @@ public class PersonAgent extends Agent implements Person
     
 	private void goToBusStop() {
     	personGui.doGoToBus();
-		this.transportState = TransportState.GoingToBus;	
+		this.transportState = TransportState.GoingToBus;
+		
+		log.add(new LoggedEvent("preforming Go to bus stop"));
+		
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {

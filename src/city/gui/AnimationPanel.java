@@ -203,11 +203,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        }
         }
 		}
-        //Here is the buildings
-        for(int i = ZERO; i<buildings.size(); i++){
-        	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
-        }
-        
+
     	synchronized(guis){		
 	        for(Gui gui : guis) {
 	        	if(gui instanceof BusGui)
@@ -216,7 +212,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		            }
 	        }
     	}
-    	synchronized(guis){		
+    	
+		synchronized(guis){		
 	        for(Gui gui : guis) {
 	        	if(gui instanceof DeliveryManDrivingGui)
 		            if (gui.isPresent()) {
@@ -224,6 +221,12 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		            }
 	        }
     	}
+		
+        //Here is the buildings
+        for(int i = ZERO; i<buildings.size(); i++){
+        	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
+        }
+    	
     }
     
 	public void addGui(PersonGui gui) {
