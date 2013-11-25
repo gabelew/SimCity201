@@ -292,6 +292,17 @@ public class PersonAgent extends Agent implements Person
 		if(hungerLevel > 50 && state != State.goingOutToEat && state != State.eating && state != State.goingHomeToEat)
 		{
 			boolean inList = false;
+			if(youAreRich() && cashOnHand < 100.00){
+				for(Task t: taskList){
+					if(t == Task.goToBankNow)
+						inList = true;
+				}
+				if(!inList){
+					taskList.add(Task.goToBankNow);
+				}
+			}
+			
+			inList = false;
 			for(Task t: taskList){
 				if(t == Task.goEatFood)
 					inList = true;
@@ -444,8 +455,19 @@ public class PersonAgent extends Agent implements Person
 		}else{
 			this.toOrderFromMarket = toOrderFromMarket;
 		}
-		
+
 		boolean inList = false;
+		if(cashOnHand < 100.00){
+			for(Task t: taskList){
+				if(t == Task.goToBank)
+					inList = true;
+			}
+			if(!inList){
+				taskList.add(Task.goToBank);
+			}
+		}
+		
+		inList = false;
 		for(Task t: taskList){
 			if(t == Task.goToMarket)
 				inList = true;

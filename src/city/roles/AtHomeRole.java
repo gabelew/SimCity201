@@ -110,8 +110,10 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		for(Food f : foodInFridge)
 		{
-			f.amount += orderList.get(f.choice).intValue();
-			f.state = FoodOrderState.none;
+			if(orderList.get(f.choice) != null){
+				f.amount += orderList.get(f.choice).intValue();
+				f.state = FoodOrderState.none;
+			}
 		}
 	}
 	public void pickSomethingElse()
