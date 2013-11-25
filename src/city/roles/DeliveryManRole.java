@@ -17,6 +17,7 @@ import market.interfaces.Clerk;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.DeliveryManDrivingGui;
 import city.gui.Gui;
 import city.roles.ClerkRole.AgentEvent;
 import restaurant.Restaurant;
@@ -71,6 +72,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.askedForOrder;
 		stateChanged();
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
+		print("delviery order");
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice){
@@ -165,7 +167,9 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			
 		}
 		}
-		deliveryGui.DoGoDeliver(location);
+		//deliveryGui.DoGoDeliver(location);
+		DeliveryManDrivingGui driving = new DeliveryManDrivingGui(this, myPerson.simCityGui);
+		driving.setPresent(true);
 		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
 		o.s=orderState.waitingForPayment;
 	}

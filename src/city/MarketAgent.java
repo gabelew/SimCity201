@@ -96,6 +96,7 @@ public void msgPlaceOrder(MarketCustomer CR){
 }
 
 public void msgPlaceDeliveryOrder(Cook cook){
+	print("DELIVERY!!!");
 	MyCooks.add(new MyCook(cook, cookState.waiting));
 	if(getStateChangePermits()==0){
 			stateChanged();	
@@ -188,6 +189,7 @@ private void giveToDelivery(delivery d,MyCook MC){
 }
 
 private void clerkDone(clerk c){
+	c.clerk.msgDoneWithShift();
 	clerks.remove(c);
 }
 
@@ -209,6 +211,14 @@ public void setInventory(int cars, int chicken,int steak,int salad, int cookie){
 }
 
 public void addClerk(Clerk c){
+	for (clerk cl:clerks){
+		if(cl.clerkState==state.busy){
+			cl.clerkState=state.wantOffWork;
+		}
+		if(cl.clerkState==state.free){
+			cl.clerkState=state.offWork;
+		}
+	}
 	clerks.add(new clerk(c,state.free));
 	if(getStateChangePermits()==0){
 			stateChanged();	

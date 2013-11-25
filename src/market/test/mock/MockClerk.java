@@ -44,4 +44,9 @@ public class MockClerk extends Mock implements Clerk {
 	public void msgHereIsPayment(double money){
 		log.add(new LoggedEvent("Received msgHereIsPaymet from market customer"));
 	}
+
+	@Override
+	public void msgDoneWithShift() {
+		log.add(new LoggedEvent("Received msgDoneWithShift from market customer"));
+	}
 }

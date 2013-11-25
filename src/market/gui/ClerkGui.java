@@ -18,7 +18,7 @@ public class ClerkGui implements Gui{
 	
 	private int xPos = CUST_START_POS, yPos = CUST_START_POS;
 	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
-	private enum state{gettingToStand,waiting,gettingFood,givingFood};
+	private enum state{gettingToStand,waiting,gettingFood,givingFood,leaving};
 	state clerkState;
 	
 	static final int CUST_START_POS = -40;
@@ -61,6 +61,10 @@ public class ClerkGui implements Gui{
 			role.atShelf();
 		}
 		if(xPos==xDestination&&yPos==yDestination&&clerkState==state.gettingToStand){
+			clerkState=state.waiting;
+			role.atShelf();
+		}
+		if(xPos==xDestination&&yPos==yDestination&&clerkState==state.leaving){
 			clerkState=state.waiting;
 			role.atShelf();
 		}
@@ -111,6 +115,12 @@ public class ClerkGui implements Gui{
 			GoToShelf(Key);
 			break;
 		}
+	}
+	
+	public void DoLeaveWork(){
+		xDestination=CUST_START_POS;
+		yDestination=CUST_START_POS;
+		clerkState=state.leaving;
 	}
 	
 	public void DoGoGiveOrder(){

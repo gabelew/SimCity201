@@ -20,4 +20,6 @@ public abstract void msgTakeCustomer(MarketCustomer mcr,Market m);
 public abstract void msgPlaceOrder(Map<String,Integer> choice);
 
 public abstract void msgHereIsPayment(double money);
+
+public abstract void msgDoneWithShift();
 }

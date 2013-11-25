@@ -34,7 +34,7 @@ public class ClerkRole extends Role implements Clerk {
 	public Market Market;
 	public MarketCustomer MCR;
 	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting, waitingForPayment, payed,done};
-	public enum AgentEvent{none,GoToWork};
+	public enum AgentEvent{none,GoToWork,offWork};
 	AgentEvent event = AgentEvent.none;
 	PersonAgent myPerson; 
 	public ClerkRole(){
@@ -66,11 +66,20 @@ public class ClerkRole extends Role implements Clerk {
 			o.s=orderState.payed;
 		stateChanged();
 	}
+	
+	public void msgDoneWithShift(){
+		event=AgentEvent.offWork;
+	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.GoToWork){
 			event = AgentEvent.none;
 			((MarketAgent)Market).addClerk(((Clerk)this));
+			return true;
+		}
+		if(event==AgentEvent.offWork){
+			event=AgentEvent.none;
+			leaveWork();
 			return true;
 		}
 		if(MCR!=null &&o.s==orderState.askedForOrder){
@@ -154,6 +163,18 @@ public class ClerkRole extends Role implements Clerk {
 		o.s=orderState.noOrder;
 		MCR=null;
 		Market.msgClerkDone(this);
+	}
+	
+	private void leaveWork(){
+		clerkGui.DoLeaveWork();
+		if(notTesting){
+		try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		}
+		myPerson.releavedFromDuty(this);
 	}
 	
 	public void atShelf(){
