@@ -88,19 +88,19 @@ public class DeliveryManGui implements Gui{
 			yDestination=ySHELF1;
 			deliveryState=state.gettingFood;
 		}
-		if(Food=="chicken"){
-			xDestination=xSHELF1+50;
-			yDestination=ySHELF1+50;
+		else if(Food=="chicken"){
+			xDestination=xSHELF1+60;
+			yDestination=ySHELF1-10;
 			deliveryState=state.gettingFood;
 		}
-		if(Food=="pizza"){
-			xDestination=xSHELF1+100;
-			yDestination=ySHELF1+100;
-			deliveryState=state.gettingFood;
-		}
-		if(Food=="cookie"){
+		else if(Food=="pizza"){
 			xDestination=xSHELF1+150;
 			yDestination=ySHELF1+150;
+			deliveryState=state.gettingFood;
+		}
+		else{
+			xDestination=xSHELF1+200;
+			yDestination=ySHELF1+140;
 			deliveryState=state.gettingFood;
 		}
 	}

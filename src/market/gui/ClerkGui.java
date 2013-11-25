@@ -83,13 +83,13 @@ public class ClerkGui implements Gui{
 			clerkState=state.gettingFood;
 		}
 		else if(Food=="chicken"){
-			xDestination=xSHELF1+50;
-			yDestination=ySHELF1+50;
+			xDestination=xSHELF1+60;
+			yDestination=ySHELF1-10;
 			clerkState=state.gettingFood;
 		}
 		else if(Food=="pizza"){
 			xDestination=xSHELF1+100;
-			yDestination=ySHELF1+100;
+			yDestination=ySHELF1-20;
 			clerkState=state.gettingFood;
 		}
 		else if(Food=="cookie"){
@@ -99,7 +99,7 @@ public class ClerkGui implements Gui{
 		}
 		else{
 			xDestination=xSHELF1+200;
-			yDestination=ySHELF1+200;
+			yDestination=ySHELF1+140;
 			clerkState=state.gettingFood;
 		}
 
@@ -109,6 +109,7 @@ public class ClerkGui implements Gui{
 		clerkState=state.waiting;
 		for (String Key:choices.keySet()){
 			GoToShelf(Key);
+			break;
 		}
 	}
 	
