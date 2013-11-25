@@ -304,5 +304,15 @@ public class PersonAgentTest extends TestCase{
 		}
 		
 	}
-
+	
+	public void testPersonGoToBusStop0Left() {
+		//setUp() runs first before this test!
+		// check preconditions
+		assertEquals("personAgent should have an empty event log before the personAgent's getFoodFromMarket is called. Instead, the personAgent's event log reads: "
+				+ person.log.toString(), 0, person.log.size());
+		assertEquals("personAgent should have 0 items in task list. Instead, the personAgents task list has: "
+				+ person.taskList.size(), 0, person.taskList.size());
+		
+		person.msgNextHour(1, "monday");
+	}
 }

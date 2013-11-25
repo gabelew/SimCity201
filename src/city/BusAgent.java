@@ -15,6 +15,7 @@ public class BusAgent extends Agent implements Bus{
 	private char type;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	Timer timer = new Timer();
+	public String name;
 	
 	public BusGui getBusGui() {
 		return busGui;
@@ -62,7 +63,11 @@ public class BusAgent extends Agent implements Bus{
 	public BusAgent(char type){
 		this.type = type;
 		
-		
+		if(type=='B'){
+			this.name = "busLeft";
+		}else if(type=='F'){
+			this.name = "busRight";
+		}
 		
 												//where customers will pile up
 		Point busStation3 = new Point(30,65);	//(67, 85+80*0)
@@ -87,6 +92,10 @@ public class BusAgent extends Agent implements Bus{
 		}
 		
 		
+	}
+	
+	public String getName(){
+	       return name;
 	}
 	
 	public List<MyBusStop> getBusStops(){
@@ -165,22 +174,22 @@ public class BusAgent extends Agent implements Bus{
 	
 	public boolean pickAndExecuteAnAction() {
 		
-		if(state == State.atStop0){
+		if(state == State.atStop0 && !(busStops.get(0).passengers.isEmpty())){
 			transferPeople(busStops.get(0));
 			return true;
 		}
 		
-		if(state == State.atStop1){
+		if(state == State.atStop1 && !(busStops.get(1).passengers.isEmpty())){
 			transferPeople(busStops.get(1));
 			return true;
 		}	
 		
-		if(state == State.atStop2){
+		if(state == State.atStop2 && !(busStops.get(2).passengers.isEmpty())){
 			transferPeople(busStops.get(2));
 			return true;
 		}	
 		
-		if(state == State.atStop3){
+		if(state == State.atStop3 && !(busStops.get(3).passengers.isEmpty())){
 			transferPeople(busStops.get(3));
 			return true;
 		}

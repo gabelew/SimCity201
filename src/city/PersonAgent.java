@@ -486,8 +486,6 @@ public class PersonAgent extends Agent implements Person
 	
 	public void msgNoMoreFood()
 	{
-		//for(int i = 0; i <1000; i++)
-		//	System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		boolean inList = false;
 		for(Task t: taskList){
 			if(t == Task.goToMarket)
@@ -1029,8 +1027,6 @@ public class PersonAgent extends Agent implements Person
 	}
     
 	private void goToBusStop() {
-		if(name.equals("richhome02"))
-			print("goToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStopgoToBusStop");
     	personGui.doGoToBus();
 		this.transportState = TransportState.GoingToBus;	
 		try {
