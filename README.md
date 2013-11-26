@@ -10,6 +10,12 @@ SimCity201 Project Repository for CS 201 students
   + Lecture Section: MW 4:00pm
   + Lab Section: Tuesday 4:00pm
 
+  + Name: Gerson Hernandez
+  + USC Email: gersonh@usc.edu
+  + USC ID: 5994912227
+  + Lecture Section: MW 4:00pm
+  + Lab Sectoin: Tuesday 4:00pm
+
 ###Instructions
   + Move imgs directory to root of project, if not there import into eclipse so that imgs folder appears under root directory
   + Table, if not in use, can be moved using drag and drop.
