@@ -86,14 +86,14 @@ public class BusAgent extends Agent implements Bus{
 		}
 		
 												//where customers will pile up
-		Point busStation3 = new Point(30,BUS_STATION3_Y);	//(67, 85+80*0)
-		Point busStation2 = new Point(30,BUS_STATION2_Y);	//(67, 85+80*1)
-		Point busStation1 = new Point(30,BUS_STATION1_Y);	//(67, 85+80*2)
-		Point busStation0 = new Point(30,BUS_STATION0_Y);	//(67, 85+80*3)
-		Point busStation4 = new Point(825,BUS_STATION3_Y);	//(797, 85+80*0)
-		Point busStation5 = new Point(825,BUS_STATION2_Y);	//(797, 85+80*1)
-		Point busStation6 = new Point(825,BUS_STATION1_Y);	//(797, 85+80*2)
-		Point busStation7 = new Point(825,BUS_STATION0_Y);	//(797, 85+80*3)
+		Point busStation3 = new Point(B_BUS_STATION_X,BUS_STATION3_Y);	//(67, 85+80*0)
+		Point busStation2 = new Point(B_BUS_STATION_X,BUS_STATION2_Y);	//(67, 85+80*1)
+		Point busStation1 = new Point(B_BUS_STATION_X,BUS_STATION1_Y);	//(67, 85+80*2)
+		Point busStation0 = new Point(B_BUS_STATION_X,BUS_STATION0_Y);	//(67, 85+80*3)
+		Point busStation4 = new Point(F_BUS_STATION_X,BUS_STATION3_Y);	//(797, 85+80*0)
+		Point busStation5 = new Point(F_BUS_STATION_X,BUS_STATION2_Y);	//(797, 85+80*1)
+		Point busStation6 = new Point(F_BUS_STATION_X,BUS_STATION1_Y);	//(797, 85+80*2)
+		Point busStation7 = new Point(F_BUS_STATION_X,BUS_STATION0_Y);	//(797, 85+80*3)
 		
 		if(this.type == 'B'){
 			busStops.add(new MyBusStop(busStation0,0));
