@@ -18,6 +18,7 @@ import city.PersonAgent;
 import city.PersonAgent.MyJob;
 import city.PersonAgent.State;
 import city.PersonAgent.Task;
+import city.PersonAgent.TransportState;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.roles.AtHomeRole;
@@ -349,7 +350,35 @@ public class PersonAgentTest extends TestCase{
 		
 		assertEquals("personAgent should be in transportation state WaitingForBus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.WaitingForBus);
 		
+		assertTrue("personAgent should have logged \"msgWaitingForBus recieved from personAgent\" but didn't. His log reads instead: " 
+				+ ((BusAgent)person.busLeft).log.getLastLoggedEvent().toString(), ((BusAgent)person.busLeft).log.containsString("msgWaitingForBus recieved from personAgent"));
 		
+		
+		i =0;
+		while(person.transportState != TransportState.GettingOnBus){
+			if(i==100){
+				assertTrue("We never recieved msg bus is here." , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+		
+		
+		assertTrue("personAgent should have logged \"Recieved bus is here msg\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Recieved bus is here msg"));
+		assertEquals("personAgent should be in state going to work. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.goingToWork);
+		assertEquals("personAgent should be in transportation state GettingOnBus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.GettingOnBus);
+		
+		//run scheduler 
+		assertTrue("Person's scheduler should have returned true , but didn't.", person.pickAndExecuteAnAction());
+
+		
+		assertTrue("personAgent should have logged \"Recieved bus is here msg\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Recieved bus is here msg"));
 		assertTrue("personAgent should have logged \"msgWaitingForBus recieved from personAgent\" but didn't. His log reads instead: " 
 				+ ((BusAgent)person.busLeft).log.getLastLoggedEvent().toString(), ((BusAgent)person.busLeft).log.containsString("msgWaitingForBus recieved from personAgent"));
 		

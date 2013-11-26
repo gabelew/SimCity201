@@ -148,7 +148,7 @@ public class BusAgent extends Agent implements Bus{
 		}
 	}
 	public void msgComingAboard(Person p, Point Destination){
-
+		log.add(new LoggedEvent("msgComingAboard recieved from " +p.getName()));
 		MyBusStop b = findBusStop(Destination);	
 		
 		b.passengers.add(new MyPassenger(p, StopEvent.dropOff));

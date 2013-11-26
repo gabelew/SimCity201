@@ -464,6 +464,7 @@ public class PersonAgent extends Agent implements Person
  ***************************/	
 	public void msgBusIshere(){
 		transportState = TransportState.GettingOnBus;
+		log.add(new LoggedEvent("Recieved bus is here msg"));
 		stateChanged();
 	}
 	public void msgAtYourStop(int xPos, int yPos){
@@ -771,17 +772,21 @@ public class PersonAgent extends Agent implements Person
  ******************^^^^^^^^^^^^^^^^*********************/
     
     private void getOffBus() {
+		log.add(new LoggedEvent("preforming get off Bus"));
     	personGui.doGetOffBus();
     	transportState = TransportState.none;
     }
 
     private void getOnBus() {
+		log.add(new LoggedEvent("preforming get on Bus"));
     	personGui.doGetOnBus();
-    	try {
-			waitingResponse.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+    	if(!testing){
+	    	try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
     	transportState = TransportState.OnBus;
 
 		if(personGui.xPos < halfScreen){
