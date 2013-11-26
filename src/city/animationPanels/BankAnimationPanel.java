@@ -33,6 +33,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	private BufferedImage fountainImg = null;
 	private BufferedImage bankFlooring = null;
 	private BufferedImage bankStatue = null;
+	private BufferedImage bankStatueL = null;
 	public List<Semaphore> atms = new CopyOnWriteArrayList<Semaphore>();
 	
 	public BankAnimationPanel(SimCityGui simCityGui){
@@ -43,7 +44,8 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 			atmImg = ImageIO.read(new File(path.toString() + "atmMirror.png"));
 			fountainImg = ImageIO.read(new File(path.toString() + "fountain.png"));
 			bankFlooring = ImageIO.read(new File(path.toString() + "bankfloor.png"));
-			bankStatue = ImageIO.read(new File(path.toString() + "bankstatue.png"));
+			bankStatue = ImageIO.read(new File(path.toString() + "dragon.png"));
+			bankStatueL = ImageIO.read(new File(path.toString() + "dragonL.png"));
 		} catch (IOException e){
 			
 		}
@@ -92,6 +94,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 		}
 		for(int i = 0; i < 3; i++)
 		{
+			g.drawImage(bankStatueL, 120 - 50*i,350,null);
 			g.drawImage(bankStatue, 750 - 50*i,0,null);
 			g.drawImage(bankStatue, 750 - 50*i,350,null);
 		}

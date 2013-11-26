@@ -377,10 +377,10 @@ public class PersonAgentTest extends TestCase{
 		assertTrue("Person's scheduler should have returned true , but didn't.", person.pickAndExecuteAnAction());
 
 		
-		assertTrue("personAgent should have logged \"Recieved bus is here msg\" but didn't. His log reads instead: " 
-				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Recieved bus is here msg"));
-		assertTrue("personAgent should have logged \"msgWaitingForBus recieved from personAgent\" but didn't. His log reads instead: " 
-				+ ((BusAgent)person.busLeft).log.getLastLoggedEvent().toString(), ((BusAgent)person.busLeft).log.containsString("msgWaitingForBus recieved from personAgent"));
+		assertTrue("personAgent should have logged \"preforming get on Bus\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("preforming get on Bus"));
+		assertTrue("personAgent should have logged \"msgComingAboard recieved from personAgent\" but didn't. His log reads instead: " 
+				+ ((BusAgent)person.busLeft).log.getLastLoggedEvent().toString(), ((BusAgent)person.busLeft).log.containsString("msgComingAboard recieved from personAgent"));
 		
 	}
 }
