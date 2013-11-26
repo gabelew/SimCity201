@@ -8,7 +8,6 @@ import city.BankAgent;
 public class BankTest extends TestCase{
 	BankAgent bank;
 	MockBankCustomer customer, customer2;
-	//MockPerson person
 	
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -16,12 +15,11 @@ public class BankTest extends TestCase{
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		//person = new MockPerson("Stanley");
 		customer = new MockBankCustomer("Whitney");	
 		customer2 = new MockBankCustomer("Tony");
 		bank = new BankAgent("BankOfSimCity");
 	}	
-	
+
 	public void testOneCustomerOpenAccountAndCheckBalance() {
 		//setUp() runs first before this test!
 		

@@ -245,6 +245,7 @@ public class BankAgent extends Agent implements Bank{
 	// Actions
 	
 	private void customerDeposit(Transaction t) {
+		t.amount = (Math.round(100*t.amount) / ((double)100));
 		t.customer.deposit(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.bc.msgDepositSuccessful(t.amount, t.customer.accountType, t.customer.currentBalance);
@@ -252,6 +253,7 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerWithdrawal(Transaction t) {
+		t.amount = (Math.round(100*t.amount) / ((double)100));
 		double withdrew = t.customer.withdraw(t.amount);
 		t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 		t.customer.accountHolder.msgHereIsMoney(withdrew, t.customer.accountType, t.customer.currentBalance);
@@ -259,6 +261,7 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerLoanPayment(Transaction t) {
+		t.amount = (Math.round(100*t.amount) / ((double)100));
 		fundsAvailable += t.amount;
 		fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 		t.customer.owed -= t.amount;
@@ -272,6 +275,7 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerAutoLoanPayment(Transaction t) {
+		t.amount = (Math.round(100*t.amount) / ((double)100));
 		t.customer.currentBalance -= t.amount;
 		fundsAvailable += t.amount;
 		fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
@@ -286,6 +290,7 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerLoanRequest(Transaction t) {
+		t.amount = (Math.round(100*t.amount) / ((double)100));
 		double canLoan = 0.0;
 		if("personal".equals(t.customer.accountType)) {
 			canLoan = customerLoanMax - t.customer.owed;
@@ -297,7 +302,7 @@ public class BankAgent extends Agent implements Bank{
 		if(-1 == loanLimit || -1 == bankLimit) {
 			t.customer.accountHolder.msgLoanDenied(t.amount, t.customer.accountType);
 		} else{
-			t.amount = (Math.round(100*t.amount) / ((double)100));
+			
 			t.customer.owed += t.amount;
 			t.customer.owed = (Math.round(100*t.customer.owed) / ((double)100));
 			fundsAvailable -= t.amount;
@@ -308,6 +313,7 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	private void customerTransfer(Transaction t) {
+		t.amount = (Math.round(100*t.amount) / ((double)100));
 		int customerAccountLimit = Double.compare(t.customer.currentBalance, t.amount);
 		if(-1 == customerAccountLimit) {
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
