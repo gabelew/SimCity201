@@ -31,6 +31,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	private SimCityGui simCityGui;
 	private BufferedImage atmImg = null;
 	private BufferedImage fountainImg = null;
+	private BufferedImage bankFlooring = null;
 	public List<Semaphore> atms = new CopyOnWriteArrayList<Semaphore>();
 	
 	public BankAnimationPanel(SimCityGui simCityGui){
@@ -40,6 +41,7 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 			StringBuilder path = new StringBuilder("imgs/");
 			atmImg = ImageIO.read(new File(path.toString() + "atmMirror.png"));
 			fountainImg = ImageIO.read(new File(path.toString() + "fountain.png"));
+			bankFlooring = ImageIO.read(new File(path.toString() + "bankfloor.png"));
 		} catch (IOException e){
 			
 		}
@@ -76,13 +78,17 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
         g2.setColor(getBackground());
         g2.fillRect(0, 0, WINDOWX, WINDOWY);
 		
+        for(int i = 0; i < 15; i ++)
+          	 for(int j = 0; j < 14; j++)
+          		 g.drawImage(bankFlooring, 80*i, 80*j, null);
+        
 		// draw ATMS
 		for(int i = 0; i < NATMS/NATMS_ROWS; i++) {
 			for(int j = 0; j < NATMS/NATMS_COLUMNS; j++) {
 				g.drawImage(atmImg, i*ATM_X_GAP+ATM_X_START, j*ATM_Y_GAP+ATM_Y_START, null);
 			} 
 		}
-		
+
 		g.drawImage(fountainImg, 340, 140, null);
 		
 		synchronized(guis) {
