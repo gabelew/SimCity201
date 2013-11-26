@@ -109,7 +109,7 @@ public class AtHomeRole extends Role implements AtHome
 	
 	public void restockFridge(Map<String,Integer> orderList)
 	{
-		
+		myPerson.print("I have food now!!");
 		for(Food f : foodInFridge)
 		{
 			if(orderList.get(f.choice) != null)
