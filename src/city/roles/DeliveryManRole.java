@@ -182,7 +182,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			
 		}
 	    }
-	    if(o.outOf!=null)
+	    if(!o.outOf.isEmpty())
 	    	cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
 	    //cook.msgHereIsPrice(o.amountOwed,this);
 	    o.s=orderState.ordered;
@@ -224,6 +224,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	private void orderDone(){
 		o.s=orderState.noOrder;
+		o.outOf.clear();
 		cook=null;
 		if(notTesting){
 			drivingGui.setPresent(true);
