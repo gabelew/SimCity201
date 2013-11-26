@@ -14,13 +14,19 @@ SimCity201 Project Repository for CS 201 students
   + USC Email: gersonh@usc.edu
   + USC ID: 5994912227
   + Lecture Section: MW 4:00pm
-  + Lab Sectoin: Tuesday 4:00pm
+  + Lab Section: Tuesday 4:00pm
   
   + Name: Garland Chen
   + USC Email: garlandc@usc.edu
   + USC ID: 7276634816
   + Lecture Section: MW 4:00pm
-  + Lab Sectoin: Tuesday 4:00pm
+  + Lab Section: Tuesday 4:00pm
+  
+  + Name: Emily Bernstein
+  + USC Email: ebernste@usc.edu
+  + USC ID: 5445682605
+  + Lecture Section: MW 12:00pm
+  + Lab Section: Tuesday 4:00pm  
 
 ###Instructions
   + Move imgs directory to root of project, if not there import into eclipse so that imgs folder appears under root directory

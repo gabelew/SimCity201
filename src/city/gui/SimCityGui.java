@@ -9,6 +9,7 @@ import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
 
+import market.gui.MarketPanel;
 import bank.BankBuilding;
 import bank.gui.BankPanel;
 import atHome.city.Apartment;
@@ -365,16 +366,17 @@ public class SimCityGui extends JFrame implements ActionListener {
         	else if(b.type.equals("market"))
         	{
                 
-            	RestaurantPanel restPanel = new RestaurantPanel(this);
+            	//RestaurantPanel restPanel = new RestaurantPanel(this);
+        		MarketPanel marketPanel = new MarketPanel(this);
                 InsideAnimationPanel marketAnimationPanel = new MarketAnimationPanel(this);
             	
                 Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
-                restPanel.setPreferredSize(restDim);
-                restPanel.setMinimumSize(restDim);
-                restPanel.setMaximumSize(restDim);
+                marketPanel.setPreferredSize(restDim);
+                marketPanel.setMinimumSize(restDim);
+                marketPanel.setMaximumSize(restDim);
 
-            	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,marketAnimationPanel, restPanel);
-            	restPanel.setInsideBuildingPanel(bp);
+            	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,marketAnimationPanel, marketPanel);
+            	marketPanel.setInsideBuildingPanel(bp);
             	b.setInsideBuildingPanel(bp);
             	marketAnimationPanel.setInsideBuildingPanel(bp);
             	buildingsPanel.add(bp, "" + i);
