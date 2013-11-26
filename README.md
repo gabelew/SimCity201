@@ -27,7 +27,13 @@ SimCity201 Project Repository for CS 201 students
   + USC ID: 5445682605
   + Lecture Section: MW 12:00pm
   + Lab Section: Tuesday 4:00pm  
-
+  
+  + Name: Gabriel Lew
+  + USC Email: gabelew@usc.edu
+  + USC ID: 3356317145
+  + Lecture Section: MW 4:00pm
+  + Lab Section: Tuesday 4:00pm
+  
 ###Instructions
   + Move imgs directory to root of project, if not there import into eclipse so that imgs folder appears under root directory
   + Table, if not in use, can be moved using drag and drop.
