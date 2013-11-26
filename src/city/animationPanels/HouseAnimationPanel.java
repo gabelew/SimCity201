@@ -7,7 +7,10 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
+
 import javax.imageio.ImageIO;
+
 import city.gui.Gui;
 import city.gui.SimCityGui;
 
@@ -22,6 +25,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	private BufferedImage fidgeImg = null;
 	private BufferedImage grillRightImg = null;
 	private BufferedImage flooringImg = null;
+	private BufferedImage batman = null;
 	private final int ZERO = 0;
 	private SimCityGui simCityGui;
 	
@@ -55,6 +59,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
 		    ImageIO.read(new File(path.toString() + "grill.png"));
 		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
+		    batman = ImageIO.read(new File(path.toString() + "batman.png"));
 		} 
         catch (IOException e){}
     	setSize(WINDOWX, WINDOWY);
@@ -87,6 +92,10 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
          for(int i = 0; i < 8; i ++)
         	 for(int j = 0; j < 10; j++)
         		 g.drawImage(flooringImg, 115*i, 50*j, null);
+         
+         //draws batman
+       //int rint = (new Random()).nextInt(5);
+       //if(rint == 3){g.drawImage(batman, 600, 400, null);}
          //draw kitchen stuff
  		g.drawImage(kitchenCounterImg, xCOOK_POSITION, yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
 		g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
