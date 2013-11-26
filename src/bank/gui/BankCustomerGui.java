@@ -111,7 +111,9 @@ public class BankCustomerGui implements Gui{
 	}
 	
 	public void DoGoToATM() {
-		findATM();
+		while(atmNumber < 0) {
+			findATM();
+		}
 		command = Command.GoToATM;
 	}
 	
@@ -124,11 +126,6 @@ public class BankCustomerGui implements Gui{
 					yDestination = atmMap.get(i).y + 4;
 				}
 			}
-		}
-		
-		if(atmNumber < 0) {
-			xDestination = xWAITING_START;
-			yDestination = yWAITING_START;
 		}
 	}
 
