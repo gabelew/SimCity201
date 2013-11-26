@@ -525,6 +525,12 @@ public class PersonAgent extends Agent implements Person
 	}
 	public void marketNotStocked(MarketAgent market){
 		markets.remove(market);
+		
+		if(markets.size()==0){
+			for(MarketAgent m: simCityGui.getMarkets()){
+				markets.add(m);
+			}
+		}
 	}
 /***************************
  * MARKET CUSTOMER MESSAGES END

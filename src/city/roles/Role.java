@@ -5,7 +5,7 @@ import city.PersonAgent;
 
 public abstract class Role 
 {
-	PersonAgent myPerson; 
+	public PersonAgent myPerson; 
 	public boolean active = false;
 	public PersonAgent getPersonAgent() { return myPerson;} //so other agents or role 
 	
