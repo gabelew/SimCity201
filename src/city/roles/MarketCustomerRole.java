@@ -52,7 +52,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 
 	public void msgCanIHelpYou(ClerkRole clerk){
-		print("can I");
 		Clerk=clerk;
 		o.s=orderState.ordering;
 		stateChanged();	
