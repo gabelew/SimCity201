@@ -511,7 +511,8 @@ public class PersonAgent extends Agent implements Person
 		log.add(new LoggedEvent("Received msgHasLeftHome from atHome Role."));
 	}
 	
-	//RepairMan to Person that appliance is fixed
+	//RepairMan to Person that appliance is fixed 
+	//V2 IMPLEMENTATION
 	public void ApplianceFixed(String appliance, double price)
 	{
 		for(Role r: roles)

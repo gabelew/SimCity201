@@ -270,7 +270,7 @@ public class AtHomeRole extends Role implements AtHome
 				choices.remove(o.choice);
 				if(choices.size() == 0)
 				{
-					myPerson.msgNoMoreFood();
+					//myPerson.msgNoMoreFood();
 					myPerson.msgDoneEatingAtHome();
 				}
 				else
@@ -313,6 +313,7 @@ public class AtHomeRole extends Role implements AtHome
 		makeMarketList();
 		myPerson.msgDoneEatingAtHome();
 	}
+	
 /*********************
  ***** SCHEDULER
  ********************/

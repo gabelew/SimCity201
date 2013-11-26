@@ -27,6 +27,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	private static BufferedImage bed = null;
 	private static BufferedImage rcarpet = null;
 	private static BufferedImage flooring = null;
+	private static BufferedImage aptwall = null;
     static final int WALL_LENGTH = 875;
     static final int WALL_WIDTH = 10; 
     //variables for kitchen
@@ -56,6 +57,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 			grill = ImageIO.read(new File(path.toString() + "grill2.png"));
 			rcarpet = ImageIO.read(new File(path.toString() + "aptcarpet.jpg"));
 			flooring = ImageIO.read(new File(path.toString() + "flooring.png"));
+			aptwall = ImageIO.read(new File(path.toString() + "aptwall.png"));
 		} catch (IOException e){
 			
 		}
@@ -101,9 +103,9 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	     
 	     //create rooms for each person. Total of 8 rooms in an apartment
 	     for(int i = 0; i < 5; i++){
-		     g2.setColor(Color.BLACK);
-	    	 g2.fillRect(217*i, 0, WALL_WIDTH, 150);
-	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 200);
+	    	 g2.drawImage(aptwall, (i*217), 0, null);
+	    	 g2.drawImage(aptwall, (i*217), 300, null);
+	    	 g2.drawImage(aptwall, (i*217), 400, null);
 	     }
 	     
 	     
