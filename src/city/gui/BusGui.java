@@ -5,21 +5,17 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 
 import javax.imageio.ImageIO;
 
 import city.BusAgent;
-import city.BusAgent.MyBusStop;
 
 public class BusGui implements Gui{
 	
 	private BusAgent agent = null;
 	private boolean isPresent = false;
 	private char type;
-	private List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
 
 	
 	private static BufferedImage bus_back = null;
@@ -30,7 +26,7 @@ public class BusGui implements Gui{
 	private enum Command {noCommand, atBusStop};
 	private Command command=Command.noCommand;
 	
-	public BusGui(BusAgent b, SimCityGui gui, char type){ //HostAgent m) {
+	public BusGui(BusAgent b, SimCityGui gui, char type){ 
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -40,7 +36,6 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
-		busStops = b.getBusStops();
 		this.type = type;
 		
 		if(type == 'B'){
@@ -107,19 +102,14 @@ public class BusGui implements Gui{
 	
 	public void GoToNextBusStop(){
 		
-		//xDestination = NextX();
 		if(type == 'B'){yDestination = NextBY();}
 		else if(type == 'F'){yDestination = NextFY();}
-
-		//NextY();
 		command = Command.atBusStop;
 	}
 	
 	
 	public int NextBY(){
-		int y = -40;
-		if(type == 'B'){
-			
+		int y = -40;			
 			if(yPos>305){
 				y=305;
 			}else if(yPos>225){
@@ -131,15 +121,12 @@ public class BusGui implements Gui{
 			}else{
 				y=305;
 			}
-		}
-			 
-			
+	
 			return y;
 	}
 	
 	public int NextFY(){
 		int y = 410;
-		if(type == 'F'){
 			if(yPos<65){
 				y=65;
 			}else if(yPos<145){
@@ -151,7 +138,6 @@ public class BusGui implements Gui{
 			}else{
 				y=65;
 			}
-		}
 		
 		return y;
 	}

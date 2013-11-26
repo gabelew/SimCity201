@@ -107,7 +107,7 @@ public class BusAgent extends Agent implements Bus{
 	public void msgWaitingForBus(Person p, Point location){
 		MyBusStop b = findBusStop(location);	
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
-		print("\t\t\t\t\t" +p.getName());
+		//print("\t\t\t\t\t" +p.getName());
 		if(getStateChangePermits()==0)
 			stateChanged();
 	}
@@ -202,9 +202,7 @@ public class BusAgent extends Agent implements Bus{
 				return true;
 			}
 		}
-		
-		/*if(state == State.none)
-			goToRest();*/
+
 		if(state == State.none)
 			goToRest();
 		
@@ -220,7 +218,7 @@ public class BusAgent extends Agent implements Bus{
 		
 	}
 	private void GoToNextBusStop(){
-		print("going to next stop");
+		//print("going to next stop");
 		busGui.GoToNextBusStop();
 	}
 	
@@ -231,11 +229,11 @@ public class BusAgent extends Agent implements Bus{
 			}
 		}, 
 		4000);
-		for(MyBusStop b: busStops){
+		/*for(MyBusStop b: busStops){
 		for(MyPassenger p : b.passengers){
 			print("\t\t\t\t"+p.person.getName());
 		}
-		}
+		}*/
 		List<MyPassenger> removePs = Collections.synchronizedList(new ArrayList<MyPassenger>());
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){
