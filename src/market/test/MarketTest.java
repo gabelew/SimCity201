@@ -56,6 +56,7 @@ public class MarketTest extends TestCase
 		cashier3 = new MockCashier("cashier3");
 		market.addClerk(clerk);
 		market.addDeliveryMan(deliveryMan);
+		market.notTesting=false;
 		
 	}	
 	

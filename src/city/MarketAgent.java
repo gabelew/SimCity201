@@ -17,6 +17,7 @@ import market.interfaces.*;
 public class MarketAgent extends Agent implements Market {
 private MarketPanel panel;
 private boolean update=false;
+public boolean notTesting=true;
 public EventLog log = new EventLog();
 public InsideAnimationPanel insideAnimationPanel;
 public Point location;
@@ -119,6 +120,7 @@ public void msgClerkDone(Clerk c){
 	if(getStateChangePermits()==0){
 			stateChanged();	
 	}
+	if(notTesting)
 	update=true;
 	log.add(new LoggedEvent("Received msgClerkDone from clerk."));
 }
@@ -135,6 +137,7 @@ public void msgDeliveryDone(DeliveryMan D){
 	if(getStateChangePermits()==0){
 			stateChanged();	
 	}
+	if(notTesting)
 	update=true;
 	log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 }
@@ -251,11 +254,13 @@ public void addDeliveryMan(DeliveryMan DM){
 }
 
 private void updatePanel(){
+	if(notTesting){
 	panel.steakPanel.labels.setText("Steak: "+Inventory.get("steak"));
 	panel.saladPanel.labels.setText("Salad: "+Inventory.get("salad"));
 	panel.cookiePanel.labels.setText("Cookie: "+Inventory.get("cookie"));
 	panel.chickenPanel.labels.setText("Chicken: "+Inventory.get("chicken"));
 	panel.carPanel.labels.setText("Car: "+Inventory.get("car"));
+	}
 }
 
 public void offWork(Clerk c){
