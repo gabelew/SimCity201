@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import city.PersonAgent;
+
 public interface BankCustomer {
 	public abstract void msgHereIsMoney(double amount, String accountType, double remainingBalance);
 	public abstract void msgHereIsBalance(double balance, String accountType);
@@ -7,4 +9,5 @@ public interface BankCustomer {
 	public abstract void msgLoanApproved(double amount, String accountType);
 	public abstract void msgDepositSuccessful(double amount, String accountType, double remainingBalance);
 	public abstract void msgLoanPaid(double amount, String accountType);
+	public abstract PersonAgent getPersonAgent();
 }

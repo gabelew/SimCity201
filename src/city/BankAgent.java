@@ -311,15 +311,17 @@ public class BankAgent extends Agent implements Bank{
 		int customerAccountLimit = Double.compare(t.customer.currentBalance, t.amount);
 		if(-1 == customerAccountLimit) {
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
-			r.getPersonAgent().msgTransferFailure(r.getPersonAgent(), t.amount, t.purpose);
+			r.getPersonAgent().msgTransferFailure(t.recipient.accountHolder.getPersonAgent(), t.amount, t.purpose);
 		} else{
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
+			PersonAgent sender = r.getPersonAgent();
+			PersonAgent receiver = t.recipient.accountHolder.getPersonAgent();
 			t.customer.withdraw(t.amount);
 			t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
 			t.recipient.deposit(t.amount);
 			t.recipient.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
-			r.getPersonAgent().msgTransferCompleted(r.getPersonAgent(), t.amount, t.purpose);
-			r.getPersonAgent().msgTransferSuccessful(r.getPersonAgent(), t.amount, t.purpose);
+			receiver.msgTransferCompleted(sender, t.amount, t.purpose);
+			sender.msgTransferSuccessful(receiver, t.amount, t.purpose);
 		}
 		transactions.remove(t);
 	}

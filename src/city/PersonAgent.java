@@ -20,6 +20,7 @@ import atHome.city.Residence;
 import city.BankAgent.BankAccount;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.interfaces.Bank;
 import city.interfaces.Bus;
 import city.interfaces.Person;
 import city.roles.*;
@@ -36,11 +37,14 @@ public class PersonAgent extends Agent implements Person
 	private List<BankBuilding> banks = new ArrayList<BankBuilding>(); 
 	private List<MarketAgent> markets = new ArrayList<MarketAgent>(); 
 	public List<Task> taskList = new ArrayList<Task>(); 
+	public List<PersonAgent> renters = new ArrayList<PersonAgent>();
+	public List<PersonAgent> employees = new ArrayList<PersonAgent>();
 	public Residence myHome;
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	public PersonGui personGui;
 	public EventLog log = new EventLog();
 	public boolean testing = false;
+	public Bank bankTeller;
 	
 	//Various States
 	public enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
@@ -54,7 +58,7 @@ public class PersonAgent extends Agent implements Person
 	public boolean car = false;
 	public Bus busLeft;
 	public Bus busRight;
-	public MyJob job;
+	public MyJob job = null;
 	public State state = State.doingNothing;
 	public Location location = Location.InCity;
 	public TransportState transportState = TransportState.none;
@@ -150,6 +154,7 @@ public class PersonAgent extends Agent implements Person
 		BankCustomerRole bc = new BankCustomerRole(this);
 		roles.add(bc);
 		bc.active = false;
+		this.bankTeller = simCityGui.bankAgent;
 	}
 	public void addAtHomeRole(){
 		AtHomeRole role = null;
@@ -216,17 +221,17 @@ public class PersonAgent extends Agent implements Person
  * BANKING MESSAGES START
  ***************************/
 	public void msgTransferSuccessful(PersonAgent recipient, double amount, String purpose) {
-
+		//print(recipient.getName() + " received: $" + amount + " for " + purpose);
 	}
 	public void msgTransferFailure(PersonAgent recipient, double amount, String purpose) {
-		// get a loan, attempt transfer again
+		print("Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);
 	}
 	public void msgTransferCompleted(PersonAgent sender, double amount, String purpose) {
-
+		//print("Received $" + amount + " from: " + sender.getName() + " for: " + purpose);
 	}
 	
 	public void msgHereIsBalance(double amount, String accountType) {
-		
+		//print("Balance is $" + amount + " for: " + accountType);
 	}
 	
 	public void msgDoneAtBank() {
@@ -277,7 +282,7 @@ public class PersonAgent extends Agent implements Person
 			}
 		}
 		
-		if(hour == 23 && isManager){
+		if(0 == (hour % 2) && isManager){
 			boolean inList = false;
 			for(Task t: taskList){
 				if(t == Task.doPayEmployees)
@@ -502,7 +507,7 @@ public class PersonAgent extends Agent implements Person
  ***************************/
 
 /***************************
- * MARKET CUSTOMER MESSAGES END
+ * MARKET CUSTOMER MESSAGES START
  ***************************/
 	public void doneShopping(Map<String,Integer> purchasedFood,MarketAgent m){
 		//restockFidge with purchased food
@@ -561,6 +566,18 @@ public class PersonAgent extends Agent implements Person
         		taskList.remove(temp);
         		return true;
         	}*/
+        	
+        	for(Task t:taskList){
+        		if(t == Task.doPayEmployees){
+        			temp = t;
+        		}
+        	}
+        	
+        	if(temp != null){
+        		doPayEmployees();
+        		taskList.remove(temp);
+        		return true;
+        	}
         	
         	for(Task t:taskList){
         		if(state == State.doingNothing && t == Task.goToWork){
@@ -701,9 +718,17 @@ public class PersonAgent extends Agent implements Person
 		}
     }
     
+    private void doPayEmployees() {
+    	for(PersonAgent e: employees) {
+    		bankTeller.msgTransferFunds(this, e, 5.00, "business", "personal", "salary");
+    	}
+    	print("Paid employees.");
+    }
+    
     private void doPayRent(){
     	//bank.msgTransferFunds(this, landlord, "personal","rent");
     }
+    
     private void goToWork(){
     	state = State.goingToWork;
     	destination = job.location;

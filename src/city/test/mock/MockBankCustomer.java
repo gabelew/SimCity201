@@ -2,6 +2,7 @@ package city.test.mock;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import restaurant.test.mock.Mock;
+import city.PersonAgent;
 import city.interfaces.BankCustomer;
 
 public class MockBankCustomer extends Mock implements BankCustomer{
@@ -48,6 +49,12 @@ public class MockBankCustomer extends Mock implements BankCustomer{
 	public void msgLoanPaid(double amount, String accountType) {
 		log.add(new LoggedEvent("Received msgLoanPaid from Bank for amount: " + amount 
 				+ " for account type: " + accountType));
+	}
+
+	@Override
+	public PersonAgent getPersonAgent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

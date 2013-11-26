@@ -41,7 +41,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public BankBuilding bank;
 	public List<Loan> loans = new CopyOnWriteArrayList<Loan>();
 	public List<Task> tasks = new CopyOnWriteArrayList<Task>();
-	public Bank bankTeller;
+	
 	enum BankingState{WantToCheckBalance, WantToOpenAccount, WantToDeposit, WantToWithdraw, 
 		WantToGetALoan, WantToPayBackLoan, WantToAutoPayLoan, WantToDepositToBusiness, CheckingBalance, 
 		OpeningAccount, Depositing, DepositingBusiness, Withdrawing, RequestingALoan, PayingLoan };
@@ -58,7 +58,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 
 	public BankCustomerRole(PersonAgent p) {
 		super(p);
-		this.bankTeller = p.simCityGui.bankAgent;
 	}
 	
 	
@@ -336,11 +335,11 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	private void CheckBalance(Task t) {
-		bankTeller.msgCheckBalance(this, t.accountType);
+		myPerson.bankTeller.msgCheckBalance(this, t.accountType);
 		tasks.remove(t);
 	}
 	private void OpenAccount(Task t) {
-		bankTeller.msgOpenAccount(this, t.amount, t.accountType);
+		myPerson.bankTeller.msgOpenAccount(this, t.amount, t.accountType);
 		tasks.remove(t);
 	}
 	private void DepositMoney(Task t) {
@@ -353,7 +352,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		if(-1 == cashLimit) {
 			print("Insufficient funds to deposit");
 		} else {
-			bankTeller.msgDepositMoney(this, t.amount, t.accountType);
+			myPerson.bankTeller.msgDepositMoney(this, t.amount, t.accountType);
 			if("personal".equals(t.accountType)) {
 				myPerson.cashOnHand -= t.amount;
 			} else {
@@ -363,16 +362,16 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		tasks.remove(t);
 	}
 	private void WithdrawMoney(Task t) {
-		bankTeller.msgWithdrawMoney(this, t.amount, t.accountType);
+		myPerson.bankTeller.msgWithdrawMoney(this, t.amount, t.accountType);
 		tasks.remove(t);
 	}
 	private void RequestLoan(Task t) {
-		bankTeller.msgRequestLoan(this, t.amount, t.accountType);
+		myPerson.bankTeller.msgRequestLoan(this, t.amount, t.accountType);
 		tasks.remove(t);
 	}
 	
 	private void DepositToBusiness(Task t) {
-		bankTeller.msgDepositToAccount(this, myPerson.businessAccount, t.amount);
+		myPerson.bankTeller.msgDepositToAccount(this, myPerson.businessAccount, t.amount);
 		myPerson.businessFunds -= t.amount;
 		tasks.remove(t);
 	}
@@ -387,7 +386,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		if(-1 == cashLimit) {
 			print("Insufficient funds to pay off loan");
 		} else {
-			bankTeller.msgPayLoan(this, t.amount, t.accountType);
+			myPerson.bankTeller.msgPayLoan(this, t.amount, t.accountType);
 			if("personal".equals(t.accountType)) {
 				myPerson.cashOnHand -= t.amount;
 			} else {
@@ -398,7 +397,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	private void AutoPayLoan(Task t) {
-		bankTeller.msgAutoPayLoan(this, t.amount, t.accountType);
+		myPerson.bankTeller.msgAutoPayLoan(this, t.amount, t.accountType);
 		tasks.remove(t);
 	}
 	
@@ -421,9 +420,9 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		this.customerGui = g;
 	}
 	
-	public void setBankTeller(BankAgent b) {
-		this.bankTeller = b;
-	}
+//	public void setBankTeller(BankAgent b) {
+//		this.bankTeller = b;
+//	}
 	
 	public void setBankBuilding(BankBuilding b) {
 		this.bank = b;
@@ -437,5 +436,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		myPerson.personalAccount = p;
 	}
 	
+	public PersonAgent getPersonAgent() {
+		return myPerson;
+	}
 	
 }
