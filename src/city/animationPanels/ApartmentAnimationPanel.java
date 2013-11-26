@@ -25,6 +25,8 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	private static BufferedImage fridge = null;
 	private static BufferedImage table = null;
 	private static BufferedImage bed = null;
+	private static BufferedImage rcarpet = null;
+	private static BufferedImage flooring = null;
     static final int WALL_LENGTH = 875;
     static final int WALL_WIDTH = 10; 
     //variables for kitchen
@@ -52,7 +54,8 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 			table = ImageIO.read(new File(path.toString() + "table.png"));
 			bed = ImageIO.read(new File(path.toString() + "bed.png"));
 			grill = ImageIO.read(new File(path.toString() + "grill2.png"));
-			
+			rcarpet = ImageIO.read(new File(path.toString() + "aptcarpet.jpg"));
+			flooring = ImageIO.read(new File(path.toString() + "flooring.png"));
 		} catch (IOException e){
 			
 		}
@@ -79,23 +82,28 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 		 g2.setColor(getBackground());     
 	     g2.fillRect(0, 0, WINDOWX, WINDOWY);
 	     
-	     //make a hallway
-	     //g2.setColor(Color.BLACK);
-	     //g2.fillRect(40,40, 50,50);
-	     //g2.fillRect(0, 150, WALL_LENGTH, WALL_WIDTH);
-	     //g2.fillRect(0, 300, WALL_LENGTH, WALL_WIDTH);
 	     
 	     g2.setColor(Color.GRAY);
 	     g2.fillRect(0, 160, WALL_LENGTH, 140);
 	     
-	     g2.setColor(Color.RED);
-	     g2.fillRect(0, 200, WALL_LENGTH, 60);
+	     //draws red carpet
+	     for(int i = 0; i < 8; i++)
+	    	 for(int j = 0; j < 2; j++)
+	    		 g2.drawImage(rcarpet, 100*i, 150+ j*75, null);
+	     //draws wooden floors
+	     for(int i = 0; i < 8; i++)
+	    	 for(int j = 0; j < 3; j++)
+	    		 g2.drawImage(flooring, 120*i, j*48, null);
+	     
+	     for(int i = 0; i < 8; i++)
+	    	 for(int j = 0; j < 4; j++)
+	    		 g2.drawImage(flooring, 120*i, 300+j*53, null);
 	     
 	     //create rooms for each person. Total of 8 rooms in an apartment
 	     for(int i = 0; i < 5; i++){
 		     g2.setColor(Color.BLACK);
 	    	 g2.fillRect(217*i, 0, WALL_WIDTH, 150);
-	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 150);
+	    	 g2.fillRect(217*i, 300, WALL_WIDTH, 200);
 	     }
 	     
 	     
