@@ -119,14 +119,9 @@ public class AtHomeRole extends Role implements AtHome
 				f.state = FoodOrderState.none;
 			}
 		}
-		
+		myPerson.print("I have a selection of: " + choices.size() +" foods");
 	}
-	public void pickSomethingElse()
-	{
-		int choice = (new Random()).nextInt(choices.size());
-		Order o = new Order( choices.get(choice) );
-		orders.add(o);
-	}
+	
 	public void BrokenApplianceMsg(String app)
 	{
 		for(Appliance a : appliances)
