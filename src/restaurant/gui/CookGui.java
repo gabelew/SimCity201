@@ -167,11 +167,7 @@ public class CookGui implements Gui  {
         if(command != Command.noCommand && xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
         		role.msgAnimationHasLeftRestaurant();
-        		System.out.println(role.myPerson.getName() + "    saved/old" +command_old.toString() + "  ( " + xDestination_old + " , " + yDestination_old +   ")   "
-        				+ "  new: " + command.toString() + "  ( " + xDestination + " , " + yDestination +   ")   ");
-        		command = command_old;
-        		xDestination = xDestination_old;
-        		yDestination = yDestination_old;
+        		command = Command.noCommand;
         	}else if(command == Command.enterRestaurant){
         		command = Command.noCommand;
         	}else if(command == Command.GoToFidge){
@@ -449,9 +445,6 @@ public class CookGui implements Gui  {
 	}
 
 	public void DoLeaveRestaurant() {
-        xDestination_old = xDestination;
-        yDestination_old = yDestination;
-        command_old = command;
         xDestination = START_POSITION;
         yDestination = START_POSITION;
         command = Command.leaveRestaurant;

@@ -51,7 +51,7 @@ public class CookRole extends Role implements Cook {
 	private int pickUpTableItems = 0;
 	public Restaurant restaurant;
 
-	enum State {none, goToWork, working, leaving, relieveFromDuty};
+	enum State {none, goToWork, working, leaving, relieveFromDuty, wantsOffWork};
 	State state = State.none;
 	
     public class Food{
@@ -168,11 +168,12 @@ public class CookRole extends Role implements Cook {
 	}
 	public void msgRelieveFromDuty(PersonAgent p) {
 		replacementPerson = p;
-		state = State.leaving;
+		state = State.wantsOffWork;
 		this.stateChanged();
 	}
 	public void msgAnimationHasLeftRestaurant() {
 		state = State.relieveFromDuty;
+		print("msgAnimationHasLeftRestaurant    waitingResponse.release()");
 		waitingResponse.release();
 		this.stateChanged();
 	}
@@ -283,10 +284,12 @@ public class CookRole extends Role implements Cook {
 
 	public void msgAnimationFinishedAtFidge(){
 		//From animation
+		print("msgAnimationFinishedAtFidge    waitingResponse.release()");
 		waitingResponse.release();
 	}
 	public void msgAnimationFinishedPutFoodOnGrill() {
 		//From animation
+		print("msgAnimationFinishedPutFoodOnGrill    waitingResponse.release()");
 		waitingResponse.release();
 	}
 	public void msgAnimationFinishedWaiterPickedUpFood(){
@@ -324,30 +327,57 @@ public class CookRole extends Role implements Cook {
 				}
 			}
 		}
+		print("msgAnimationFinishedPutFoodOnPickUpTable    waitingResponse.release()");
 		waitingResponse.release();
 	}	
 	
 	public boolean pickAndExecuteAnAction() {
+		
+		if(state == State.wantsOffWork){
+			boolean canGetOffWork = true;
+			for (RoleOrder o : orders)
+			{
+				if(o.state != OrderState.PENDING)
+				{
+					canGetOffWork = false;
+					print("waiting to get off work");
+					break;
+				}
+			}
+			if(canGetOffWork){
+				state = State.leaving;
+			}
+		}
+		
 		if(state == State.relieveFromDuty){
 			state = State.none;
 			myPerson.releavedFromDuty(this);
 			if(replacementPerson != null){
+				print("replacementPerson    waitingResponse.release()");
 				replacementPerson.waitingResponse.release();
+			}else{
+				print("replacementPerson IS NULLL !!!!!!!!!!!!!!!!!!!!!!!!");
 			}
+			return true;
 		}
+		
 		if(state == State.goToWork){
 			state = State.working;
 			cookGui.DoEnterRestaurant();
 			return true;
 		}
+		
+		
 		if(state == State.leaving){
 			state = State.none;
 			cookGui.DoLeaveRestaurant();
+			print("DoLeaveRestaurant waitingResponse.acquire()");
 			try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			print("DoLeaveRestaurant waitingResponse.acquire()DONEDONE");
 			state = State.relieveFromDuty;
 			return true;
 		}
@@ -394,14 +424,17 @@ public class CookRole extends Role implements Cook {
 		}
 		
 		synchronized(orders){
-			for (RoleOrder o : orders)
-			{
-				if(o.state == OrderState.PENDING && temp == null)
+			if(state == State.working){
+				for (RoleOrder o : orders)
 				{
-					temp = o;
+					if(o.state == OrderState.PENDING && temp == null)
+					{
+						temp = o;
+					}
 				}
 			}
 		}
+		
 		if(temp != null){
 			temp.state = OrderState.COOKING;
 			cookIt(temp);
@@ -439,12 +472,13 @@ public class CookRole extends Role implements Cook {
 	
 	private void plateIt(RoleOrder o) {
 		DoPlating(o);
-	
+		print("DoPlating waitingResponse.acquire()");
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		print("DoPlating waitingResponse.acquire()DONEDONE");
 		if(o.state == OrderState.DONE){
 			o.waiter.msgOrderIsReady(o.choice, o.table);
 			orders.remove(o);
@@ -454,11 +488,13 @@ public class CookRole extends Role implements Cook {
 	private void cookIt(RoleOrder o)
 	{
 		DoGoToFidge();
+		print("DoGoToFidge waitingResponse.acquire()");
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		print("DoGoToFidge waitingResponse.acquire()DONE");
 		Food food = findFood(o.choice.toLowerCase());
 		if(food.amount > 0){
 			food.amount--;
@@ -475,11 +511,14 @@ public class CookRole extends Role implements Cook {
 					counterItems++;
 				}
 			
+
+				print("DoCooking waitingResponse.acquire()");
 				try {
 					waitingResponse.acquire();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				print("DoCooking waitingResponse.acquire()DONEDONE");
 				scheduleCook(o);
 				
 			}else{
