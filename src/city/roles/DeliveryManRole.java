@@ -5,6 +5,7 @@ package city.roles;
 
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,7 +44,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			s=state;
 		}
 		public Map<String, Integer> Choices = new HashMap<String, Integer>();
-		public List<String> outOf;
+		public List<String> outOf= new ArrayList<String>();
 		public orderState s;
 		public double amountOwed;
 	}
@@ -75,7 +76,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.askedForOrder;
 		stateChanged();
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
-		print("delviery order");
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice){
@@ -173,7 +173,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	        	((MarketAgent)Market).Inventory.put(pairs.getKey().toString(),(((MarketAgent)Market).Inventory.get(pairs.getKey())-temp));
 	        }
 	    }
-
 	    deliveryGui.DoGoGetFood(o.Choices);
 	    if(notTesting){
 	    try {
@@ -184,7 +183,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	    }
 	    if(!o.outOf.isEmpty())
 	    	cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
-	    //cook.msgHereIsPrice(o.amountOwed,this);
 	    o.s=orderState.ordered;
 	}
 	
@@ -234,6 +232,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	private void backAtMarket(){
 		Market.msgDeliveryDone(this);
+		o.outOf.clear();
 		o.s=orderState.done;
 		deliveryGui.DoGoToStand();
 	}
