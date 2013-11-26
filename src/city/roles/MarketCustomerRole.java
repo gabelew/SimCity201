@@ -67,8 +67,10 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf){
 		o.s=orderState.done;
 		o.Choices=choice;
-		if(outOf!=null)
+		if(!outOf.isEmpty()){
 			o.outOf=outOf;
+			print("out of order");
+		}
 		stateChanged();	
 	}
 	
@@ -139,7 +141,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			
 		}
-	    if(o.outOf==null||o.outOf.size()==0)
+	    if(!o.outOf.equals(null))
 	    	myPerson.marketNotStocked(market);
 	    myPerson.doneShopping(o.Choices,market);
 		o=null;
