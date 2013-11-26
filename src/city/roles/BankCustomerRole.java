@@ -145,6 +145,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	public void msgHereIsBalance(double balance, String accountType) {
+		if(myPerson.getName().contains("landlord"))
+				print("Balance: " + balance);
 		int balanceBroke;
 		int onHandBroke;
 		if("personal".equals(accountType)) {

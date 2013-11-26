@@ -174,6 +174,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		
     		if(residence instanceof Apartment){
     			((Apartment)residence).addRenter(p);
+    			p.isRenter = true;
     		}else{
     			((Home)residence).owner = p;
     		}
@@ -1112,6 +1113,8 @@ public class InfoPanel extends JPanel implements KeyListener {
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			}
+    		} else if(name.toLowerCase().contains("landlord")) {
+    			p.job = p.new MyJob("landlord");
     		}
     		
     		

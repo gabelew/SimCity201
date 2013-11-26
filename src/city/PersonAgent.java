@@ -51,8 +51,9 @@ public class PersonAgent extends Agent implements Person
 	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
 	public enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	public enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
-	public boolean isRenter;
-	public boolean isManager;
+	public boolean isRenter = false;
+	public boolean isManager = false;
+	public PersonAgent landlord;
 	
 	public String name;
 	public boolean car = false;
@@ -106,6 +107,10 @@ public class PersonAgent extends Agent implements Person
 			this.location = l;
 			this.type = type;
 			this.shift = s;
+		}
+		
+		public MyJob(String type) { // for landlord
+			this.type = type;
 		}
 	}
 
@@ -231,7 +236,7 @@ public class PersonAgent extends Agent implements Person
 	}
 	
 	public void msgHereIsBalance(double amount, String accountType) {
-		//print("Balance is $" + amount + " for: " + accountType);
+		print("Balance is $" + amount + " for: " + accountType);
 	}
 	
 	public void msgDoneAtBank() {
@@ -271,7 +276,7 @@ public class PersonAgent extends Agent implements Person
 			}
 			
 		}
-		if(currentHour == 23 && isRenter){
+		if(0 == (hour % 2) && isRenter){
 			boolean inList = false;
 			for(Task t: taskList){
 				if(t == Task.doPayRent)
@@ -554,7 +559,7 @@ public class PersonAgent extends Agent implements Person
         		state = State.leavingHome;
         		leaveHouse();
         	}
-        /*
+        
         	for(Task t:taskList){
         		if(t == Task.doPayRent){
         			temp = t;
@@ -565,7 +570,7 @@ public class PersonAgent extends Agent implements Person
         		doPayRent();
         		taskList.remove(temp);
         		return true;
-        	}*/
+        	}
         	
         	for(Task t:taskList){
         		if(t == Task.doPayEmployees){
@@ -726,7 +731,8 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void doPayRent(){
-    	//bank.msgTransferFunds(this, landlord, "personal","rent");
+    	bankTeller.msgTransferFunds(this, landlord, 3.00, "personal", "personal", "rent");
+    	print("Paid rent.");
     }
     
     private void goToWork(){

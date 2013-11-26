@@ -322,10 +322,10 @@ public class BankAgent extends Agent implements Bank{
 			BankCustomerRole r = (BankCustomerRole)t.customer.accountHolder;
 			PersonAgent sender = r.getPersonAgent();
 			PersonAgent receiver = t.recipient.accountHolder.getPersonAgent();
-			t.customer.withdraw(t.amount);
+			t.customer.withdraw(t.amount);			
 			t.customer.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
-			t.recipient.deposit(t.amount);
-			t.recipient.currentBalance = (Math.round(100*t.customer.currentBalance) / ((double)100));
+			t.recipient.deposit(t.amount);		
+			t.recipient.currentBalance = (Math.round(100*t.recipient.currentBalance) / ((double)100));
 			receiver.msgTransferCompleted(sender, t.amount, t.purpose);
 			sender.msgTransferSuccessful(receiver, t.amount, t.purpose);
 		}

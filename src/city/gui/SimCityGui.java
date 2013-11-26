@@ -122,10 +122,11 @@ public class SimCityGui extends JFrame implements ActionListener {
         bankAgent.startThread();
         createDefaultPeople();
         createEmployeeList();
-        //createRenterList();
+        setLandlordForRenters();
     }
 
     private void createDefaultPeople() {
+    	infoPanel.getPersonPanel().addPerson("landlordcarhome");
     	infoPanel.getPersonPanel().addPerson("poor01");
     	infoPanel.getPersonPanel().addPerson("poor02");
     	infoPanel.getPersonPanel().addPerson("poor03");
@@ -226,6 +227,20 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("deliveryMan06nightcar");
     	
 
+    }
+    
+    private void setLandlordForRenters() {
+    	PersonAgent landlord = null;
+    	for(PersonAgent p: persons) {
+    		if(p.job!= null && p.job.type.equals("landlord")) {
+    			landlord = p;
+    		}
+    	}
+    	for(PersonAgent r: persons) {
+    		if(r.isRenter) {
+    			r.landlord = landlord;
+    		}
+    	}
     }
     
     private void createEmployeeList() {
