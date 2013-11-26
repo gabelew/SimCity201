@@ -17,15 +17,19 @@ import city.gui.SimCityGui;
 public class HouseAnimationPanel  extends InsideAnimationPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private BufferedImage bedImg = null;
-	private BufferedImage couchImg = null;
-	private BufferedImage tvImg = null;
 	
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
 	private BufferedImage fidgeImg = null;
 	private BufferedImage grillRightImg = null;
 	private BufferedImage flooringImg = null;
-	private BufferedImage batman = null;
+	private BufferedImage bedflooringImg = null;
+	private BufferedImage kitchenfloor = null;
+	private BufferedImage pooltable = null;
+	private BufferedImage aptwall = null;
+	private BufferedImage poolfloor = null;
+	private BufferedImage sidewall = null;
+	
 	private final int ZERO = 0;
 	private SimCityGui simCityGui;
 	
@@ -48,18 +52,18 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
         try 
         {
 			StringBuilder path = new StringBuilder("imgs/");
-		    bedImg = ImageIO.read(new File(path.toString() + "bed.png"));
-		    couchImg = ImageIO.read(new File(path.toString() + "couch.png"));
-		    tvImg = ImageIO.read(new File(path.toString() + "tv.png"));
-		    //tableImg = ImageIO.read(new File(path.toString() + "house_table.png"));
-		    flooringImg = ImageIO.read(new File(path.toString() + "flooring.png"));
-		    //StringBuilder path = new StringBuilder("imgs/");
+		    bedImg = ImageIO.read(new File(path.toString() + "classybed.png"));
+		    flooringImg = ImageIO.read(new File(path.toString() + "houseflooring.png"));
+		    bedflooringImg = ImageIO.read(new File(path.toString() + "bedhouseflooring.png"));
 		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
 		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
 		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
-		    ImageIO.read(new File(path.toString() + "grill.png"));
 		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
-		    batman = ImageIO.read(new File(path.toString() + "batman.png"));
+		    kitchenfloor = ImageIO.read(new File(path.toString() + "housekitchenfloor.png"));
+		    pooltable = ImageIO.read(new File(path.toString() + "pooltable.png"));
+		    aptwall = ImageIO.read(new File(path.toString() + "aptwall.png"));
+		    poolfloor = ImageIO.read(new File(path.toString() + "poolfloor.png"));
+		    sidewall = ImageIO.read(new File(path.toString() + "sidewall.png"));
 		} 
         catch (IOException e){}
     	setSize(WINDOWX, WINDOWY);
@@ -87,15 +91,27 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	@Override
 	public void paintComponent(Graphics g) {
          Graphics2D g2 = (Graphics2D)g;
-         g2.setColor(getBackground());
-         g2.fillRect(ZERO, ZERO, WINDOWX, WINDOWY );
-         for(int i = 0; i < 8; i ++)
-        	 for(int j = 0; j < 10; j++)
-        		 g.drawImage(flooringImg, 115*i, 50*j, null);
          
-         //draws batman
-       //int rint = (new Random()).nextInt(5);
-       //if(rint == 3){g.drawImage(batman, 600, 400, null);}
+         //draws floors
+         
+         for(int i = 0; i < 10; i ++)
+        	 for(int j = 0; j < 8; j++)
+        		 g.drawImage(flooringImg, 49*i, 100+49*j, null);
+         for(int i = 0; i < 9; i ++)
+        	 for(int j = 0; j < 10; j++)
+        		 g.drawImage(bedflooringImg, 450+49*i, 49*j, null);
+         
+         
+         //draws kitchen floor
+         for(int i = 0; i < 3; i ++)
+        	 for(int j = 0; j < 2; j++)
+        		 g.drawImage(kitchenfloor, 75*i, 45*j, null);
+         //draws kitchen wall
+         g2.drawImage(aptwall, 250, -5, null);
+         //draws pool table
+         g.drawImage(poolfloor,260,-2,null);
+         g.drawImage(pooltable, 312, 50, null);
+         g2.drawImage(aptwall, 450, -5, null);
          //draw kitchen stuff
  		g.drawImage(kitchenCounterImg, xCOOK_POSITION, yCOOK_POSITION-yKITCHEN_COUNTER_OFFSET, null);
 		g.drawImage(grillRightImg, xCOOK_POSITION+xGRILL_RIGHT_OFFSET, yCOOK_POSITION-yGRILL_RIGHT_OFFSET, null);
@@ -106,12 +122,11 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
          
          //bedroom stuff
  		 for(int j = 0; j < 2; j++)
- 			 g.drawImage(bedImg, 800,150*j, null);
+ 			 g.drawImage(bedImg, 700,300*j, null);
+ 		 g.drawImage(sidewall, 630,250,null);
+ 		 g.drawImage(sidewall, 450,250,null);
+ 		 g.drawImage(aptwall, 450,250,null);
  		 
-         //living room stuff
-         for(int i = 0; i < 2; i++)
-        	 g.drawImage(couchImg, 600+ 100*i,300, null);
-         g.drawImage(tvImg, 600, 400, null);
          
          synchronized(guis){
 				for(Gui gui : getGuis()) {
