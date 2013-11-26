@@ -469,6 +469,7 @@ public class PersonAgent extends Agent implements Person
 	}
 	public void msgAtYourStop(int xPos, int yPos){
 
+		log.add(new LoggedEvent("Recieved msgAtYourStop"));
 		if(personGui.xPos < halfScreen){
 			personGui.yPos = yPos+20;
 			personGui.xPos = xPos+5;
@@ -828,15 +829,23 @@ public class PersonAgent extends Agent implements Person
     
 	private void finishGoingToWork() {
 		personGui.DoWalkTo(destination);
-    	try {
-			waitingResponse.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		
+		log.add(new LoggedEvent("preformed finish going to work"));
+		
+		if(!testing){
+	    	try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}	
 		}
-    	location = Location.AtWork;
-    	state = State.eating;
+		location = Location.AtWork;
+    	state = State.working;
     	
-    	if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
+    	if(testing){
+    		//do not create working role
+    	}
+    	else if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
     		if(job.type.equalsIgnoreCase("waiter")){

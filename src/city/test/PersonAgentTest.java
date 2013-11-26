@@ -15,6 +15,7 @@ import junit.framework.TestCase;
 import city.BusAgent;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.BusAgent.StopEvent;
 import city.PersonAgent.MyJob;
 import city.PersonAgent.State;
 import city.PersonAgent.Task;
@@ -337,7 +338,7 @@ public class PersonAgentTest extends TestCase{
 		
 		int i =0;
 		while(person.personGui.xPos != 67 || person.personGui.yPos != 85){
-			if(i==100){
+			if(i==200){
 				assertTrue("We never reached destination. Instead, the current position is : (" + person.personGui.xPos + ", " + person.personGui.yPos + ")" , false);
 			}
 			i++;
@@ -356,7 +357,7 @@ public class PersonAgentTest extends TestCase{
 		
 		i =0;
 		while(person.transportState != TransportState.GettingOnBus){
-			if(i==100){
+			if(i==2000){
 				assertTrue("We never recieved msg bus is here." , false);
 			}
 			i++;
@@ -379,8 +380,81 @@ public class PersonAgentTest extends TestCase{
 		
 		assertTrue("personAgent should have logged \"preforming get on Bus\" but didn't. His log reads instead: " 
 				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("preforming get on Bus"));
-		assertTrue("personAgent should have logged \"msgComingAboard recieved from personAgent\" but didn't. His log reads instead: " 
+		assertTrue("busAgent should have logged \"msgComingAboard recieved from personAgent\" but didn't. His log reads instead: " 
 				+ ((BusAgent)person.busLeft).log.getLastLoggedEvent().toString(), ((BusAgent)person.busLeft).log.containsString("msgComingAboard recieved from personAgent"));
 		
+		
+		i =0;
+		while(person.personGui.xPos != 35 || person.personGui.yPos != 85){
+			if(i==100){
+				assertTrue("We never reached destination. Instead, the current position is : (" + person.personGui.xPos + ", " + person.personGui.yPos + ")" , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+	
+		assertEquals("personAgent should be in transportation state OnBus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.OnBus);
+		
+		assertEquals("BusAgent's bus stop 2 should have 1 passenger. Instead it has " + ((BusAgent)person.busLeft).busStops.get(2).passengers.size(),((BusAgent)person.busLeft).busStops.get(2).passengers.size(), 1);
+		assertEquals("BusAgent's bus stop 2 should have passenger where state is dropOff. Instead it has " + ((BusAgent)person.busLeft).busStops.get(2).passengers.get(0).stopEvent.toString(),
+				((BusAgent)person.busLeft).busStops.get(2).passengers.get(0).stopEvent, StopEvent.dropOff);
+		
+		
+
+		i =0;
+		while(person.transportState != TransportState.GettingOffBus){
+			if(i==200){
+				assertTrue("We never recieved msg bus is here." , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+		
+		assertEquals("BusAgent's bus stop 2 should have 0 passengers. Instead it has " + ((BusAgent)person.busLeft).busStops.get(2).passengers.size(),((BusAgent)person.busLeft).busStops.get(2).passengers.size(), 0);
+		assertTrue("personAgent should have logged \"Recieved msgAtYourStop\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("Recieved msgAtYourStop"));
+		assertEquals("personAgent should be in state going to work. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.goingToWork);
+		assertEquals("personAgent should be in transportation state GettingOffBus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.GettingOffBus);
+		
+		//run scheduler 
+		assertTrue("Person's scheduler should have returned true , but didn't.", person.pickAndExecuteAnAction());
+
+		assertTrue("personAgent should have logged \"preforming get off Bus\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("preforming get off Bus"));
+		assertEquals("personAgent should be in state going to work. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.goingToWork);
+		assertEquals("personAgent should be in transportation state none. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.none);
+
+		//run scheduler 
+		assertTrue("Person's scheduler should have returned true , but didn't.", person.pickAndExecuteAnAction());
+
+		assertTrue("personAgent should have logged \"preformed finish going to work\" but didn't. His log reads instead: " 
+				+ person.log.getLastLoggedEvent().toString(), person.log.containsString("preformed finish going to work"));
+		
+		i =0;
+		while(person.personGui.xPos != 337 || person.personGui.yPos != 148){
+			if(i==200){
+				assertTrue("We never reached destination. Instead, the current position is : (" + person.personGui.xPos + ", " + person.personGui.yPos + ")" , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(100);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
+		
+		assertEquals("personAgent should be in state going to work. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.goingToWork);
+		assertEquals("personAgent should be in transportation state none. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.none);
+		assertEquals("personAgent should be in location state atWork. Instead, his state is " + person.transportState.toString(), person.location, PersonAgent.Location.AtWork);
+		
+
 	}
 }
