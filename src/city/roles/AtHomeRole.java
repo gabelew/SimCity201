@@ -22,7 +22,7 @@ public class AtHomeRole extends Role implements AtHome
 	//States for Orders
 	public enum FoodOrderState {none, ordered};
 	enum AppState {working, broken, repairRequested, payRepairman};
-	public enum EventState {none, leavingHome, goingHome, makingFood, goToFridge, goToCounter, goToGrill, OutOfFood};
+	public enum EventState {none, leavingHome, goingHome, makingFood, goToFridge, OutOfFood};
 	enum OrderState {pending, cooking, done, eating}
 	public EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
