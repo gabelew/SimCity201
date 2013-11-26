@@ -10,6 +10,7 @@ import restaurant.gui.RestaurantPanel;
 import javax.swing.*;
 
 import bank.BankBuilding;
+import bank.gui.BankPanel;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.BankAgent;
@@ -403,15 +404,15 @@ public class SimCityGui extends JFrame implements ActionListener {
             	
 	    	}else if(b.type.equals("bank")){
 	            
-	        	RestaurantPanel restPanel = new RestaurantPanel(this);
+	        	BankPanel bankPanel = new BankPanel();
 	            InsideAnimationPanel bankAnimationPanel = new BankAnimationPanel(this);
 	        	
 	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
-	            restPanel.setPreferredSize(restDim);
-	            restPanel.setMinimumSize(restDim);
-	            restPanel.setMaximumSize(restDim);
+	            bankPanel.setPreferredSize(restDim);
+	            bankPanel.setMinimumSize(restDim);
+	            bankPanel.setMaximumSize(restDim);
 	
-	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, restPanel);
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, bankPanel);
 	        	bankAnimationPanel.setInsideBuildingPanel(bp);
 	        	b.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);
