@@ -4,13 +4,14 @@ Team 09
 SimCity201 Project Repository for CS 201 students
 
 ####Team Members
-| No. | Name (First (Nickname) Last) |       USC Email       |                GitHub Username                |      Role      |
-| :-: | :--------------------------- | :-------------------- | :-------------------------------------------- | :------------- |
-|  1  | Gabriel Lew    | gabelew@usc.edu      | @[gabelew](https://github.com/gabelew)    | Team leader |
-|  2  | Chad Martin    | chadmart@usc.edu       | @[chadmart](https://github.com/chadmart)        | GUI guru             |
-|  3  | Emily Bernstein | ebernste@usc.edu   | @[theemilyjane](https://github.com/theemilyjane)           |                |
-|  4  | Gerson Hernandez | gersonh@usc.edu   | @[Gersonh](https://github.com/Gersonh)        |     |
-|  5  | Garland Chen    | garlandc@usc.edu    | @[garland106](https://github.com/garland106)  | A* lead |
+| No. | Name |       USC Email       |                GitHub Username                |      Lecture Section      | USC ID |
+| :-: | :--------------------------- | :-------------------- | :-------------------------------------------- | :------------- | :---------- |
+|  1  | Gabriel Lew    | gabelew@usc.edu      | @[gabelew](https://github.com/gabelew)    | MW 4:00pm | 3356317145|
+|  2  | Chad Martin    | chadmart@usc.edu       | @[chadmart](https://github.com/chadmart)        | MW 4:00pm  | 5493785402|
+|  3  | Emily Bernstein | ebernste@usc.edu   | @[theemilyjane](https://github.com/theemilyjane)   |   MW 12:00pm  |5445682605|
+|  4  | Gerson Hernandez | gersonh@usc.edu   | @[Gersonh](https://github.com/Gersonh)        |  MW 4:00pm   | 5994912227|
+|  5  | Garland Chen    | garlandc@usc.edu    | @[garland106](https://github.com/garland106)  |MW 4:00pm|7276634816|
+
 ####Team Meetings
 |       Meeting       |           Time           |      Location      |
 | :------------------ | :----------------------- | :----------------- |
