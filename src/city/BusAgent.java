@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
 import city.gui.BusGui;
 import city.interfaces.Bus;
 import city.interfaces.Person;
@@ -16,6 +18,7 @@ public class BusAgent extends Agent implements Bus{
 	public Semaphore waitingResponse = new Semaphore(0,true);
 	Timer timer = new Timer();
 	public String name;
+	public EventLog log = new EventLog();
 	
     static final int B_BUS_STATION_X = 30;
     static final int F_BUS_STATION_X = 825;
@@ -117,6 +120,7 @@ public class BusAgent extends Agent implements Bus{
 	//Messages
 	
 	public void msgWaitingForBus(Person p, Point location){
+		log.add(new LoggedEvent("msgWaitingForBus recieved from " +p.getName()));
 		MyBusStop b = findBusStop(location);	
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
 		if(getStateChangePermits()==0)

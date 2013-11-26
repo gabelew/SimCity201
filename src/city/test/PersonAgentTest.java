@@ -12,6 +12,7 @@ import market.test.mock.MockMarket;
 import market.test.mock.MockMarketCustomer;
 import atHome.city.Residence;
 import junit.framework.TestCase;
+import city.BusAgent;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.PersonAgent.MyJob;
@@ -119,8 +120,8 @@ public class PersonAgentTest extends TestCase{
 		assertEquals("personAgent should be in state Shopping. Instead, his state is " + person.state.toString(), person.state, PersonAgent.State.shopping);
 		int i =0;
 		while(person.personGui.xPos != 417 || person.personGui.yPos != 68){
-			if(i==100){
-				assertTrue("We never recieved destination.", false);
+			if(i==200){
+				assertTrue("We never recieved destination. (" + person.personGui.xPos +" , "+ person.personGui.yPos + ")" , false);
 			}
 			i++;
 			try {
@@ -346,7 +347,11 @@ public class PersonAgentTest extends TestCase{
 			}
 		}
 		
-		assertEquals("personAgent should be in transportation state going to bus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.WaitingForBus);
-
+		assertEquals("personAgent should be in transportation state WaitingForBus. Instead, his state is " + person.transportState.toString(), person.transportState, PersonAgent.TransportState.WaitingForBus);
+		
+		
+		assertTrue("personAgent should have logged \"msgWaitingForBus recieved from personAgent\" but didn't. His log reads instead: " 
+				+ ((BusAgent)person.busLeft).log.getLastLoggedEvent().toString(), ((BusAgent)person.busLeft).log.containsString("msgWaitingForBus recieved from personAgent"));
+		
 	}
 }
