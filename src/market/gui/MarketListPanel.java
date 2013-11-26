@@ -20,7 +20,7 @@ public class MarketListPanel extends JPanel implements ActionListener {
     private MarketPanel marketPanel;
     private String type;
     
-    private JTextField typeNameHere = new JTextField();
+    public JTextField typeNameHere = new JTextField();
   
     static final int LIST_ITEM_VIEW_GAP = 5;
     static final int LIST_ITEM_VIEW_X = 180;
@@ -34,6 +34,8 @@ public class MarketListPanel extends JPanel implements ActionListener {
     static final int ONE = 1;
     static final String GREEN_LABEL_COLOR = "0x10721c";
     static final String RED_LABEL_COLOR = "0x971515";
+    public int amount;
+    public JLabel labels;
     
     /**
      * Constructor for ListPanel.  Sets up all the gui
@@ -41,14 +43,14 @@ public class MarketListPanel extends JPanel implements ActionListener {
      * @param rp   reference to the restaurant panel
      * @param type indicates if this is for customers or waiters
      */
-    public MarketListPanel(MarketPanel mp, String type) {
+    public MarketListPanel(MarketPanel mp, String type,int a) {
         marketPanel = mp;
         this.type = type;
-        
+        amount=a;
         setLayout(new BorderLayout(5,5));
         //add(typeNameHere);
         //add(new JLabel("<html><pre>" + type + "<br></pre></html>"));
-        JLabel labels = new JLabel(type+": ");
+        labels = new JLabel(type+": "+amount);
         addListItemView.setLayout(new BorderLayout(LIST_ITEM_VIEW_GAP, LIST_ITEM_VIEW_GAP));
         Dimension addCustViewSize = new Dimension(LIST_ITEM_VIEW_X, LIST_ITEM_VIEW_Y);
         addListItemView.setPreferredSize(addCustViewSize);

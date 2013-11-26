@@ -400,6 +400,8 @@ public class SimCityGui extends JFrame implements ActionListener {
             			new Point(b.getX(),b.getY()),
             			name, 
             			marketAnimationPanel);
+            	marketPanel.setMarket(marketAgent);
+            	marketAgent.setPanel(marketPanel);
             	marketAgent.setInventory(200, 200, 200, 200, 200);
             	marketAgent.startThread();
             	markets.add(marketAgent);
