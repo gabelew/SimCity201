@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
-
 import restaurant.test.mock.LoggedEvent;
 import atHome.city.AtHomeGui;
 import city.PersonAgent;
@@ -109,13 +109,17 @@ public class AtHomeRole extends Role implements AtHome
 	
 	public void restockFridge(Map<String,Integer> orderList)
 	{
+		
 		for(Food f : foodInFridge)
 		{
-			if(orderList.get(f.choice) != null){
+			if(orderList.get(f.choice) != null)
+			{
 				f.amount += orderList.get(f.choice).intValue();
+				choices.add(f.choice);
 				f.state = FoodOrderState.none;
 			}
 		}
+		
 	}
 	public void pickSomethingElse()
 	{
