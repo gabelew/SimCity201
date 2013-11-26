@@ -299,7 +299,7 @@ public class PersonAgent extends Agent implements Person
 		if(hungerLevel > 50 && state != State.goingOutToEat && state != State.eating && state != State.goingHomeToEat)
 		{
 			boolean inList = false;
-			if(youAreRich() && cashOnHand < 100.00){
+			if(youAreRich() && cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) || !"Sunday".equals(dayOfWeek))){
 				for(Task t: taskList){
 					if(t == Task.goToBankNow)
 						inList = true;
@@ -377,7 +377,7 @@ public class PersonAgent extends Agent implements Person
 			if(t == Task.goToBankNow)
 				inList = true;
 		}
-		if(!inList){
+		if(!inList && (!"Saturday".equals(dayOfWeek) || !"Sunday".equals(dayOfWeek))){
 			taskList.add(Task.goToBankNow);
 		}
 		stateChanged();
@@ -467,7 +467,7 @@ public class PersonAgent extends Agent implements Person
 		}
 
 		boolean inList = false;
-		if(cashOnHand < 100.00){
+		if(cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) || !"Sunday".equals(dayOfWeek))){
 			for(Task t: taskList){
 				if(t == Task.goToBank)
 					inList = true;
