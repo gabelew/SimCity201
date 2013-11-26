@@ -130,6 +130,12 @@ public class InfoPanel extends JPanel implements KeyListener {
     		Residence residence = findOpenHome(name);
     		if(stringIsDouble(name)){
     			p = new PersonAgent(name, Double.valueOf(name),gui, residence);
+    			BankCustomerRole bcr = null;
+    			for(Role role : p.roles) {
+    				if(role instanceof BankCustomerRole)
+    					bcr = (BankCustomerRole)role;
+    			}
+    			gui.bankAgent.msgOpenAccount(bcr, Double.valueOf(name), "personal");
     		}else if(name.toLowerCase().contains("rami") || name.toLowerCase().contains("mahdi") 
     				|| name.toLowerCase().contains("ditch") || name.toLowerCase().contains("broke")){
     			p = new PersonAgent(name, NO_CASH,gui, residence);   
@@ -168,6 +174,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     		
     		if(residence instanceof Apartment){
     			((Apartment)residence).addRenter(p);
+    			p.isRenter = true;
     		}else{
     			((Home)residence).owner = p;
     		}
@@ -178,6 +185,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     			if(name.toLowerCase().contains("01")){
     				Restaurant r = gui.restaurants.get(0);
     				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
+    				
     			}else if(name.toLowerCase().contains("02")){
     				Restaurant r = gui.restaurants.get(1);
     				p.job = p.new MyJob(r.location , "waiter", PersonAgent.Shift.day);
@@ -1105,6 +1113,8 @@ public class InfoPanel extends JPanel implements KeyListener {
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			}
+    		} else if(name.toLowerCase().contains("landlord")) {
+    			p.job = p.new MyJob("landlord");
     		}
     		
     		

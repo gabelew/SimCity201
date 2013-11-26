@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.Semaphore;
 
 import restaurant.test.mock.LoggedEvent;
@@ -52,7 +51,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 
 	public void msgCanIHelpYou(ClerkRole clerk){
-		print("can I");
 		Clerk=clerk;
 		o.s=orderState.ordering;
 		stateChanged();	
@@ -67,8 +65,10 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public void msgHereIsOrder(Map<String,Integer>choice,List<String>outOf){
 		o.s=orderState.done;
 		o.Choices=choice;
-		if(outOf!=null)
+		if(!outOf.isEmpty()){
 			o.outOf=outOf;
+			print("out of order");
+		}
 		stateChanged();	
 	}
 	
@@ -127,7 +127,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void payForOrder(){
 		//subtract amount from money in person agent
-		myPerson.cashOnHand=myPerson.cashOnHand-o.amountOwed;
+		double cash = myPerson.cashOnHand-o.amountOwed;
+		myPerson.cashOnHand=(Math.round(100*cash) / ((double)100));
 		Clerk.msgHereIsPayment(o.amountOwed);
 		o.s=orderState.payed;
 	}
@@ -139,7 +140,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		} catch (InterruptedException e) {
 			
 		}
-	    if(o.outOf==null||o.outOf.size()==0)
+	    if(!o.outOf.equals(null))
 	    	myPerson.marketNotStocked(market);
 	    myPerson.doneShopping(o.Choices,market);
 		o=null;

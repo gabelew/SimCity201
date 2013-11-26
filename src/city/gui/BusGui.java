@@ -5,21 +5,17 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 
 import javax.imageio.ImageIO;
 
 import city.BusAgent;
-import city.BusAgent.MyBusStop;
 
 public class BusGui implements Gui{
 	
 	private BusAgent agent = null;
 	private boolean isPresent = false;
 	private char type;
-	private List<MyBusStop> busStops = Collections.synchronizedList(new ArrayList<MyBusStop>());
 
 	
 	private static BufferedImage bus_back = null;
@@ -30,7 +26,18 @@ public class BusGui implements Gui{
 	private enum Command {noCommand, atBusStop};
 	private Command command=Command.noCommand;
 	
-	public BusGui(BusAgent b, SimCityGui gui, char type){ //HostAgent m) {
+    static final int B_XStart = 30;
+    static final int B_YStart = 410;
+    static final int F_XStart = 825;
+    static final int F_YStart = -40;
+    static final int BusStop0 = 305;
+    static final int BusStop1 = 225;
+    static final int BusStop2 = 145;
+    static final int BusStop3 = 65;
+
+
+	
+	public BusGui(BusAgent b, SimCityGui gui, char type){ 
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -40,20 +47,19 @@ public class BusGui implements Gui{
 		}
 		
 		agent = b;
-		busStops = b.getBusStops();
 		this.type = type;
 		
 		if(type == 'B'){
-			xPos = 30;
-			yPos = 410;
-			xDestination = 30;
-			yDestination = 410;
+			xPos = B_XStart;
+			yPos = B_YStart;
+			xDestination = B_XStart;
+			yDestination = B_YStart;
 		}
 		else if(type == 'F'){
-			xPos = 825;
-			yPos = -40;
-			xDestination = 825;
-			yDestination = -40;
+			xPos = F_XStart;
+			yPos = F_YStart;
+			xDestination = F_XStart;
+			yDestination = F_YStart;
 		}
         
 		this.gui = gui;
@@ -69,9 +75,9 @@ public class BusGui implements Gui{
 			}else if (yPos != yDestination && type == 'B' && yPos > -50){
 				yPos--;
 			}else if(yPos != yDestination && type == 'B' && yPos <= -40){
-				yPos = 410;
+				yPos = B_YStart;
 			}else if(yPos != yDestination && type == 'F' && yPos >= 410){
-				yPos = -40;
+				yPos = F_YStart;
 			}
 
 				if (xPos == xDestination && yPos == yDestination) {
@@ -85,11 +91,11 @@ public class BusGui implements Gui{
 
 	@Override
 	public void draw(Graphics2D g) {
-		if(xPos == 30)
+		if(xPos == B_XStart)
 		{
 			g.drawImage(bus_back, xPos, yPos, null);
 		}
-		if(xPos == 825){
+		if(xPos == F_XStart){
 			g.drawImage(bus_front, xPos, yPos, null);
 		}
 
@@ -107,64 +113,55 @@ public class BusGui implements Gui{
 	
 	public void GoToNextBusStop(){
 		
-		//xDestination = NextX();
 		if(type == 'B'){yDestination = NextBY();}
 		else if(type == 'F'){yDestination = NextFY();}
-
-		//NextY();
 		command = Command.atBusStop;
 	}
 	
 	
 	public int NextBY(){
-		int y = -40;
-		if(type == 'B'){
-			
-			if(yPos>305){
-				y=305;
-			}else if(yPos>225){
-				y=225;
-			}else if(yPos>145){
-				y=145;
-			}else if(yPos>65){
-				y=65;
+		int y = F_YStart;			
+			if(yPos>BusStop0){
+				y=BusStop0;
+			}else if(yPos>BusStop1){
+				y=BusStop1;
+			}else if(yPos>BusStop2){
+				y=BusStop2;
+			}else if(yPos>BusStop3){
+				y=BusStop3;
 			}else{
-				y=305;
+				y=BusStop0;
 			}
-		}
-			 
-			
+	
 			return y;
 	}
 	
 	public int NextFY(){
-		int y = 410;
-		if(type == 'F'){
-			if(yPos<65){
-				y=65;
-			}else if(yPos<145){
-				y=145;
-			}else if (yPos<225){
-				y=225;
-			}else if(yPos<305){
-				y=305;
+		int y = B_YStart;
+			if(yPos<BusStop3){
+				y=BusStop3;
+			}else if(yPos<BusStop2){
+				y=BusStop2;
+			}else if (yPos<BusStop1){
+				y=BusStop1;
+			}else if(yPos<BusStop0){
+				y=BusStop0;
 			}else{
-				y=65;
+				y=BusStop3;
 			}
-		}
 		
 		return y;
 	}
 	
 	public void doGoToRest() {
 		if(type == 'B'){
-			xDestination = 30;
-			yDestination = -40;
+			xDestination = B_XStart;
+			yDestination = F_YStart;
 		}
 		
 		else if(type == 'F'){
-			xDestination = 825;
-			yDestination = 410;
+			xDestination = F_XStart;
+			yDestination = B_YStart;
 		}
 	}
 

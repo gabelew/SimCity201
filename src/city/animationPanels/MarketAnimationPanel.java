@@ -56,12 +56,13 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		synchronized(getGuis()){
 		for(Gui gui : getGuis()) {
             if (gui.isPresent()) {
                 gui.updatePosition();
             }
         }
-
+		}
 
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible){
 			repaint();  //Will have paintComponent called
@@ -82,12 +83,13 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
 	     for(int i=ZERO;i<NUM_SHELF;i++){
 	    	 g.drawImage(shelfImg, xSHELF2_POSITION+i*50, ySHELF2_POSITION-i*20, null); 
 	     }
-	     
-        for(Gui gui : getGuis()) {
-			if (gui.isPresent()) {
-				gui.draw(g2);
-	        }
-		}
+	     synchronized(getGuis()){
+	    	 for(Gui gui : getGuis()) {
+	    		 if (gui.isPresent()) {
+	    		 gui.draw(g2);
+	         }
+	     }
+	     }
         
 	     //Clerk Stand
 	     g.drawImage(clerkTableImg, xCLERK_POSITION, yCLERK_POSITION, null);

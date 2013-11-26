@@ -121,9 +121,12 @@ public class SimCityGui extends JFrame implements ActionListener {
         setVisible(true);
         bankAgent.startThread();
         createDefaultPeople();
+        createEmployeeList();
+        setLandlordForRenters();
     }
 
     private void createDefaultPeople() {
+    	infoPanel.getPersonPanel().addPerson("landlordcarhome");
     	infoPanel.getPersonPanel().addPerson("poor01");
     	infoPanel.getPersonPanel().addPerson("poor02");
     	infoPanel.getPersonPanel().addPerson("poor03");
@@ -224,6 +227,69 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("deliveryMan06nightcar");
     	
 
+    }
+    
+    private void setLandlordForRenters() {
+    	PersonAgent landlord = null;
+    	for(PersonAgent p: persons) {
+    		if(p.job!= null && p.job.type.equals("landlord")) {
+    			landlord = p;
+    		}
+    	}
+    	for(PersonAgent r: persons) {
+    		if(r.isRenter) {
+    			r.landlord = landlord;
+    		}
+    	}
+    }
+    
+    private void createEmployeeList() {
+    	for(PersonAgent p: persons) {
+    		if(p.getName().toLowerCase().contains("rmanager01") && p.isManager) {
+    			for(PersonAgent e: persons) {
+    				if((e.getName().toLowerCase().contains("cook01") || e.getName().toLowerCase().contains("waiter01")
+    				|| e.getName().toLowerCase().contains("cashier01") || e.getName().toLowerCase().contains("host01"))
+    				&& e.job != null) {
+    					p.employees.add(e);
+    				}
+    			}
+    		} else if(p.getName().toLowerCase().contains("rmanager02") && p.isManager) {
+    			for(PersonAgent e: persons) {
+    				if((e.getName().toLowerCase().contains("cook02") || e.getName().toLowerCase().contains("waiter02")
+    				|| e.getName().toLowerCase().contains("cashier02") || e.getName().toLowerCase().contains("host02"))
+    				&& e.job != null) {
+    					p.employees.add(e);
+    				}
+    			}
+    			
+   			} else if(p.getName().toLowerCase().contains("rmanager03") && p.isManager) {
+   				for(PersonAgent e: persons) {
+    				if((e.getName().toLowerCase().contains("cook03") || e.getName().toLowerCase().contains("waiter03")
+    				|| e.getName().toLowerCase().contains("cashier03") || e.getName().toLowerCase().contains("host03"))
+    				&& e.job != null) {
+    					p.employees.add(e);
+    				}
+    			}
+   				
+   			} else if(p.getName().toLowerCase().contains("rmanager04") && p.isManager) {
+   				for(PersonAgent e: persons) {
+    				if((e.getName().toLowerCase().contains("cook04") || e.getName().toLowerCase().contains("waiter04")
+    				|| e.getName().toLowerCase().contains("cashier04") || e.getName().toLowerCase().contains("host04"))
+    				&& e.job != null) {
+    					p.employees.add(e);
+    				}
+    			}
+   			} else if (p.getName().toLowerCase().contains("rmanager05") && p.isManager) {
+   				for(PersonAgent e: persons) {
+    				if((e.getName().toLowerCase().contains("cook05") || e.getName().toLowerCase().contains("waiter05")
+    				|| e.getName().toLowerCase().contains("cashier05") || e.getName().toLowerCase().contains("host05"))
+    				&& e.job != null) {
+    					p.employees.add(e);
+    				}
+    			}
+    				    			
+    		}
+    	}
     }
 
 	private void createDefaultBuildingPanels() {

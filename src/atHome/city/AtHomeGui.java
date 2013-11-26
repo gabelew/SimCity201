@@ -49,7 +49,7 @@ public class AtHomeGui implements Gui{
     static final int yAPT_OFFSET = 310;
     static final int xAPT_OFFSET = 30;
     static final int HOUSE_TABLEPOS = 150;
-    static final int COOKING_OFFSET = 0;
+    static final int COOKING_OFFSET = 20;
 	static final int KITCHEN_OFFSET = 15;
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
 	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood, LeaveHome, GetFoodFromCounter, GetFoodFromGrill};
@@ -205,12 +205,12 @@ public class AtHomeGui implements Gui{
 						if(f.state == FoodState.PutFoodOnGrill)
 						{
 							f.state = FoodState.FoodOnGrill;
-							f.CookingPoint = new Point(xGRILL_POSITION + COOKING_OFFSET, yGRILL_POSITION + COOKING_OFFSET);
+							f.CookingPoint = new Point(xGRILL_POSITION + COOKING_OFFSET, yGRILL_POSITION + 0*COOKING_OFFSET);
 						}
 						else if (f.state == FoodState.PutFoodOnCounter)
 						{
 							f.state = FoodState.FoodOnCounter;
-							f.CookingPoint = new Point(xKITCHEN_COUNTER_POSITION + COOKING_OFFSET,yKITCHEN_COUNTER_POSITION + COOKING_OFFSET);
+							f.CookingPoint = new Point(xKITCHEN_COUNTER_POSITION + COOKING_OFFSET,yKITCHEN_COUNTER_POSITION + 0*COOKING_OFFSET);
 						}
 					}
 				}
