@@ -42,7 +42,7 @@ public class BusAgent extends Agent implements Bus{
 	public class MyBusStop{
 		Point location;
 		int stopnumber;
-		List<MyPassenger> passengers = Collections.synchronizedList(new ArrayList<MyPassenger>());
+		public List<MyPassenger> passengers = Collections.synchronizedList(new ArrayList<MyPassenger>());
 	
 		MyBusStop(Point p, int sn){
 			location = p;
@@ -60,7 +60,7 @@ public class BusAgent extends Agent implements Bus{
 	
 	public class MyPassenger{
 		Person person;
-		StopEvent stopEvent;
+		public StopEvent stopEvent;
 		
 		MyPassenger(Person p, StopEvent se){
 			person = p;
@@ -72,7 +72,7 @@ public class BusAgent extends Agent implements Bus{
 		}
 	}
 	
-	enum StopEvent {pickUp, onBus, dropOff}	
+	public enum StopEvent {pickUp, onBus, dropOff}	
 	enum State {none, atStop0, atStop1, atStop2, atStop3, goingToStop}
 	private State state = State.none;
 	

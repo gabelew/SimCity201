@@ -75,6 +75,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private int hour;
     private String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"};
     private String dayOfWeek = daysOfWeek[0];
+    public boolean testing = false;
     
     static final int FRAMEX = 1100;
     static final int FRAMEY = 430;
@@ -90,7 +91,8 @@ public class SimCityGui extends JFrame implements ActionListener {
      * Constructor for RestaurantGui class.
      * Sets up all the gui components.
      */
-    public SimCityGui() {
+    public SimCityGui(boolean test) {
+    	testing = test;
     	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
     	setLayout(new BorderLayout());
     	topPanel.setLayout(new BorderLayout(5,0));
@@ -126,7 +128,44 @@ public class SimCityGui extends JFrame implements ActionListener {
         createEmployeeList();
         setLandlordForRenters();
     }
+    public SimCityGui() {
+    	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
+    	setLayout(new BorderLayout());
+    	topPanel.setLayout(new BorderLayout(5,0));
+        
+        Dimension infoDim = new Dimension(WINDOWX, (int) (REST_PANEL_Y));
+        infoPanel.setPreferredSize(infoDim);
+        infoPanel.setMinimumSize(infoDim);
+        infoPanel.setMaximumSize(infoDim);
 
+        topPanel.add(animationPanel, BorderLayout.CENTER);
+        topPanel.add(infoPanel, BorderLayout.WEST);
+        add(topPanel, BorderLayout.CENTER);
+        
+        
+        Dimension buildingsPanelDim = new Dimension(WINDOWX,REST_PANEL_Y);
+        buildingsPanel.setLayout(cardLayout);
+        buildingsPanel.setMaximumSize(buildingsPanelDim);
+        buildingsPanel.setMinimumSize(buildingsPanelDim);
+        buildingsPanel.setPreferredSize(buildingsPanelDim);
+        
+        
+        bottomFrame.setLayout(new BorderLayout());
+        bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
+        bottomFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        bottomFrame.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
+        bottomFrame.setVisible(true);
+
+        createDefaultBuildingPanels();
+        
+        setVisible(true);
+        if(!testing){
+        	bankAgent.startThread();
+        	createDefaultPeople();
+        	createEmployeeList();
+        	setLandlordForRenters();
+        }
+    }
     private void createDefaultPeople() {
     	infoPanel.getPersonPanel().addPerson("landlordcarhome");
     	infoPanel.getPersonPanel().addPerson("poor01");
@@ -400,6 +439,8 @@ public class SimCityGui extends JFrame implements ActionListener {
             			new Point(b.getX(),b.getY()),
             			name, 
             			marketAnimationPanel);
+            	marketPanel.setMarket(marketAgent);
+            	marketAgent.setPanel(marketPanel);
             	marketAgent.setInventory(200, 200, 200, 200, 200);
             	marketAgent.startThread();
             	markets.add(marketAgent);

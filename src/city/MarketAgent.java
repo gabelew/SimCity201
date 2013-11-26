@@ -5,6 +5,7 @@ import java.util.*;
 
 import agent.Agent;
 import city.animationPanels.InsideAnimationPanel;
+import market.gui.MarketPanel;
 import market.interfaces.Clerk;
 import market.interfaces.DeliveryMan;
 import market.interfaces.Market;
@@ -14,6 +15,8 @@ import restaurant.test.mock.LoggedEvent;
 import market.interfaces.*;
 
 public class MarketAgent extends Agent implements Market {
+private MarketPanel panel;
+private boolean update=false;
 public EventLog log = new EventLog();
 public InsideAnimationPanel insideAnimationPanel;
 public Point location;
@@ -96,7 +99,6 @@ public void msgPlaceOrder(MarketCustomer CR){
 }
 
 public void msgPlaceDeliveryOrder(Cook cook){
-	print("DELIVERY!!!");
 	MyCooks.add(new MyCook(cook, cookState.waiting));
 	if(getStateChangePermits()==0){
 			stateChanged();	
@@ -116,7 +118,8 @@ public void msgClerkDone(Clerk c){
 	}
 	if(getStateChangePermits()==0){
 			stateChanged();	
-		}
+	}
+	update=true;
 	log.add(new LoggedEvent("Received msgClerkDone from clerk."));
 }
 
@@ -131,7 +134,8 @@ public void msgDeliveryDone(DeliveryMan D){
 	}
 	if(getStateChangePermits()==0){
 			stateChanged();	
-		}
+	}
+	update=true;
 	log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 }
 
@@ -166,6 +170,11 @@ public boolean pickAndExecuteAnAction() {
 				deliveryDone(d);
 				return true;
 			}
+		}
+		if(update){
+			update=false;
+			updatePanel();
+			return true;
 		}
 		
 	}
@@ -241,6 +250,14 @@ public void addDeliveryMan(DeliveryMan DM){
 		}
 }
 
+private void updatePanel(){
+	panel.steakPanel.labels.setText("Steak: "+Inventory.get("steak"));
+	panel.saladPanel.labels.setText("Salad: "+Inventory.get("salad"));
+	panel.cookiePanel.labels.setText("Cookie: "+Inventory.get("cookie"));
+	panel.chickenPanel.labels.setText("Chicken: "+Inventory.get("chicken"));
+	panel.carPanel.labels.setText("Car: "+Inventory.get("car"));
+}
+
 public void offWork(Clerk c){
 	for (clerk cl:clerks){
 		if(cl.clerk==c){
@@ -255,6 +272,10 @@ public void offWork(DeliveryMan DM){
 			de.deliveryState=state.wantOffWork;
 		}
 	}
+}
+
+public void setPanel(MarketPanel p){
+	panel=p;
 }
 
 }
