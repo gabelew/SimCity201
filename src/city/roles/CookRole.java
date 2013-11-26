@@ -408,9 +408,9 @@ public class CookRole extends Role implements Cook {
 			return true;
 		}
 		
-		if(checkStand) {
-			checkRevolvingStand();
-		}
+//		if(checkStand) {
+//			checkRevolvingStand();
+//		}
 		
 		goToRestPost();
 		return false;
