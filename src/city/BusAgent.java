@@ -17,6 +17,18 @@ public class BusAgent extends Agent implements Bus{
 	Timer timer = new Timer();
 	public String name;
 	
+    static final int B_BUS_STATION_X = 30;
+    static final int F_BUS_STATION_X = 825;
+    static final int BUS_STATION0_Y = 305;
+    static final int BUS_STATION1_Y = 225;
+    static final int BUS_STATION2_Y = 145;
+    static final int BUS_STATION3_Y = 65;
+
+
+
+
+
+	
 	public BusGui getBusGui() {
 		return busGui;
 	}
@@ -70,14 +82,14 @@ public class BusAgent extends Agent implements Bus{
 		}
 		
 												//where customers will pile up
-		Point busStation3 = new Point(30,65);	//(67, 85+80*0)
-		Point busStation2 = new Point(30,145);	//(67, 85+80*1)
-		Point busStation1 = new Point(30,225);	//(67, 85+80*2)
-		Point busStation0 = new Point(30,305);	//(67, 85+80*3)
-		Point busStation4 = new Point(825,65);	//(797, 85+80*0)
-		Point busStation5 = new Point(825,145);	//(797, 85+80*1)
-		Point busStation6 = new Point(825,225);	//(797, 85+80*2)
-		Point busStation7 = new Point(825,305);	//(797, 85+80*3)
+		Point busStation3 = new Point(30,BUS_STATION3_Y);	//(67, 85+80*0)
+		Point busStation2 = new Point(30,BUS_STATION2_Y);	//(67, 85+80*1)
+		Point busStation1 = new Point(30,BUS_STATION1_Y);	//(67, 85+80*2)
+		Point busStation0 = new Point(30,BUS_STATION0_Y);	//(67, 85+80*3)
+		Point busStation4 = new Point(825,BUS_STATION3_Y);	//(797, 85+80*0)
+		Point busStation5 = new Point(825,BUS_STATION2_Y);	//(797, 85+80*1)
+		Point busStation6 = new Point(825,BUS_STATION1_Y);	//(797, 85+80*2)
+		Point busStation7 = new Point(825,BUS_STATION0_Y);	//(797, 85+80*3)
 		
 		if(this.type == 'B'){
 			busStops.add(new MyBusStop(busStation0,0));
@@ -107,7 +119,6 @@ public class BusAgent extends Agent implements Bus{
 	public void msgWaitingForBus(Person p, Point location){
 		MyBusStop b = findBusStop(location);	
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
-		//print("\t\t\t\t\t" +p.getName());
 		if(getStateChangePermits()==0)
 			stateChanged();
 	}
@@ -218,7 +229,6 @@ public class BusAgent extends Agent implements Bus{
 		
 	}
 	private void GoToNextBusStop(){
-		//print("going to next stop");
 		busGui.GoToNextBusStop();
 	}
 	
@@ -229,11 +239,7 @@ public class BusAgent extends Agent implements Bus{
 			}
 		}, 
 		4000);
-		/*for(MyBusStop b: busStops){
-		for(MyPassenger p : b.passengers){
-			print("\t\t\t\t"+p.person.getName());
-		}
-		}*/
+
 		List<MyPassenger> removePs = Collections.synchronizedList(new ArrayList<MyPassenger>());
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){
