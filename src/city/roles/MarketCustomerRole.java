@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.Semaphore;
 
 import restaurant.test.mock.LoggedEvent;
@@ -128,7 +127,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void payForOrder(){
 		//subtract amount from money in person agent
-		myPerson.cashOnHand=myPerson.cashOnHand-o.amountOwed;
+		double cash = myPerson.cashOnHand-o.amountOwed;
+		myPerson.cashOnHand=(Math.round(100*cash) / ((double)100));
 		Clerk.msgHereIsPayment(o.amountOwed);
 		o.s=orderState.payed;
 	}
