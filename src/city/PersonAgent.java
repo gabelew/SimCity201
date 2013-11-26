@@ -113,7 +113,61 @@ public class PersonAgent extends Agent implements Person
 			this.type = type;
 		}
 	}
+	public static int randInt(int min, int max) {
+	    Random i = new Random();
+	    return i.nextInt((max - min) + 1) + min;
+	}
 
+    private MarketAgent chooseClosestMarket() {
+    	MarketAgent closestMa = markets.get(0);
+    	for(MarketAgent m: markets){
+			if(Math.abs(closestMa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
+				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
+					closestMa = m;
+				}
+			}
+		}
+		return closestMa;
+	}
+
+    private BankBuilding chooseClosestBank() {
+    	BankBuilding closestBa = banks.get(0);
+    	for(BankBuilding b: banks){
+			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(b.location.y - personGui.yPos)){
+				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
+					closestBa = b;
+				}
+			}
+		}
+		return closestBa;
+	}
+
+	private boolean youAreRich() {
+		if(personalAccount != null){
+			if(personalAccount.currentBalance > 200){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Restaurant findRestaurant(Point d) {
+		for(Restaurant r: restaurants){
+			if(r.location.equals(d)){
+				return r;
+			}
+		}
+		return null;
+	}
+    
+	private BankBuilding findBank(Point d) {
+		for(BankBuilding b: banks){
+			if(b.location.equals(d)){
+				return b;
+			}
+		}
+		return null;
+	}
 /***********************
  *  UTILITY CLASSES END
  ***********************/
@@ -341,6 +395,20 @@ public class PersonAgent extends Agent implements Person
 		if(!inList){
 			taskList.add(Task.offWorkBreak);
 		}
+	}
+	public void releavedFromDuty(Role role) {
+		Role removeRole = null;
+		for(Role r:roles){
+			if(role == r){
+				removeRole = r;
+			}
+		}
+		if(removeRole!=null){
+			roles.remove(removeRole);
+			state = State.doingNothing;
+			location = Location.InCity;
+		}
+		stateChanged();
 	}
 
 	
@@ -913,14 +981,42 @@ public class PersonAgent extends Agent implements Person
 		 */
 		
 	}
-	private boolean youAreRich() {
-		if(personalAccount != null){
-			if(personalAccount.currentBalance > 200){
-				return true;
-			}
-		}
-		return false;
+    private void goHome() 
+    {	
+    		destination = myHome.location;
+			if(car == true || Math.abs(destination.y - personGui.yPos) <= 40){
+				personGui.doWalkToHome();
+				if(!testing){
+		        	try {
+		    			waitingResponse.acquire();
+		    		} catch (InterruptedException e) {
+		    			e.printStackTrace();
+		    		}
+		    	}
+				location = Location.AtHome;
+				state = State.inHome;
+				for(Role r: roles){
+					if(r instanceof AtHomeRole){
+						r.active = true;
+						((AtHomeRole) r).getGui().setPresent(true);
+						((AtHomeRole)r).goToHomePos();
+						if(toPutInFridge != null)
+							((AtHomeRole)r).restockFridge(this.toPutInFridge);
+						toPutInFridge = null;
+					}
+				}
+	    	}else{
+	    		goToBusStop();
+	    	} 
+
 	}
+    private void leaveHouse() {
+    	for(Role r: roles){
+			if(r instanceof AtHomeRole){
+				((AtHomeRole)r).msgGoLeaveHome();
+			}
+    	}
+    }
 
 	private void goToRestaurant() {
     	// DoGoToRestaurant animation
@@ -1043,30 +1139,6 @@ public class PersonAgent extends Agent implements Person
     	role.getMarketCustomerGui().setPresent(true);
     	role.startShopping(m, toOrderFromMarket);
     }
-
-    private MarketAgent chooseClosestMarket() {
-    	MarketAgent closestMa = markets.get(0);
-    	for(MarketAgent m: markets){
-			if(Math.abs(closestMa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
-				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
-					closestMa = m;
-				}
-			}
-		}
-		return closestMa;
-	}
-
-    private BankBuilding chooseClosestBank() {
-    	BankBuilding closestBa = banks.get(0);
-    	for(BankBuilding b: banks){
-			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(b.location.y - personGui.yPos)){
-				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
-					closestBa = b;
-				}
-			}
-		}
-		return closestBa;
-	}
     
 	private void goToBusStop() {
     	personGui.doGoToBus();
@@ -1088,25 +1160,13 @@ public class PersonAgent extends Agent implements Person
 		}
 		this.transportState = TransportState.WaitingForBus;	
 	}
+	
+/********************************************************
+ *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
+ *                ANIMATION METHODS 
+ *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
+ ******************^^^^^^^^^^^^^^^^*********************/
 
-	private Restaurant findRestaurant(Point d) {
-		for(Restaurant r: restaurants){
-			if(r.location.equals(d)){
-				return r;
-			}
-		}
-		return null;
-	}
-    
-	private BankBuilding findBank(Point d) {
-		for(BankBuilding b: banks){
-			if(b.location.equals(d)){
-				return b;
-			}
-		}
-		return null;
-	}
-    
 	public void msgAnimationFinshed() {
 		waitingResponse.release();	
 	}
@@ -1122,71 +1182,5 @@ public class PersonAgent extends Agent implements Person
 		personGui = g;
 		
 	}
-	public static int randInt(int min, int max) {
-	    Random i = new Random();
-	    return i.nextInt((max - min) + 1) + min;
-	}
-
-/********************************************************
- *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
- *                ANIMATION METHODS 
- *>>>>>>>>>>>>                        <<<<<<<<<<<<<<<<<<
- ******************^^^^^^^^^^^^^^^^*********************/
-	    private void goHome() 
-	    {	
-	    		destination = myHome.location;
-				if(car == true || Math.abs(destination.y - personGui.yPos) <= 40){
-					personGui.doWalkToHome();
-					if(!testing){
-			        	try {
-			    			waitingResponse.acquire();
-			    		} catch (InterruptedException e) {
-			    			e.printStackTrace();
-			    		}
-			    	}
-					location = Location.AtHome;
-					state = State.inHome;
-					for(Role r: roles){
-						if(r instanceof AtHomeRole){
-							r.active = true;
-							((AtHomeRole) r).getGui().setPresent(true);
-							((AtHomeRole)r).goToHomePos();
-							if(toPutInFridge != null)
-								((AtHomeRole)r).restockFridge(this.toPutInFridge);
-							toPutInFridge = null;
-						}
-					}
-		    	}else{
-		    		goToBusStop();
-		    	} 
-
-		}
-	    private void leaveHouse() {
-	    	for(Role r: roles){
-				if(r instanceof AtHomeRole){
-					((AtHomeRole)r).msgGoLeaveHome();
-				}
-	    	}
-	    }
-	    
-	    //public void msgReenablePerson(){
-			//gui.setPresent();
-		//}
-
-		public void releavedFromDuty(Role role) {
-			Role removeRole = null;
-			for(Role r:roles){
-				if(role == r){
-					removeRole = r;
-				}
-			}
-			if(removeRole!=null){
-				roles.remove(removeRole);
-				state = State.doingNothing;
-				location = Location.InCity;
-			}
-			stateChanged();
-		}
-
 
 }
