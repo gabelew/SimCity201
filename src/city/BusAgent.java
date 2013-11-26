@@ -19,6 +19,7 @@ public class BusAgent extends Agent implements Bus{
 	Timer timer = new Timer();
 	public String name;
 	public EventLog log = new EventLog();
+	public boolean testing = false;
 	
     static final int B_BUS_STATION_X = 30;
     static final int F_BUS_STATION_X = 825;
@@ -247,7 +248,11 @@ public class BusAgent extends Agent implements Bus{
 		List<MyPassenger> removePs = Collections.synchronizedList(new ArrayList<MyPassenger>());
 		for(MyPassenger p : ms.passengers){
 			if(p.stopEvent == StopEvent.dropOff){
-				p.person.msgAtYourStop(busGui.xPos, busGui.yPos);
+				if(!testing){
+					p.person.msgAtYourStop(busGui.xPos, busGui.yPos);
+				}else{
+					p.person.msgAtYourStop(30,145);
+				}
 				removePs.add(p);
 			}
 		}	
