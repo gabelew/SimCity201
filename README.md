@@ -40,17 +40,17 @@ SimCity201 Project Repository for CS 201 students
   
 ###People with compound names
 	+ "poor01" 
-	..* lives in the first apartment, apt room #7
-	..* cooks food at home initially
+	... lives in the first apartment, apt room #7
+	... cooks food at home initially
 	+ "poorHome02" 
-	..* lives in the second home 
-	..* eats at home initially
+	... lives in the second home 
+	... eats at home initially
 	+ "poorHome04NoFood"
-	..* lives in the fourth home
-	..* has no food, so decides to go to market
-	..* goes to bank first to get money
-	..* buys food from market
-	..* goes home with restocked food
+	... lives in the fourth home
+	... has no food, so decides to go to market
+	... goes to bank first to get money
+	... buys food from market
+	... goes home with restocked food
 	
 ###Participation from each Member
   + Chad Martin: CardLayout, Person Agent, Person Agent tests, City Animation Panel, Add tables, Gui Interaction Panel, photoshopping of images, interaction diagrams
