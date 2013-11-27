@@ -1152,44 +1152,34 @@ public class InfoPanel extends JPanel implements KeyListener {
 	
     public void pauseAgents()
     {
-    	/*if(tablesPanel.getPauseButtonLabel() == "Pause")
+    	if(personPanel.getPauseButtonLabel() == "Pause")
     	{
-    	 for (CustomerAgent temp: customers)
+    	 for (PersonAgent temp: gui.persons)
     	 {
              temp.pauseAgent();
     	 }
-    	 for (WaiterAgent temp: waiters) 
+    	 for (MarketAgent temp: gui.markets) 
     	 {
              temp.pauseAgent();
     	 }
-    	 for (MarketAgent temp: markets) 
-    	 {
-             temp.pauseAgent();
-    	 }
-    	 //host.pauseAgent();
-    	 //cook.pauseAgent();
-    	 //cashier.pauseAgent();
+    	 gui.animationPanel.busLeft.pauseAgent();
+    	 gui.animationPanel.busRight.pauseAgent();
     	}
     	else
     	{
-       	 for(CustomerAgent temp: customers)
+       	 for(PersonAgent temp: gui.persons)
        	 {
                 temp.resumeAgent();
        	 }
-       	 for (WaiterAgent temp: waiters)
+       	 for (MarketAgent temp: gui.markets)
        	 {
                 temp.resumeAgent();
        	 }
-       	 for (MarketAgent temp: markets)
-       	 {
-                temp.resumeAgent();
-       	 }
-       //	 host.resumeAgent();
-       	// cook.resumeAgent();
-    	 //cashier.resumeAgent();
+    	 gui.animationPanel.busLeft.resumeAgent();
+    	 gui.animationPanel.busRight.resumeAgent();
     	}
-    	 tablesPanel.changePauseButton();     
-    */}
+    	personPanel.changePauseButton();     
+    }
 
 	public void setWaiterOnBreak(String name) {
 		//waitersPanel.setWaiterOnBreak(name);
