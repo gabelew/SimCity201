@@ -302,7 +302,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	//Actions
 	private void EnterBank() {
-		Do("Entering bank");
 		customerGui.DoEnterBank();
 		try {
 			waitingResponse.acquire();
