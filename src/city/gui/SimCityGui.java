@@ -482,16 +482,16 @@ public class SimCityGui extends JFrame implements ActionListener {
 		    	homes.add(new Home( houseAnimationPanel, new Point(b.getX(),b.getY())));
 			}else if(b.type.equals("apartment")){
 			    
-				RestaurantPanel restPanel = new RestaurantPanel(this);
+				BankPanel aptPanel = new BankPanel();
 			    InsideAnimationPanel apartmentAnimationPanel = new ApartmentAnimationPanel(this);
 				
 			    Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
-			    restPanel.setPreferredSize(restDim);
-			    restPanel.setMinimumSize(restDim);
-			    restPanel.setMaximumSize(restDim);
+			    aptPanel.setPreferredSize(restDim);
+			    aptPanel.setMinimumSize(restDim);
+			    aptPanel.setMaximumSize(restDim);
 			
-				InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,apartmentAnimationPanel, restPanel);
-            	restPanel.setInsideBuildingPanel(bp);
+				InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,apartmentAnimationPanel, aptPanel);
+            	apartmentAnimationPanel.setInsideBuildingPanel(bp);
 				b.setInsideBuildingPanel(bp);
 				apartmentAnimationPanel.setInsideBuildingPanel(bp);
 				buildingsPanel.add(bp, "" + i);
