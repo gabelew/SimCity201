@@ -123,10 +123,13 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultBuildingPanels();
         
         setVisible(true);
-        bankAgent.startThread();
-        createDefaultPeople();
-        createEmployeeList();
-        setLandlordForRenters();
+
+        if(!testing){
+        	bankAgent.startThread();
+        	createDefaultPeople();
+        	createEmployeeList();
+        	setLandlordForRenters();
+        }
     }
     public SimCityGui() {
     	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
@@ -159,12 +162,11 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultBuildingPanels();
         
         setVisible(true);
-        if(!testing){
-        	bankAgent.startThread();
-        	createDefaultPeople();
-        	createEmployeeList();
-        	setLandlordForRenters();
-        }
+        bankAgent.startThread();
+        createDefaultPeople();
+        createEmployeeList();
+        setLandlordForRenters();
+       
     }
     private void createDefaultPeople() {
     	infoPanel.getPersonPanel().addPerson("landlordcarhome");
