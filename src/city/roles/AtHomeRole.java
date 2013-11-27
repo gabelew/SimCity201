@@ -308,6 +308,7 @@ public class AtHomeRole extends Role implements AtHome
 	}
 	private void ImOutOfFood()
 	{
+		myPerson.print("I'm out of food");
 		NoMoreFood = false;
 		this.state = EventState.OutOfFood;
 		makeMarketList();
