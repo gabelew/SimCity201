@@ -12,6 +12,7 @@ import restaurant.gui.Table;
 import restaurant.gui.WaiterGui;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.HostRole;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -379,7 +380,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     	tables.add(new Table(xDEFAULT_NEW_TABLE_POSITION, yDEFAULT_NEW_TABLE_POSITION));
     	for(Restaurant r: simCityGui.getRestaurants()){
     		if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-    			r.host.addNewTable();
+    			((HostRole) r.host).addNewTable();
     		}
     	}
     	
@@ -390,7 +391,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     	tables.add(new Table( x, y));
     	for(Restaurant r: simCityGui.getRestaurants()){
     		if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-    			r.host.addNewTable();
+    			((HostRole) r.host).addNewTable();
     		}
     	}
 		

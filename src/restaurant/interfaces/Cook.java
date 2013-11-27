@@ -27,20 +27,6 @@ public interface Cook {
 	
 	//public abstract void msgOutOfOrder(Market m, List<MarketAgent.MyFood> orderList);
 	
-	public abstract void msgAnimationFinishedAtFidge();
-	
-	public abstract void msgAnimationFinishedPutFoodOnGrill();
-	
-	public abstract void msgAnimationFinishedWaiterPickedUpFood();
-	
-	public abstract void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o);
-	
-	public abstract void badSteaks();
-
-	public abstract void cookieMonster();
-
-	public abstract void setSteaksAmount(int i);
-	
 	public abstract void msgCanIHelpYou(DeliveryMan DM, MarketAgent  M);
 
 	public abstract void msgNeverOrderFromMarketAgain(MarketAgent market);

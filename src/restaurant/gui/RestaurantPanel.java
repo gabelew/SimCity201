@@ -380,7 +380,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 			for(Restaurant r: gui.getRestaurants()){
 				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-		            r.cook.badSteaks();
+		            ((CookRole) r.cook).badSteaks();
 				}
 			}
         }
@@ -388,7 +388,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		if ((e.getKeyCode() == KeyEvent.VK_2) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 			for(Restaurant r: gui.getRestaurants()){
 				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-					r.cook.cookieMonster();
+					((CookRole) r.cook).cookieMonster();
 				}
 			}
         }
@@ -401,7 +401,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 
 			for(Restaurant r: gui.getRestaurants()){
 				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-					r.cook.setSteaksAmount(5);
+					((CookRole) r.cook).setSteaksAmount(5);
 				}
 			}
         }

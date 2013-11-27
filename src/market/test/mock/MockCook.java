@@ -59,42 +59,34 @@ public class MockCook extends Mock implements Cook {
 		log.add(new LoggedEvent("Received msgFoodDone."));
 	}
 	
-	@Override
 	public void msgAnimationFinishedAtFidge(){
 		log.add(new LoggedEvent("Received msgAnimationFinishedAtFidge."));
 	}
 	
-	@Override
 	public void msgAnimationFinishedPutFoodOnGrill(){
 		log.add(new LoggedEvent("Received msgAnimationFinishedPutFoodOnGrill."));
 	}
-	
-	@Override
+
 	public void msgAnimationFinishedWaiterPickedUpFood(){
 		log.add(new LoggedEvent("Received msgAnimationFinishedWaiterPickedUpFood."));
 	}
 	
-	@Override
 	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o){
 		log.add(new LoggedEvent("Received msgAnimationFinishedPutFoodOnPickUpTable."));
 	}
 	
-	@Override
 	public void badSteaks(){
 		log.add(new LoggedEvent("Received bad steaks"));
 	}
 	
-	@Override
 	public void cookieMonster(){
 		log.add(new LoggedEvent("Received cookie monster"));
 	}
 	
-	@Override
 	public void setSteaksAmount(int i){
 		log.add(new LoggedEvent("Recieved set steaks amount"));
 	}
 	
-	@Override
 	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String,Integer> choices, List<String> outOf, double amount){
 		log.add(new LoggedEvent("Recieved msgHereIsOrderFromMarket"));
 	}
