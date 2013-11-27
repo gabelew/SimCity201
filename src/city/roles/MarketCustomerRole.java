@@ -47,7 +47,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		o = new Order(toOrderFromMarket, orderState.waiting);
 		stateChanged();	
 		market.msgPlaceOrder(this);
-		print("Going to market");
 		myPerson.log.add(new LoggedEvent("received start shopping from person"));
 	}
 
