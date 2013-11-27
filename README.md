@@ -71,6 +71,28 @@ SimCity201 Project Repository for CS 201 students
      ....... "I'm hungry and want to make: "
      ....... "Cooking food"
      ....... "food is done"
+     4. "poorHome05 low steak"
+     . lives in the fourth home from top right
+     . eats at home
+     ... Messages:
+     ....... "I'm going home to eat"
+     ....... "I'm Eatin at Home"
+     ....... "I'm hungry and want to make: "
+     ....... "cooking food"
+     ....... "food is done!!!"
+     . goes to bank first to get money
+     ... Messages:
+     ....... "I'm going to bank"
+     ....... "I'm at bank"
+     ....... "widthdrew $100 from personal"
+     ....... "leaving bank"
+     . then buys food from market
+     ... Messages:
+     ....... "I'm going to market"
+     ....... "I'm at Market"
+     ....... "Got food from market"
+     . then goes home with restocked food
+     ....... "I have food now"
      
      
      

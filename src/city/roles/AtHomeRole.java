@@ -408,7 +408,7 @@ public class AtHomeRole extends Role implements AtHome
 	{
 	    public String choice;
 	    public int cookingTime;
-	    public int amount = 3;
+	    public int amount = 4;
 	    public int low = 2;
 	    public int capacity = 5;
 	    public FoodOrderState state = FoodOrderState.none;
