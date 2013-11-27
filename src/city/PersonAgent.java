@@ -978,10 +978,10 @@ public class PersonAgent extends Agent implements Person
 			if(r instanceof AtHomeRole){
 				r.active = true;
 				((AtHomeRole)r).getGui().setPresent(true);
-				((AtHomeRole)r).ImHungry();
 				if(toPutInFridge != null)
 					((AtHomeRole)r).restockFridge(this.toPutInFridge);
 				toPutInFridge = null;
+				((AtHomeRole)r).ImHungry();
 				break;
 			}
 		}
