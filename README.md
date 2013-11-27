@@ -40,13 +40,13 @@ SimCity201 Project Repository for CS 201 students
   
 ###People with compound names
 	1. "poor01" 
-      ... lives in the first apartment, apt room #7
+      ... lives in the first apartment from top left, apt room #1 (top left room)
       ... cooks food at home initially
 	2. "poorHome02" 
      ... lives in the second home 
      ... eats at home initially
 	3. "poorHome04NoFood"
-     . lives in the fourth home
+     . lives in the fourth home from top left
      . has no food, so decides to go to market
      ... Messages:
      ....... "I'm going home to eat"
