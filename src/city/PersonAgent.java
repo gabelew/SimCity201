@@ -1034,6 +1034,7 @@ public class PersonAgent extends Agent implements Person
     }
 
 	private void goToRestaurant() {
+    	print("I'm going to restaurant");
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
     	
@@ -1052,6 +1053,7 @@ public class PersonAgent extends Agent implements Person
     	}
     }
     private void finishGoingToRestaurant(){
+    	print("I'm at restaurant");
     	personGui.DoWalkTo(destination);
     	try {
 			waitingResponse.acquire();
@@ -1071,6 +1073,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToBank() {
+    	print("I'm going to bank");
     	state = State.goingToBank;
 	    BankBuilding m  = chooseClosestBank();
 	    destination = m.location;
@@ -1090,6 +1093,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void finishGoingToBank(){
+    	print("I'm at bank");
     	state  = State.banking;
     	BankBuilding b = findBank(destination);
     	personGui.DoWalkTo(destination); //animationStub
@@ -1115,6 +1119,7 @@ public class PersonAgent extends Agent implements Person
     }
 
 	private void goToMarket(){
+    	print("I'm going to market");
     	state = State.goingToMarket;
 	    MarketAgent m  = chooseClosestMarket();
 	    destination = m.location;
@@ -1137,6 +1142,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void finishGoingToMarket(){
+    	print("I'm at market");
     	state  = State.shopping;
     	MarketAgent m = findMarket(destination);
     	personGui.DoWalkTo(destination); //animationStub
