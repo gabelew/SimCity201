@@ -800,7 +800,7 @@ public class PersonAgent extends Agent implements Person
     
     private void doPayEmployees() {
     	for(PersonAgent e: employees) {
-    		bankTeller.msgTransferFunds(this, e, 5.00, "business", "personal", "salary");
+    		bankTeller.msgTransferFunds(this, e, 10.00, "business", "personal", "salary");
     	}
     	print("Paid employees.");
     }

@@ -1025,7 +1025,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(role instanceof BankCustomerRole)
     							bcr = (BankCustomerRole)role;
     					}
-    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					gui.bankAgent.msgOpenAccount(bcr, 8000, "business");
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			} else if(name.toLowerCase().contains("02")) {
@@ -1046,7 +1046,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(role instanceof BankCustomerRole)
     							bcr = (BankCustomerRole)role;
     					}
-    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					gui.bankAgent.msgOpenAccount(bcr, 8000, "business");
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			} else if(name.toLowerCase().contains("03")) {
@@ -1067,7 +1067,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(role instanceof BankCustomerRole)
     							bcr = (BankCustomerRole)role;
     					}
-    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					gui.bankAgent.msgOpenAccount(bcr, 8000, "business");
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			} else if(name.toLowerCase().contains("04")) {
@@ -1088,7 +1088,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(role instanceof BankCustomerRole)
     							bcr = (BankCustomerRole)role;
     					}
-    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					gui.bankAgent.msgOpenAccount(bcr, 8000, "business");
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			} else if(name.toLowerCase().contains("05")) {
@@ -1109,7 +1109,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     						if(role instanceof BankCustomerRole)
     							bcr = (BankCustomerRole)role;
     					}
-    					gui.bankAgent.msgOpenAccount(bcr, 2000, "business");
+    					gui.bankAgent.msgOpenAccount(bcr, 8000, "business");
     					r.setRestaurantAccount(p.businessAccount);
     				}
     			}
