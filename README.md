@@ -39,7 +39,7 @@ SimCity201 Project Repository for CS 201 students
   
  ###Participation from each Member
   + Chad Martin: CardLayout, Person Agent, Person Agent tests, City Animation Panel, Add tables, Gui Interaction Panel, photoshopping of images, interaction diagrams
-  + Gabriel Lew: Bank Agent, Bank Customer Role, Bank tests, Manager employees payment behavior in Person Agent, landlord renter in person agent, general structure of wiki and images
+  + Gabriel Lew: Bank Agent, Bank Customer Role, Bank tests, Bank Animation, Manager employees payment behavior in Person Agent, landlord renter in person agent, general structure of wiki and images
   + Gerson Hernandez: Bus Agent, Bus Gui, bus tests, apartment animation layout
   + Emily Bernstein: Market Agent, Market Customer Role, Clerk Role, Delivery Man Role, Delivery Man and Clerk Gui, Delivery Man Driving Gui, Market Panel, Market tests(including market roles)
   + Garland Chen: AtHome role, AtHome tests, RepairMan role, Apartment Gui && animation upgrades, AtHome gui, Home, Residence
