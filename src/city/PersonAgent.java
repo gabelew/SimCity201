@@ -949,6 +949,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToHouseToEat() {
+    	print("Going home to eat.");
     	location = Location.AtHome;
 
     	destination = myHome.location;
