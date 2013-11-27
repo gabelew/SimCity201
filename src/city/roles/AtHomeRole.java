@@ -99,6 +99,7 @@ public class AtHomeRole extends Role implements AtHome
 			int choice = (new Random()).nextInt(choices.size());
 			Order o = new Order(choices.get(choice) );
 			orders.add(o);
+			myPerson.print("I'm hungry and want to make: " + o.choice);
 		}
 		else if(choices.size() == 0)
 		{

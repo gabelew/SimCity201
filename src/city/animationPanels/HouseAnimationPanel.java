@@ -53,7 +53,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
         {
 			StringBuilder path = new StringBuilder("imgs/");
 		    bedImg = ImageIO.read(new File(path.toString() + "classybed.png"));
-		    flooringImg = ImageIO.read(new File(path.toString() + "houseflooring.png"));
+		    flooringImg = ImageIO.read(new File(path.toString() + "flooring.png"));
 		    bedflooringImg = ImageIO.read(new File(path.toString() + "bedhouseflooring.png"));
 		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
 		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
