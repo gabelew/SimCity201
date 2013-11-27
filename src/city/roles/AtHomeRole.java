@@ -237,9 +237,13 @@ public class AtHomeRole extends Role implements AtHome
 				try { busy.acquire();} 
 				catch (InterruptedException e) {e.printStackTrace();}
 			}
-			if(food.amount <= food.low)
+			for(Food f : foodInFridge)
 			{
-				makeMarketList();
+				myPerson.print("Food: " + f.choice + ", amount: " + f.amount);
+				if(f.amount <= food.low)
+				{
+					makeMarketList();
+				}
 			}
 			//Cooking Timer for Food
 			timer.schedule(new TimerTask() {
