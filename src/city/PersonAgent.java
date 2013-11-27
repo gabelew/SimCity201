@@ -464,6 +464,7 @@ public class PersonAgent extends Agent implements Person
  ***************************/	
 	public void msgBusIshere(){
 		transportState = TransportState.GettingOnBus;
+		
 		log.add(new LoggedEvent("Recieved bus is here msg"));
 		stateChanged();
 	}
@@ -775,12 +776,14 @@ public class PersonAgent extends Agent implements Person
     
     private void getOffBus() {
 		log.add(new LoggedEvent("preforming get off Bus"));
+    	print("I'm getting off bus.");
     	personGui.doGetOffBus();
     	transportState = TransportState.none;
     }
 
     private void getOnBus() {
 		log.add(new LoggedEvent("preforming get on Bus"));
+    	print("I'm getting on bus.");
     	personGui.doGetOnBus();
     	if(!testing){
 	    	try {
@@ -811,6 +814,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToWork(){
+    	print("I'm going to work.");
     	state = State.goingToWork;
     	destination = job.location;
     	if(car == true || destination.y == personGui.yPos){
@@ -841,7 +845,8 @@ public class PersonAgent extends Agent implements Person
 		}
 		location = Location.AtWork;
     	state = State.working;
-    	
+
+    	print("I'm at work.");
     	if(testing){
     		//do not create working role
     	}
@@ -1165,7 +1170,7 @@ public class PersonAgent extends Agent implements Person
 	private void goToBusStop() {
     	personGui.doGoToBus();
 		this.transportState = TransportState.GoingToBus;
-		
+		print("Going to bus stop.");
 		log.add(new LoggedEvent("preforming Go to bus stop"));
 		
 		try {
