@@ -47,6 +47,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		o = new Order(toOrderFromMarket, orderState.waiting);
 		stateChanged();	
 		market.msgPlaceOrder(this);
+		print("Going to market");
 		myPerson.log.add(new LoggedEvent("received start shopping from person"));
 	}
 
@@ -67,7 +68,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		o.Choices=choice;
 		if(!outOf.isEmpty()){
 			o.outOf=outOf;
-			print("out of order");
+			print("out of food from market");
 		}
 		stateChanged();	
 	}
@@ -134,6 +135,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	private void receivedOrder(){
+		print("Got food from market");
 		marketCGui.DoLeaveMarket();
 	    try {
 			atShelf.acquire();
