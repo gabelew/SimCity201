@@ -73,6 +73,11 @@ public class AtHomeRole extends Role implements AtHome
 					choices.add(f.choice);
 			}
 		}
+		if(foodAmount == 1)
+		{
+			findFood.get("steak").amount = 1;
+		}
+		
 		this.gui = new AtHomeGui(myPerson, this);
 	}
 	
