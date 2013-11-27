@@ -121,7 +121,7 @@ public class PersonAgent extends Agent implements Person
     private MarketAgent chooseClosestMarket() {
     	MarketAgent closestMa = markets.get(0);
     	for(MarketAgent m: markets){
-			if(Math.abs(closestMa.location.y - personGui.yPos) > Math.abs(m.location.y - personGui.yPos)){
+			if(Math.abs(closestMa.location.y - personGui.yPos) >= Math.abs(m.location.y - personGui.yPos)){
 				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
 					closestMa = m;
 				}
@@ -133,7 +133,7 @@ public class PersonAgent extends Agent implements Person
     private BankBuilding chooseClosestBank() {
     	BankBuilding closestBa = banks.get(0);
     	for(BankBuilding b: banks){
-			if(Math.abs(closestBa.location.y - personGui.yPos) > Math.abs(b.location.y - personGui.yPos)){
+			if(Math.abs(closestBa.location.y - personGui.yPos) >= Math.abs(b.location.y - personGui.yPos)){
 				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
 					closestBa = b;
 				}
