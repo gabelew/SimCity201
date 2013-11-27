@@ -26,7 +26,7 @@ SimCity201 Project Repository for CS 201 students
   + A table is in use if label is red
   + Tables cannot be placed on top of each other
   + Tables can only be placed in valid area show by darker grey area when moving tables
-  
+
 ###Useful Testing Hacks
   + If a person's name contains "poor", the person will have 50 cash on hand and 200 in bank account
   + If a person's name contains "broke", the person will have 0 cash on hand and 0 in bank account
@@ -36,8 +36,23 @@ SimCity201 Project Repository for CS 201 students
   + If a person's name does not contain "home", the person will live in an apartment as a renter unless there are no more apartments left
   + If a person's name contains "waiter" and "day" and "01"-"05", the person will work as a waiter during the day at the respective restaurant
   + If a person's name contains "waiter" and "night" and "01"-"05", the person will work as a waiter during the night at the respective restaurant
+  + If a person's name contains "NoFood", the person will have no food in his fridge
   
- ###Participation from each Member
+###People with compound names
+	+ "poor01" 
+	... lives in the first apartment, apt room #7
+	... cooks food at home initially
+	+ "poorHome02" 
+	... lives in the second home 
+	... eats at home initially
+	+ "poorHome04NoFood"
+	... lives in the fourth home
+	... has no food, so decides to go to market
+	... goes to bank first to get money
+	... buys food from market
+	... goes home with restocked food
+	
+###Participation from each Member
   + Chad Martin: CardLayout, Person Agent, Person Agent tests, City Animation Panel, Add tables, Gui Interaction Panel, photoshopping of images, interaction diagrams
   + Gabriel Lew: Bank Agent, Bank Customer Role, Bank tests, Bank Animation, Manager employees payment behavior in Person Agent, landlord renter in person agent, general structure of wiki and images
   + Gerson Hernandez: Bus Agent, Bus Gui, bus tests, apartment animation layout
