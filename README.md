@@ -46,11 +46,34 @@ SimCity201 Project Repository for CS 201 students
      ... lives in the second home 
      ... eats at home initially
 	3. "poorHome04NoFood"
-     .. lives in the fourth home
-     .. has no food, so decides to go to market
-     .. goes to bank first to get money
-     .. then buys food from market
-     .. then goes home with restocked food
+     . lives in the fourth home
+     . has no food, so decides to go to market
+     ... Messages:
+     ....... "I'm going home to eat"
+     ....... "I'm Eatin at Home"
+     ....... "I'm out of food"
+     . goes to bank first to get money
+     ... Messages:
+     ....... "I'm going to bank"
+     ....... "I'm at bank"
+     ....... "widthdrew $100 from personal"
+     ....... "leaving bank"
+     . then buys food from market
+     ... Messages:
+     ....... "I'm going to market"
+     ....... "I'm at Market"
+     ....... "Got food from market"
+     . then goes home with restocked food
+     ....... "I'm going home to eat"
+     ....... "I'm Eatin at Home"
+     ....... "I have food now"
+     ....... "I have a selection of: "
+     ....... "I'm hungry and want to make: "
+     ....... "Cooking food"
+     ....... "food is done"
+     
+     
+     
 	
 ###Participation from each Member
   + Chad Martin: CardLayout, Person Agent, Person Agent tests, City Animation Panel, Add tables, Gui Interaction Panel, photoshopping of images, interaction diagrams
