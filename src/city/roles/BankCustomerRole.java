@@ -140,7 +140,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		} else {
 			myPerson.businessFunds += amount;
 		}
-		//print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
+		print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
 		stateChanged();
 	}
 	
@@ -302,6 +302,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	
 	//Actions
 	private void EnterBank() {
+		Do("Entering bank");
 		customerGui.DoEnterBank();
 		try {
 			waitingResponse.acquire();
@@ -322,6 +323,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	private void LeaveBank() {	
 		timer.schedule(new TimerTask() {
 			public void run() {
+				Do("Leaving bank");
 				customerGui.DoLeaveBank();
 				try {
 					waitingResponse.acquire();
