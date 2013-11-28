@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import restaurant.gui.CustomerGui;
-import restaurant.gui.WaiterGui;
+import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.gui.CMWaiterGui;
 import city.gui.Gui;
 
 public abstract class InsideAnimationPanel extends JPanel implements ActionListener {

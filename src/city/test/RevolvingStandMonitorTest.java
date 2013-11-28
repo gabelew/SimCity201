@@ -3,11 +3,11 @@ package city.test;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import CMRestaurant.gui.CMWaiterGui;
+import CMRestaurant.roles.CMCookRole;
 import restaurant.RevolvingStandMonitor;
-import restaurant.gui.WaiterGui;
 import restaurant.test.mock.MockCustomer;
 import city.PersonAgent;
-import city.roles.CookRole;
 import city.roles.SharedDataWaiterRole;
 import city.roles.SharedDataWaiterRole.CustomerState;
 import junit.framework.TestCase;
@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class RevolvingStandMonitorTest extends TestCase{
 	SharedDataWaiterRole waiter;
 	RevolvingStandMonitor revolvingStand;
-	CookRole cook;
+	CMCookRole cook;
 	PersonAgent person;
 	MockCustomer customer;
 	Timer timer;
@@ -30,7 +30,7 @@ public class RevolvingStandMonitorTest extends TestCase{
 		waiter = new SharedDataWaiterRole(person);
 		customer = new MockCustomer("James");
 		revolvingStand = new RevolvingStandMonitor();
-		cook = new CookRole();
+		cook = new CMCookRole();
 		timer = new Timer();
 	}	
 	

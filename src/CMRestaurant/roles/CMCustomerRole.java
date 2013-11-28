@@ -1,7 +1,6 @@
-package city.roles;
+package CMRestaurant.roles;
 
 import restaurant.Restaurant;
-import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Waiter.Menu;
@@ -14,16 +13,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import CMRestaurant.gui.CMCustomerGui;
 import city.PersonAgent;
+import city.roles.Role;
 
 /**
  * Restaurant customer agent.
  */
-public class CustomerRole extends Role implements Customer {
+public class CMCustomerRole extends Role implements Customer {
 	private String choice; 				// will hold the customers food choice
 	private MyMenu myMenu;	
 	Timer timer = new Timer();
-	private CustomerGui customerGui;
+	private CMCustomerGui customerGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	private Semaphore leaveEarly = new Semaphore(1,true);
 	boolean recievedCheck = false;
@@ -59,7 +60,7 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(PersonAgent p, Restaurant r){
+	public CMCustomerRole(PersonAgent p, Restaurant r){
 		super(p);
 		myPerson = p;
 		restaurant = r;
@@ -110,19 +111,19 @@ public class CustomerRole extends Role implements Customer {
 	private void msgChoiceMade(String c){
 		choice = c;
 
-		if(myPerson.name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CashierRole.STEAK_COST && isAvailable("Steak")){
+		if(myPerson.name.equalsIgnoreCase("Steak") && myPerson.cashOnHand >= CMCashierRole.STEAK_COST && isAvailable("Steak")){
 			choice = "Steak";
 		}
-		if(myPerson.name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CashierRole.CHICKEN_COST && isAvailable("Chicken")){
+		if(myPerson.name.equalsIgnoreCase("Chicken") && myPerson.cashOnHand >=  CMCashierRole.CHICKEN_COST && isAvailable("Chicken")){
 			choice = "Chicken";
 		}
-		if(myPerson.name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CashierRole.SALAD_COST && isAvailable("Salad")){
+		if(myPerson.name.equalsIgnoreCase("Salad") && myPerson.cashOnHand >=  CMCashierRole.SALAD_COST && isAvailable("Salad")){
 			choice = "Salad";
 		}
-		if(myPerson.name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CashierRole.BURGER_COST && isAvailable("Burger")){
+		if(myPerson.name.equalsIgnoreCase("Burger") && myPerson.cashOnHand >=  CMCashierRole.BURGER_COST && isAvailable("Burger")){
 			choice = "Burger";
 		}
-		if(myPerson.name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CashierRole.COOKIE_COST && isAvailable("Cookie")){
+		if(myPerson.name.equalsIgnoreCase("Cookie") && myPerson.cashOnHand >=  CMCashierRole.COOKIE_COST && isAvailable("Cookie")){
 			choice = "Cookie";
 		}
 		
@@ -423,12 +424,12 @@ public class CustomerRole extends Role implements Customer {
 		return "customer " + getName();
 	}
 
-	public void setGui(CustomerGui g) {
+	public void setGui(CMCustomerGui g) {
 		customerGui = g;
 		
 	}
 
-	public CustomerGui getGui() {
+	public CMCustomerGui getGui() {
 		return customerGui;
 	}
 

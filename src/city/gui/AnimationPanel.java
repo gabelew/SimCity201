@@ -3,8 +3,8 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import restaurant.gui.CustomerGui;
-import restaurant.gui.WaiterGui;
+import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.gui.CMWaiterGui;
 import city.BusAgent;
 
 import java.awt.*;

@@ -1,7 +1,7 @@
 package restaurant;
 
+import CMRestaurant.roles.CMCookRole.OrderState;
 import restaurant.interfaces.Waiter;
-import city.roles.CookRole.OrderState;
 
 public class RoleOrder{
 	public Waiter waiter;

@@ -1,6 +1,7 @@
 package market.test.mock;
 
 import city.MarketAgent;
+import city.PersonAgent;
 import market.interfaces.*;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
@@ -41,6 +42,12 @@ public class MockCashier extends Mock implements Cashier {
 	@Override
 	public void msgPayment(Customer c, double cash){
 		log.add(new LoggedEvent("Received msgPayment from customer."));
+	}
+
+	@Override
+	public void msgReleaveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

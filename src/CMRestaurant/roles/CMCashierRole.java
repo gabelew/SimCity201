@@ -1,19 +1,21 @@
-package city.roles;
+package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import CMRestaurant.gui.CMCashierGui;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
+import city.roles.DeliveryManRole;
+import city.roles.Role;
 import restaurant.Restaurant;
-import restaurant.gui.CashierGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 
-public class CashierRole extends Role implements Cashier {
+public class CMCashierRole extends Role implements Cashier {
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	Timer timer = new Timer();
@@ -21,7 +23,7 @@ public class CashierRole extends Role implements Cashier {
 	public EventLog log = new EventLog();
 
 	public Restaurant restaurant;
-	public CashierGui cashierGui = null;
+	public CMCashierGui cashierGui = null;
 	Map<String, Double> pricingMap = new HashMap<String, Double>(); 
 	public double bank = 5000; 
 	enum State {none, goToWork, working, leaving, releaveFromDuty};
@@ -67,7 +69,7 @@ public class CashierRole extends Role implements Cashier {
 	public static final double CHICKEN_COST = 10.99;
 	public static final double COOKIE_COST = 3.99;	
 	
-	public CashierRole(){
+	public CMCashierRole(){
 		super();
 		
 		pricingMap.put("salad", SALAD_COST);
@@ -76,11 +78,11 @@ public class CashierRole extends Role implements Cashier {
 		pricingMap.put("cookie", COOKIE_COST);
 	}
 
-	public void setGui(CashierGui g) {
+	public void setGui(CMCashierGui g) {
 		cashierGui = g;
 	}
 
-	public CashierGui getGui() {
+	public CMCashierGui getGui() {
 		return cashierGui;
 	}
 

@@ -1,16 +1,18 @@
-package city.roles;
+package CMRestaurant.roles;
 
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import CMRestaurant.gui.CMWaiterGui;
 import city.PersonAgent;
+import city.roles.Role;
 import restaurant.Restaurant;
-import restaurant.gui.WaiterGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 
-public class WaiterRole extends Role implements Waiter{
-	WaiterGui waiterGui;
+public class CMWaiterRole extends Role implements Waiter{
+	CMWaiterGui waiterGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	public List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
 	public Restaurant restaurant;
@@ -35,7 +37,7 @@ public class WaiterRole extends Role implements Waiter{
 
 	}
 
-	public WaiterRole(PersonAgent p, Restaurant r) {
+	public CMWaiterRole(PersonAgent p, Restaurant r) {
 		super(p);
 		restaurant = r;
 	}
@@ -122,11 +124,11 @@ public class WaiterRole extends Role implements Waiter{
 		stateChanged();
 	}	
 	
-	public void setGui(WaiterGui g) {
+	public void setGui(CMWaiterGui g) {
 		waiterGui = g;
 	}
 
-	public WaiterGui getGui() {
+	public CMWaiterGui getGui() {
 		return waiterGui;
 	}
 

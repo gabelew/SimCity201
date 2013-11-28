@@ -1,4 +1,4 @@
-package restaurant.gui;
+package CMRestaurant.gui;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -14,16 +14,17 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
-import city.roles.CookRole;
+import CMRestaurant.gui.CMHostGui.Command;
+import CMRestaurant.roles.CMCookRole;
 import restaurant.RoleOrder;
 import city.gui.Gui;
 import city.gui.SimCityGui;
-import restaurant.gui.HostGui.Command;
+import restaurant.gui.FoodIcon;
 import restaurant.interfaces.Waiter;
 
-public class CookGui implements Gui  {
+public class CMCookGui implements Gui  {
 
-	private CookRole role = null;
+	private CMCookRole role = null;
 	private boolean isPresent = false;
 	private BufferedImage cookImg = null;
 	SimCityGui gui;
@@ -107,7 +108,7 @@ public class CookGui implements Gui  {
     private int xPos = START_POSITION, yPos = START_POSITION;//default waiter position
     private int xDestination = START_POSITION, yDestination = START_POSITION;//default start position
     
-	public CookGui(CookRole cook) {
+	public CMCookGui(CMCookRole cook) {
 		try {
 		    cookImg = ImageIO.read(new File("imgs/chef_v1.png"));
 		} catch (IOException e) {
@@ -145,11 +146,11 @@ public class CookGui implements Gui  {
         
 	}
 	
-	public CookRole getRole() {
+	public CMCookRole getRole() {
 		return role;
 	}
 
-	public void setRole(CookRole role) {
+	public void setRole(CMCookRole role) {
 		this.role = role;
 	}
 

@@ -9,10 +9,15 @@ import java.util.concurrent.Semaphore;
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
 import restaurant.Restaurant;
-import restaurant.gui.CustomerGui;
-import restaurant.gui.WaiterGui;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
+import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.gui.CMWaiterGui;
+import CMRestaurant.roles.CMCashierRole;
+import CMRestaurant.roles.CMCookRole;
+import CMRestaurant.roles.CMCustomerRole;
+import CMRestaurant.roles.CMHostRole;
+import CMRestaurant.roles.CMWaiterRole;
 import agent.Agent;
 import atHome.city.AtHomeGui;
 import atHome.city.Home;
@@ -854,15 +859,15 @@ public class PersonAgent extends Agent implements Person
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
     		if(job.type.equalsIgnoreCase("waiter")){
-    			WaiterRole role = (WaiterRole) SimCityGui.waiterFactory(this, r);
-            	role.setGui(new WaiterGui(role));
+    			CMWaiterRole role = (CMWaiterRole) SimCityGui.waiterFactory(this, r);
+            	role.setGui(new CMWaiterGui(role));
             	roles.add(role);
             	role.active = true;
             	r.insideAnimationPanel.addGui(role.getGui());
             	role.getGui().setPresent(true);
             	role.goesToWork();	
     		}else if(job.type.equalsIgnoreCase("host")){
-    			HostRole role = (HostRole)(r.host);
+    			CMHostRole role = (CMHostRole)(r.host);
     			if(role.getPerson() != null){
     				role.msgReleaveFromDuty(this);
     				try {
@@ -877,7 +882,7 @@ public class PersonAgent extends Agent implements Person
             	role.getGui().setPresent(true);
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
-    			CookRole role = (CookRole)(r.cook);
+    			CMCookRole role = (CMCookRole)(r.cook);
     			if(role.getPerson() != null){
     				role.msgRelieveFromDuty(this);
     				try {
@@ -892,7 +897,7 @@ public class PersonAgent extends Agent implements Person
             	role.getGui().setPresent(true);
             	role.goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
-    			CashierRole role = (CashierRole)(r.cashier);
+    			CMCashierRole role = (CMCashierRole)(r.cashier);
     			if(role.getPerson() != null){
     				role.msgReleaveFromDuty(this);
     				try {
@@ -1069,8 +1074,8 @@ public class PersonAgent extends Agent implements Person
     	state = State.eating;
     	
     	Restaurant r = findRestaurant(destination);
-    	CustomerRole role = (CustomerRole) SimCityGui.customerFactory(this, r);
-    	role.setGui(new CustomerGui(role));
+    	CMCustomerRole role = (CMCustomerRole) SimCityGui.customerFactory(this, r);
+    	role.setGui(new CMCustomerGui(role));
     	roles.add(role);
     	role.active = true;
     	r.insideAnimationPanel.addGui(role.getGui());

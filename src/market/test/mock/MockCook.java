@@ -3,10 +3,11 @@ package market.test.mock;
 import java.util.List;
 import java.util.Map;
 
+import CMRestaurant.gui.CMCustomerGui;
 import city.MarketAgent;
+import city.PersonAgent;
 import restaurant.RoleOrder;
 import restaurant.interfaces.Waiter.Menu;
-import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
@@ -89,5 +90,11 @@ public class MockCook extends Mock implements Cook {
 	
 	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String,Integer> choices, List<String> outOf, double amount){
 		log.add(new LoggedEvent("Recieved msgHereIsOrderFromMarket"));
+	}
+
+	@Override
+	public void msgRelieveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
 	}
 }

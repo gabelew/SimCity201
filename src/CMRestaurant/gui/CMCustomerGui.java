@@ -1,4 +1,4 @@
-package restaurant.gui;
+package CMRestaurant.gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,15 +13,16 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
-import city.animationPanels.RestaurantAnimationPanel;
+import restaurant.gui.FoodIcon;
+import CMRestaurant.roles.CMCustomerRole;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
-import city.roles.CustomerRole;
 
-public class CustomerGui implements Gui{
+public class CMCustomerGui implements Gui{
 
-	private CustomerRole role = null;
-	private WaiterGui waiterGui = null;
+	private CMCustomerRole role = null;
+	private CMWaiterGui waiterGui = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 	private boolean toldToSeat = false;
@@ -61,7 +62,7 @@ public class CustomerGui implements Gui{
     static final int WAITINGSEATS_Y_GAP = 30;
     
 
-	public CustomerGui(CustomerRole role){ //HostAgent m) {
+	public CMCustomerGui(CMCustomerRole role){ //HostAgent m) {
 		
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -193,7 +194,7 @@ public class CustomerGui implements Gui{
 		toldToSeat = true;
 	}
 
-	public void msgYourTableIsReady(WaiterGui g) {
+	public void msgYourTableIsReady(CMWaiterGui g) {
 		xDestination = xWAITING_AREA;
 		yDestination = yWAITING_AREA;
 		waiterGui = g;
@@ -204,7 +205,7 @@ public class CustomerGui implements Gui{
 		xDestination = p.x + xSEAT_OFFSET;
 		yDestination = p.y + ySEAT_OFFSET;
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
+			((CMRestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		command = Command.GoToSeat;
@@ -214,7 +215,7 @@ public class CustomerGui implements Gui{
 		state = State.standing;
 
 		if(waitingSeatNumber >= 0){
-			((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
+			((CMRestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
 		
@@ -244,9 +245,9 @@ public class CustomerGui implements Gui{
 	}
 	
 	private void findPlaceToWait() {		
-		for(int i = 0; i < ((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.size(); i++){
+		for(int i = 0; i < ((CMRestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.size(); i++){
 			if(waitingSeatNumber < 0){
-				if(((RestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(i).tryAcquire()){
+				if(((CMRestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(i).tryAcquire()){
 					waitingSeatNumber = i;
 					xDestination = seatMap.get(i).x;
 					yDestination = seatMap.get(i).y;

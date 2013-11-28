@@ -2,10 +2,10 @@ package market.interfaces;
 
 import java.util.Map;
 
+import CMRestaurant.gui.CMCustomerGui;
 import city.MarketAgent;
 import city.roles.MarketCustomerRole;
 import restaurant.interfaces.Waiter.Menu;
-import restaurant.gui.CustomerGui;
 
 /**
  * A sample MarketCustomer interface built to unit test a MarketAgent.

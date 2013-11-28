@@ -3,17 +3,18 @@ package city.roles;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import CMRestaurant.gui.CMWaiterGui;
+import CMRestaurant.roles.CMCustomerRole;
 import city.PersonAgent;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.RoleOrder;
-import restaurant.gui.WaiterGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 
 public class SharedDataWaiterRole extends Role implements Waiter{
 
-	WaiterGui waiterGui;
+	CMWaiterGui waiterGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	public List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
 	public Restaurant restaurant;
@@ -131,11 +132,11 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}	
 	
-	public void setGui(WaiterGui g) {
+	public void setGui(CMWaiterGui g) {
 		waiterGui = g;
 	}
 
-	public WaiterGui getGui() {
+	public CMWaiterGui getGui() {
 		return waiterGui;
 	}
 
@@ -379,7 +380,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		doGoToTable(c.table);
 		c.s = CustomerState.seated;
 		c.c.msgOutOfOrder(c.choice);
-		print(c.c.getName() + ", we are out of " + c.choice);
+		print(((CMCustomerRole) c.c).getName() + ", we are out of " + c.choice);
 	}
 	
 	private void dropOffCheck(MyCustomer c) {

@@ -1,18 +1,18 @@
-package restaurant.gui;
+package CMRestaurant.gui;
 
 import restaurant.Restaurant;
 
 import javax.swing.*;
 
+import CMRestaurant.roles.CMCookRole;
+import CMRestaurant.roles.CMCustomerRole;
+import CMRestaurant.roles.CMWaiterRole;
+import CMRestaurant.roles.CMCookRole.Food;
 import city.PersonAgent;
 import city.animationPanels.InsideBuildingPanel;
-import city.animationPanels.RestaurantAnimationPanel;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
-import city.roles.CookRole;
-import city.roles.CookRole.Food;
-import city.roles.CustomerRole;
-import city.roles.WaiterRole;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * Panel in frame that contains all the restaurant information,
  * including host, cook, waiters, and customers.
  */
-public class RestaurantPanel extends JPanel implements KeyListener {
+public class CMRestaurantPanel extends JPanel implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	private static final int REST_PANEL_GAP = 20;
 	private static final int GROUP_PANEL_GAP = 10;
@@ -37,20 +37,20 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 	
     //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
     //private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
-    private Vector<WaiterRole> waiters = new Vector<WaiterRole>();
+    private Vector<CMWaiterRole> waiters = new Vector<CMWaiterRole>();
 
     private JPanel restLabel = new JPanel();
     //private ListPanel customerPanel = new ListPanel(this, "Customers");
 
     //private RestaurantListPanel waitersPanel = new RestaurantListPanel(this, "Waiters");
-    private RestaurantListPanel tablesPanel = new RestaurantListPanel(this, "Tables");
+    private CMRestaurantListPanel tablesPanel = new CMRestaurantListPanel(this, "Tables");
     
     private JPanel group = new JPanel();
 
     private SimCityGui gui; //reference to main gui
     private InsideBuildingPanel insideBuildingPanel;
     
-    public RestaurantPanel(SimCityGui gui) {
+    public CMRestaurantPanel(SimCityGui gui) {
 
        /* markets.add(new MarketAgent("Vons Market"));
         markets.add(new MarketAgent("Sprouts Market"));
@@ -144,7 +144,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 
         if (type.equals("Waiters")) {
 
-            for (WaiterRole temp: waiters) {
+            for (CMWaiterRole temp: waiters) {
                 if (temp.getName() == name)
                 {
                 	temp.getGui().setWorking();
@@ -154,7 +154,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     }
 
 	public void askBreak(String name) {
-        for (WaiterRole temp: waiters) {
+        for (CMWaiterRole temp: waiters) {
             if (temp.getName() == name)
             	temp.getGui().askBreak();
         }
@@ -283,7 +283,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
     	}
 
     }
-    public void setCustomerEnabled(CustomerRole c){
+    public void setCustomerEnabled(CMCustomerRole c){
     //	customerPanel.setCustomerEnabled(c.getName());
     }
 
@@ -295,18 +295,18 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		tablesPanel.setTableDisabled(tableNumber);
 	}
 	public void addTable() {
-		((RestaurantAnimationPanel) insideBuildingPanel.insideAnimationPanel).addTable();
+		((CMRestaurantAnimationPanel) insideBuildingPanel.insideAnimationPanel).addTable();
 	}
 	
 	public void addTable(int x,int y) {
-		((RestaurantAnimationPanel) insideBuildingPanel.insideAnimationPanel).addTable(x,y);
+		((CMRestaurantAnimationPanel) insideBuildingPanel.insideAnimationPanel).addTable(x,y);
 	}
 	
-	public RestaurantListPanel getTablesPanel() {
+	public CMRestaurantListPanel getTablesPanel() {
 		return tablesPanel;
 	}
 
-	public void setTablesPanel(RestaurantListPanel tablesPanel) {
+	public void setTablesPanel(CMRestaurantListPanel tablesPanel) {
 		this.tablesPanel = tablesPanel;
 	}
 
@@ -380,7 +380,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		if ((e.getKeyCode() == KeyEvent.VK_S) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 			for(Restaurant r: gui.getRestaurants()){
 				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-		            ((CookRole) r.cook).badSteaks();
+		            ((CMCookRole) r.cook).badSteaks();
 				}
 			}
         }
@@ -388,7 +388,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 		if ((e.getKeyCode() == KeyEvent.VK_2) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 			for(Restaurant r: gui.getRestaurants()){
 				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-					((CookRole) r.cook).cookieMonster();
+					((CMCookRole) r.cook).cookieMonster();
 				}
 			}
         }
@@ -401,7 +401,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 
 			for(Restaurant r: gui.getRestaurants()){
 				if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-					((CookRole) r.cook).setSteaksAmount(5);
+					((CMCookRole) r.cook).setSteaksAmount(5);
 				}
 			}
         }
@@ -428,7 +428,7 @@ public class RestaurantPanel extends JPanel implements KeyListener {
 				System.out.println("Cook Inventory: ");
 				for(Restaurant r: gui.getRestaurants()){
 					if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-						for(Food f: ((CookRole)r.cook).foods){
+						for(Food f: ((CMCookRole)r.cook).foods){
 							System.out.print("\t" + f.getChoice() + "\t" + f.getAmount() + "\t");
 						}
 					}

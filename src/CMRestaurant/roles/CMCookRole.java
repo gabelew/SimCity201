@@ -1,20 +1,21 @@
-package city.roles;
+package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import market.interfaces.Market;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.RoleOrder;
-import restaurant.gui.CookGui;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
 
-public class CookRole extends Role implements Cook {
+public class CMCookRole extends Role implements Cook {
 	
 	public List<RoleOrder> orders = Collections.synchronizedList(new ArrayList<RoleOrder>());
 	public List<Food> foods = Collections.synchronizedList(new ArrayList<Food>());
@@ -27,7 +28,7 @@ public class CookRole extends Role implements Cook {
 	boolean orderFromMarket = true;
 	private RevolvingStandMonitor revolvingStand;
 	private boolean checkStand;
-	public CookGui cookGui = null;
+	public CMCookGui cookGui = null;
 
 	static final int CHECK_STAND_TIME = 4000;
     static final int SALAD_COOKTIME = 7000;
@@ -130,7 +131,7 @@ public class CookRole extends Role implements Cook {
 	}
 	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	
-	public CookRole(){
+	public CMCookRole(){
 		super();
 		
 		checkStand = true;
@@ -141,7 +142,7 @@ public class CookRole extends Role implements Cook {
 		foods.add(new Food("cookie",COOKIE_COOKTIME, COOKIE_INIT_AMOUNT, COOKIE_LOW_AMOUNT, COOKIE_CAPACITY));
 	}
 
-	public CookRole( int steakAmount){
+	public CMCookRole( int steakAmount){
 		super();
 		
 		checkStand = true;
@@ -154,11 +155,11 @@ public class CookRole extends Role implements Cook {
 	public void addMarket(MarketAgent m){
         markets.add(new MyMarket(m));
 	}
-	public void setGui(CookGui g) {
+	public void setGui(CMCookGui g) {
 		cookGui = g;
 	}
 
-	public CookGui getGui() {
+	public CMCookGui getGui() {
 		return cookGui;
 	}
 
@@ -590,7 +591,7 @@ public class CookRole extends Role implements Cook {
 	}
 	
 	private void hereIsMarketBill(MarketOrder morder){
-		((CashierRole)restaurant.cashier).msgHereIsInvoice(morder.price,morder.deliveryMan);
+		((CMCashierRole)restaurant.cashier).msgHereIsInvoice(morder.price,morder.deliveryMan);
 		marketOrders.remove(morder);
 	}
 	

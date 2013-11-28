@@ -1,4 +1,4 @@
-package restaurant.gui;
+package CMRestaurant.gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Subpanel of restaurantPanel.
  * This holds the scroll panes for the customers and, later, for waiters
  */
-public class RestaurantListPanel extends JPanel implements ActionListener {
+public class CMRestaurantListPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private long lastCheckAction = 0;
 	public JScrollPane pane =
@@ -22,7 +22,7 @@ public class RestaurantListPanel extends JPanel implements ActionListener {
     private JButton pauseAgentsB = new JButton("Pause");
     private JPanel buttonGroup = new JPanel();
 
-    private RestaurantPanel restPanel;
+    private CMRestaurantPanel restPanel;
     private String type;
     
     private JTextField typeNameHere = new JTextField();
@@ -50,7 +50,7 @@ public class RestaurantListPanel extends JPanel implements ActionListener {
      * @param rp   reference to the restaurant panel
      * @param type indicates if this is for customers or waiters
      */
-    public RestaurantListPanel(RestaurantPanel rp, String type) {
+    public CMRestaurantListPanel(CMRestaurantPanel rp, String type) {
         restPanel = rp;
         this.type = type;
 

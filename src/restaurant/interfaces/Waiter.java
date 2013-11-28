@@ -43,16 +43,12 @@ public interface Waiter {
 	public abstract void msgOutOfOrder(String choice, int table);
 	public abstract void msgOrderIsReady(String choice, int table);
 	public abstract void msgGoOnBreak();
-	public abstract String getName();
 	public abstract void msgDontGoOnBreak();
 	public abstract void msgAtEntrance();
 	public abstract void msgLeftTheRestaurant();
 	public abstract void msgAtTable();
-	public abstract void msgAtCashier();
-	public abstract void msgAtKitchen();
 	public abstract Restaurant getRestaurant();
 	public abstract void goesToWork();
 	public abstract void msgAskForBreak();
-	
 
 }

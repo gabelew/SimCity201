@@ -2,8 +2,9 @@ package restaurant.interfaces;
 
 import java.util.List;
 
+import CMRestaurant.roles.CMWaiterRole;
+import city.PersonAgent;
 import city.roles.Role;
-import city.roles.WaiterRole;
 
 
 /**
@@ -13,7 +14,8 @@ import city.roles.WaiterRole;
  *
  */
 public interface Host {
-	
+
+	public abstract void msgReleaveFromDuty(PersonAgent p);
 	public abstract void msgReadyToWork(Waiter w);
 	
 	public abstract void msgIWantToEat(Customer c);

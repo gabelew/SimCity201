@@ -3,11 +3,12 @@ package restaurant.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
+import city.PersonAgent;
 import restaurant.RoleOrder;
 import city.roles.DeliveryManRole;
-import restaurant.gui.CookGui;
 
 /**
  * A sample Cashier interface built to unit test a CashierAgent.
@@ -17,7 +18,7 @@ import restaurant.gui.CookGui;
  */
 public interface Cook {
 
-	public CookGui cookGui = null;
+	public CMCookGui cookGui = null;
 	
 	public abstract void msgHereIsOrder(Waiter w, String choice, int table);
 	
@@ -34,4 +35,5 @@ public interface Cook {
 	public abstract void msgHereIsOrderFromMarket(DeliveryMan Dm,Map<String,Integer>choices,List<String> outOf,double amount);
 
 	public abstract void msgIncompleteOrder(DeliveryMan deliveryMan,List<String> outOf);
+	public abstract void msgRelieveFromDuty(PersonAgent p);
 }

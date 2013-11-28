@@ -1,17 +1,19 @@
-package restaurant.gui;
+package CMRestaurant.gui;
 
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
+import CMRestaurant.roles.CMHostRole;
 import city.gui.Gui;
-import city.roles.HostRole;
 
-public class HostGui implements Gui {
+public class CMHostGui implements Gui {
 
-    private HostRole role = null;
+    private CMHostRole role = null;
 
     private int xPos = -20, yPos = -20;//default waiter position
     public int xDestination = -20;//default start position
@@ -27,7 +29,7 @@ public class HostGui implements Gui {
     
 	private BufferedImage hostImg = null;
 
-    public HostGui(HostRole role) {
+    public CMHostGui(CMHostRole role) {
         this.setRole(role);
         try {
 		    hostImg = ImageIO.read(new File("imgs/host_v1.png"));
@@ -35,11 +37,11 @@ public class HostGui implements Gui {
 		}
     }
 
-    public HostRole getRole() {
+    public CMHostRole getRole() {
 		return role;
 	}
 
-	public void setRole(HostRole role) {
+	public void setRole(CMHostRole role) {
 		this.role = role;
 	}
 

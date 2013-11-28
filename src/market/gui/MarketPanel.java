@@ -1,20 +1,20 @@
 package market.gui;
 
 import restaurant.Restaurant;
-import restaurant.gui.RestaurantListPanel;
 
 import javax.swing.*;
 
+import CMRestaurant.gui.CMRestaurantListPanel;
+import CMRestaurant.roles.CMCookRole;
+import CMRestaurant.roles.CMCustomerRole;
+import CMRestaurant.roles.CMWaiterRole;
+import CMRestaurant.roles.CMCookRole.Food;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.animationPanels.InsideBuildingPanel;
-import city.animationPanels.RestaurantAnimationPanel;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
-import city.roles.CookRole;
-import city.roles.CookRole.Food;
-import city.roles.CustomerRole;
-import city.roles.WaiterRole;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,7 +46,7 @@ public class MarketPanel extends JPanel implements ActionListener {
 	private int car=0;
     //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
     //private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
-    private Vector<WaiterRole> waiters = new Vector<WaiterRole>();
+    private Vector<CMWaiterRole> waiters = new Vector<CMWaiterRole>();
     private MarketAgent Market;
     private JLabel marketLabel = new JLabel();
     private JButton update = new JButton("Update all");

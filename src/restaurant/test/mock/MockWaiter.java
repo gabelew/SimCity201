@@ -87,18 +87,6 @@ public class MockWaiter extends Mock implements Waiter{
 	}
 
 	@Override
-	public void msgAtCashier() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgAtKitchen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Restaurant getRestaurant() {
 		// TODO Auto-generated method stub
 		return null;

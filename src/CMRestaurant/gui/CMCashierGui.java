@@ -1,4 +1,4 @@
-package restaurant.gui;
+package CMRestaurant.gui;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -7,14 +7,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import CMRestaurant.gui.CMHostGui.Command;
+import CMRestaurant.roles.CMCashierRole;
 import city.gui.Gui;
 import city.gui.SimCityGui;
-import city.roles.CashierRole;
-import restaurant.gui.HostGui.Command;
 
-public class CashierGui implements Gui  {
+public class CMCashierGui implements Gui  {
 
-	private CashierRole role = null;
+	private CMCashierRole role = null;
 	private boolean isPresent = true;
 	private BufferedImage cashierImg = null;
 	SimCityGui gui;
@@ -31,7 +31,7 @@ public class CashierGui implements Gui  {
     enum Command {none,enterRestaurant, leaveRestaurant };
     Command command = Command.none;
     
-	public CashierGui(CashierRole cashier) {
+	public CMCashierGui(CMCashierRole cashier) {
 		try {
 		    cashierImg = ImageIO.read(new File("imgs/cashier_v1.png"));
 		} catch (IOException e) {
@@ -42,11 +42,11 @@ public class CashierGui implements Gui  {
 		yDestination = ySTART_POSITION;
 	}
 		
-	public CashierRole getRole() {
+	public CMCashierRole getRole() {
 		return role;
 	}
 
-	public void setRole(CashierRole agent) {
+	public void setRole(CMCashierRole agent) {
 		this.role = agent;
 	}
 

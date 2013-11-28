@@ -3,10 +3,10 @@ package market.test.mock;
 import java.util.List;
 import java.util.Map;
 
+import CMRestaurant.gui.CMCustomerGui;
 import city.MarketAgent;
 import city.roles.ClerkRole;
 import restaurant.interfaces.Waiter.Menu;
-import restaurant.gui.CustomerGui;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;

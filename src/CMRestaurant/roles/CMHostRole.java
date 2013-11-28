@@ -1,15 +1,18 @@
-package city.roles;
+package CMRestaurant.roles;
 
 import restaurant.Restaurant;
-import restaurant.gui.HostGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
+
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import CMRestaurant.gui.CMHostGui;
 import city.PersonAgent;
-import city.animationPanels.RestaurantAnimationPanel;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.SimCityGui;
+import city.roles.Role;
 
 /**
  * Restaurant Host Agent
@@ -18,7 +21,7 @@ import city.gui.SimCityGui;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostRole extends Role implements Host {
+public class CMHostRole extends Role implements Host {
 	
 	//a global for the number of tables.
 	private int NTABLES = 0; // must start at zero -
@@ -36,7 +39,7 @@ public class HostRole extends Role implements Host {
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 
-	public HostGui hostGui = null;
+	public CMHostGui hostGui = null;
 	private SimCityGui simCityGui = null;
 
 	public enum cState {waiting, waitingAndTold, eating, done};
@@ -75,7 +78,7 @@ public class HostRole extends Role implements Host {
 		}
 	}
 	
-	public HostRole() {
+	public CMHostRole() {
 		super();
 	}
 
@@ -108,15 +111,15 @@ public class HostRole extends Role implements Host {
 		}
 		
 		if(addWaiter){
-			if(w.getName().toLowerCase().contains("day")){
+			if(((CMWaiterRole) w).getName().toLowerCase().contains("day")){
 				for(MyWaiter existingW: waiters){
-					if(existingW.w.getName().toLowerCase().contains("night")){
+					if(((CMWaiterRole) existingW.w).getName().toLowerCase().contains("night")){
 						existingW.state = wState.idle;
 					}
 				}
-			}else if(w.getName().toLowerCase().contains("night")){
+			}else if(((CMWaiterRole) w).getName().toLowerCase().contains("night")){
 				for(MyWaiter existingW: waiters){
-					if(existingW.w.getName().toLowerCase().contains("day")){
+					if(((CMWaiterRole) existingW.w).getName().toLowerCase().contains("day")){
 						existingW.state = wState.idle;
 					}
 				}
@@ -177,7 +180,7 @@ public class HostRole extends Role implements Host {
 
 				table.setUnoccupied();
 
-				((RestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
+				((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
 			    	
 			   
 				this.stateChanged();
@@ -341,13 +344,13 @@ public class HostRole extends Role implements Host {
 	private void doLetWaiterBreak(MyWaiter w) {
 		w.state = wState.idle;
 		w.w.msgGoOnBreak();
-		simCityGui.setWaiterOnBreak(w.w.getName());
+		simCityGui.setWaiterOnBreak(((CMWaiterRole) w.w).getName());
 	}
 
 	private void dontLetWaiterBreak(MyWaiter w) {
 		w.state = wState.working;
 		w.w.msgDontGoOnBreak();
-		simCityGui.setWaiterCantBreak(w.w.getName());
+		simCityGui.setWaiterCantBreak(((CMWaiterRole) w.w).getName());
 	}
 	
 	private void assignWaiter(MyCustomer c, Table t)
@@ -367,7 +370,7 @@ public class HostRole extends Role implements Host {
 			t.setOccupant(c.c);
 
 
-			((RestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableOccupied(t.getTableNumber());
+			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableOccupied(t.getTableNumber());
 		 
 			c.setState(cState.eating);
 			c.c.msgTableIsReady();
@@ -390,11 +393,11 @@ public class HostRole extends Role implements Host {
 		this.stateChanged();
 	}
 	
-	public void setGui(HostGui gui) {
+	public void setGui(CMHostGui gui) {
 		hostGui = gui;
 	}
 
-	public HostGui getGui() {
+	public CMHostGui getGui() {
 		return hostGui;
 	}
 

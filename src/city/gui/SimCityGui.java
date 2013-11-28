@@ -2,16 +2,21 @@ package city.gui;
 
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
-import restaurant.gui.CashierGui;
-import restaurant.gui.CookGui;
-import restaurant.gui.HostGui;
-import restaurant.gui.RestaurantPanel;
 
 import javax.swing.*;
 
 import market.gui.MarketPanel;
 import bank.BankBuilding;
 import bank.gui.BankPanel;
+import CMRestaurant.gui.CMCashierGui;
+import CMRestaurant.gui.CMCookGui;
+import CMRestaurant.gui.CMHostGui;
+import CMRestaurant.gui.CMRestaurantPanel;
+import CMRestaurant.roles.CMCashierRole;
+import CMRestaurant.roles.CMCookRole;
+import CMRestaurant.roles.CMCustomerRole;
+import CMRestaurant.roles.CMHostRole;
+import CMRestaurant.roles.CMWaiterRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.BankAgent;
@@ -23,13 +28,8 @@ import city.animationPanels.HouseAnimationPanel;
 import city.animationPanels.InsideAnimationPanel;
 import city.animationPanels.InsideBuildingPanel;
 import city.animationPanels.MarketAnimationPanel;
-import city.animationPanels.RestaurantAnimationPanel;
-import city.roles.CashierRole;
-import city.roles.CookRole;
-import city.roles.CustomerRole;
-import city.roles.HostRole;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.roles.Role;
-import city.roles.WaiterRole;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -345,8 +345,8 @@ public class SimCityGui extends JFrame implements ActionListener {
         	if(b.type.equals("restaurant"))
         	{
 	            
-	        	RestaurantPanel restPanel = new RestaurantPanel(this);
-	            InsideAnimationPanel restaurantAnimationPanel = new RestaurantAnimationPanel(this);
+	        	CMRestaurantPanel restPanel = new CMRestaurantPanel(this);
+	            InsideAnimationPanel restaurantAnimationPanel = new CMRestaurantAnimationPanel(this);
 	        	
 	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
 	            restPanel.setPreferredSize(restDim);
@@ -361,9 +361,9 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	Restaurant r =null;
 	        	if(i==6){
 	        		r = new Restaurant(
-    						(restaurant.interfaces.Host)(new HostRole()), 
-    						(restaurant.interfaces.Cashier)(new CashierRole()), 
-    						(restaurant.interfaces.Cook)(new CookRole(1)), 
+    						(restaurant.interfaces.Host)(new CMHostRole()), 
+    						(restaurant.interfaces.Cashier)(new CMCashierRole()), 
+    						(restaurant.interfaces.Cook)(new CMCookRole(1)), 
     						new restaurant.interfaces.Waiter.Menu(), 
     						"Restaurant1CustomerRole", 
     						"Restaurant1", 
@@ -372,9 +372,9 @@ public class SimCityGui extends JFrame implements ActionListener {
     						"Restaurant1WaiterRole");
 	        	}else{
 	        		r = new Restaurant(
-	        						(restaurant.interfaces.Host)(new HostRole()), 
-	        						(restaurant.interfaces.Cashier)(new CashierRole()), 
-	        						(restaurant.interfaces.Cook)(new CookRole()), 
+	        						(restaurant.interfaces.Host)(new CMHostRole()), 
+	        						(restaurant.interfaces.Cashier)(new CMCashierRole()), 
+	        						(restaurant.interfaces.Cook)(new CMCookRole()), 
 	        						new restaurant.interfaces.Waiter.Menu(), 
 	        						"Restaurant1CustomerRole", 
 	        						"Restaurant1", 
@@ -383,24 +383,24 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        						"Restaurant1WaiterRole");
 	        	}
 	        	getRestaurants().add(r);
-	        	((RestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
+	        	((CMRestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
 	
-	        	((HostRole)r.host).setRestaurant(r);
-	        	HostGui hg = new HostGui(((HostRole)r.host));
-	        	((HostRole)r.host).setGui(hg);
+	        	((CMHostRole)r.host).setRestaurant(r);
+	        	CMHostGui hg = new CMHostGui(((CMHostRole)r.host));
+	        	((CMHostRole)r.host).setGui(hg);
 	        	restaurantAnimationPanel.addGui(hg);
 	
 	
-	        	((CashierRole)r.cashier).setRestaurant(r);
-	        	CashierGui cg = new CashierGui(((CashierRole)r.cashier));
-	        	((CashierRole)r.cashier).setGui(cg);
+	        	((CMCashierRole)r.cashier).setRestaurant(r);
+	        	CMCashierGui cg = new CMCashierGui(((CMCashierRole)r.cashier));
+	        	((CMCashierRole)r.cashier).setGui(cg);
 	        	restaurantAnimationPanel.addGui(cg);
 	        	
 	
-	        	((CookRole)r.cook).setRestaurant(r);
-	        	CookGui ccg = new CookGui(((CookRole)r.cook));
-	        	((CookRole)r.cook).setGui(ccg);
-	        	((CookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	((CMCookRole)r.cook).setRestaurant(r);
+	        	CMCookGui ccg = new CMCookGui(((CMCookRole)r.cook));
+	        	((CMCookRole)r.cook).setGui(ccg);
+	        	((CMCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 
         	}
@@ -503,7 +503,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         
         for(Restaurant r: restaurants){
         	for(MarketAgent m: markets){
-        		((CookRole)r.cook).addMarket(m);
+        		((CMCookRole)r.cook).addMarket(m);
         	}
         }
 	}
@@ -598,14 +598,14 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 	public static Role customerFactory(PersonAgent p, Restaurant r){
 		if(r.customerRole.equalsIgnoreCase("Restaurant1CustomerRole")){
-			return new CustomerRole(p, r);
+			return new CMCustomerRole(p, r);
 		}
 		
 		return null;
 	}
 	public static Role waiterFactory(PersonAgent p, Restaurant r){
 		if(r.waiterRole.equalsIgnoreCase("Restaurant1WaiterRole")){
-			return new WaiterRole(p, r);
+			return new CMWaiterRole(p, r);
 		}
 		
 		return null;

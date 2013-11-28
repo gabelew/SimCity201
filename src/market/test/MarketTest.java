@@ -2,15 +2,15 @@ package market.test;
 
 import java.awt.Point;
 
+import CMRestaurant.roles.CMCashierRole;
+import CMRestaurant.roles.CMCookRole;
 import city.MarketAgent;
 import city.MarketAgent.cookState;
 import city.MarketAgent.state;
 import city.MarketAgent.customerState;
-import city.roles.CashierRole;
 import city.roles.MarketCustomerRole;
 import city.roles.ClerkRole;
 import city.roles.DeliveryManRole;
-import city.roles.CookRole;
 import restaurant.interfaces.*;
 import market.test.mock.*;
 import junit.framework.*;

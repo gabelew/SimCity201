@@ -3,16 +3,16 @@ package city.animationPanels;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import CMRestaurant.gui.CMCashierGui;
+import CMRestaurant.gui.CMCookGui;
+import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.gui.CMWaiterGui;
+import CMRestaurant.gui.CMRestaurantPanel;
+import CMRestaurant.roles.CMHostRole;
 import restaurant.Restaurant;
-import restaurant.gui.CashierGui;
-import restaurant.gui.CookGui;
-import restaurant.gui.CustomerGui;
-import restaurant.gui.RestaurantPanel;
 import restaurant.gui.Table;
-import restaurant.gui.WaiterGui;
 import city.gui.Gui;
 import city.gui.SimCityGui;
-import city.roles.HostRole;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-public class RestaurantAnimationPanel extends InsideAnimationPanel implements ActionListener, MouseListener {
+public class CMRestaurantAnimationPanel extends InsideAnimationPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
     private List<Table> tables = new ArrayList<Table>();
@@ -102,7 +102,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	private BufferedImage grillRightImg = null;
 	private BufferedImage platingTableImg = null;
 
-	public RestaurantAnimationPanel(SimCityGui simCityGui){
+	public CMRestaurantAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
 		
 		try {
@@ -185,7 +185,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 
     	synchronized(getGuis()){
 	        for(Gui gui : getGuis()) {
-	        	if(!(gui instanceof CustomerGui || gui instanceof WaiterGui))
+	        	if(!(gui instanceof CMCustomerGui || gui instanceof CMWaiterGui))
 		            if (gui.isPresent()) {
 		                gui.draw(g2);
 		            }
@@ -200,7 +200,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 
     	synchronized(getGuis()){		
 	        for(Gui gui : getGuis()) {
-	        	if(gui instanceof CustomerGui || gui instanceof WaiterGui)
+	        	if(gui instanceof CMCustomerGui || gui instanceof CMWaiterGui)
 		            if (gui.isPresent()) {
 		                gui.draw(g2);
 		            }
@@ -220,7 +220,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 
     	synchronized(getGuis()){
 	    	for(Gui gui : getGuis()) {
-	        	if(gui instanceof CashierGui)
+	        	if(gui instanceof CMCashierGui)
 		            if (gui.isPresent()) {
 		                gui.draw(g2);
 		            }
@@ -236,13 +236,13 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 
     	synchronized(getGuis()){
 	        for(Gui gui : getGuis()) {
-	        	if(gui instanceof CustomerGui){
-	        		CustomerGui cGui = (CustomerGui) gui;
+	        	if(gui instanceof CMCustomerGui){
+	        		CMCustomerGui cGui = (CMCustomerGui) gui;
 		            if (cGui.isPresent()) {
 		            	cGui.drawFood(g2);
 		            }
-	        	}else if(gui instanceof CookGui){
-	        		CookGui cGui = (CookGui) gui;
+	        	}else if(gui instanceof CMCookGui){
+	        		CMCookGui cGui = (CMCookGui) gui;
 		            if (cGui.isPresent()) {
 		            	cGui.drawFood(g2);
 		            }
@@ -308,10 +308,10 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	}
 
     public void addDefaultTables() {
-    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y);
-    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING);
-    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
-    	((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
+    	((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y);
+    	((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING);
+    	((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
+    	((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).getTablesPanel().addStartingTable(STARTING_TABLES_X,STARTING_TABLE1_Y+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING+STARTING_TABLE_Y_SPACING);
 	}
 
  	public int getTablesXCoord(int i){
@@ -353,11 +353,11 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
 	public void setTableOccupied(int tableNumber) {
 		System.out.println("\t\t\tsetTableOccupied " + tableNumber + "Tables size " + tables.size());
 		tables.get(tableNumber).setOccupied();
-		((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableDisabled(tableNumber);
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableDisabled(tableNumber);
 	}
 	public void setTableUnoccupied(int tableNumber) {
 		tables.get(tableNumber).setMovable();
-		((RestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableEnabled(tableNumber);
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableEnabled(tableNumber);
 	}
 
 	public boolean notOnExistingTable(Table newTablePos, Point placeTableHere) {
@@ -380,7 +380,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     	tables.add(new Table(xDEFAULT_NEW_TABLE_POSITION, yDEFAULT_NEW_TABLE_POSITION));
     	for(Restaurant r: simCityGui.getRestaurants()){
     		if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-    			((HostRole) r.host).addNewTable();
+    			((CMHostRole) r.host).addNewTable();
     		}
     	}
     	
@@ -391,7 +391,7 @@ public class RestaurantAnimationPanel extends InsideAnimationPanel implements Ac
     	tables.add(new Table( x, y));
     	for(Restaurant r: simCityGui.getRestaurants()){
     		if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-    			((HostRole) r.host).addNewTable();
+    			((CMHostRole) r.host).addNewTable();
     		}
     	}
 		

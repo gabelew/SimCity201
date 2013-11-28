@@ -1,5 +1,6 @@
 package restaurant.interfaces;
 
+import city.PersonAgent;
 import market.interfaces.DeliveryMan;
 
 /**
@@ -27,5 +28,5 @@ public interface Cashier {
 	public abstract void msgProduceCheck(Waiter w, Customer c, String choice);
 
 	public abstract void msgHereIsBill(DeliveryMan DMR, double bill);
-
+	public abstract void msgReleaveFromDuty(PersonAgent p);
 }
