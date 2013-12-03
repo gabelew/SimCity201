@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+
 import city.gui.trace.AlertLevel;
 import city.gui.trace.AlertTag;
 import city.gui.trace.TracePanel;
@@ -39,6 +41,7 @@ public class TraceControlPanel extends JPanel {
 	JToggleButton waiterTagButton = new JToggleButton("Restaurant Waiter");
 	
 	String[] importantPersonList = {"Everyone","poor01","poorHome02","poorHome04NoFood", "poorhome05LowSteak", "cook01DayPoor", "waiter01day"};
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	JComboBox personFilterList = new JComboBox(importantPersonList);
 	
 	JLabel levelLabel = new JLabel("Alerts Levels");
@@ -51,6 +54,8 @@ public class TraceControlPanel extends JPanel {
 	public TraceControlPanel(final TracePanel tracePanel) {
 		this.tp = tracePanel;
 
+		personFilterList.setEditable(true);
+		
 		messagesButton.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -260,27 +265,19 @@ public class TraceControlPanel extends JPanel {
 		this.personFilterList.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("rawtypes")
 				JComboBox cb = (JComboBox)e.getSource();
 				String personName = (String)cb.getSelectedItem();
 				//{"Everyone","poor01","poorHome02","poorHome04NoFood", "poorhome05LowSteak", "cook01DayPoor", "waiter01day"};
-				if(personName.equals("poor01")){
-					tracePanel.showOnlyThisPerson("poor01");
-				}else if(personName.equals("poorHome02")){
-					tracePanel.showOnlyThisPerson("poorHome02");
-				}else if(personName.equals("poorHome04NoFood")){
-					tracePanel.showOnlyThisPerson("poorHome04NoFood");
-				}else if(personName.equals("poorhome05LowSteak")){
-					tracePanel.showOnlyThisPerson("poorhome05LowSteak");
-				}else if(personName.equals("cook01DayPoor")){
-					tracePanel.showOnlyThisPerson("cook01DayPoor");
-				}else if(personName.equals("waiter01day")){
-					tracePanel.showOnlyThisPerson("waiter01day");
-				}else{
+				if(personName.equalsIgnoreCase("Everyone")){
 					tracePanel.showAllPeople();
+				}else{
+					tracePanel.showOnlyThisPerson(personName);
 				}
 				
 			}
 		});
+		
 		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setLayout(new GridLayout(0,1,10,2));
 		this.add(levelLabel);
