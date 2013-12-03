@@ -48,7 +48,8 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	private List<Alert> newAlerts = Collections.synchronizedList(new ArrayList<Alert>());
 	private Set<AlertLevel> visibleLevels = Collections.synchronizedSet(EnumSet.allOf(AlertLevel.class));
 	private Set<AlertTag> visibleTags = Collections.synchronizedSet(EnumSet.noneOf(AlertTag.class));
-
+	private String focusOnPerson = null;
+	
 	Dimension size;
 	Style errorStyle;
 	Style warningStyle;
@@ -81,10 +82,7 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		StyleConstants.setForeground(errorStyle, Color.red);
 
 		// Warning
-		StyleConstants.setForeground(warningStyle, Color.yellow);
-		//TODO: This looks ugly and is only so we could actually read the text... change it!
-		//And maybe change font color or panel background color or something...
-		StyleConstants.setBackground(warningStyle, Color.black);
+		StyleConstants.setForeground(warningStyle, Color.magenta);
 
 		// Info
 		StyleConstants.setForeground(infoStyle, Color.blue);
@@ -118,7 +116,11 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	 */
 	private boolean isAlertVisible(Alert alert) {
 		if(visibleLevels.contains(alert.level) && visibleTags.contains(alert.tag)) {
-			return true;
+			if(focusOnPerson == null || focusOnPerson.equalsIgnoreCase(alert.name)){
+				return true;
+			}else{
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -178,7 +180,9 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		Collections.sort(alerts);									//Sort them (they end up sorted by timestamp)
 		for(Alert alert:alerts) {
 			if(visibleTags.contains(alert.tag) && visibleLevels.contains(alert.level)) {
-				newAlerts.add(alert);
+				if(focusOnPerson == null || focusOnPerson.equalsIgnoreCase(alert.name)){
+					newAlerts.add(alert);
+				}
 				//System.out.println("Adding Alert: " + alert.name + alert.level + alert.tag);
 			}
 		}
@@ -270,4 +274,15 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		addNewAlert(alert);
 	}
 
+
+	public void showOnlyThisPerson(String name) {
+		focusOnPerson = name;
+		this.filterTracePanel();
+	}
+
+
+	public void showAllPeople() {
+		focusOnPerson = null;
+		this.filterTracePanel();
+	}
 }

@@ -87,6 +87,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     static final int FRAMEX = 1100;
     static final int FRAMEY = 430;
     static final int INSIDE_BUILDING_FRAME_Y = 517;
+    static final int TRACEFRAMEX = 800;
     static final int WINDOWX = 225;
     static final int OFFSETPOS = 50;
     static final int NROWS = 1;
@@ -116,8 +117,8 @@ public class SimCityGui extends JFrame implements ActionListener {
         
        /* traceFrame.setLayout(new BorderLayout());
         traceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        traceFrame.setBounds(OFFSETPOS+40, OFFSETPOS+40, FRAMEX, INSIDE_BUILDING_FRAME_Y);
-        Dimension traceFrameDim = new Dimension(FRAMEX,INSIDE_BUILDING_FRAME_Y);
+        traceFrame.setBounds(OFFSETPOS+40, OFFSETPOS+40, TRACEFRAMEX, INSIDE_BUILDING_FRAME_Y);
+        Dimension traceFrameDim = new Dimension(TRACEFRAMEX,INSIDE_BUILDING_FRAME_Y);
         traceFrame.setMaximumSize(traceFrameDim);
         traceFrame.setMinimumSize(traceFrameDim);
         traceFrame.setPreferredSize(traceFrameDim);
@@ -178,8 +179,8 @@ public class SimCityGui extends JFrame implements ActionListener {
    
         traceFrame.setLayout(new BorderLayout());
         traceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        traceFrame.setBounds(OFFSETPOS+40, OFFSETPOS+40, FRAMEX, INSIDE_BUILDING_FRAME_Y);
-        Dimension traceFrameDim = new Dimension(FRAMEX,INSIDE_BUILDING_FRAME_Y);
+        traceFrame.setBounds(OFFSETPOS+600, OFFSETPOS+40, TRACEFRAMEX, INSIDE_BUILDING_FRAME_Y);
+        Dimension traceFrameDim = new Dimension(TRACEFRAMEX,INSIDE_BUILDING_FRAME_Y);
         traceFrame.setMaximumSize(traceFrameDim);
         traceFrame.setMinimumSize(traceFrameDim);
         traceFrame.setPreferredSize(traceFrameDim);
