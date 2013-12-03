@@ -10,6 +10,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
@@ -40,6 +41,9 @@ public class TraceControlPanel extends JPanel {
 	JToggleButton cookTagButton = new JToggleButton("Restaurant Cook");
 	JToggleButton cashierTagButton = new JToggleButton("Restaurant Cashier");
 	JToggleButton waiterTagButton = new JToggleButton("Restaurant Waiter");
+
+	JLabel levelLabel = new JLabel("Alerts Levels");
+	JLabel tagLabel = new JLabel("Alerts Tags");
 
     static final int BUTTON_PADDING = 40;
     static final int GROUP_BUTTON_Y = 25;
@@ -256,11 +260,13 @@ public class TraceControlPanel extends JPanel {
 		
 		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setLayout(new GridLayout(0,1,10,2));
+		this.add(levelLabel);
 		this.add(messagesButton);
 		this.add(errorButton);
 		this.add(warningButton);
 		this.add(infoButton);
 		this.add(debugButton);
+		this.add(tagLabel);
 		this.add(personTagButton);
 		this.add(atHomeTagButton);
 		this.add(marketCustTagButton);
