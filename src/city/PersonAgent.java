@@ -25,6 +25,8 @@ import atHome.city.Residence;
 import city.BankAgent.BankAccount;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.interfaces.Bank;
 import city.interfaces.Bus;
 import city.interfaces.Person;
@@ -819,7 +821,8 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToWork(){
-    	print("I'm going to work.");
+    	AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "I'm going to work.");
+    	//print("I'm going to work.");
     	state = State.goingToWork;
     	destination = job.location;
     	if(car == true || destination.y == personGui.yPos){

@@ -29,6 +29,8 @@ import city.animationPanels.InsideAnimationPanel;
 import city.animationPanels.InsideBuildingPanel;
 import city.animationPanels.MarketAnimationPanel;
 import city.animationPanels.CMRestaurantAnimationPanel;
+import city.gui.trace.TraceControlPanel;
+import city.gui.trace.TracePanel;
 import city.roles.Role;
 
 import java.awt.*;
@@ -66,6 +68,11 @@ public class SimCityGui extends JFrame implements ActionListener {
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
     
     private RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
+    
+
+    public TracePanel tracePanel = new TracePanel();
+    public TraceControlPanel traceControlPanel = new TraceControlPanel(tracePanel);
+    private JFrame traceFrame = new JFrame();
     
     private JFrame bottomFrame = new JFrame();
     private JPanel topPanel = new JPanel();
@@ -107,18 +114,36 @@ public class SimCityGui extends JFrame implements ActionListener {
         add(topPanel, BorderLayout.CENTER);
         
         
+       /* traceFrame.setLayout(new BorderLayout());
+        traceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        traceFrame.setBounds(OFFSETPOS+40, OFFSETPOS+40, FRAMEX, INSIDE_BUILDING_FRAME_Y);
+        Dimension traceFrameDim = new Dimension(FRAMEX,INSIDE_BUILDING_FRAME_Y);
+        traceFrame.setMaximumSize(traceFrameDim);
+        traceFrame.setMinimumSize(traceFrameDim);
+        traceFrame.setPreferredSize(traceFrameDim);
+        traceFrame.add(tracePanel, BorderLayout.CENTER);
+        traceFrame.add(traceControlPanel, BorderLayout.WEST);
+        traceFrame.setVisible(true);*/
+        
+        
         Dimension buildingsPanelDim = new Dimension(WINDOWX,REST_PANEL_Y);
         buildingsPanel.setLayout(cardLayout);
         buildingsPanel.setMaximumSize(buildingsPanelDim);
         buildingsPanel.setMinimumSize(buildingsPanelDim);
         buildingsPanel.setPreferredSize(buildingsPanelDim);
-        
+    
         
         bottomFrame.setLayout(new BorderLayout());
-        bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
         bottomFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         bottomFrame.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
-        bottomFrame.setVisible(true);
+        Dimension bottomFrameDim = new Dimension(FRAMEX,INSIDE_BUILDING_FRAME_Y);
+        bottomFrame.setMaximumSize(bottomFrameDim);
+        bottomFrame.setMinimumSize(bottomFrameDim);
+        bottomFrame.setPreferredSize(bottomFrameDim);
+        bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
+        bottomFrame.setVisible(true);    
+        
+
 
         createDefaultBuildingPanels();
         
@@ -133,6 +158,11 @@ public class SimCityGui extends JFrame implements ActionListener {
     }
     public SimCityGui() {
     	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
+        Dimension frameDim = new Dimension(FRAMEX,FRAMEY);
+        this.setMaximumSize(frameDim);
+        this.setMinimumSize(frameDim);
+        this.setPreferredSize(frameDim);
+        
     	setLayout(new BorderLayout());
     	topPanel.setLayout(new BorderLayout(5,0));
         
@@ -145,6 +175,18 @@ public class SimCityGui extends JFrame implements ActionListener {
         topPanel.add(infoPanel, BorderLayout.WEST);
         add(topPanel, BorderLayout.CENTER);
         
+   
+        traceFrame.setLayout(new BorderLayout());
+        traceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        traceFrame.setBounds(OFFSETPOS+40, OFFSETPOS+40, FRAMEX, INSIDE_BUILDING_FRAME_Y);
+        Dimension traceFrameDim = new Dimension(FRAMEX,INSIDE_BUILDING_FRAME_Y);
+        traceFrame.setMaximumSize(traceFrameDim);
+        traceFrame.setMinimumSize(traceFrameDim);
+        traceFrame.setPreferredSize(traceFrameDim);
+        traceFrame.add(tracePanel, BorderLayout.CENTER);
+        traceFrame.add(traceControlPanel, BorderLayout.WEST);
+        traceFrame.setVisible(true);
+        
         
         Dimension buildingsPanelDim = new Dimension(WINDOWX,REST_PANEL_Y);
         buildingsPanel.setLayout(cardLayout);
@@ -154,11 +196,15 @@ public class SimCityGui extends JFrame implements ActionListener {
         
         
         bottomFrame.setLayout(new BorderLayout());
-        bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
         bottomFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         bottomFrame.setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, INSIDE_BUILDING_FRAME_Y);
-        bottomFrame.setVisible(true);
-
+        Dimension bottomFrameDim = new Dimension(FRAMEX,INSIDE_BUILDING_FRAME_Y);
+        bottomFrame.setMaximumSize(bottomFrameDim);
+        bottomFrame.setMinimumSize(bottomFrameDim);
+        bottomFrame.setPreferredSize(bottomFrameDim);
+        bottomFrame.add(buildingsPanel, BorderLayout.CENTER);
+        bottomFrame.setVisible(true);    
+        
         createDefaultBuildingPanels();
         
         setVisible(true);
