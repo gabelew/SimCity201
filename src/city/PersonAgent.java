@@ -290,14 +290,16 @@ public class PersonAgent extends Agent implements Person
 		//print(recipient.getName() + " received: $" + amount + " for " + purpose);
 	}
 	public void msgTransferFailure(PersonAgent recipient, double amount, String purpose) {
-		print("Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);
+		//print("Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);
 	}
 	public void msgTransferCompleted(PersonAgent sender, double amount, String purpose) {
 		//print("Received $" + amount + " from: " + sender.getName() + " for: " + purpose);
 	}
 	
 	public void msgHereIsBalance(double amount, String accountType) {
-		print("Balance is $" + amount + " for: " + accountType);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Balance is $" + amount + " for: " + accountType);
+		//print("Balance is $" + amount + " for: " + accountType);
 	}
 	
 	public void msgDoneAtBank() {
@@ -783,14 +785,18 @@ public class PersonAgent extends Agent implements Person
     
     private void getOffBus() {
 		log.add(new LoggedEvent("preforming get off Bus"));
-    	print("I'm getting off bus.");
+
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm getting off bus.");
+    	//print("I'm getting off bus.");
     	personGui.doGetOffBus();
     	transportState = TransportState.none;
     }
 
     private void getOnBus() {
 		log.add(new LoggedEvent("preforming get on Bus"));
-    	print("I'm getting on bus.");
+		
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm getting on bus.");
+    	//print("I'm getting on bus.");
     	personGui.doGetOnBus();
     	if(!testing){
 	    	try {
@@ -812,12 +818,14 @@ public class PersonAgent extends Agent implements Person
     	for(PersonAgent e: employees) {
     		bankTeller.msgTransferFunds(this, e, 10.00, "business", "personal", "salary");
     	}
-    	print("Paid employees.");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Paid employees.");
+    	//print("Paid employees.");
     }
     
     private void doPayRent(){
     	bankTeller.msgTransferFunds(this, landlord, 3.00, "personal", "personal", "rent");
-    	print("Paid rent.");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Paid rent.");
+    	//print("Paid rent.");
     }
     
     private void goToWork(){
@@ -854,7 +862,8 @@ public class PersonAgent extends Agent implements Person
 		location = Location.AtWork;
     	state = State.working;
 
-    	print("I'm at work.");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm at work.");
+    	//print("I'm at work.");
     	if(testing){
     		//do not create working role
     	}
@@ -962,7 +971,8 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToHouseToEat() {
-    	print("Going home to eat.");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Going home to eat.");
+    	//print("Going home to eat.");
     	location = Location.AtHome;
 
     	destination = myHome.location;
@@ -979,7 +989,8 @@ public class PersonAgent extends Agent implements Person
 	}
 
 	private void finishGoingToHomeToEat() {
-		print("eatin at home");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "eatin at home");
+		//print("eatin at home");
 		personGui.DoWalkTo(destination);
     	try {
 			waitingResponse.acquire();
@@ -1048,7 +1059,8 @@ public class PersonAgent extends Agent implements Person
     }
 
 	private void goToRestaurant() {
-    	print("I'm going to restaurant");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant");
+    	//print("I'm going to restaurant");
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
     	
@@ -1067,7 +1079,8 @@ public class PersonAgent extends Agent implements Person
     	}
     }
     private void finishGoingToRestaurant(){
-    	print("I'm at restaurant");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm at restaurant");
+    	//print("I'm at restaurant");
     	personGui.DoWalkTo(destination);
     	try {
 			waitingResponse.acquire();
@@ -1087,7 +1100,8 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToBank() {
-    	print("I'm going to bank");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to bank");
+    	//print("I'm going to bank");
     	state = State.goingToBank;
 	    BankBuilding m  = chooseClosestBank();
 	    destination = m.location;
@@ -1107,7 +1121,8 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void finishGoingToBank(){
-    	print("I'm at bank");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm at bank");
+    	//print("I'm at bank");
     	state  = State.banking;
     	BankBuilding b = findBank(destination);
     	personGui.DoWalkTo(destination); //animationStub
@@ -1133,7 +1148,8 @@ public class PersonAgent extends Agent implements Person
     }
 
 	private void goToMarket(){
-    	print("I'm going to market");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market");
+    	//print("I'm going to market");
     	state = State.goingToMarket;
 	    MarketAgent m  = chooseClosestMarket();
 	    destination = m.location;
@@ -1156,7 +1172,8 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void finishGoingToMarket(){
-    	print("I'm at market");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm at market");
+    	//print("I'm at market");
     	state  = State.shopping;
     	MarketAgent m = findMarket(destination);
     	personGui.DoWalkTo(destination); //animationStub
@@ -1178,7 +1195,8 @@ public class PersonAgent extends Agent implements Person
 	private void goToBusStop() {
     	personGui.doGoToBus();
 		this.transportState = TransportState.GoingToBus;
-		print("Going to bus stop.");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Going to bus stop.");
+		//print("Going to bus stop.");
 		log.add(new LoggedEvent("preforming Go to bus stop"));
 		
 		try {
