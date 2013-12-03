@@ -821,7 +821,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToWork(){
-    	AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "I'm going to work.");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to work.");
     	//print("I'm going to work.");
     	state = State.goingToWork;
     	destination = job.location;

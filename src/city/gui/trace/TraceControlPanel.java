@@ -1,6 +1,8 @@
 package city.gui.trace;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -18,83 +20,98 @@ import city.gui.trace.TracePanel;
 public class TraceControlPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	TracePanel tp;	//Hack so I can easily call showAlertsWithLevel for this demo.
-	
-	JButton enableMessagesButton;		//You could (and probably should) substitute a JToggleButton to replace both
-	JButton disableMessagesButton;		//of these, but I split it into enable and disable for clarity in the demo.
-	JButton enableErrorButton;		
-	JButton disableErrorButton;		
-	JButton enableBankCustTagButton;		//You could (and probably should) substitute a JToggleButton to replace both
-	JButton disableBankCustTagButton;		//of these, but I split it into enable and disable for clarity in the demo.
-	JToggleButton bankCustTagButton;
+	TracePanel tp;	//Hack so I can easily call showAlertsWithLevel for this demo
+
+	JToggleButton messagesButton = new JToggleButton("Message");
+	JToggleButton errorButton = new JToggleButton("Error");
+	JToggleButton warningButton = new JToggleButton("Warning");
+	JToggleButton infoButton = new JToggleButton("Info");
+	JToggleButton debugButton = new JToggleButton("Debug");
+	JToggleButton personTagButton = new JToggleButton("Person");
+	JToggleButton busTagButton = new JToggleButton("Bus");
+	JToggleButton atHomeTagButton = new JToggleButton("At Home");
+	JToggleButton marketCustTagButton = new JToggleButton("Market Customer");
+	JToggleButton marketClerkTagButton = new JToggleButton("Market Clerk");
+	JToggleButton deliveryManTagButton = new JToggleButton("Market Deliveryman");
+	JToggleButton bankCustTagButton = new JToggleButton("Bank Customer");
+	JToggleButton bankSystemTagButton = new JToggleButton("Bank System");
+	JToggleButton restCustTagButton = new JToggleButton("Restaurant Customer");
+	JToggleButton hostTagButton = new JToggleButton("Restaurant Host");
+	JToggleButton cookTagButton = new JToggleButton("Restaurant Cook");
+	JToggleButton cashierTagButton = new JToggleButton("Restaurant Cashier");
+	JToggleButton waiterTagButton = new JToggleButton("Restaurant Waiter");
+
+    static final int BUTTON_PADDING = 40;
+    static final int GROUP_BUTTON_Y = 25;
 	
 	public TraceControlPanel(final TracePanel tracePanel) {
 		this.tp = tracePanel;
-		enableMessagesButton = new JButton("Show Level: MESSAGE");
-		disableMessagesButton = new JButton("Hide Level: MESSAGE");
-		enableErrorButton = new JButton("Show Level: ERROR");
-		disableErrorButton = new JButton("Hide Level: ERROR");
-		enableBankCustTagButton = new JButton("Show Tag: BANK_CUSTOMER");
-		disableBankCustTagButton = new JButton("Hide Tag: BANK_CUSTOMER");
-		bankCustTagButton = new JToggleButton("BANK_CUSTOMER");
+
+		messagesButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithLevel(AlertLevel.MESSAGE);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithLevel(AlertLevel.MESSAGE);
+				}
+			}
+		});
 		
+		errorButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithLevel(AlertLevel.ERROR);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithLevel(AlertLevel.ERROR);
+				}
+			}
+		});
 		
-		enableMessagesButton.addActionListener(new ActionListener() {
+		warningButton.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				//============================ TUTORIAL ==========================================
-				//This is how you make messages with a certain Level (normal MESSAGE here) show up in the trace panel.
-				tracePanel.showAlertsWithLevel(AlertLevel.MESSAGE);
-				//================================================================================
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithLevel(AlertLevel.WARNING);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithLevel(AlertLevel.WARNING);
+				}
 			}
 		});
-		disableMessagesButton.addActionListener(new ActionListener() {
+		
+		infoButton.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				//============================ TUTORIAL ==========================================
-				//This is how you make messages with a certain Level not show up in the trace panel.
-				tracePanel.hideAlertsWithLevel(AlertLevel.MESSAGE);
-				//================================================================================
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithLevel(AlertLevel.INFO);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithLevel(AlertLevel.INFO);
+				}
 			}
 		});
-		enableErrorButton.addActionListener(new ActionListener() {
+		
+		debugButton.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				//============================ TUTORIAL ==========================================
-				//This is how you make messages with a level of ERROR show up in the trace panel.
-				tracePanel.showAlertsWithLevel(AlertLevel.ERROR);
-				//================================================================================
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithLevel(AlertLevel.DEBUG);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithLevel(AlertLevel.DEBUG);
+				}
 			}
 		});
-		disableErrorButton.addActionListener(new ActionListener() {
+		personTagButton.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				//============================ TUTORIAL ==========================================
-				//This is how you make messages with a level of ERROR not show up in the trace panel.
-				tracePanel.hideAlertsWithLevel(AlertLevel.ERROR);
-				//================================================================================
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.PERSON);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.PERSON);
+				}
 			}
 		});
-		enableBankCustTagButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//============================ TUTORIAL ==========================================
-				//This works the same way as AlertLevels, only you're using tags instead.
-				//In this demo, I generate message with tag BANK_CUSTOMER when you click in the 
-				//AnimationPanel somewhere.
-				tracePanel.showAlertsWithTag(AlertTag.BANK_CUSTOMER);
-				//================================================================================
-			}
-		});
-		disableBankCustTagButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//============================ TUTORIAL ==========================================
-				//This works the same way as AlertLevels, only you're using tags instead.
-				tracePanel.hideAlertsWithTag(AlertTag.BANK_CUSTOMER);
-				//================================================================================
-			}
-		});
+        
 		bankCustTagButton.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -105,14 +122,158 @@ public class TraceControlPanel extends JPanel {
 				}
 			}
 		});
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(enableMessagesButton);
-		this.add(disableMessagesButton);
-		this.add(enableErrorButton);
-		this.add(disableErrorButton);
-		this.add(enableBankCustTagButton);
-		this.add(disableBankCustTagButton);
+        
+		atHomeTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.AT_HOME);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.AT_HOME);
+				}
+			}
+		});
+        
+		marketCustTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.MARKET_CUSTOMER);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.MARKET_CUSTOMER);
+				}
+			}
+		});
+        
+		
+		marketClerkTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.MARKET_CLERK);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.MARKET_CLERK);
+				}
+			}
+		});
+        
+		
+		deliveryManTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.MARKET_DELIVERYMAN);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.MARKET_DELIVERYMAN);
+				}
+			}
+		});
+        
+		
+		bankSystemTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.BANK_SYSTEM);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.BANK_SYSTEM);
+				}
+			}
+		});
+        
+		
+		restCustTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.REST_CUSTOMER);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.REST_CUSTOMER);
+				}
+			}
+		});
+        
+		
+		hostTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.REST_HOST);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.REST_HOST);
+				}
+			}
+		});
+        
+		
+		cookTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.REST_COOK);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.REST_COOK);
+				}
+			}
+		});
+        
+		
+		cashierTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.REST_CASHIER);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.REST_CASHIER);
+				}
+			}
+		});
+        
+		
+		waiterTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.REST_WAITER);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.REST_WAITER);
+				}
+			}
+		});
+        
+		
+		busTagButton.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					tracePanel.showAlertsWithTag(AlertTag.BUS);
+				}else if(e.getStateChange()==ItemEvent.DESELECTED){
+					tracePanel.hideAlertsWithTag(AlertTag.BUS);
+				}
+			}
+		});
+        
+		
+		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new GridLayout(0,1,10,2));
+		this.add(messagesButton);
+		this.add(errorButton);
+		this.add(warningButton);
+		this.add(infoButton);
+		this.add(debugButton);
+		this.add(personTagButton);
+		this.add(atHomeTagButton);
+		this.add(marketCustTagButton);
+		this.add(marketClerkTagButton);
+		this.add(deliveryManTagButton);
 		this.add(bankCustTagButton);
+		this.add(bankSystemTagButton);
+		this.add(restCustTagButton);
+		this.add(hostTagButton);
+		this.add(cookTagButton);
+		this.add(cashierTagButton);
+		this.add(waiterTagButton);
+		this.add(busTagButton);
 		this.setMinimumSize(new Dimension(50, 600));
 	}
 }

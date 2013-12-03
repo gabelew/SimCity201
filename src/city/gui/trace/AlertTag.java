@@ -14,10 +14,17 @@ package city.gui.trace;
  */
 public enum AlertTag {
 	PERSON,
-	BANK_TELLER,
+	AT_HOME,
+	MARKET_CUSTOMER,
+	MARKET_CLERK,
+	MARKET_DELIVERYMAN,
 	BANK_CUSTOMER,
-	BUS_STOP,
-	RESTAURANT,		//For the demo code where you make a new restaurant
-	BANK,			//For the demo code where you make a new bank
+	BUS,
+	BANK_SYSTEM,
+	REST_CUSTOMER,
+	REST_HOST,
+	REST_COOK,
+	REST_CASHIER,
+	REST_WAITER,
 	GENERAL_CITY
 }
