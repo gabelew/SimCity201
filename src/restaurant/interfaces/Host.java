@@ -22,7 +22,7 @@ public interface Host {
 	
 	public abstract void msgLeavingRestaurant(Customer c);
 	
-	public abstract void msgTableIsFree(Waiter w, int msgerT);
+	//public abstract void msgTableIsFree(Waiter w, int msgerT);
 	
 	public abstract void msgCanIBreak(Waiter w);
 	
