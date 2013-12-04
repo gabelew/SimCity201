@@ -93,6 +93,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     private SimCityGui simCityGui;
     public BusAgent busLeft = new BusAgent('B');
     public BusAgent busRight = new BusAgent('F');
+    public boolean paused = false;
     
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
@@ -130,7 +131,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().toString().contains("Timer"))
+		if(e.getSource().toString().contains("Timer") && !paused)
 			timeIncrementer++;
     	if(timeIncrementer == THIRTYSECONDS){
     		timeIncrementer = 0;

@@ -1179,6 +1179,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     	 gui.animationPanel.busLeft.pauseAgent();
     	 gui.animationPanel.busRight.pauseAgent();
     	 gui.bankAgent.pauseAgent();
+    	 gui.animationPanel.paused = true;
     	}
     	else
     	{
@@ -1193,6 +1194,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     	 gui.animationPanel.busLeft.resumeAgent();
     	 gui.animationPanel.busRight.resumeAgent();
     	 gui.bankAgent.resumeAgent();
+    	 gui.animationPanel.paused = false;
     	}
     	personPanel.changePauseButton();     
     }
