@@ -367,7 +367,13 @@ public class ListPanel extends JPanel implements ActionListener {
 		else
 			pauseAgentsB.setText("Pause");
 	}
-	
+	public void hidePauseButton() {
+		pauseAgentsB.setVisible(false);
+		
+	}
+	public void showPauseButton(){
+		pauseAgentsB.setVisible(true);
+	}
 	public String getPauseButtonLabel(){
 		return pauseAgentsB.getText();
 	}
@@ -433,4 +439,6 @@ public class ListPanel extends JPanel implements ActionListener {
 	public void setTypeNameHere(JTextField typeNameHere) {
 		this.typeNameHere = typeNameHere;
 	}
+
+
 }

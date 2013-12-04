@@ -63,7 +63,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
         group.add(configPanel);
         add(group);
         
-        
+        personPanel.hidePauseButton();
 
         goButton.addActionListener(this);
         personPanel.getTypeNameHere().addKeyListener(this);
@@ -1330,6 +1330,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
 		configPanel.validate();
 		remove(configPanel);
 		pauseAgents();
+		personPanel.showPauseButton();
 		gui.invalidate();
 		gui.validate();
 	}
