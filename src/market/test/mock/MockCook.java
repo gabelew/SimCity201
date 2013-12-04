@@ -97,4 +97,10 @@ public class MockCook extends Mock implements Cook {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void addMarket(MarketAgent m) {
+		// TODO Auto-generated method stub
+		
+	}
 }
