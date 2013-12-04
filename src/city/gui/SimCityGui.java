@@ -2,6 +2,7 @@ package city.gui;
 
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
+import restaurant.interfaces.Cook;
 
 import javax.swing.*;
 
@@ -550,7 +551,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         
         for(Restaurant r: restaurants){
         	for(MarketAgent m: markets){
-        		((CMCookRole)r.cook).addMarket(m);
+        		((Cook)r.cook).addMarket(m);
         	}
         }
 	}

@@ -36,4 +36,6 @@ public interface Cook {
 
 	public abstract void msgIncompleteOrder(DeliveryMan deliveryMan,List<String> outOf);
 	public abstract void msgRelieveFromDuty(PersonAgent p);
+
+	public abstract void addMarket(MarketAgent m);
 }
