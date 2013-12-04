@@ -4,7 +4,9 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import CMRestaurant.gui.CMWaiterGui;
+import CMRestaurant.roles.CMCashierRole;
 import CMRestaurant.roles.CMCustomerRole;
+import CMRestaurant.roles.CMHostRole;
 import city.PersonAgent;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
@@ -356,7 +358,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		c.c.msgHereIsYourFood();
 		waiterGui.doneServingOrder();
 		//doGoToCashier();
-		restaurant.cashier.msgProduceCheck(this, c.c, c.choice);
+		((CMCashierRole) restaurant.cashier).msgProduceCheck(this, c.c, c.choice);
 	}
 
 	private void pickUpOrder(MyCustomer c){
@@ -368,7 +370,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	}
 
 	private void tableFree(MyCustomer c) {
-		restaurant.host.msgTableIsFree(this, c.table);
+		((CMHostRole) restaurant.host).msgTableIsFree(this, c.table);
 		customers.remove(c);
 	}
 	

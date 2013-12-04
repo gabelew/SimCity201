@@ -21,11 +21,11 @@ public interface Cashier {
 	public static final double CHICKEN_COST = 10.99;
 	public static final double BURGER_COST = 8.99;
 	public static final double COOKIE_COST = 3.99;	
-	public abstract void msgPayment(Customer c, double cash);
+	//public abstract void msgPayment(Customer c, double cash);
 
 	/**
 	 */
-	public abstract void msgProduceCheck(Waiter w, Customer c, String choice);
+	//public abstract void msgProduceCheck(Waiter w, Customer c, String choice);
 
 	public abstract void msgHereIsBill(DeliveryMan DMR, double bill);
 	public abstract void msgReleaveFromDuty(PersonAgent p);

@@ -379,9 +379,9 @@ public class CMCustomerRole extends Role implements Customer {
 		
 		if((myPerson.cashOnHand - check) > 0){
 			myPerson.cashOnHand = myPerson.cashOnHand - check;
-			restaurant.cashier.msgPayment(this, check);
+			((CMCashierRole) restaurant.cashier).msgPayment(this, check);
 		}else{
-			restaurant.cashier.msgPayment(this, myPerson.cashOnHand);
+			((CMCashierRole) restaurant.cashier).msgPayment(this, myPerson.cashOnHand);
 			myPerson.cashOnHand = 0;
 		}
 	}

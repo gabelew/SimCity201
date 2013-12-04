@@ -1,6 +1,7 @@
 package restaurant.test.mock;
 
 import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.roles.*;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
@@ -32,15 +33,15 @@ public class MockCustomer extends Mock implements Customer {
 
 		if((this.name.toLowerCase().contains("mahdi") || this.name.toLowerCase().contains("ditch")) && !goToATM){
 			//test the non-normative scenario where the customer has no money if their name contains the string "theif"
-			cashier.msgPayment(this, 0);
+			((CMCashierRole) cashier).msgPayment(this, 0);
 
 		}else if (this.name.toLowerCase().contains("rich")){
 			//test the non-normative scenario where the customer overpays if their name contains the string "rich"
-			cashier.msgPayment(this, Math.ceil(check));
+			((CMCashierRole) cashier).msgPayment(this, Math.ceil(check));
 
 		}else{
 			//test the normative scenario
-			cashier.msgPayment(this, check);
+			((CMCashierRole) cashier).msgPayment(this, check);
 		}
 	}
 

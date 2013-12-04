@@ -29,7 +29,7 @@ public class MockCashier extends Mock implements Cashier {
 
 	}
 
-	@Override
+	
 	public void msgProduceCheck(Waiter w, Customer c, String choice) {
 		log.add(new LoggedEvent("Received msgProduceCheck from waiter."));
 	}
@@ -39,7 +39,6 @@ public class MockCashier extends Mock implements Cashier {
 		log.add(new LoggedEvent("Received msgHereIsBill from delivery man."));
 	}
 	
-	@Override
 	public void msgPayment(Customer c, double cash){
 		log.add(new LoggedEvent("Received msgPayment from customer."));
 	}
