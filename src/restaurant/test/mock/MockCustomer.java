@@ -27,7 +27,6 @@ public class MockCustomer extends Mock implements Customer {
 
 	}
 
-	@Override
 	public void msgHereIsCheck(double check) {
 		log.add(new LoggedEvent("Received msgHereIsCheck from cashier. Total = "+ check));
 
@@ -45,33 +44,33 @@ public class MockCustomer extends Mock implements Customer {
 		}
 	}
 
-	@Override
+	
 	public void msgChange(double cashBack) {
 		log.add(new LoggedEvent("Received msgChange from cashier. Change = "+ cashBack));
 	}
 
-	@Override
+	
 	public void msgPayMeLater() {
 		log.add(new LoggedEvent("Received msgPayMeLater from cashier. Go to ATM."));
 		goToATM = true;
 	}
 
-	@Override
+	
 	public void msgFollowMeToTable(Waiter w, Menu m) {
 		log.add(new LoggedEvent("Received msgFollowMeToTable from waiter."));
 	}
 
-	@Override
+	
 	public void msgWhatWouldYouLike() {		
 		log.add(new LoggedEvent("Received msgWhatWouldYouLike from waiter."));
 	}
 
-	@Override
+	
 	public void msgOutOfOrder(String c) {		
 		log.add(new LoggedEvent("Received msgOutOfOrder from waiter."));
 	}
 
-	@Override
+	
 	public void msgHereIsYourFood() {
 		log.add(new LoggedEvent("Received msgHereIsYourFood from waiter."));
 	}

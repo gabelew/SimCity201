@@ -322,7 +322,7 @@ public class CMHostRole extends Role implements Host {
 	// Actions
 	private void tellCustNoTables(MyCustomer c) {
 		c.state = cState.waitingAndTold;
-		c.c.msgWaitForOpenTable();
+		((CMCustomerRole) c.c).msgWaitForOpenTable();
 	}
 	
 	private void waiterBreak(MyWaiter w){
@@ -373,7 +373,7 @@ public class CMHostRole extends Role implements Host {
 			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableOccupied(t.getTableNumber());
 		 
 			c.setState(cState.eating);
-			c.c.msgTableIsReady();
+			((CMCustomerRole) c.c).msgTableIsReady();
 			
 			waiter.tableCount++;
 			/*if(waiter.tableCount > 0)
@@ -382,7 +382,7 @@ public class CMHostRole extends Role implements Host {
 			}*/
 			
 			waiter.state = wState.working;
-			waiter.w.msgSitAtTable(c.c, t.tableNumber);
+			((CMWaiterRole) waiter.w).msgSitAtTable(c.c, t.tableNumber);
 		}
 	}
 

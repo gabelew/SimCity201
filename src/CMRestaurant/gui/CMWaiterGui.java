@@ -106,7 +106,7 @@ public class CMWaiterGui implements Gui {
 
         if (xPos == xDestination && yPos == yDestination && command==Command.GoToHost){
             command=Command.noCommand;
-        	role.msgAtEntrance();
+        	((CMWaiterRole) role).msgAtEntrance();
         }else if(xPos == xDestination && yPos == yDestination && command==Command.LeaveRestaurant){
             command=Command.noCommand;
         	role.msgLeftTheRestaurant();
@@ -116,7 +116,7 @@ public class CMWaiterGui implements Gui {
         		&& xPos < xTABLE_AREA + xTABLE_AREA_WIDTH && yPos > yTABLE_AREA && yPos < yTABLE_AREA + yTABLE_AREA_WIDTH
         		 && command==Command.GoToTable){
             command=Command.noCommand;
-            role.msgAtTable();
+            ((CMWaiterRole) role).msgAtTable();
          }
         else  if (xPos == xDestination && yPos == yDestination && xPos == xCASHIER_POSITION 
         		&& yPos == yCASHIER_POSITION && command==Command.GoToCashier){

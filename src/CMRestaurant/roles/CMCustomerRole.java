@@ -293,7 +293,7 @@ public class CMCustomerRole extends Role implements Customer {
 		Do("Leaving Early.");
 		if(waiter != null)
 		{
-			waiter.msgDoneEatingAndLeaving(this);
+			((CMWaiterRole) waiter).msgDoneEatingAndLeaving(this);
 			waiter = null;
 			customerGui.DoExitRestaurant();
 			if(leaveEarly.availablePermits() == 0){
@@ -342,12 +342,12 @@ public class CMCustomerRole extends Role implements Customer {
 
 	
 	private void tellWaiter(){
-		waiter.msgImReadyToOrder(this);
+		((CMWaiterRole) waiter).msgImReadyToOrder(this);
 		customerGui.orderFood(choice);
 	}
 	
 	private void giveOrder(){
-		waiter.msgHereIsMyOrder(this, choice);
+		((CMWaiterRole) waiter).msgHereIsMyOrder(this, choice);
 		customerGui.doneOrderingFood();
 	}
 
@@ -372,7 +372,7 @@ public class CMCustomerRole extends Role implements Customer {
 
 	private void leaveTable() {
 		customerGui.doneEatingFood();
-		waiter.msgDoneEatingAndLeaving(this);
+		((CMWaiterRole) waiter).msgDoneEatingAndLeaving(this);
 		waiter = null;
 		myPerson.hungerLevel = 0;
 		doGoToCashier();

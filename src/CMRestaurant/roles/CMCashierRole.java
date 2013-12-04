@@ -317,10 +317,10 @@ public class CMCashierRole extends Role implements Cashier {
 			
 			o.state = OrderState.inDebt;
 			//print("You can pay us on your next visit");
-			o.customer.msgPayMeLater();
+			((CMCustomerRole) o.customer).msgPayMeLater();
 		}else{
 			bank += o.check;
-			o.customer.msgChange(cashOut);
+			((CMCustomerRole) o.customer).msgChange(cashOut);
 			orders.remove(o);
 		}
 		
@@ -345,7 +345,7 @@ public class CMCashierRole extends Role implements Cashier {
 
 	private void giveWaiter(Order o) {
 		o.state = OrderState.awaitingPayment;
-		o.waiter.msgHereIsCheck(o.customer, o.check);
+		((CMWaiterRole) o.waiter).msgHereIsCheck(o.customer, o.check);
 		log.add(new LoggedEvent("Performed giveWaiter. Total of check = "+ o.check));
 	}
 

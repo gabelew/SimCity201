@@ -20,9 +20,9 @@ public interface Cook {
 
 	public CMCookGui cookGui = null;
 	
-	public abstract void msgHereIsOrder(Waiter w, String choice, int table);
+	//public abstract void msgHereIsOrder(Waiter w, String choice, int table);
 	
-	public abstract void msgFoodDone(RoleOrder o);
+	//public abstract void msgFoodDone(RoleOrder o);
 	
 	//public abstract void msgDelivering(Market m, List<MarketAgent.MyFood>orderlist);
 	
@@ -32,7 +32,7 @@ public interface Cook {
 
 	public abstract void msgNeverOrderFromMarketAgain(MarketAgent market);
 	
-	public abstract void msgHereIsOrderFromMarket(DeliveryMan Dm,Map<String,Integer>choices,List<String> outOf,double amount);
+	public abstract void msgHereIsOrderFromMarket(DeliveryMan Dm,Map<String,Integer>choices,double amount);
 
 	public abstract void msgIncompleteOrder(DeliveryMan deliveryMan,List<String> outOf);
 	public abstract void msgRelieveFromDuty(PersonAgent p);

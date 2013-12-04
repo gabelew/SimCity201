@@ -196,7 +196,7 @@ public class CMCookRole extends Role implements Cook {
 			}
 		}
 	}
-	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, List<String>outOf,double amountOwed){
+	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, double amountOwed){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
 				order.price=amountOwed;
@@ -469,7 +469,7 @@ public class CMCookRole extends Role implements Cook {
 			e.printStackTrace();
 		}
 		if(o.state == OrderState.DONE){
-			o.waiter.msgOrderIsReady(o.choice, o.table);
+			((CMWaiterRole) o.waiter).msgOrderIsReady(o.choice, o.table);
 			orders.remove(o);
 		}
 	}
@@ -512,7 +512,7 @@ public class CMCookRole extends Role implements Cook {
 		}
 		else{
 			//print("msgOutOfOrder");
-			o.waiter.msgOutOfOrder(o.choice, o.table);
+			((CMWaiterRole) o.waiter).msgOutOfOrder(o.choice, o.table);
 			
 			Food f = findFood(o.choice);
 			

@@ -307,7 +307,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		
 		//StringBuilder msg = new StringBuilder("Follow me " + c.c.getName());
 		//print(msg.toString());
-		c.c.msgFollowMeToTable(((Waiter)this), new Menu());
+		((CMCustomerRole) c.c).msgFollowMeToTable(((Waiter)this), new Menu());
 		
 		DoSeatCustomer(c, c.table);
 		
@@ -323,7 +323,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	private void takeOrder(MyCustomer c) {
 		doGoToTable(c.table);
 		
-		c.c.msgWhatWouldYouLike();
+		((CMCustomerRole) c.c).msgWhatWouldYouLike();
 		c.s = CustomerState.asked;
 		//print("What would you like to order?");
 		
@@ -355,7 +355,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		doGoToTable(c.table);
 		c.s = CustomerState.orderServed;
 		print("serving food");
-		c.c.msgHereIsYourFood();
+		((CMCustomerRole) c.c).msgHereIsYourFood();
 		waiterGui.doneServingOrder();
 		//doGoToCashier();
 		((CMCashierRole) restaurant.cashier).msgProduceCheck(this, c.c, c.choice);
@@ -381,7 +381,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	private void tellBadNews(MyCustomer c) {
 		doGoToTable(c.table);
 		c.s = CustomerState.seated;
-		c.c.msgOutOfOrder(c.choice);
+		((CMCustomerRole) c.c).msgOutOfOrder(c.choice);
 		print(((CMCustomerRole) c.c).getName() + ", we are out of " + c.choice);
 	}
 	
@@ -389,7 +389,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		c.s = CustomerState.hasCheck;
 		doGoToCashier();
 		doGoToTable(c.table);
-		c.c.msgHereIsCheck(c.check);
+		((CMCustomerRole) c.c).msgHereIsCheck(c.check);
 	}
 
 	// The animation DoXYZ() routines

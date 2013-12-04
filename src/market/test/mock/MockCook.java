@@ -34,11 +34,6 @@ public class MockCook extends Mock implements Cook {
 		super(name);
 
 	}
-
-	@Override
-	public void msgIncompleteOrder(DeliveryMan Dm,List<String> outOf){
-		log.add(new LoggedEvent("Received msgIncompleteOrder from delivery man."));
-	}
 	
 	@Override
 	public void msgNeverOrderFromMarketAgain(MarketAgent market){
@@ -50,12 +45,10 @@ public class MockCook extends Mock implements Cook {
 		log.add(new LoggedEvent("Received msgCanIHelpYou from delivery man."));
 	}
 
-	@Override
 	public void msgHereIsOrder(Waiter W,String choice, int table) {
 		log.add(new LoggedEvent("Received msgHereIsOrder from waiter."));
 	}
 	
-	@Override
 	public void msgFoodDone(RoleOrder o){
 		log.add(new LoggedEvent("Received msgFoodDone."));
 	}
@@ -88,7 +81,7 @@ public class MockCook extends Mock implements Cook {
 		log.add(new LoggedEvent("Recieved set steaks amount"));
 	}
 	
-	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String,Integer> choices, List<String> outOf, double amount){
+	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String,Integer> choices, double amount){
 		log.add(new LoggedEvent("Recieved msgHereIsOrderFromMarket"));
 	}
 
@@ -100,6 +93,12 @@ public class MockCook extends Mock implements Cook {
 
 	@Override
 	public void addMarket(MarketAgent m) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
 		// TODO Auto-generated method stub
 		
 	}

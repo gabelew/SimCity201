@@ -35,18 +35,18 @@ public interface Waiter {
 			cost = d;
 		}
 	}
-	public abstract void msgHereIsCheck(Customer c, double check);
-	public abstract void msgSitAtTable(Customer c, int table);
-	public abstract void msgImReadyToOrder(Customer c);
-	public abstract void msgHereIsMyOrder(Customer c, String choice);
-	public abstract void msgDoneEatingAndLeaving(Customer c);
-	public abstract void msgOutOfOrder(String choice, int table);
-	public abstract void msgOrderIsReady(String choice, int table);
+	//public abstract void msgHereIsCheck(Customer c, double check);
+	//public abstract void msgSitAtTable(Customer c, int table);
+	//public abstract void msgImReadyToOrder(Customer c);
+	//public abstract void msgHereIsMyOrder(Customer c, String choice);
+	//public abstract void msgDoneEatingAndLeaving(Customer c);
+	//public abstract void msgOutOfOrder(String choice, int table);
+	//public abstract void msgOrderIsReady(String choice, int table);
 	public abstract void msgGoOnBreak();
 	public abstract void msgDontGoOnBreak();
-	public abstract void msgAtEntrance();
+	//public abstract void msgAtEntrance();
 	public abstract void msgLeftTheRestaurant();
-	public abstract void msgAtTable();
+	//public abstract void msgAtTable();
 	public abstract Restaurant getRestaurant();
 	public abstract void goesToWork();
 	public abstract void msgAskForBreak();

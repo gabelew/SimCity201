@@ -291,7 +291,7 @@ public class CMWaiterRole extends Role implements Waiter{
 	private void seatCustomer(MyCustomer c){
 			doGoToEntrance();
 			
-			c.c.msgFollowMeToTable(((Waiter)this), new Menu());
+			((CMCustomerRole) c.c).msgFollowMeToTable(((Waiter)this), new Menu());
 			
 			DoSeatCustomer(c, c.table);
 			
@@ -307,7 +307,7 @@ public class CMWaiterRole extends Role implements Waiter{
 	private void takeOrder(MyCustomer c) {
 		doGoToTable(c.table);
 		
-		c.c.msgWhatWouldYouLike();
+		((CMCustomerRole) c.c).msgWhatWouldYouLike();
 		c.s = CustomerState.asked;
 		
 		try {
@@ -320,14 +320,14 @@ public class CMWaiterRole extends Role implements Waiter{
 	private void putInOrder(MyCustomer c) {
 		doGoToKitchen(c);
 		c.s = CustomerState.orderPlaced;
-		restaurant.cook.msgHereIsOrder(this, c.choice, c.table);
+		((CMCookRole) restaurant.cook).msgHereIsOrder(this, c.choice, c.table);
 		waiterGui.placedOrder();
 	}
 
 	private void serveOrder(MyCustomer c) {
 		doGoToTable(c.table);
 		c.s = CustomerState.orderServed;
-		c.c.msgHereIsYourFood();
+		((CMCustomerRole) c.c).msgHereIsYourFood();
 		waiterGui.doneServingOrder();
 		//doGoToCashier();
 		((CMCashierRole) restaurant.cashier).msgProduceCheck(this, c.c, c.choice);
@@ -351,14 +351,14 @@ public class CMWaiterRole extends Role implements Waiter{
 	private void tellBadNews(MyCustomer c) {
 		doGoToTable(c.table);
 		c.s = CustomerState.seated;
-		c.c.msgOutOfOrder(c.choice);
+		((CMCustomerRole) c.c).msgOutOfOrder(c.choice);
 	}
 	
 	private void dropOffCheck(MyCustomer c) {
 		c.s = CustomerState.hasCheck;
 		doGoToCashier();
 		doGoToTable(c.table);
-		c.c.msgHereIsCheck(c.check);
+		((CMCustomerRole) c.c).msgHereIsCheck(c.check);
 	}
 
 	// The animation DoXYZ() routines
