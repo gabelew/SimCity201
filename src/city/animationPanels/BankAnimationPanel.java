@@ -28,7 +28,6 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 	static final int ATM_X_GAP = 100;
 	static final int ATM_Y_GAP = 90;
 	
-	private SimCityGui simCityGui;
 	private BufferedImage atmImg = null;
 	private BufferedImage fountainImg = null;
 	private BufferedImage bankFlooring = null;

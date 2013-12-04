@@ -18,8 +18,6 @@ import city.gui.SimCityGui;
 public class ApartmentAnimationPanel  extends InsideAnimationPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
-	private SimCityGui simCityGui;
-	
 	private static BufferedImage kitchen = null;
 	private static BufferedImage grill = null;
 	private static BufferedImage fridge = null;

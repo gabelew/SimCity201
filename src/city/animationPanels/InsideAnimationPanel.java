@@ -11,10 +11,12 @@ import javax.swing.JPanel;
 import CMRestaurant.gui.CMCustomerGui;
 import CMRestaurant.gui.CMWaiterGui;
 import city.gui.Gui;
+import city.gui.SimCityGui;
 
 public abstract class InsideAnimationPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	
+
+    public SimCityGui simCityGui;
 	InsideBuildingPanel insideBuildingPanel;
 	protected static final int TIMERDELAY = 20;
 	protected final int WINDOWX = 934;

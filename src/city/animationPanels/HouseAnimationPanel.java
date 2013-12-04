@@ -31,7 +31,6 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	private BufferedImage sidewall = null;
 	
 	private final int ZERO = 0;
-	private SimCityGui simCityGui;
 	
     static final int xCOOK_POSITION = 50;  
     static final int yCOOK_POSITION = 50;

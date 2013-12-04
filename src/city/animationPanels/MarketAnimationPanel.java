@@ -34,7 +34,6 @@ public class MarketAnimationPanel extends InsideAnimationPanel implements Action
     static final int NUM_SHELF=6;
     static final int NUM_CHAIR=8;
     static final int ZERO=0;
-	private SimCityGui simCityGui;
 
 	
 	public MarketAnimationPanel(SimCityGui simCityGui){

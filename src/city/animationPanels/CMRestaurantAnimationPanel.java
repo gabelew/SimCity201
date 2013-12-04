@@ -92,7 +92,6 @@ public class CMRestaurantAnimationPanel extends InsideAnimationPanel implements 
 	static final int STARTING_TABLE1_Y = 35;
 	static final int STARTING_TABLE_Y_SPACING = 90;
 	
-    private SimCityGui simCityGui;
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
 	private BufferedImage chairImg = null;

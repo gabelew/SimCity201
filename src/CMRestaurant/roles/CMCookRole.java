@@ -5,7 +5,6 @@ import java.util.concurrent.Semaphore;
 
 import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
-import market.interfaces.Market;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.roles.Role;
@@ -213,6 +212,12 @@ public class CMCookRole extends Role implements Cook {
 	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
 		MyMarket m = findMarket(market);
 		markets.remove(m);
+		
+		if(markets.size()==0){
+			for(MarketAgent ma: restaurant.insideAnimationPanel.simCityGui.getMarkets()){
+				this.addMarket(ma);
+			}
+		}
 	}
 	/*public void msgHereIsPrice(double amountOwed,DeliveryManRole DMR){
 		for (MarketOrder order:marketOrders){
@@ -263,9 +268,20 @@ public class CMCookRole extends Role implements Cook {
 	
 	public void msgIncompleteOrder(DeliveryMan m,List<String> outOf){
 		boolean reorder=false;
-		
+		MyMarket orderedFromMarket = null;
+
+		synchronized(markets){
+		for(MyMarket mm: markets){
+			if(mm.market==((city.roles.DeliveryManRole)m).Market){
+				orderedFromMarket = mm;
+			}
+		}
+		}
 		for (String out: outOf){
 			Food food=findFood(out);
+			if(orderedFromMarket != null){
+				orderedFromMarket.foodInventoryMap.put(out.toLowerCase(), InventoryState.OUTOFCHOICE);
+			}
 			if(food.amount<=food.low){
 				reorder=true;
 				food.os=OrderingState.order;
@@ -276,6 +292,30 @@ public class CMCookRole extends Role implements Cook {
 			reorder=false;
 			orderFromMarket=true;
 		}
+		
+		for(Food f:foods){
+			
+			boolean stillPossible = false;
+
+			synchronized(markets){
+			for(MyMarket mm:markets){
+				if(mm.foodInventoryMap.get( f.choice.toLowerCase() ) != InventoryState.OUTOFCHOICE){
+					stillPossible = true;
+				}
+			}
+			}
+			
+			if(!stillPossible){
+				synchronized(markets){
+				for(MyMarket mm:markets){
+					if(mm.foodInventoryMap.get( f.choice.toLowerCase() ) != InventoryState.ATTEMPTING){
+						mm.foodInventoryMap.put(f.choice.toLowerCase(), InventoryState.POSSIBLE);
+					}
+				}
+				}
+			}
+		}
+		
 		stateChanged();
 		
 	}
@@ -659,35 +699,6 @@ public class CMCookRole extends Role implements Cook {
 		}
 		
 	}
-
-/*
-	@Override
-	public void msgFoodDone(Order o) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void msgDelivering(Market m, List<MyFood> orderlist) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void msgOutOfOrder(Market m, List<MyFood> orderList) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o) {
-		// TODO Auto-generated method stub
-		
-	}*/
-
 
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;

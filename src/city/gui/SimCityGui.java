@@ -549,9 +549,22 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        }
 		}
         
-        for(Restaurant r: restaurants){
-        	for(MarketAgent m: markets){
-        		((Cook)r.cook).addMarket(m);
+        //adds markets in order of closest to restaurant
+        for(int i = 0; i < restaurants.size(); i++){
+        	if(i<2){
+        		for(int j= 0; j<markets.size(); j++){
+        			((Cook)restaurants.get(i).cook).addMarket(markets.get(j));
+        		}
+        	}else if(i<4){
+    			((Cook)restaurants.get(i).cook).addMarket(markets.get(1));
+    			((Cook)restaurants.get(i).cook).addMarket(markets.get(0));
+        		for(int j= 2; j<markets.size(); j++){
+        			((Cook)restaurants.get(i).cook).addMarket(markets.get(j));
+        		}
+        	}else{
+        		for(int j= markets.size()-1; j>=0; j--){
+        			((Cook)restaurants.get(i).cook).addMarket(markets.get(j));
+        		}
         	}
         }
 	}
