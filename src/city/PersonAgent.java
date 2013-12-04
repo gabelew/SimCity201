@@ -367,7 +367,7 @@ public class PersonAgent extends Agent implements Person
 		if(hungerLevel > 50 && state != State.goingOutToEat && state != State.eating && state != State.goingHomeToEat)
 		{
 			boolean inList = false;
-			if(youAreRich() && cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) || !"Sunday".equals(dayOfWeek))){
+			if(youAreRich() && cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) && !"Sunday".equals(dayOfWeek))){
 				for(Task t: taskList){
 					if(t == Task.goToBankNow)
 						inList = true;
@@ -413,6 +413,9 @@ public class PersonAgent extends Agent implements Person
 			}
 		}
 		if(removeRole!=null){
+			if(removeRole.myPerson!=null){
+				removeRole.myPerson = null;
+			}
 			roles.remove(removeRole);
 			state = State.doingNothing;
 			location = Location.InCity;
@@ -459,7 +462,7 @@ public class PersonAgent extends Agent implements Person
 			if(t == Task.goToBankNow)
 				inList = true;
 		}
-		if(!inList && (!"Saturday".equals(dayOfWeek) || !"Sunday".equals(dayOfWeek))){
+		if(!inList && (!"Saturday".equals(dayOfWeek) && !"Sunday".equals(dayOfWeek))){
 			taskList.add(Task.goToBankNow);
 		}
 		stateChanged();
@@ -553,7 +556,7 @@ public class PersonAgent extends Agent implements Person
 		}
 
 		boolean inList = false;
-		if(cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) || !"Sunday".equals(dayOfWeek))){
+		if(cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) && !"Sunday".equals(dayOfWeek))){
 			for(Task t: taskList){
 				if(t == Task.goToBank)
 					inList = true;

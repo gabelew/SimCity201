@@ -82,7 +82,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     
     private int hour;
     private String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"};
-    private String dayOfWeek = daysOfWeek[0];
+    String dayOfWeek = daysOfWeek[0];
     public boolean testing = false;
     
     static final int FRAMEX = 1100;
@@ -156,6 +156,8 @@ public class SimCityGui extends JFrame implements ActionListener {
         	createDefaultPeople();
         	createEmployeeList();
         	setLandlordForRenters();
+        	
+        	infoPanel.pauseAgents();
         }
     }
     public SimCityGui() {
@@ -214,6 +216,9 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultPeople();
         createEmployeeList();
         setLandlordForRenters();
+
+    	
+    	infoPanel.pauseAgents();
        
     }
     private void createDefaultPeople() {

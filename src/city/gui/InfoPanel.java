@@ -14,6 +14,8 @@ import city.roles.BankCustomerRole;
 import city.roles.Role;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.regex.Pattern;
@@ -22,7 +24,7 @@ import java.util.regex.Pattern;
  * Panel in frame that contains all the restaurant information,
  * including host, cook, waiters, and customers.
  */
-public class InfoPanel extends JPanel implements KeyListener {
+public class InfoPanel extends JPanel implements KeyListener,ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static final int REST_PANEL_GAP = 20;
 	private static final int GROUP_PANEL_GAP = 10;
@@ -34,24 +36,36 @@ public class InfoPanel extends JPanel implements KeyListener {
 	private static final double NO_CASH = 0.0;
 
     private ListPanel personPanel = new ListPanel(this, "Persons");
-    
+
     private JPanel group = new JPanel();
+    
+    private JPanel configPanel = new JPanel();
+    private JButton goButton = new JButton("Start");
+    private String[] dayStrings = {"Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"};
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private JComboBox configList = new JComboBox(dayStrings);
 
     private SimCityGui gui; //reference to main gui
 
     public InfoPanel(SimCityGui gui) {
-
-        //markets.add(new MarketAgent("Vons Market"));
-        //markets.add(new MarketAgent("Sprouts Market"));
-        //markets.add(new MarketAgent("CostCo"));
         
         this.gui = gui;
 
+        this.configPanel.setLayout(new BorderLayout(5,0));
+        configPanel.add(this.configList, BorderLayout.CENTER);
+        configPanel.add(this.goButton, BorderLayout.EAST);
+        
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
-        group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
-
+        //group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
+        group.setLayout(new FlowLayout());
+        
         add(personPanel);
+        group.add(configPanel);
+        add(group);
+        
+        
 
+        goButton.addActionListener(this);
         personPanel.getTypeNameHere().addKeyListener(this);
     }
 
@@ -1164,6 +1178,7 @@ public class InfoPanel extends JPanel implements KeyListener {
     	 }
     	 gui.animationPanel.busLeft.pauseAgent();
     	 gui.animationPanel.busRight.pauseAgent();
+    	 gui.bankAgent.pauseAgent();
     	}
     	else
     	{
@@ -1177,6 +1192,7 @@ public class InfoPanel extends JPanel implements KeyListener {
        	 }
     	 gui.animationPanel.busLeft.resumeAgent();
     	 gui.animationPanel.busRight.resumeAgent();
+    	 gui.bankAgent.resumeAgent();
     	}
     	personPanel.changePauseButton();     
     }
@@ -1301,6 +1317,19 @@ public class InfoPanel extends JPanel implements KeyListener {
 	
 	public ListPanel getPersonPanel(){
 		return personPanel;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String configSetting = (String) configList.getSelectedItem();
+		gui.dayOfWeek = configSetting;
+		configPanel.removeAll();
+		configPanel.invalidate();
+		configPanel.validate();
+		remove(configPanel);
+		pauseAgents();
+		gui.invalidate();
+		gui.validate();
 	}
 
 }
