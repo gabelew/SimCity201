@@ -12,6 +12,8 @@ import bank.gui.BankCustomerGui;
 import city.BankAgent;
 import city.BankAgent.BankAccount;
 import city.PersonAgent;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 
@@ -140,7 +142,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		} else {
 			myPerson.businessFunds += amount;
 		}
-		print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
+		//print("Withdrew  $" + amount + " from " + accountType + ". Cash on hand: " + myPerson.cashOnHand + " Remaining balance is: " + remainingBalance);
 		stateChanged();
 	}
 	
@@ -173,7 +176,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	public void msgLoanDenied(double amount, String accountType) {
-		print("$" + amount + " loan for " + accountType + " account was denied.");
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "$" + amount + " loan for " + accountType + " account was denied.");
+		//print("$" + amount + " loan for " + accountType + " account was denied.");
 		stateChanged();
 	}
 	
@@ -184,18 +188,21 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			myPerson.businessFunds += amount;
 		}
 		loans.add(new Loan(amount, accountType));
-		print("$" + amount + " loan for " + accountType + " account was approved.");
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "$" + amount + " loan for " + accountType + " account was approved.");
+		//print("$" + amount + " loan for " + accountType + " account was approved.");
 		stateChanged();
 	}
 	
 	public void msgLoanPaid(double amount, String accountType) {
-		print("$" + amount + " loan for " + accountType + " account was paid.");
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "$" + amount + " loan for " + accountType + " account was paid.");
+		//print("$" + amount + " loan for " + accountType + " account was paid.");
 		loans.remove(findLoanIndex(amount, accountType));
 		stateChanged();
 	}
 	
 	public void msgDepositSuccessful(double amount, String accountType, double remainingBalance) {
-		print("$" + amount + " was deposited successfully into account: " + accountType + ". Remaining balance: " + remainingBalance);
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "$" + amount + " was deposited successfully into account: " + accountType + ". Remaining balance: " + remainingBalance);
+		//print("$" + amount + " was deposited successfully into account: " + accountType + ". Remaining balance: " + remainingBalance);
 		stateChanged();
 	}
 	
@@ -351,7 +358,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			cashLimit = Double.compare(myPerson.businessFunds, t.amount);
 		}	
 		if(-1 == cashLimit) {
-			print("Insufficient funds to deposit");
+			AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "Insufficient funds to deposit");
+			//print("Insufficient funds to deposit");
 		} else {
 			myPerson.bankTeller.msgDepositMoney(this, t.amount, t.accountType);
 			if("personal".equals(t.accountType)) {
@@ -385,7 +393,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			cashLimit = Double.compare(myPerson.businessFunds, t.amount);
 		}	
 		if(-1 == cashLimit) {
-			print("Insufficient funds to pay off loan");
+			AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "Insufficient funds to pay off loan");
+			//print("Insufficient funds to pay off loan");
 		} else {
 			myPerson.bankTeller.msgPayLoan(this, t.amount, t.accountType);
 			if("personal".equals(t.accountType)) {

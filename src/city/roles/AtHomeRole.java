@@ -9,9 +9,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
+
 import restaurant.test.mock.LoggedEvent;
 import atHome.city.AtHomeGui;
 import city.PersonAgent;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.interfaces.AtHome;
 
 public class AtHomeRole extends Role implements AtHome
@@ -104,7 +107,8 @@ public class AtHomeRole extends Role implements AtHome
 			int choice = (new Random()).nextInt(choices.size());
 			Order o = new Order(choices.get(choice) );
 			orders.add(o);
-			myPerson.print("I'm hungry and want to make: " + o.choice);
+			AlertLog.getInstance().logMessage(AlertTag.AT_HOME, this.getName(), "I'm hungry and want to make: " + o.choice);
+			//print("I'm hungry and want to make: " + o.choice);
 		}
 		else if(choices.size() == 0)
 		{
@@ -115,7 +119,8 @@ public class AtHomeRole extends Role implements AtHome
 	
 	public void restockFridge(Map<String,Integer> orderList)
 	{
-		myPerson.print("I have food now!!");
+		AlertLog.getInstance().logMessage(AlertTag.AT_HOME, this.getName(), "I have food now!!");
+			//print("I have food now!!");
 		for(Food f : foodInFridge)
 		{
 			if(orderList.get(f.choice) != null)
@@ -125,7 +130,8 @@ public class AtHomeRole extends Role implements AtHome
 				f.state = FoodOrderState.none;
 			}
 		}
-		myPerson.print("I have a selection of: " + choices.size() +" foods");
+		AlertLog.getInstance().logMessage(AlertTag.AT_HOME, this.getName(), "I have a selection of: " + choices.size() +" foods");
+			//print("I have a selection of: " + choices.size() +" foods");
 	}
 	
 	public void BrokenApplianceMsg(String app)
@@ -233,7 +239,8 @@ public class AtHomeRole extends Role implements AtHome
 		//adds to marketOrder if low on food
 		if( food.amount > 0)
 		{
-			myPerson.print("Cooking Food");
+			AlertLog.getInstance().logMessage(AlertTag.AT_HOME, this.getName(), "Cooking Food");
+			//print("Cooking Food");
 			food.amount--;
 			//puts food on grill
 			if(!testing)
@@ -244,7 +251,8 @@ public class AtHomeRole extends Role implements AtHome
 			}
 			for(Food f : foodInFridge)
 			{
-				myPerson.print("Food: " + f.choice + ", amount: " + f.amount);
+				AlertLog.getInstance().logMessage(AlertTag.AT_HOME, this.getName(), "Food: " + f.choice + ", amount: " + f.amount);
+				//print("Food: " + f.choice + ", amount: " + f.amount);
 				if(f.amount <= food.low)
 				{
 					makeMarketList();
@@ -265,7 +273,8 @@ public class AtHomeRole extends Role implements AtHome
 						try { busy.acquire();} 
 						catch (InterruptedException e) {e.printStackTrace();}
 					}
-					myPerson.print("Food is Done!!!");
+					AlertLog.getInstance().logMessage(AlertTag.AT_HOME, myPerson.getName(), "Food is Done!!!");
+					//print("Food is Done!!!");
 					o.state = OrderState.done;
 				}
 			},
@@ -317,7 +326,8 @@ public class AtHomeRole extends Role implements AtHome
 	}
 	private void ImOutOfFood()
 	{
-		myPerson.print("I'm out of food");
+		AlertLog.getInstance().logMessage(AlertTag.AT_HOME, this.getName(), "I'm out of food");
+			//print("I'm out of food");
 		NoMoreFood = false;
 		this.state = EventState.OutOfFood;
 		makeMarketList();

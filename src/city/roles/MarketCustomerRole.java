@@ -12,6 +12,8 @@ import market.gui.MarketCustomerGui;
 import market.interfaces.MarketCustomer;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 
 /**
  * Restaurant customer agent.
@@ -67,7 +69,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		o.Choices=choice;
 		if(!outOf.isEmpty()){
 			o.outOf=outOf;
-			print("out of food from market");
+			AlertLog.getInstance().logMessage(AlertTag.MARKET_CUSTOMER, this.getName(), "out of food from market");
+			//print("out of food from market");
 		}
 		stateChanged();	
 	}
@@ -134,7 +137,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	private void receivedOrder(){
-		print("Got food from market");
+		
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_CUSTOMER, this.getName(), "Got food from market");
+		//print("Got food from market");
 		marketCGui.DoLeaveMarket();
 	    try {
 			atShelf.acquire();
