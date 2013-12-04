@@ -208,7 +208,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	
 	private void atRestaurant(){
-		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices, o.outOf,o.amountOwed);
+		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
 		o.s=orderState.waitingForPayment;
 	}
 	private void giveBill(){
