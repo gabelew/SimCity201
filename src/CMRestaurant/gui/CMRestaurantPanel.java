@@ -212,7 +212,7 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 		waitersPanel.addPerson(name);
 	}
 	public void removeWaiterFromList(String name){
-		waitersPanel.addPerson(name);
+		waitersPanel.removeWaiter(name);
 	}
     public void createWaiter(String name){
 

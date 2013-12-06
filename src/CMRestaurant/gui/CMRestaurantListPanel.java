@@ -2,6 +2,9 @@ package CMRestaurant.gui;
 
 import javax.swing.*;
 
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -329,13 +332,12 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
     	validate();
     }
     public void removeWaiter(String name){
-    		if(type != "waiter"){
-    			return;
-    		}else{
+    			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, this.getName(), "Removing Waiter from list panel");
     			JPanel removeP = null;
     			for(int i = 0; i < view.getComponentCount();i++){
     				if(((JLabel) ((JPanel) view.getComponent(i)).getComponent(1)).getText().equals(name)){
     					removeP = (JPanel) view.getComponent(i);
+    	    			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, this.getName(), "removing Waiter from scroll view");
     				}
     			}
     			if(removeP != null){
@@ -345,6 +347,7 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
     			for(int i = 0; i< listItems.size();i++){
     				if(listItems.get(i).label.getText().equals(name)){
     					removeI = listItems.get(i);
+    	    			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, this.getName(), "removing Waiter from list items");
     				}
     			}
     				
@@ -354,7 +357,6 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
     			
     			invalidate();
     			validate();	
-    		}
     }
 	public void setCustomerEnabled(String name) {
 		for(ListItem temp:listItems)

@@ -290,6 +290,7 @@ public class CMWaiterRole extends Role implements Waiter{
 	}
 	
 	private void leaveWork() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
 		try {
