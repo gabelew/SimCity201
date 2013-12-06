@@ -6,13 +6,15 @@ import javax.swing.*;
 
 import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
+import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMWaiterRole;
 import CMRestaurant.roles.CMCookRole.Food;
-import city.PersonAgent;
 import city.animationPanels.InsideBuildingPanel;
 import city.animationPanels.CMRestaurantAnimationPanel;
-import city.gui.PersonGui;
 import city.gui.SimCityGui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
+import city.roles.Role;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -37,12 +39,12 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 	
     //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
     //private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
-    private Vector<CMWaiterRole> waiters = new Vector<CMWaiterRole>();
+    //private Vector<CMWaiterRole> waiters = new Vector<CMWaiterRole>();
 
     private JPanel restLabel = new JPanel();
     //private ListPanel customerPanel = new ListPanel(this, "Customers");
 
-    //private RestaurantListPanel waitersPanel = new RestaurantListPanel(this, "Waiters");
+    public CMRestaurantListPanel waitersPanel = new CMRestaurantListPanel(this, "Waiters");
     private CMRestaurantListPanel tablesPanel = new CMRestaurantListPanel(this, "Tables");
     
     private JPanel group = new JPanel();
@@ -52,11 +54,12 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
     
     public CMRestaurantPanel(SimCityGui gui) {
 
+        this.gui = gui;
+        
        /* markets.add(new MarketAgent("Vons Market"));
         markets.add(new MarketAgent("Sprouts Market"));
         markets.add(new MarketAgent("CostCo"));
         
-        this.gui = gui;
         host.setGui(hostGui, gui);
         cashier.setGui(cashierGui);
         cook.setCashier(cashier);
@@ -81,13 +84,13 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
         //initRestLabel();
         //add(restLabel);
         //add(group);
-       // add(waitersPanel);
+        add(waitersPanel);
         add(tablesPanel);
         createWaiter("w1");
         createWaiter("w2");
 
         //customerPanel.getTypeNameHere().addKeyListener(this);
-        //waitersPanel.getTypeNameHere().addKeyListener(this);
+        waitersPanel.getTypeNameHere().addKeyListener(this);
     }
 
     /**
@@ -144,20 +147,27 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 
         if (type.equals("Waiters")) {
 
-            for (CMWaiterRole temp: waiters) {
-                if (temp.getName() == name)
-                {
-                	temp.getGui().setWorking();
-                }
-            }
+    		for(Restaurant r: gui.getRestaurants()){
+    	        for (CMHostRole.MyWaiter temp: ((CMHostRole)r.host).waiters) {
+    	            if (((CMWaiterRole) temp.w).getName() == name){
+    	            	((CMWaiterRole) temp.w).getGui().setWorking();
+    	            }
+    	        }
+    		}
         }
     }
 
 	public void askBreak(String name) {
-        for (CMWaiterRole temp: waiters) {
-            if (temp.getName() == name)
-            	temp.getGui().askBreak();
-        }
+		AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "CMRestaurantPanel", "Recieved asked for break from GUI");
+		for(Restaurant r: gui.getRestaurants()){
+			if(((CMHostRole)r.host).waiters != null){
+	        for (CMHostRole.MyWaiter temp: ((CMHostRole)r.host).waiters) {
+	            if (((CMWaiterRole) temp.w).getName() == name){
+	            	((CMWaiterRole) temp.w).getGui().askBreak();
+	            }
+	        }
+			}
+		}
 	}
 
 	public void createCustomer(String name){
@@ -198,31 +208,12 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 		persons.add(c);
 		c.startThread();
 	}*/
-	/**
-     * Adds a customer or waiter to the appropriate list
-     *
-     * @param type indicates whether the person is a customer or waiter (later)
-     * @param name name of person
-     */
-    public void addPerson(String type, String name) {
-
-    	/*if (type.equals("Customers")) {
-    		createCustomer(name);
-    	}
-    	
-    	if (type.equals("Waiters")) {
-    		WaiterAgent w = new WaiterAgent(name);	
-    		WaiterGui g = new WaiterGui(w, gui);
-
-    		gui.restaurantAnimationPanel.addGui(g);// dw
-    		w.setHost(host);
-    		w.setCashier(cashier);
-    		w.setGui(g);
-    		w.setCook(cook);
-    		waiters.add(w);
-    		w.startThread();
-    	}*/
-    }
+	public void addWaiterToList(String name){
+		waitersPanel.addPerson(name);
+	}
+	public void removeWaiterFromList(String name){
+		waitersPanel.addPerson(name);
+	}
     public void createWaiter(String name){
 
 		/*WaiterAgent w = new WaiterAgent(name);	
@@ -311,20 +302,20 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 	}
 
 	public void setWaiterOnBreak(String name) {
-		//waitersPanel.setWaiterOnBreak(name);
+		waitersPanel.setWaiterOnBreak(name);
 	}
 
 	public void setWaiterCantBreak(String name) {
-		//waitersPanel.setWaiterCantBreak(name);
+		waitersPanel.setWaiterCantBreak(name);
 		
 	}
 
 	public void setWaiterBreakable(String name) {
-		//waitersPanel.setWaiterBreakable(name);
+		waitersPanel.setWaiterBreakable(name);
 		
 	}
 	public void setWaiterUnbreakable(String name) {
-		//waitersPanel.setWaiterUnbreakable(name);
+		waitersPanel.setWaiterUnbreakable(name);
 		
 	}
 

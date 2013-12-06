@@ -17,7 +17,7 @@ public class InsideBuildingPanel extends JPanel{
 	String myName;
 	BuildingIcon buildingIcon;
 	public InsideAnimationPanel insideAnimationPanel;
-	JPanel guiInteractionPanel;
+	public JPanel guiInteractionPanel;
 
     static final int FRAMEX = 1100;
     static final int FRAMEY = 430;

@@ -358,7 +358,31 @@ public class CMRestaurantAnimationPanel extends InsideAnimationPanel implements 
 		tables.get(tableNumber).setMovable();
 		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setTableEnabled(tableNumber);
 	}
+	
+	public void addWaiterToList(String name){
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).addWaiterToList(name);
+	}
+	public void removeWaiterFromList(String name){
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).removeWaiterFromList(name);
+	}
+	public void setWaiterBreakable(String name) {
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setWaiterBreakable(name);
+	}
 
+	public void setWaiterUnbreakable(String name) {
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setWaiterUnbreakable(name);	
+	}
+	public void setWaiterOnBreak(String name) {
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setWaiterOnBreak(name);
+	}
+
+	public void setWaiterCantBreak(String name) {
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setWaiterCantBreak(name);
+	}
+	public void setWaiterBackFromBreak(String name){
+		((CMRestaurantPanel) insideBuildingPanel.guiInteractionPanel).waitersPanel.setWaiterBackFromBreak(name);
+	}
+	
 	public boolean notOnExistingTable(Table newTablePos, Point placeTableHere) {
 		for(Table t: tables)
 		{
@@ -395,6 +419,7 @@ public class CMRestaurantAnimationPanel extends InsideAnimationPanel implements 
     	}
 		
 	}
+
 
 
 	

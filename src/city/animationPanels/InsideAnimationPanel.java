@@ -17,7 +17,7 @@ public abstract class InsideAnimationPanel extends JPanel implements ActionListe
 	private static final long serialVersionUID = 1L;
 
     public SimCityGui simCityGui;
-	InsideBuildingPanel insideBuildingPanel;
+	public InsideBuildingPanel insideBuildingPanel;
 	protected static final int TIMERDELAY = 20;
 	protected final int WINDOWX = 934;
     protected final int WINDOWY = 472;

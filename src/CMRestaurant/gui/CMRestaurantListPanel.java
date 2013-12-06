@@ -1,6 +1,7 @@
 package CMRestaurant.gui;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -17,7 +18,7 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
             new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     private JPanel view = new JPanel();
-    private JPanel addListItemView = new JPanel();
+    //private JPanel addListItemView = new JPanel();
     private JButton addPersonB = new JButton("Add");
     private JButton pauseAgentsB = new JButton("Pause");
     private JPanel buttonGroup = new JPanel();
@@ -57,23 +58,23 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
         setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
         add(new JLabel("<html><pre> <u>" + type + "</u><br></pre></html>"));
 
-        addListItemView.setLayout(new BorderLayout(LIST_ITEM_VIEW_GAP, LIST_ITEM_VIEW_GAP));
+        /*addListItemView.setLayout(new BorderLayout(LIST_ITEM_VIEW_GAP, LIST_ITEM_VIEW_GAP));
         Dimension addCustViewSize = new Dimension(LIST_ITEM_VIEW_X, LIST_ITEM_VIEW_Y);
         addListItemView.setPreferredSize(addCustViewSize);
         addListItemView.setMinimumSize(addCustViewSize);
         addListItemView.setMaximumSize(addCustViewSize);      
 
-        addListItemView.add(getTypeNameHere(),BorderLayout.CENTER);
+        addListItemView.add(getTypeNameHere(),BorderLayout.CENTER);*/
         setStateCB = new JCheckBox();
         setStateCB.setVisible(true);
         setStateCB.addActionListener(this);
         if(type == "Customers")
         	setStateCB.setText("Hungry?");
         else if(type == "Waiters")
-        	setStateCB.setText("Working?");
+        	setStateCB.setText("Break?");
         setStateCB.setSelected(false);
         setStateCB.setEnabled(true);
-        addListItemView.add(setStateCB, BorderLayout.EAST);
+        //addListItemView.add(setStateCB, BorderLayout.EAST);
         
         
         buttonGroup.setLayout(new BoxLayout(buttonGroup, BoxLayout.X_AXIS));
@@ -91,7 +92,9 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
         addPersonB.setPreferredSize(addPersonBSize);
         addPersonB.setMinimumSize(addPersonBSize);
         addPersonB.setMaximumSize(addPersonBSize);  
-        buttonGroup.add(addPersonB);
+        if(this.type == "Tables"){
+        	buttonGroup.add(addPersonB);
+        }
         
         pauseAgentsB.addActionListener(this);
         Dimension pauseAgentsBSize = new Dimension(fm.stringWidth("Resume") + BUTTON_PADDING, GROUP_BUTTON_Y);
@@ -108,10 +111,10 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
 
         //view.add(addCustView);
 
-        if(this.type != "Tables")
+        /*if(this.type != "Tables")
         {
         	add(addListItemView);
-        }
+        }*/
         
         view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
         pane.setViewportView(view);
@@ -125,9 +128,6 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addPersonB) {
-            if(type == "Customers"){
-            	addPerson(getTypeNameHere().getText());
-            }
             if(type == "Waiters"){
             	addPerson(getTypeNameHere().getText());
             }
@@ -212,7 +212,7 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
             if(type == "Customers")
             	newstateCB.setText("Hungry?");
             if(type == "Waiters")
-            	newstateCB.setText("Working?");
+            	newstateCB.setText("Break?");
             if(type == "Tables")
             	newstateCB.setText("delete?");
             
@@ -323,12 +323,39 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
         listItems.add(new ListItem(label, newstateCB));
         addNewCustView.add(label);
         view.add(addNewCustView);
-            	
+        
     	restPanel.addTable(x, y);
     	
     	validate();
     }
-    
+    public void removeWaiter(String name){
+    		if(type != "waiter"){
+    			return;
+    		}else{
+    			JPanel removeP = null;
+    			for(int i = 0; i < view.getComponentCount();i++){
+    				if(((JLabel) ((JPanel) view.getComponent(i)).getComponent(1)).getText().equals(name)){
+    					removeP = (JPanel) view.getComponent(i);
+    				}
+    			}
+    			if(removeP != null){
+    				view.remove(removeP);
+    			}
+    			ListItem removeI = null;
+    			for(int i = 0; i< listItems.size();i++){
+    				if(listItems.get(i).label.getText().equals(name)){
+    					removeI = listItems.get(i);
+    				}
+    			}
+    				
+    			if(removeI != null){
+    				listItems.remove(removeI);
+    			}
+    			
+    			invalidate();
+    			validate();	
+    		}
+    }
 	public void setCustomerEnabled(String name) {
 		for(ListItem temp:listItems)
     	{
@@ -385,7 +412,17 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
 			stateCB = c;
 		}
 	}
-
+	public void setWaiterBackFromBreak(String name){
+		for (ListItem temp:listItems){
+			if(temp.stateCB.getName() == name)
+			{
+				temp.stateCB.setText("Break?");
+		    	temp.stateCB.setEnabled(true);
+		    	temp.stateCB.setSelected(false);
+				restPanel.setWorking(type, temp.stateCB.getName());
+			}
+		}
+	}
 	public void setWaiterOnBreak(String name) {
 		for (ListItem temp:listItems){
 			if(temp.stateCB.getName() == name)
@@ -397,7 +434,6 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
 		
 		}
 	}
-
 	public void setWaiterCantBreak(String name) {
 		for (ListItem temp:listItems){
 			if(temp.stateCB.getName() == name)

@@ -6,6 +6,9 @@ import java.util.concurrent.Semaphore;
 
 import CMRestaurant.gui.CMWaiterGui;
 import city.PersonAgent;
+import city.animationPanels.CMRestaurantAnimationPanel;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
@@ -20,6 +23,8 @@ public class CMWaiterRole extends Role implements Waiter{
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
 	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty};
 	AgentEvent event = AgentEvent.none;
+	Timer timer = new Timer();
+	private final int THIRTY_SECONDS = 30000;
 	
 	private class MyCustomer{
 		private Customer c;
@@ -263,6 +268,17 @@ public class CMWaiterRole extends Role implements Waiter{
 		{
 			event = AgentEvent.onBreak;
 			doGoToBreakPos();
+			
+			timer.schedule(new TimerTask() {
+				public void run() {
+					//goesToWork();
+					if(event == AgentEvent.onBreak){
+						((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterBackFromBreak(getName());
+						stateChanged();
+					}
+				}
+			}, THIRTY_SECONDS);
+			
 			return false;
 		}
 
@@ -272,8 +288,7 @@ public class CMWaiterRole extends Role implements Waiter{
 		
 		return false;
 	}
-
-
+	
 	private void leaveWork() {
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
@@ -346,6 +361,7 @@ public class CMWaiterRole extends Role implements Waiter{
 	}
 	
 	public void askForBreak(){
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Can I take a break?");
 		restaurant.host.msgCanIBreak(this);
 	}
 	private void tellBadNews(MyCustomer c) {

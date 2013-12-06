@@ -8,7 +8,7 @@ import restaurant.interfaces.Waiter;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-import CMRestaurant.gui.CMHostGui;
+import CMRestaurant.gui.*;
 import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.SimCityGui;
@@ -66,8 +66,8 @@ public class CMHostRole extends Role implements Host {
 			this.state = state;
 		}
 	}
-	private class MyWaiter{
-		private Waiter w;
+	public class MyWaiter{
+		public Waiter w;
 		private wState state;	
 		private int tableCount;
 		
@@ -125,6 +125,7 @@ public class CMHostRole extends Role implements Host {
 				}
 			}
 
+			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((CMWaiterRole) w).getName());
 			waiters.add(new MyWaiter(w, wState.working, ZERO));
 		}
 		
@@ -173,9 +174,9 @@ public class CMHostRole extends Role implements Host {
 				if(w!=null){
 					w.tableCount--;
 				}
-				/*if(w.tableCount == 0){
-					restGui.setWaiterBreakable(w.w.getName()); //enables break check box
-				}*/
+				if(w.tableCount == 0){
+					((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterBreakable(((CMWaiterRole) w.w).getName()); //enables break check box
+				}
 				customers.remove(c); //c.state = cState.done;
 
 				table.setUnoccupied();
@@ -344,13 +345,13 @@ public class CMHostRole extends Role implements Host {
 	private void doLetWaiterBreak(MyWaiter w) {
 		w.state = wState.idle;
 		w.w.msgGoOnBreak();
-		simCityGui.setWaiterOnBreak(((CMWaiterRole) w.w).getName());
+		((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterOnBreak(((CMWaiterRole) w.w).getName());
 	}
 
 	private void dontLetWaiterBreak(MyWaiter w) {
 		w.state = wState.working;
 		w.w.msgDontGoOnBreak();
-		simCityGui.setWaiterCantBreak(((CMWaiterRole) w.w).getName());
+		((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterCantBreak(((CMWaiterRole) w.w).getName());
 	}
 	
 	private void assignWaiter(MyCustomer c, Table t)
@@ -376,10 +377,10 @@ public class CMHostRole extends Role implements Host {
 			((CMCustomerRole) c.c).msgTableIsReady();
 			
 			waiter.tableCount++;
-			/*if(waiter.tableCount > 0)
+			if(waiter.tableCount > 0)
 			{
-				restGui.setWaiterUnbreakable(waiter.w.getName());
-			}*/
+				((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterUnbreakable(((CMWaiterRole) waiter.w).getName());
+			}
 			
 			waiter.state = wState.working;
 			((CMWaiterRole) waiter.w).msgSitAtTable(c.c, t.tableNumber);
@@ -449,6 +450,8 @@ public class CMHostRole extends Role implements Host {
 		if(removeW !=null){
 			waiters.remove(removeW);
 		}
+		
+		((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) waiter).getName());
 		
 	}
 
