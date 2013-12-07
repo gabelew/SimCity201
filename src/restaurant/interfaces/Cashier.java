@@ -29,4 +29,5 @@ public interface Cashier {
 
 	public abstract void msgHereIsBill(DeliveryMan DMR, double bill);
 	public abstract void msgReleaveFromDuty(PersonAgent p);
+	public abstract void goesToWork();
 }
