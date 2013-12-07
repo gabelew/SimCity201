@@ -3,7 +3,9 @@ package city.gui;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Cook;
+
 import javax.swing.*;
+
 import market.gui.MarketPanel;
 import bank.BankBuilding;
 import bank.gui.BankPanel;
@@ -16,6 +18,15 @@ import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
+import EBRestaurant.gui.EBCashierGui;
+import EBRestaurant.gui.EBCookGui;
+import EBRestaurant.gui.EBHostGui;
+import EBRestaurant.gui.EBRestaurantPanel;
+import EBRestaurant.roles.EBCashierRole;
+import EBRestaurant.roles.EBCookRole;
+import EBRestaurant.roles.EBCustomerRole;
+import EBRestaurant.roles.EBHostRole;
+import EBRestaurant.roles.EBWaiterRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.BankAgent;
@@ -31,6 +42,7 @@ import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.trace.TraceControlPanel;
 import city.gui.trace.TracePanel;
 import city.roles.Role;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -406,9 +418,56 @@ public class SimCityGui extends JFrame implements ActionListener {
         for(int i =0; i<buildings.size(); i++){
         	
         	BuildingIcon b = buildings.get(i);
-        	
-        	if(b.type.equals("restaurant"))
-        	{
+        	if(b.type.equals("restaurant") && i==10){
+        		EBRestaurantPanel restPanel = new EBRestaurantPanel(this);
+	            InsideAnimationPanel restaurantAnimationPanel = new EBRestaurantAnimationPanel(this);
+	        	
+	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+	            restPanel.setPreferredSize(restDim);
+	            restPanel.setMinimumSize(restDim);
+	            restPanel.setMaximumSize(restDim);
+	
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, restPanel);
+	        	restPanel.setInsideBuildingPanel(bp);
+	        	b.setInsideBuildingPanel(bp);
+	        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
+	        	buildingsPanel.add(bp, "" + i);
+	        	Restaurant r =null;
+	        	
+	        	r = new Restaurant(
+	        						(restaurant.interfaces.Host)(new EBHostRole()), 
+	        						(restaurant.interfaces.Cashier)(new EBCashierRole()), 
+	        						(restaurant.interfaces.Cook)(new EBCookRole(1)), 
+	        						new restaurant.interfaces.Waiter.Menu(), 
+	        						"RestaurantEBCustomerRole", 
+	        						"RestaurantEB", 
+	        						restaurantAnimationPanel, 
+	        						new Point(b.getX(),b.getY()), 
+	        						"RestaurantEBWaiterRole");
+	     
+	        	getRestaurants().add(r);
+	        	((EBRestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
+	
+	        	((EBHostRole)r.host).setRestaurant(r);
+	        	EBHostGui hg = new EBHostGui(((EBHostRole)r.host));
+	        	((EBHostRole)r.host).setGui(hg);
+	        	restaurantAnimationPanel.addGui(hg);
+	
+	
+	        	((EBCashierRole)r.cashier).setRestaurant(r);
+	        	EBCashierGui cg = new EBCashierGui(((EBCashierRole)r.cashier));
+	        	((EBCashierRole)r.cashier).setGui(cg);
+	        	restaurantAnimationPanel.addGui(cg);
+	        	
+	
+	        	((EBCookRole)r.cook).setRestaurant(r);
+	        	EBCookGui ccg = new EBCookGui(((EBCookRole)r.cook));
+	        	((EBCookRole)r.cook).setGui(ccg);
+	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
+	        	//((EBCookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	restaurantAnimationPanel.addGui(ccg);
+	        	
+        	}else if(b.type.equals("restaurant")){
 	            
 	        	CMRestaurantPanel restPanel = new CMRestaurantPanel(this);
 	            InsideAnimationPanel restaurantAnimationPanel = new CMRestaurantAnimationPanel(this);
@@ -430,11 +489,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        						(restaurant.interfaces.Cashier)(new CMCashierRole()), 
 	        						(restaurant.interfaces.Cook)(new CMCookRole(1)), 
 	        						new restaurant.interfaces.Waiter.Menu(), 
-	        						"Restaurant1CustomerRole", 
-	        						"Restaurant1", 
+	        						"RestaurantCMCustomerRole", 
+	        						"RestaurantCM", 
 	        						restaurantAnimationPanel, 
 	        						new Point(b.getX(),b.getY()), 
-	        						"Restaurant1WaiterRole");
+	        						"RestaurantCMWaiterRole");
 	     
 	        	getRestaurants().add(r);
 	        	((CMRestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
@@ -665,15 +724,19 @@ public class SimCityGui extends JFrame implements ActionListener {
 		
 	}
 	public static Role customerFactory(PersonAgent p, Restaurant r){
-		if(r.customerRole.equalsIgnoreCase("Restaurant1CustomerRole")){
+		if(r.customerRole.equalsIgnoreCase("RestaurantCMCustomerRole")){
 			return new CMCustomerRole(p, r);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBCustomerRole")){
+			return new EBCustomerRole(p,r);
 		}
 		
 		return null;
 	}
 	public static Role waiterFactory(PersonAgent p, Restaurant r){
-		if(r.waiterRole.equalsIgnoreCase("Restaurant1WaiterRole")){
+		if(r.waiterRole.equalsIgnoreCase("RestaurantCMWaiterRole")){
 			return new CMNormalWaiterRole(p, r);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
+			return new EBWaiterRole(p,r);
 		}
 		
 		return null;
