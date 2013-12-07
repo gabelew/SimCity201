@@ -29,8 +29,8 @@ public class EBCookRole extends Role implements Cook {
 	private boolean putOrder=false;
 	private int numMarket=0;
 	private List<String>stock=new ArrayList<String>();
-	enum State {none, goToWork, working, leaving, relieveFromDuty, wantsOffWork};
-	State cookState;
+	enum CState {none, goToWork, working, leaving, relieveFromDuty, wantsOffWork};
+	CState cookState=CState.none;
 	private class market{
 		public market(MarketAgent m,List<String>s) {
 			market=m;
@@ -136,7 +136,7 @@ public class EBCookRole extends Role implements Cook {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		if(cookState == State.wantsOffWork){
+		if(cookState == CState.wantsOffWork){
 			boolean canGetOffWork = true;
 			for (Order o :Orders)
 			{
@@ -147,12 +147,12 @@ public class EBCookRole extends Role implements Cook {
 				}
 			}
 			if(canGetOffWork){
-				cookState = State.leaving;
+				cookState = CState.leaving;
 			}
 		}
 		
-		if(cookState == State.relieveFromDuty){
-			cookState = State.none;
+		if(cookState == CState.relieveFromDuty){
+			cookState = CState.none;
 			myPerson.releavedFromDuty(this);
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
@@ -160,22 +160,22 @@ public class EBCookRole extends Role implements Cook {
 			return true;
 		}
 		
-		if(cookState == State.goToWork){
-			cookState = State.working;
+		if(cookState == CState.goToWork){
+			cookState = CState.working;
 			cookGui.DoEnterRestaurant();
 			return true;
 		}
 		
 		
-		if(cookState == State.leaving){
-			cookState = State.none;
+		if(cookState == CState.leaving){
+			cookState = CState.none;
 			cookGui.DoLeaveRestaurant();
 			/*try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}*/
-			cookState = State.relieveFromDuty;
+			cookState = CState.relieveFromDuty;
 			return true;
 		}
 		for (Order O: Orders){
@@ -334,7 +334,7 @@ public class EBCookRole extends Role implements Cook {
 
 	public void msgRelieveFromDuty(PersonAgent p) {
 		replacementPerson = p;
-		cookState = State.wantsOffWork;
+		cookState = CState.wantsOffWork;
 		this.stateChanged();
 	}
 	
@@ -343,7 +343,7 @@ public class EBCookRole extends Role implements Cook {
 	}
 
 	public void goesToWork() {
-		cookState = State.goToWork;
+		cookState = CState.goToWork;
 		stateChanged();
 	}
 	

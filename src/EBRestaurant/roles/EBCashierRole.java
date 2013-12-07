@@ -33,8 +33,8 @@ public class EBCashierRole extends Role implements Cashier {
 	public double money;
 	private EBMenu menu=new EBMenu();
 	private int payNumber;
-	enum State {none, goToWork, working, leaving, releaveFromDuty};
-	State cashierState = State.none;
+	enum CashState {none, goToWork, working, leaving, releaveFromDuty};
+	CashState cashierState = CashState.none;
 	public List<payment>Payments=new ArrayList<payment>();
 	public class payment{
 		DeliveryMan delivery;
@@ -152,20 +152,20 @@ public class EBCashierRole extends Role implements Cashier {
 	 */
 	public boolean pickAndExecuteAnAction() {
 		try{
-			if(cashierState == State.releaveFromDuty){
-				cashierState = State.none;
+			if(cashierState == CashState.releaveFromDuty){
+				cashierState = CashState.none;
 				myPerson.releavedFromDuty(this);
 				if(replacementPerson != null){
 					replacementPerson.waitingResponse.release();
 				}
 			}
-			if(cashierState == State.goToWork){
-				cashierState = State.working;
+			if(cashierState == CashState.goToWork){
+				cashierState = CashState.working;
 				cashierGui.DoEnterRestaurant();
 				return true;
 			}
-			if(cashierState == State.leaving){
-				cashierState = State.none;
+			if(cashierState == CashState.leaving){
+				cashierState = CashState.none;
 				if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek))
 					DepositBusinessCash();
 				cashierGui.DoLeaveRestaurant();
@@ -294,12 +294,12 @@ public class EBCashierRole extends Role implements Cashier {
 
 	public void msgReleaveFromDuty(PersonAgent p) {
 		replacementPerson = p;
-		cashierState = State.leaving;
+		cashierState = CashState.leaving;
 		this.stateChanged();
 	}
 
 	public void goesToWork() {
-		cashierState = State.goToWork;
+		cashierState = CashState.goToWork;
 		stateChanged();
 	}
 
