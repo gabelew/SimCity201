@@ -337,14 +337,12 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	private void putInOrder(MyCustomer c) {
 		if(!testingRevolvingMonitor)
 			doGoToKitchen(c);
-		//print("\t\t HERHER IM IN DA KITCH");
 		if(revolvingStand.getCount() < 5) {
 			c.s = CustomerState.orderPlaced;
 			print("\t\t Inserting order into revolving stand");
 			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
 			if(!testingRevolvingMonitor) {
 				waiterGui.placedOrder();
-				//print("\t\t waiterGui.placedOrder");
 			}
 		} else {
 			print("Revolving stand is full. I'll come back later.");

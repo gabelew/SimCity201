@@ -708,7 +708,9 @@ public class CMCookRole extends Role implements Cook {
 	public void setRevolvingStand(RevolvingStandMonitor r) {
 		this.revolvingStand = r;
 	}
-
+	public RevolvingStandMonitor getRevolvingStand(){
+		return revolvingStand;
+	}
 
 
 

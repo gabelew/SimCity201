@@ -17,6 +17,7 @@ import CMRestaurant.roles.CMCashierRole;
 import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
+import CMRestaurant.roles.CMNormalWaiterRole;
 import CMRestaurant.roles.CMWaiterRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
@@ -67,9 +68,6 @@ public class SimCityGui extends JFrame implements ActionListener {
     List<BankBuilding> banks = new ArrayList<BankBuilding>();
     public BankAgent bankAgent = new BankAgent("SimCityBank");
     public List<PersonAgent> persons = Collections.synchronizedList(new ArrayList<PersonAgent>());
-    
-    private RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
-    
 
     public TracePanel tracePanel = new TracePanel();
     public TraceControlPanel traceControlPanel = new TraceControlPanel(tracePanel);
@@ -445,6 +443,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((CMCookRole)r.cook).setRestaurant(r);
 	        	CMCookGui ccg = new CMCookGui(((CMCookRole)r.cook));
 	        	((CMCookRole)r.cook).setGui(ccg);
+	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
 	        	((CMCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 
@@ -663,7 +662,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 	public static Role waiterFactory(PersonAgent p, Restaurant r){
 		if(r.waiterRole.equalsIgnoreCase("Restaurant1WaiterRole")){
-			return new CMWaiterRole(p, r);
+			return new CMNormalWaiterRole(p, r);
 		}
 		
 		return null;

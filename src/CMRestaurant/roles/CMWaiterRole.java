@@ -11,10 +11,11 @@ import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 
-public class CMWaiterRole extends Role implements Waiter{
+public abstract class CMWaiterRole extends Role implements Waiter{
 	CMWaiterGui waiterGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	public List<MyCustomer> customers	=  Collections.synchronizedList(new ArrayList<MyCustomer>());
@@ -25,12 +26,14 @@ public class CMWaiterRole extends Role implements Waiter{
 	AgentEvent event = AgentEvent.none;
 	Timer timer = new Timer();
 	private final int THIRTY_SECONDS = 30000;
+	protected RevolvingStandMonitor revolvingStand;
+	boolean haveNotRecentlyCheckedStand = true;
 	
-	private class MyCustomer{
+	class MyCustomer{
 		private Customer c;
-		private int table;
-		private CustomerState s;
-		private String choice;
+		int table;
+		CustomerState s;
+		String choice;
 		private double check;
 
 		MyCustomer(Customer nc, int t, CustomerState ns, String nchoice){
@@ -189,15 +192,16 @@ public class CMWaiterRole extends Role implements Waiter{
 			return true;
 		}
 		try{
-			for (MyCustomer c : customers)
-			{
-				if(c.s == CustomerState.ordered)
+			if(revolvingStand == null || haveNotRecentlyCheckedStand){
+				for (MyCustomer c : customers)
 				{
-					putInOrder(c);				
-					return true;
+					if(c.s == CustomerState.ordered)
+					{
+						putInOrder(c);				
+						return true;
+					}
 				}
 			}
-			
 			for (MyCustomer c : customers)
 			{
 				if(c.s == CustomerState.servingOrder)
@@ -333,13 +337,8 @@ public class CMWaiterRole extends Role implements Waiter{
 		}
 	}
 
-	private void putInOrder(MyCustomer c) {
-		doGoToKitchen(c);
-		c.s = CustomerState.orderPlaced;
-		((CMCookRole) restaurant.cook).msgHereIsOrder(this, c.choice, c.table);
-		waiterGui.placedOrder();
-	}
-
+	protected abstract void putInOrder(MyCustomer c);
+	
 	private void serveOrder(MyCustomer c) {
 		doGoToTable(c.table);
 		c.s = CustomerState.orderServed;
@@ -406,7 +405,7 @@ public class CMWaiterRole extends Role implements Waiter{
 		waiterGui.doGoToBreakPos();
 	}
 	
-	private void doGoToKitchen(MyCustomer c){
+	protected void doGoToKitchen(MyCustomer c){
 		if(c.s == CustomerState.ordered){
 			waiterGui.grabbingFood(c.choice);
 			waiterGui.doGoDropOffOrderAtKitchen();

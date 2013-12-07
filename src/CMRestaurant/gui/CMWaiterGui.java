@@ -5,11 +5,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
@@ -18,13 +15,9 @@ import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMWaiterRole;
 import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
-import city.gui.SimCityGui;
-import city.roles.SharedDataWaiterRole;
-import restaurant.Restaurant;
 import restaurant.gui.FoodIcon;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
-import city.animationPanels.CMRestaurantAnimationPanel;
 
 public class CMWaiterGui implements Gui {
 
@@ -273,6 +266,10 @@ public class CMWaiterGui implements Gui {
 	}
 	
 	public void placedOrder(){
+		if(food !=null)
+			food = null;
+	}
+	public void placeOrderInPocket(){
 		if(food !=null)
 			food = null;
 	}
