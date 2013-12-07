@@ -3,13 +3,18 @@ package EBRestaurant.gui;
 
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import EBRestaurant.roles.EBWaiterRole;
 import restaurant.interfaces.*;
 
 public class EBWaiterGui implements Gui {
-
+	private static BufferedImage waiterImg = null;
     private EBWaiterRole agent = null;
     EBRestaurantGui gui;
     private int xPos = -20, yPos = -20;//default waiter position
@@ -32,7 +37,11 @@ public class EBWaiterGui implements Gui {
     private boolean onBreak;
 
     public EBWaiterGui(EBWaiterRole w, EBRestaurantGui gui, int xIndex){
-		agent = w;
+    	try {
+		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
+		} catch (IOException e) {
+		}
+    	agent = w;
 		xWaitingPosition=xIndex;
 		xPos = -20;
 		yPos = -20;
@@ -79,8 +88,7 @@ public class EBWaiterGui implements Gui {
 
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
-        g.fillRect(xPos, yPos, xChange, xChange);
+    	g.drawImage(waiterImg, xPos, yPos, null);
         g.setColor(Color.black);
         Font textFont = new Font("Arial", Font.BOLD, 12);  
         g.setFont(textFont);

@@ -2,7 +2,12 @@ package EBRestaurant.gui;
 
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import EBRestaurant.roles.EBCookRole;
@@ -10,7 +15,8 @@ import EBRestaurant.roles.EBCookRole;
 public class EBCookGui implements Gui {
 
     private EBCookRole agent = null;
-
+    private BufferedImage cookImg = null;
+    
     private int xPos = -20, yPos = -20;//default waiter position
     private static int xDestination = -20;//default start position
 	private static int yDestination = -20;
@@ -39,6 +45,11 @@ public class EBCookGui implements Gui {
         shortChoice.put("Chicken", "Ch");
         shortChoice.put("Pizza", "Pi");
         shortChoice.put("", "");
+        try {
+		    cookImg = ImageIO.read(new File("imgs/chef_v1.png"));
+		} catch (IOException e) {
+		}
+		
     }
 
     public void updatePosition() {
@@ -63,6 +74,7 @@ public class EBCookGui implements Gui {
         g.drawString(wait1, waitX, wait1Y);
         g.drawString(wait2, waitX, wait2Y);
         g.drawString(wait3, waitX, wait3Y);
+        g.drawImage(cookImg, xPos, yPos, null);
     }
     
     public void setCooking(String choice, int cookingSlot){
