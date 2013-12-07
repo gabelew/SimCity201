@@ -52,6 +52,8 @@ public class PersonAgent extends Agent implements Person
 	public EventLog log = new EventLog();
 	public boolean testing = false;
 	public boolean mustEatAtHomeFirst = false;
+	public boolean mustEatOutBeforeMarketAndBank = false;
+	public boolean mustEatOutBeforeMarket = false;
 	public Bank bankTeller;
 	
 	//Various States
@@ -206,6 +208,12 @@ public class PersonAgent extends Agent implements Person
 	    }
 	    if(this.name.toLowerCase().contains("visiter")){
 	    	this.mustEatAtHomeFirst = true;
+	    }
+	    if(this.name.toLowerCase().contains("visiter") && this.name.toLowerCase().contains("car")){
+	    	mustEatOutBeforeMarket = true;
+	    }
+	    if(this.name.toLowerCase().contains("visiter") && this.name.toLowerCase().contains("bus")){
+	    	mustEatOutBeforeMarketAndBank = true;
 	    }
 	}
 	// for unit testing purposes, where gui is not needed
@@ -699,11 +707,13 @@ public class PersonAgent extends Agent implements Person
         		taskList.remove(temp);
         		return true;
         	}
-        
-        	for(Task t:taskList){
-        		if(state == State.doingNothing && t == Task.goToBankNow){
-        			temp = t;
-        		}
+        	
+        	if(!mustEatOutBeforeMarketAndBank){
+	        	for(Task t:taskList){
+	        		if(state == State.doingNothing && t == Task.goToBankNow){
+	        			temp = t;
+	        		}
+	        	}
         	}
         	
         	if(temp != null){
@@ -723,23 +733,27 @@ public class PersonAgent extends Agent implements Person
         		taskList.remove(temp);
         		return true;
         	}
-        
-        	for(Task t:taskList){
-        		if(state == State.doingNothing && t == Task.goToBank){
-        			temp = t;
-        		}
+
+        	if(!mustEatOutBeforeMarketAndBank){
+	        	for(Task t:taskList){
+	        		if(state == State.doingNothing && t == Task.goToBank){
+	        			temp = t;
+	        		}
+	        	}
         	}
-        	
         	if(temp != null){
         		goToBank();
         		taskList.remove(temp);
         		return true;
         	}
         
-        	for(Task t:taskList){
-        		if(state == State.doingNothing && t == Task.goToMarket){
-        			temp = t;
-        		}
+
+        	if(!mustEatOutBeforeMarketAndBank==true && !mustEatOutBeforeMarket==true){
+	        	for(Task t:taskList){
+	        		if(state == State.doingNothing && t == Task.goToMarket){
+	        			temp = t;
+	        		}
+	        	}
         	}
         	
         	if(temp != null){
@@ -1089,6 +1103,12 @@ public class PersonAgent extends Agent implements Person
 	private void goToRestaurant() {
     	//print("I'm going to restaurant");
     	// DoGoToRestaurant animation
+		if(mustEatOutBeforeMarketAndBank == true){
+			mustEatOutBeforeMarketAndBank = false;
+		}
+		if(mustEatOutBeforeMarket == true){
+			mustEatOutBeforeMarket = false;
+		}
     	location = Location.AtRestaurant;
     	Restaurant mr = null;
     	int restaurantNumber = 0;
