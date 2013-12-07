@@ -177,7 +177,7 @@ public class CMCashierRole extends Role implements Cashier {
 		}
 		if(state == State.leaving){
 			state = State.none;
-			if(!"Saturday".equals(myPerson.dayOfWeek) || !"Sunday".equals(myPerson.dayOfWeek))
+			if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek))
 				DepositBusinessCash();
 			cashierGui.DoLeaveRestaurant();
 			try {
