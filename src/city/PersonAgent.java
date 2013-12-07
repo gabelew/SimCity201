@@ -147,24 +147,33 @@ public class PersonAgent extends Agent implements Person
     private BankBuilding chooseClosestBank() {
 
     	List<BankBuilding> openBanks = new ArrayList<BankBuilding>(); 
+    	
     	for(BankBuilding ob: banks){
     		if(ob.isOpen()){
     			openBanks.add(ob);
     		}
     	}
     	
-    	BankBuilding closestBa = banks.get(0);
+    	if(openBanks.isEmpty()){
+    		return null;
+    	}
+    	
+    	BankBuilding closestBa = openBanks.get(0);
+    	
 	    if(this.name.toLowerCase().contains("bus")){
-	    	closestBa = banks.get(5);
-	    }else{
-	    	for(BankBuilding b: banks){
-				if(Math.abs(closestBa.location.y - personGui.yPos) >= Math.abs(b.location.y - personGui.yPos)){
-					if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
-						closestBa = b;
-					}
+	    	if(openBanks.get(5) != null){
+	    		return openBanks.get(5);
+	    	}
+	    }
+	    
+	    for(BankBuilding b: openBanks){
+			if(Math.abs(closestBa.location.y - personGui.yPos) >= Math.abs(b.location.y - personGui.yPos)){
+				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
+					closestBa = b;
 				}
 			}
-	    }
+		}
+	    
 		return closestBa;
 	}
 
@@ -194,6 +203,14 @@ public class PersonAgent extends Agent implements Person
 			}
 		}
 		return null;
+	}
+	public boolean aBankIsOpen(){
+		for(BankBuilding b: banks){
+			if(b.isOpen()){
+				return true;
+			}
+		}
+		return false;
 	}
 /***********************
  *  UTILITY CLASSES END
@@ -1164,6 +1181,13 @@ public class PersonAgent extends Agent implements Person
     	//print("I'm going to bank");
     	state = State.goingToBank;
 	    BankBuilding b  = chooseClosestBank();
+	    
+	    if(b==null){
+	    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "All banks are closed. I will try again when they are open.");
+	    	state = State.doingNothing;
+	    	return;
+	    }
+	    
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to bank 0" + banks.indexOf(b));
 	    destination = b.location;
 	    
