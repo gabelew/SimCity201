@@ -102,4 +102,10 @@ public class MockCook extends Mock implements Cook {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
 }

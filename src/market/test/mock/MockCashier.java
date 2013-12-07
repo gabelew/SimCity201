@@ -48,5 +48,12 @@ public class MockCashier extends Mock implements Cashier {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
