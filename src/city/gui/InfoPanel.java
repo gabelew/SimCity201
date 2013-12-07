@@ -36,6 +36,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
 	private static final double NO_CASH = 0.0;
 
     private ListPanel personPanel = new ListPanel(this, "Persons");
+    private CloseBuildingsListPanel buildingsPanel = new CloseBuildingsListPanel(this, "Buildings");
 
     private JPanel group = new JPanel();
     
@@ -45,7 +46,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	private JComboBox configList = new JComboBox(dayStrings);
 
-    private SimCityGui gui; //reference to main gui
+    SimCityGui gui; //reference to main gui
 
     public InfoPanel(SimCityGui gui) {
         
@@ -57,12 +58,12 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
         
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         //group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
-        group.setLayout(new FlowLayout());
+        group.setLayout(new BorderLayout());
         
         add(personPanel);
-        group.add(configPanel);
+        group.add(configPanel, BorderLayout.NORTH);
+        group.add(this.buildingsPanel, BorderLayout.CENTER);
         add(group);
-        
         personPanel.hidePauseButton();
 
         goButton.addActionListener(this);
@@ -1333,6 +1334,10 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
 		personPanel.showPauseButton();
 		gui.invalidate();
 		gui.validate();
+	}
+
+	public void addBuilding(String n,int i) {
+		this.buildingsPanel.addBuilding(n,i);
 	}
 
 }

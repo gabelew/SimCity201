@@ -148,7 +148,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultBuildingPanels();
         
         setVisible(true);
-
+        updateBuildingsPanel();
         if(!testing){
         	bankAgent.startThread();
         	createDefaultPeople();
@@ -158,7 +158,8 @@ public class SimCityGui extends JFrame implements ActionListener {
         	infoPanel.pauseAgents();
         }
     }
-    public SimCityGui() {
+    
+	public SimCityGui() {
     	setBounds(OFFSETPOS, OFFSETPOS, FRAMEX, FRAMEY);
         Dimension frameDim = new Dimension(FRAMEX,FRAMEY);
         this.setMaximumSize(frameDim);
@@ -210,6 +211,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         createDefaultBuildingPanels();
         
         setVisible(true);
+        updateBuildingsPanel();
         bankAgent.startThread();
         createDefaultPeople();
         createEmployeeList();
@@ -219,6 +221,19 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.pauseAgents();
        
     }
+
+    private void updateBuildingsPanel() {
+    	for(int i = 0; i< restaurants.size();i++){
+    		infoPanel.addBuilding("Restaurant 0" + (i+1),i);
+    	}
+    	for(int i = 0; i< markets.size();i++){
+    		infoPanel.addBuilding("Market 0" + (i+1),i);
+    	}
+    	for(int i = 0; i< banks.size();i++){
+    		infoPanel.addBuilding("Bank 0" + (i+1),i);
+    	}
+	}
+    
     private void createDefaultPeople() {
     	infoPanel.getPersonPanel().addPerson("landlordcarhome");
     	infoPanel.getPersonPanel().addPerson("poor01");
@@ -689,6 +704,16 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}
 		}
 		return false;
+	}
+
+	public void setOpen(String name, int buildingNumber) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setClosed(String name, int buildingNumber) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -156,22 +156,6 @@ public class ListPanel extends JPanel implements ActionListener {
 	                		infoPanel.setHungry(type, temp.stateCB.getName());
 	                		temp.stateCB.setEnabled(false);
 	                	}
-	                	/*if(type == "Waiters")
-	                	{
-	                		if(temp.stateCB.getText() == "Working?" || temp.stateCB.getText() == "Back To Work?")
-	                		{
-	                			temp.stateCB.setText("Break?");
-	                        	temp.stateCB.setEnabled(true);
-	                        	temp.stateCB.setSelected(false);
-	                			restPanel.setWorking(type, temp.stateCB.getName());
-	                		}
-	                		else{
-	                        	temp.stateCB.setEnabled(false);
-	                        	temp.stateCB.setSelected(true);
-	                			restPanel.askBreak(temp.stateCB.getName());
-	                		}
-	                	}*/
-	                    
 	                }
 	            }
 	        }
