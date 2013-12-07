@@ -80,7 +80,7 @@ public class AtHomeRole extends Role implements AtHome
 		{
 			findFood.get("steak").amount = 1;
 		}
-		
+
 		this.gui = new AtHomeGui(myPerson, this);
 	}
 	
@@ -203,7 +203,9 @@ public class AtHomeRole extends Role implements AtHome
 				{
 					gui.DoneEating();
 					orders.remove(o);
-					myPerson.hungerLevel = 0;
+				    if(!getName().toLowerCase().contains("visiter")){
+						myPerson.hungerLevel = 0;
+				    }
 					myPerson.msgDoneEatingAtHome();
 				}
 			},

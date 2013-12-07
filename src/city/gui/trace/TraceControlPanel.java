@@ -40,7 +40,7 @@ public class TraceControlPanel extends JPanel {
 	JToggleButton cashierTagButton = new JToggleButton("Restaurant Cashier");
 	JToggleButton waiterTagButton = new JToggleButton("Restaurant Waiter");
 	
-	String[] importantPersonList = {"Everyone","poor01","poorHome02","poorHome04NoFood", "poorhome05LowSteak", "cook01DayPoor", "waiter01day"};
+	String[] importantPersonList = {"Everyone","poor01","poorHome02","poorHome04NoFood", "poorhome05LowSteak", "cook01DayPoor", "waiter01day", "visiterhome06LowSteak", "visiterhomebus07LowSteak", "visiterhomecar08LowSteak"};
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	JComboBox personFilterList = new JComboBox(importantPersonList);
 	

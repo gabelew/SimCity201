@@ -51,6 +51,7 @@ public class PersonAgent extends Agent implements Person
 	public PersonGui personGui;
 	public EventLog log = new EventLog();
 	public boolean testing = false;
+	public boolean mustEatAtHomeFirst = false;
 	public Bank bankTeller;
 	
 	//Various States
@@ -127,34 +128,44 @@ public class PersonAgent extends Agent implements Person
 
     private MarketAgent chooseClosestMarket() {
     	MarketAgent closestMa = markets.get(0);
-    	for(MarketAgent m: markets){
-			if(Math.abs(closestMa.location.y - personGui.yPos) >= Math.abs(m.location.y - personGui.yPos)){
-				if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
-					closestMa = m;
+	    if(this.name.toLowerCase().contains("bus")){
+	    	closestMa = markets.get(5);
+	    }else{
+	    	for(MarketAgent m: markets){
+				if(Math.abs(closestMa.location.y - personGui.yPos) >= Math.abs(m.location.y - personGui.yPos)){
+					if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
+						closestMa = m;
+					}
 				}
 			}
-		}
+	    }
 		return closestMa;
 	}
 
     private BankBuilding chooseClosestBank() {
+
     	BankBuilding closestBa = banks.get(0);
-    	for(BankBuilding b: banks){
-			if(Math.abs(closestBa.location.y - personGui.yPos) >= Math.abs(b.location.y - personGui.yPos)){
-				if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
-					closestBa = b;
+	    if(this.name.toLowerCase().contains("bus")){
+	    	closestBa = banks.get(5);
+	    }else{
+	    	for(BankBuilding b: banks){
+				if(Math.abs(closestBa.location.y - personGui.yPos) >= Math.abs(b.location.y - personGui.yPos)){
+					if(Math.abs(closestBa.location.x - personGui.xPos) > Math.abs(b.location.x - personGui.xPos)){
+						closestBa = b;
+					}
 				}
 			}
-		}
+	    }
 		return closestBa;
 	}
 
 	private boolean youAreRich() {
-		if(personalAccount != null){
+		if(personalAccount != null && this.mustEatAtHomeFirst==false){
 			if(personalAccount.currentBalance > 200){
 				return true;
 			}
 		}
+		
 		return false;
 	}
 
@@ -193,6 +204,9 @@ public class PersonAgent extends Agent implements Person
 	    if(this.name.toLowerCase().contains("car") || this.name.toLowerCase().contains("deliveryman")){
 	    	car = true;
 	    }
+	    if(this.name.toLowerCase().contains("visiter")){
+	    	this.mustEatAtHomeFirst = true;
+	    }
 	}
 	// for unit testing purposes, where gui is not needed
 	public PersonAgent(String name, double cash, Residence h) {
@@ -200,6 +214,9 @@ public class PersonAgent extends Agent implements Person
 		this.cashOnHand = cash;
 	    if(this.name.toLowerCase().contains("car") || this.name.toLowerCase().contains("deliveryman")){
 	    	car = true;
+	    }
+	    if(this.name.toLowerCase().contains("visiter")){
+	    	this.mustEatAtHomeFirst = true;
 	    }
 
 		this.myHome = h;
@@ -211,6 +228,9 @@ public class PersonAgent extends Agent implements Person
 	    this.simCityGui = simCityGui;
 	    if(this.name.toLowerCase().contains("car") || this.name.toLowerCase().contains("deliveryman")){
 	    	car = true;
+	    }
+	    if(this.name.toLowerCase().contains("visiter")){
+	    	this.mustEatAtHomeFirst = true;
 	    }
 	    
 	    this.busLeft = this.simCityGui.animationPanel.busLeft;
@@ -968,6 +988,11 @@ public class PersonAgent extends Agent implements Person
     		goToRestaurant();
 		}else{
 			state = State.goingHomeToEat;
+			
+			if(mustEatAtHomeFirst==true){
+				mustEatAtHomeFirst = false;
+			}
+			
 			destination = myHome.location;
 			goToHouseToEat();
 		}
@@ -1062,12 +1087,18 @@ public class PersonAgent extends Agent implements Person
     }
 
 	private void goToRestaurant() {
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant");
     	//print("I'm going to restaurant");
     	// DoGoToRestaurant animation
     	location = Location.AtRestaurant;
-    	
-    	Restaurant mr = restaurants.get(randInt(0,restaurants.size() - 1));
+    	Restaurant mr = null;
+    	int restaurantNumber = 0;
+	    if(this.name.toLowerCase().contains("visiter") && this.name.toLowerCase().contains("car")==false){
+	    	restaurantNumber = randInt(0,1);
+	    }else{
+	    	restaurantNumber = randInt(0,restaurants.size() - 1);
+	    }
+    	mr = restaurants.get(restaurantNumber);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant 0"+restaurantNumber);
     	//Restaurant mr = restaurants.get(randInt(0,0));
     	destination = mr.location;
     	if(car == true || destination.y == personGui.yPos){
@@ -1103,11 +1134,11 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToBank() {
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to bank");
     	//print("I'm going to bank");
     	state = State.goingToBank;
-	    BankBuilding m  = chooseClosestBank();
-	    destination = m.location;
+	    BankBuilding b  = chooseClosestBank();
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to bank 0" + banks.indexOf(b));
+	    destination = b.location;
 	    
 	    if(car == true || destination.y == personGui.yPos){
     		personGui.DoWalkTo(destination);
@@ -1151,10 +1182,10 @@ public class PersonAgent extends Agent implements Person
     }
 
 	private void goToMarket(){
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market");
     	//print("I'm going to market");
     	state = State.goingToMarket;
 	    MarketAgent m  = chooseClosestMarket();
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market 0"+markets.indexOf(m));
 	    destination = m.location;
 	    
 	    if(car == true || destination.y == personGui.yPos){
