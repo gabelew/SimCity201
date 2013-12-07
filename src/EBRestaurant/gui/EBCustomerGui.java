@@ -16,7 +16,6 @@ public class EBCustomerGui implements Gui{
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
-	EBRestaurantGui gui;
 	private int xArea=10;
 	private int yArea;
 	private int xPos, yPos;
@@ -33,13 +32,12 @@ public class EBCustomerGui implements Gui{
 	private int Width=20;
 	private int Height=20;
 	
-	public EBCustomerGui(EBCustomerRole c, EBRestaurantGui gui){ 
+	public EBCustomerGui(EBCustomerRole c){ 
 		agent = c;
 		xPos = -40;
 		yPos = -40;
 		xDestination = -40;
 		yDestination = -40;
-		this.gui = gui;
 		yArea=60;
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -64,9 +62,7 @@ public class EBCustomerGui implements Gui{
 				agent.msgAnimationFinishedGoToSeat();
 			else if (command==Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
 			}
 			command=Command.noCommand;
 		}

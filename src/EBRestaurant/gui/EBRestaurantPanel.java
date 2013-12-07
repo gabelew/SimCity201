@@ -40,7 +40,6 @@ public class EBRestaurantPanel extends JPanel {
     private JPanel restLabel = new JPanel();
     private EBListPanel customerPanel = new EBListPanel(this, "Customers");
     private JPanel group = new JPanel();
-    private EBRestaurantGui restGui;
     private SimCityGui gui; //reference to main gui
     private InsideBuildingPanel insideBuildingPanel;
 
@@ -187,9 +186,6 @@ public class EBRestaurantPanel extends JPanel {
     	}
     }
 
-    public void setRestaurantGui(EBRestaurantGui guis){
-    	restGui=guis;
-    }
     
 	public void setInsideBuildingPanel(InsideBuildingPanel bp) {
 		insideBuildingPanel = bp;

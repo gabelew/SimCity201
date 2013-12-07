@@ -16,12 +16,11 @@ import restaurant.interfaces.*;
 public class EBWaiterGui implements Gui {
 	private static BufferedImage waiterImg = null;
     private EBWaiterRole agent = null;
-    EBRestaurantGui gui;
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
     private final int xChange = 20;
     private final int yChange = -20;
-    private int xWaitingPosition;
+    private int xWaitingPosition=100;
     private final int yWaitingPosition=50;
     private final int xTable = 100;
     private final int yTable1 = 100;
@@ -36,18 +35,16 @@ public class EBWaiterGui implements Gui {
     private int Choice3Y;
     private boolean onBreak;
 
-    public EBWaiterGui(EBWaiterRole w, EBRestaurantGui gui, int xIndex){
+    public EBWaiterGui(EBWaiterRole w){
     	try {
 		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
 		} catch (IOException e) {
 		}
     	agent = w;
-		xWaitingPosition=xIndex;
 		xPos = -20;
 		yPos = -20;
 		xDestination = xWaitingPosition;
 		yDestination = yWaitingPosition;
-		this.gui = gui;
 		ChoiceX=-5;
 		Choice1Y=-5;
 		Choice2Y=-5;
@@ -168,7 +165,6 @@ public class EBWaiterGui implements Gui {
 	
 	public void breakDenied(){
 		onBreak=false;
-		gui.setWaiterEnabled(agent);
 	}
     
 	public boolean onBreak() {

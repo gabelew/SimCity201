@@ -82,7 +82,7 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
         //Here is the table
         g2.setColor(Color.ORANGE);
         g.drawImage(tableImg, RectX, Rect1Y, null);
-        g2.fillRect(RectX, Rect1Y, RectWH, RectWH);
+        //g2.fillRect(RectX, Rect1Y, RectWH, RectWH);
         g2.fillRect(RectX, Rect2Y, RectWH, RectWH);
         g2.fillRect(RectX, Rect3Y, RectWH, RectWH);
         
