@@ -3,9 +3,7 @@ package city.gui;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Cook;
-
 import javax.swing.*;
-
 import market.gui.MarketPanel;
 import bank.BankBuilding;
 import bank.gui.BankPanel;
@@ -18,7 +16,6 @@ import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
-import CMRestaurant.roles.CMWaiterRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.BankAgent;
@@ -34,7 +31,6 @@ import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.trace.TraceControlPanel;
 import city.gui.trace.TracePanel;
 import city.roles.Role;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -707,12 +703,23 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 
 	public void setOpen(String name, int buildingNumber) {
-		// TODO Auto-generated method stub
-		
+		if(name.toLowerCase().contains("restaurant")){
+			Restaurant r = restaurants.get(buildingNumber);
+		}else if(name.toLowerCase().contains("market")){
+			MarketAgent m = markets.get(buildingNumber);
+		}else if(name.toLowerCase().contains("bank")){
+			BankBuilding b = banks.get(buildingNumber);
+		}
 	}
 
 	public void setClosed(String name, int buildingNumber) {
-		// TODO Auto-generated method stub
+		if(name.toLowerCase().contains("restaurant")){
+			Restaurant r = restaurants.get(buildingNumber);
+		}else if(name.toLowerCase().contains("market")){
+			MarketAgent m = markets.get(buildingNumber);
+		}else if(name.toLowerCase().contains("bank")){
+			BankBuilding b = banks.get(buildingNumber);
+		}
 		
 	}
 

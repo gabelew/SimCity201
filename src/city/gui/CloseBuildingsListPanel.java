@@ -4,19 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import city.gui.ListPanel.ListItem;
 
 public class CloseBuildingsListPanel extends JPanel implements ActionListener  {
 	private static final long serialVersionUID = 1L;
@@ -60,7 +56,7 @@ public class CloseBuildingsListPanel extends JPanel implements ActionListener  {
         this.type = type;
 
         setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
-        add(new JLabel("<html><pre> <u>" + type + "</u><br></pre></html>"));
+        add(new JLabel("<html><pre> <u>" + this.type + "</u><br></pre></html>"));
       
         view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
         pane.setViewportView(view);
