@@ -2,6 +2,11 @@ package EBRestaurant.gui;
 
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import EBRestaurant.roles.EBCustomerRole;
@@ -10,7 +15,7 @@ import EBRestaurant.roles.EBHostRole;
 public class EBHostGui implements Gui {
 
     private EBHostRole agent = null;
-
+    private BufferedImage hostImg = null;
     private int xPos = -20, yPos = -20;//default host position
     private int xDestination = -20, yDestination = -20;//default host position
     private final int xChange = 20;
@@ -21,6 +26,10 @@ public class EBHostGui implements Gui {
 
     public EBHostGui(EBHostRole agent) {
         this.agent = agent;
+        try {
+		    hostImg = ImageIO.read(new File("imgs/host_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
@@ -45,8 +54,7 @@ public class EBHostGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
-        g.fillRect(xPos, yPos, xChange, xChange);
+    	g.drawImage(hostImg, xPos, yPos, null);
     }
 
     public boolean isPresent() {

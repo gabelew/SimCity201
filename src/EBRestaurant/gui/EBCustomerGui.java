@@ -1,12 +1,17 @@
 package EBRestaurant.gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import EBRestaurant.roles.EBCustomerRole;
 
 public class EBCustomerGui implements Gui{
-
+	private static BufferedImage customerImg = null;
 	private EBCustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
@@ -36,6 +41,11 @@ public class EBCustomerGui implements Gui{
 		yDestination = -40;
 		this.gui = gui;
 		yArea=60;
+		try {
+			StringBuilder path = new StringBuilder("imgs/");
+		    customerImg = ImageIO.read(new File(path.toString() + "customer_v1.png"));
+		} catch (IOException e) {
+		}
 	}
 
 	public void updatePosition() {
@@ -63,8 +73,7 @@ public class EBCustomerGui implements Gui{
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, Width, Height);
+		g.drawImage(customerImg, xPos, yPos, null);
 	}
 
 	public boolean isPresent() {

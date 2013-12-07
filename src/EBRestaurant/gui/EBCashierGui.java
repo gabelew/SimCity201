@@ -2,6 +2,11 @@ package EBRestaurant.gui;
 
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import EBRestaurant.roles.EBCashierRole;
@@ -9,7 +14,8 @@ import EBRestaurant.roles.EBCashierRole;
 public class EBCashierGui implements Gui {
 
     private EBCashierRole agent = null;
-
+    private BufferedImage cashierImg = null;
+    
     private int xPos = -40, yPos = -40;//default cashier position
     private int xDestination = -40, yDestination = -40;//default start position
     private final int xChange = 20;
@@ -19,6 +25,10 @@ public class EBCashierGui implements Gui {
 
     public EBCashierGui(EBCashierRole agent) {
         this.agent = agent;
+        try {
+		    cashierImg = ImageIO.read(new File("imgs/cashier_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
@@ -35,8 +45,7 @@ public class EBCashierGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        g.fillRect(xPos, yPos, xChange, xChange);
+    	g.drawImage(cashierImg, xPos, yPos, null);
     }
     
 
