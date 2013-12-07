@@ -6,6 +6,7 @@ import EBRestaurant.gui.EBWaiterGui;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.roles.Role;
@@ -58,10 +59,9 @@ public class EBWaiterRole extends Role implements Waiter {
 	private boolean atCook=false;
 	private boolean requestBreak=false;
 	
-	public EBWaiterRole(String name,Restaurant r) {
-		super();
+	public EBWaiterRole(PersonAgent p, Restaurant r) {
+		super(p);
 		restaurant=r;
-		this.name = name;
 	}
 
 	public String getMaitreDName() {

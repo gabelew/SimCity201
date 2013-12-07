@@ -8,7 +8,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
 
+import city.PersonAgent;
 import city.roles.Role;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 /**
@@ -34,6 +36,7 @@ public class EBCustomerRole extends Role implements Customer {
 	private int leaving;
 	private int waitY;
 	private boolean responsible;
+	public Restaurant restaurant;
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
@@ -50,9 +53,10 @@ public class EBCustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public EBCustomerRole(String name){
-		super();
-		this.name = name;
+	public EBCustomerRole(PersonAgent p, Restaurant r){
+		super(p);
+		myPerson=p;
+		restaurant=r;
 		responsible=true;
 	}
 
