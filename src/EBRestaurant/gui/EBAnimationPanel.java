@@ -1,19 +1,24 @@
 package EBRestaurant.gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
+import city.gui.SimCityGui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-public class EBAnimationPanel extends JPanel implements ActionListener {
+public class EBAnimationPanel extends InsideAnimationPanel implements ActionListener {
 
-    private final int WINDOWX = 450;
-    private final int WINDOWY = 350;
     private final int RectX=100;
     private final int Rect1Y=100;
     private final int Rect2Y=200;
@@ -23,19 +28,50 @@ public class EBAnimationPanel extends JPanel implements ActionListener {
     private final int time=15;
     private Dimension bufferSize;
     private List<Gui> guis = new ArrayList<Gui>();
+    
+    private BufferedImage kitchenCounterImg = null;
+	private BufferedImage tableImg = null;
+	private BufferedImage chairImg = null;
+	private BufferedImage hostStandImg = null;
+	private BufferedImage registerImg = null;
+	private BufferedImage fidgeImg = null;
+	private BufferedImage grillRightImg = null;
+	private BufferedImage platingTableImg = null;
 
-    public EBAnimationPanel() {
+    public EBAnimationPanel(SimCityGui simCityGui) {
+    	this.simCityGui = simCityGui;
+    	try {
+			StringBuilder path = new StringBuilder("imgs/");
+		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
+		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
+		    chairImg = ImageIO.read(new File(path.toString() + "customer_chair_v1.png"));
+		    hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
+		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
+		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
+		    ImageIO.read(new File(path.toString() + "grill.png"));
+		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
+		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
+		} catch (IOException e) {
+		}
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         
         bufferSize = this.getSize();
- 
+        simCityGui.animationPanel.timer.addActionListener(this);
     	Timer timer = new Timer(time, this );
     	timer.start();
     }
 
 	public void actionPerformed(ActionEvent e) {
-		repaint();  //Will have paintComponent called
+		synchronized(getGuis()){
+			for(Gui gui : getGuis()) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+    	}
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
+			repaint();  //Will have paintComponent called
 	}
 
     public void paintComponent(Graphics g) {
@@ -45,6 +81,7 @@ public class EBAnimationPanel extends JPanel implements ActionListener {
         g2.fillRect(RectPos, RectPos, WINDOWX, WINDOWY );
         //Here is the table
         g2.setColor(Color.ORANGE);
+        g.drawImage(tableImg, RectX, Rect1Y, null);
         g2.fillRect(RectX, Rect1Y, RectWH, RectWH);
         g2.fillRect(RectX, Rect2Y, RectWH, RectWH);
         g2.fillRect(RectX, Rect3Y, RectWH, RectWH);

@@ -79,9 +79,8 @@ public class EBCashierRole extends Role implements Cashier {
 	public enum state{created,waiting,paid};
 	Timer timer= new Timer();
 	public EventLog log=new EventLog();
-	public EBCashierRole(String name) {
+	public EBCashierRole() {
 		super();
-		this.name=name;
 		money=50;
 		payNumber=0;
 	}
@@ -305,6 +304,10 @@ public class EBCashierRole extends Role implements Cashier {
 
 	public void setGui(EBCashierGui g) {
 		cashierGui = g;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 	}	
 
 }

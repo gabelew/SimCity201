@@ -81,20 +81,19 @@ public class EBCookRole extends Role implements Cook {
 			foodDone(O);
 		}
 	}
-	public EBCookRole(String name) {
+	public EBCookRole(int amount) {
 		super();
-		this.name=name;
 		hm.put("Steak",20*1000);
 		hm.put("Salad", 7*1000);
 		hm.put("Pizza", 12*1000);
 		hm.put("Chicken", 15*1000);
-		Inventory.put("Steak",1);
-		Inventory.put("Salad", 1);
-		Inventory.put("Pizza", 1);
-		Inventory.put("Chicken", 1);
+		Inventory.put("Steak",50);
+		Inventory.put("Salad", 50);
+		Inventory.put("Cookie", 50);
+		Inventory.put("Chicken", amount);
 		stock.add("Steak");
 		stock.add("Chicken");
-		stock.add("Pizza");
+		stock.add("Cookie");
 		stock.add("Salad");
 	}
 	

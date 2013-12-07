@@ -112,7 +112,7 @@ public class EBListPanel extends JPanel implements ActionListener {
                 String pizza=pizzaField.getText();
         		restPanel.addMarket("market"+numMarket,steak,chicken,salad,pizza);
         	}
-        }*/
+        }
         else {
         	for (JButton temp:list){
                 if (e.getSource() == temp)
@@ -122,7 +122,7 @@ public class EBListPanel extends JPanel implements ActionListener {
                 if (e.getSource() == temp)
                     restPanel.showInfo("waiters", temp.getText());
             }
-        }
+        }*/
     }
 
     /**
@@ -185,7 +185,7 @@ public class EBListPanel extends JPanel implements ActionListener {
             listWaiter.add(buttonWaiter);
             viewWaiter.add(buttonWaiter);
         	restPanel.addPerson("Waiters", name, false,amount,false);
-        	restPanel.showInfo("waiters", name);
+        	//restPanel.showInfo("waiters", name);
         	validate();
         }
     }

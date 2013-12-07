@@ -6,6 +6,7 @@ import java.util.*;
 
 import city.PersonAgent;
 import city.roles.Role;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 /**
@@ -16,6 +17,7 @@ import restaurant.interfaces.*;
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
 public class EBHostRole extends Role implements Host {
+	public Restaurant restaurant;
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -55,10 +57,9 @@ public class EBHostRole extends Role implements Host {
 	public EBHostGui hostGui = null;
 	public boolean atStart=false;
 
-	public EBHostRole(String name) {
+	public EBHostRole() {
 		super();
 
-		this.name = name;
 		// make some tables
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
@@ -297,6 +298,10 @@ public class EBHostRole extends Role implements Host {
 				waiters.remove(w);
 			}
 		}
+	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant=r;
 	}
 	
 	/*public void pauseIt(){

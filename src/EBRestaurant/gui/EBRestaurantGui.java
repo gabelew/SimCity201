@@ -17,14 +17,14 @@ public class EBRestaurantGui extends JFrame implements ActionListener {
      * and the animation frame
      */
 	JPanel animationFrame = new JPanel();
-	public EBAnimationPanel animationPanel = new EBAnimationPanel();
+	public EBAnimationPanel animationPanel = new EBAnimationPanel(null);
 	
     /* restPanel holds 2 panels
      * 1) the staff listing, menu, and lists of current customers all constructed
      *    in RestaurantPanel()
      * 2) the infoPanel about the clicked Customer (created just below)
      */    
-    private EBRestaurantPanel restPanel = new EBRestaurantPanel(this);
+    private EBRestaurantPanel restPanel = new EBRestaurantPanel(null);
     private int windowPos=50;
     private int infoRows=1;
     private int infoCols=2;

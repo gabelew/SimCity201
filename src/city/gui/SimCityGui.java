@@ -18,6 +18,7 @@ import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
+import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBCashierGui;
 import EBRestaurant.gui.EBCookGui;
 import EBRestaurant.gui.EBHostGui;
@@ -420,7 +421,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         	BuildingIcon b = buildings.get(i);
         	if(b.type.equals("restaurant") && i==10){
         		EBRestaurantPanel restPanel = new EBRestaurantPanel(this);
-	            InsideAnimationPanel restaurantAnimationPanel = new EBRestaurantAnimationPanel(this);
+	            InsideAnimationPanel restaurantAnimationPanel = new EBAnimationPanel(this);
 	        	
 	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
 	            restPanel.setPreferredSize(restDim);
@@ -446,7 +447,6 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        						"RestaurantEBWaiterRole");
 	     
 	        	getRestaurants().add(r);
-	        	((EBRestaurantAnimationPanel) restaurantAnimationPanel).addDefaultTables();
 	
 	        	((EBHostRole)r.host).setRestaurant(r);
 	        	EBHostGui hg = new EBHostGui(((EBHostRole)r.host));

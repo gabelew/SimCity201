@@ -3,6 +3,8 @@ package EBRestaurant.gui;
 import javax.swing.*;
 
 import city.MarketAgent;
+import city.animationPanels.InsideBuildingPanel;
+import city.gui.SimCityGui;
 import EBRestaurant.roles.EBCashierRole;
 import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
@@ -19,11 +21,11 @@ import java.util.Vector;
 public class EBRestaurantPanel extends JPanel {
 
     //Host, cook, waiters and customers
-    private EBHostRole host = new EBHostRole("Sarah");
+    /*private EBHostRole host = new EBHostRole();
     private EBHostGui hostGui = new EBHostGui(host);
-    private EBCookRole cook= new EBCookRole("Cook");
+    private EBCookRole cook= new EBCookRole();
     private EBCookGui cookGui = new EBCookGui(cook);
-    private EBCashierRole Cashier=new EBCashierRole("Cashier");
+    private EBCashierRole Cashier=new EBCashierRole();*/
     private final int rows=1;
     private final int cols=2;
     private final int hgap=20;
@@ -38,15 +40,16 @@ public class EBRestaurantPanel extends JPanel {
     private JPanel restLabel = new JPanel();
     private EBListPanel customerPanel = new EBListPanel(this, "Customers");
     private JPanel group = new JPanel();
+    private EBRestaurantGui restGui;
+    private SimCityGui gui; //reference to main gui
+    private InsideBuildingPanel insideBuildingPanel;
 
-    private EBRestaurantGui gui; //reference to main gui
-
-    public EBRestaurantPanel(EBRestaurantGui gui) {
-        this.gui = gui;
-        host.setGui(hostGui);
+    public EBRestaurantPanel(SimCityGui simCityGui) {
+        this.gui = simCityGui;
+        /*host.setGui(hostGui);
         gui.animationPanel.addGui(cookGui);
         gui.animationPanel.addGui(hostGui);
-        cook.setGui(cookGui);
+        cook.setGui(cookGui);*/
         setLayout(new GridLayout(rows, cols, hgap, vgap));
         group.setLayout(new GridLayout(rows, cols, hgaps, vgaps));
         group.add(customerPanel);
@@ -80,14 +83,14 @@ public class EBRestaurantPanel extends JPanel {
      * @param type indicates whether the person is a customer or waiter
      * @param name name of person
      */
-    public void showInfo(String type, String name) {
+     /*public void showInfo(String type, String name) {
     	types=type;
         if (type.equals("Customers")) {
       
             for (int i = 0; i < customers.size(); i++) {
                 EBCustomerRole temp = customers.get(i);
                 if (temp.getName() == name)
-                    gui.updateInfoPanel(temp);
+                    restGui.updateInfoPanel(temp);
             }
         }
         else if(type.equals("waiters"))
@@ -95,10 +98,10 @@ public class EBRestaurantPanel extends JPanel {
             for (int i = 0; i < waiters.size(); i++) {
                 EBWaiterRole temp = waiters.get(i);
                 if (temp.getName() == name)
-                    gui.updateInfoPanel(temp);
+                    restGui.updateInfoPanel(temp);
             }
         }
-    }
+    }*/
 
     /**
      * Adds a customer or waiter to the appropriate list
@@ -183,5 +186,13 @@ public class EBRestaurantPanel extends JPanel {
     		}*/
     	}
     }
+
+    public void setRestaurantGui(EBRestaurantGui guis){
+    	restGui=guis;
+    }
+    
+	public void setInsideBuildingPanel(InsideBuildingPanel bp) {
+		insideBuildingPanel = bp;
+	}
 
 }
