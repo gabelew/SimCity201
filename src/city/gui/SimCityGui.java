@@ -709,6 +709,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			MarketAgent m = markets.get(buildingNumber);
 		}else if(name.toLowerCase().contains("bank")){
 			BankBuilding b = banks.get(buildingNumber);
+			b.setIsOpen(true);
 		}
 	}
 
@@ -719,6 +720,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			MarketAgent m = markets.get(buildingNumber);
 		}else if(name.toLowerCase().contains("bank")){
 			BankBuilding b = banks.get(buildingNumber);
+			b.setIsOpen(false);
 		}
 		
 	}

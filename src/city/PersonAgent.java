@@ -146,6 +146,13 @@ public class PersonAgent extends Agent implements Person
 
     private BankBuilding chooseClosestBank() {
 
+    	List<BankBuilding> openBanks = new ArrayList<BankBuilding>(); 
+    	for(BankBuilding ob: banks){
+    		if(ob.isOpen()){
+    			openBanks.add(ob);
+    		}
+    	}
+    	
     	BankBuilding closestBa = banks.get(0);
 	    if(this.name.toLowerCase().contains("bus")){
 	    	closestBa = banks.get(5);
