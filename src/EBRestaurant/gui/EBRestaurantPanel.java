@@ -27,8 +27,8 @@ public class EBRestaurantPanel extends JPanel {
     private EBCookRole cook= new EBCookRole();
     private EBCookGui cookGui = new EBCookGui(cook);
     private EBCashierRole Cashier=new EBCashierRole();*/
-    private final int rows=1;
-    private final int cols=2;
+    private final int rows=2;
+    private final int cols=1;
     private final int hgap=20;
     private final int vgap=20;
     private final int hgaps=10;
@@ -51,12 +51,13 @@ public class EBRestaurantPanel extends JPanel {
         gui.animationPanel.addGui(cookGui);
         gui.animationPanel.addGui(hostGui);
         cook.setGui(cookGui);*/
+
         setLayout(new GridLayout(rows, cols, hgap, vgap));
         group.setLayout(new GridLayout(rows, cols, hgaps, vgaps));
-        group.add(customerPanel);
+        add(waitersPanel);
         //initRestLabel();
-        add(restLabel);
-        add(group);
+        //add(restLabel);
+       // add(group);
     }
 
     /**

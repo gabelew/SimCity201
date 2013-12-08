@@ -31,12 +31,13 @@ public class CMSharedWaiterRole extends CMWaiterRole{
 				waiterGui.placedOrder();
 			}
 		} else {
+			haveNotRecentlyCheckedStand = false;
 			if(waiterGui!=null){
 				waiterGui.placeOrderInPocket();
 			}
 			timer.schedule(new TimerTask() {
 				public void run() {
-					haveNotRecentlyCheckedStand = false;
+					haveNotRecentlyCheckedStand = true;
 					stateChanged();
 				}
 			}, CHECK_STAND_TIME);

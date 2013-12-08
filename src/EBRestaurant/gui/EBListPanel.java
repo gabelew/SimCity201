@@ -55,7 +55,7 @@ public class EBListPanel extends JPanel implements ActionListener {
     	restPanel = rp;
         this.type = type;
 
-        setLayout(new FlowLayout());
+        setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
         addPersonB.addActionListener(this);
         waiters= new JLabel("Waiters");
 

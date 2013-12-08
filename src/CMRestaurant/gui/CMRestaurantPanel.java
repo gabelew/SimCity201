@@ -56,26 +56,6 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 
         this.gui = gui;
         
-       /* markets.add(new MarketAgent("Vons Market"));
-        markets.add(new MarketAgent("Sprouts Market"));
-        markets.add(new MarketAgent("CostCo"));
-        
-        host.setGui(hostGui, gui);
-        cashier.setGui(cashierGui);
-        cook.setCashier(cashier);
-        cook.setGui(cookGui);
-        for(MarketAgent m:markets){
-        	cook.addMarket(m);
-        	m.startThread();
-        }
-        
-        gui.restaurantAnimationPanel.addGui(hostGui);
-        gui.restaurantAnimationPanel.addGui(cashierGui);
-        gui.restaurantAnimationPanel.addGui(cookGui);
-        host.startThread();
-        cashier.startThread();
-        cook.startThread();*/
-
         setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
 
