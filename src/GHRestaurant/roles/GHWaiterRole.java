@@ -2,11 +2,13 @@ package GHRestaurant.roles;
 
 import GHRestaurant.gui.GHWaiterGui;
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -439,6 +441,48 @@ public class GHWaiterRole extends Role implements Waiter{
 			cost = co;
 			tablenumber = t;
 		}	
+	}
+
+	@Override
+	public void msgGoOnBreak() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgDontGoOnBreak() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgLeftTheRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Restaurant getRestaurant() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAskForBreak() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

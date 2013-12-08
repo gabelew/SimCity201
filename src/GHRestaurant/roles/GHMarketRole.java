@@ -6,6 +6,7 @@ import restaurant.interfaces.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -165,6 +166,24 @@ public class GHMarketRole extends Role implements Market {
 		public void setAmount(int a){
 			amount = a;
 		}
+	}
+
+	@Override
+	public void msgPayment(Cashier c, double payment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

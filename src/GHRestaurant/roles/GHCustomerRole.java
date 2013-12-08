@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -334,6 +335,12 @@ public class GHCustomerRole extends Role implements Customer{
 			choice = c;
 			cost = co;
 		}	
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

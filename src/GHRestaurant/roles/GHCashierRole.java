@@ -5,6 +5,9 @@ import restaurant.interfaces.*;
 
 import java.util.*;
 
+import market.interfaces.DeliveryMan;
+import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -217,6 +220,36 @@ public class GHCashierRole extends Role implements Cashier{
 		public double getCost(){
 			return cost;
 		}
+	}
+
+	@Override
+	public void msgHereIsBill(DeliveryMan DMR, double bill) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgReleaveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

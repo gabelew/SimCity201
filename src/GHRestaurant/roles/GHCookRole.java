@@ -7,6 +7,10 @@ import GHRestaurant.gui.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import market.interfaces.DeliveryMan;
+import city.MarketAgent;
+import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -254,6 +258,61 @@ public class GHCookRole extends Role implements Cook {
 		public String getFoodType(){
 			return foodtype;
 		}
+	}
+
+	@Override
+	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgHereIsOrderFromMarket(DeliveryMan Dm,
+			Map<String, Integer> choices, double amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgRelieveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addMarket(MarketAgent m) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 
