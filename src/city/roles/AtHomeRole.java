@@ -13,6 +13,7 @@ import java.util.concurrent.Semaphore;
 import restaurant.test.mock.LoggedEvent;
 import atHome.city.AtHomeGui;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.interfaces.AtHome;
@@ -88,9 +89,9 @@ public class AtHomeRole extends Role implements AtHome
 	{
 		return gui;
 	}
-	public void setGui(AtHomeGui g)
+	public void setGui(Gui g)
 	{
-		this.gui = g;
+		this.gui = (AtHomeGui) g;
 	}
 /*********************
  ***** MESSAGES

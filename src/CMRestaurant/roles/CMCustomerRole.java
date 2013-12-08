@@ -15,6 +15,7 @@ import java.util.concurrent.Semaphore;
 
 import CMRestaurant.gui.CMCustomerGui;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -456,6 +457,12 @@ public class CMCustomerRole extends Role implements Customer {
 		public String getMenuItemName(int i){
 			return menuItems.get(i).item;
 		}
+	}
+
+	@Override
+	public void setGui(Gui g) {
+		customerGui = (CMCustomerGui) g;
+		
 	}
 
 

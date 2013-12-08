@@ -2,6 +2,7 @@ package CMRestaurant.roles;
 
 import restaurant.Restaurant;
 import city.PersonAgent;
+import city.gui.Gui;
 
 public class CMNormalWaiterRole extends CMWaiterRole {
 
@@ -15,4 +16,6 @@ public class CMNormalWaiterRole extends CMWaiterRole {
 		((CMCookRole) restaurant.cook).msgHereIsOrder(this, c.choice, c.table);
 		waiterGui.placedOrder();
 	}
+
+	
 }

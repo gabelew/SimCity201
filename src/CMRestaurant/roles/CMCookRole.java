@@ -7,6 +7,7 @@ import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
@@ -710,6 +711,11 @@ public class CMCookRole extends Role implements Cook {
 	}
 	public RevolvingStandMonitor getRevolvingStand(){
 		return revolvingStand;
+	}
+
+	@Override
+	public void setGui(Gui g) {
+		cookGui = (CMCookGui) g;
 	}
 
 

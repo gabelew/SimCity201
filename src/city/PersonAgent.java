@@ -9,6 +9,8 @@ import java.util.concurrent.Semaphore;
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
 import restaurant.Restaurant;
+import restaurant.interfaces.Host;
+import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import CMRestaurant.gui.CMCustomerGui;
@@ -657,8 +659,8 @@ public class PersonAgent extends Agent implements Person
 		MarketCustomerRole removeRole = null;
 		for(Role r: roles){
 			if(r instanceof MarketCustomerRole){
-				m.insideAnimationPanel.removeGui(((MarketCustomerRole) r).getMarketCustomerGui());
-		    	((MarketCustomerRole) r).getMarketCustomerGui().setPresent(false);
+				m.insideAnimationPanel.removeGui(((MarketCustomerRole) r).getGui());
+		    	((MarketCustomerRole) r).getGui().setPresent(false);
 				r.active = false;
 				removeRole = (MarketCustomerRole) r;
 			}
@@ -890,8 +892,12 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToWork(){
+    	if(workIsClosed()){
+        	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Work is closed. I'll check back later.");
+    		return;
+    	}
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to work.");
-    	//print("I'm going to work.");
+    	
     	state = State.goingToWork;
     	destination = job.location;
     	if(car == true || destination.y == personGui.yPos){
@@ -908,6 +914,23 @@ public class PersonAgent extends Agent implements Person
     	}
     }
     
+	private boolean workIsClosed() {
+		for(Restaurant r: simCityGui.getRestaurants()){
+			if(job.location.equals(r.location)){
+				//TODO: if(r.isOpen()==false)
+				//return true;
+			}
+		}
+		for(MarketAgent m: simCityGui.getMarkets()){
+			if(job.location.equals(m.location)){
+				//TODO: if(m.isOpen()==false)
+				//return true;
+			}
+		}
+		
+		return false;
+	}
+
 	private void finishGoingToWork() {
 		personGui.DoWalkTo(destination);
 		
@@ -932,17 +955,17 @@ public class PersonAgent extends Agent implements Person
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
     		if(job.type.equalsIgnoreCase("waiter")){
-    			CMWaiterRole role = (CMWaiterRole) SimCityGui.waiterFactory(this, r);
-            	role.setGui(new CMWaiterGui(role));
-            	roles.add(role);
+    			Role role = (Role) SimCityGui.waiterFactory(this, r);
+            	role.setGui(SimCityGui.waiterGuiFactory(r, (Role) role));
+            	roles.add((Role) role);
             	role.active = true;
             	r.insideAnimationPanel.addGui(role.getGui());
             	role.getGui().setPresent(true);
-            	role.goesToWork();	
+            	((Waiter) role).goesToWork();	
     		}else if(job.type.equalsIgnoreCase("host")){
-    			CMHostRole role = (CMHostRole)(r.host);
+    			Role role = (Role)r.host;
     			if(role.getPerson() != null){
-    				role.msgReleaveFromDuty(this);
+    				((Host) role).msgReleaveFromDuty(this);
     				try {
     					waitingResponse.acquire();
     				} catch (InterruptedException e) {
@@ -953,7 +976,7 @@ public class PersonAgent extends Agent implements Person
     			role.setPerson(this);
             	role.active = true;
             	role.getGui().setPresent(true);
-            	role.goesToWork();
+            	((Host) role).goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
     			CMCookRole role = (CMCookRole)(r.cook);
     			if(role.getPerson() != null){
@@ -994,8 +1017,8 @@ public class PersonAgent extends Agent implements Person
 		    		role.setPerson(this);
 		    		roles.add(role);
 		           	role.active = true;
-		    		ma.insideAnimationPanel.addGui(role.getClerkGui());
-		           	role.getClerkGui().setPresent(true);
+		    		ma.insideAnimationPanel.addGui(role.getGui());
+		           	role.getGui().setPresent(true);
 		           	role.goesToWork();	
 			}else if(job.type.equalsIgnoreCase("deliveryMan")){
 					DeliveryManRole role = new DeliveryManRole(this);
@@ -1003,15 +1026,15 @@ public class PersonAgent extends Agent implements Person
 		    		role.setPerson(this);
 		    		roles.add(role);
 		            role.active = true;
-		    		ma.insideAnimationPanel.addGui(role.getDeliveryManGui());
-		            role.getDeliveryManGui().setPresent(true);
+		    		ma.insideAnimationPanel.addGui(role.getGui());
+		            role.getGui().setPresent(true);
 		            role.goesToWork();		
 			}
     	}
     }
 
 	private MarketAgent findMarket(Point p) {
-		for(MarketAgent ma: markets){
+		for(MarketAgent ma: simCityGui.getMarkets()){
 			if(ma.location.equals(p)){
 				return ma;
 			}
@@ -1272,8 +1295,8 @@ public class PersonAgent extends Agent implements Person
     	MarketCustomerRole role = new MarketCustomerRole(this);
     	roles.add(role);
     	role.active = true;
-    	m.insideAnimationPanel.addGui(role.getMarketCustomerGui());
-    	role.getMarketCustomerGui().setPresent(true);
+    	m.insideAnimationPanel.addGui(role.getGui());
+    	role.getGui().setPresent(true);
     	role.startShopping(m, toOrderFromMarket);
     }
     

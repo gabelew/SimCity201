@@ -12,6 +12,7 @@ import bank.gui.BankCustomerGui;
 import city.BankAgent;
 import city.BankAgent.BankAccount;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.interfaces.Bank;
@@ -426,8 +427,8 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public BankCustomerGui getGui() {
 		return customerGui;
 	}
-	public void setGui(BankCustomerGui g) {
-		this.customerGui = g;
+	public void setGui(Gui g) {
+		this.customerGui = (BankCustomerGui) g;
 	}
 	
 	public void setBankBuilding(BankBuilding b) {
@@ -445,5 +446,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	public PersonAgent getPersonAgent() {
 		return myPerson;
 	}
+
+
 	
 }

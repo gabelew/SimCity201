@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore;
 import CMRestaurant.gui.CMCashierGui;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.DeliveryManRole;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -356,6 +357,11 @@ public class CMCashierRole extends Role implements Cashier {
 
 	public int getStateChangePermits() {
 		return getStateChangePermits();
+	}
+
+	@Override
+	public void setGui(Gui g) {
+		cashierGui = (CMCashierGui) g;
 	}
 
 }

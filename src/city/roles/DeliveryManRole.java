@@ -248,7 +248,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		}
 		myPerson.releavedFromDuty(this);
 	}
-	public DeliveryManGui getDeliveryManGui() {
+	public Gui getGui() {
 		return deliveryGui;
 	}
 	
@@ -261,5 +261,11 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		atShelf.release();
 		}
 	}
+	
+	@Override
+	public void setGui(Gui gui) {
+		
+	}
+
 }
 

@@ -12,6 +12,7 @@ import market.gui.MarketCustomerGui;
 import market.interfaces.MarketCustomer;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 
@@ -152,12 +153,17 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		o=null;
 	}
 	
-	public MarketCustomerGui getMarketCustomerGui(){
+	public Gui getGui(){
 		return marketCGui;
 	}
 	
 	public void atSpot(){
 		atShelf.release();
+	}
+
+	@Override
+	public void setGui(Gui gui) {
+		marketCGui = (MarketCustomerGui) gui;	
 	}
 	
 }

@@ -13,7 +13,7 @@ import city.roles.Role;
  * @author Chad Martin
  *
  */
-public interface Host {
+public interface Host{
 
 	public abstract void msgReleaveFromDuty(PersonAgent p);
 	public abstract void msgReadyToWork(Waiter w);

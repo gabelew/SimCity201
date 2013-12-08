@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 import CMRestaurant.gui.CMWaiterGui;
 import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;
+import city.gui.Gui;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.roles.Role;
@@ -445,5 +446,8 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	public Restaurant getRestaurant() {
 		return restaurant;
 	}
-	
+	@Override
+	public void setGui(Gui g) {
+		waiterGui = (CMWaiterGui) g;
+	}
 }

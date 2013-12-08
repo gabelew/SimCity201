@@ -15,6 +15,7 @@ import market.gui.ClerkGui;
 import market.interfaces.*;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.Gui;
 
 /**
  * Restaurant customer agent.
@@ -187,8 +188,14 @@ public class ClerkRole extends Role implements Clerk {
 		atShelf.release();
 		}
 	}
-	public ClerkGui getClerkGui(){
+	public Gui getGui(){
 		return clerkGui;
+	}
+
+	@Override
+	public void setGui(Gui gui) {
+		clerkGui = (ClerkGui) gui;
+		
 	}
 }
 

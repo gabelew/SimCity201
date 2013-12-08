@@ -11,6 +11,7 @@ import java.util.concurrent.Semaphore;
 import CMRestaurant.gui.*;
 import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;
+import city.gui.Gui;
 import city.gui.SimCityGui;
 import city.roles.Role;
 
@@ -452,6 +453,13 @@ public class CMHostRole extends Role implements Host {
 		}
 		
 		((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) waiter).getName());
+		
+	}
+
+
+	@Override
+	public void setGui(Gui g) {
+		
 		
 	}
 

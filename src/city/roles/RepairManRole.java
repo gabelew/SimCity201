@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.PersonAgent;
+import city.gui.Gui;
 import city.interfaces.RepairMan;
 
 public class RepairManRole extends Role implements RepairMan
@@ -95,5 +96,16 @@ public class RepairManRole extends Role implements RepairMan
 			this.appliance = app;
 		}
 	}
+
+@Override
+public void setGui(Gui gui) {
+	// TODO Auto-generated method stub
+	
+}
+@Override
+public Gui getGui() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

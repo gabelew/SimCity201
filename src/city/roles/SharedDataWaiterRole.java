@@ -8,6 +8,7 @@ import CMRestaurant.roles.CMCashierRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import city.PersonAgent;
+import city.gui.Gui;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.RoleOrder;
@@ -464,5 +465,11 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 	@Override
 	public Restaurant getRestaurant() {
 		return restaurant;
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
 	}
 }

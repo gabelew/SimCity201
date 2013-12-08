@@ -3,6 +3,7 @@ package city.gui;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Cook;
+import restaurant.interfaces.Waiter;
 
 import javax.swing.*;
 
@@ -13,6 +14,7 @@ import CMRestaurant.gui.CMCashierGui;
 import CMRestaurant.gui.CMCookGui;
 import CMRestaurant.gui.CMHostGui;
 import CMRestaurant.gui.CMRestaurantPanel;
+import CMRestaurant.gui.CMWaiterGui;
 import CMRestaurant.roles.CMCashierRole;
 import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
@@ -23,6 +25,7 @@ import EBRestaurant.gui.EBCashierGui;
 import EBRestaurant.gui.EBCookGui;
 import EBRestaurant.gui.EBHostGui;
 import EBRestaurant.gui.EBRestaurantPanel;
+import EBRestaurant.gui.EBWaiterGui;
 import EBRestaurant.roles.EBCashierRole;
 import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
@@ -737,6 +740,15 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new CMNormalWaiterRole(p, r);
 		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
 			return new EBWaiterRole(p,r);
+		}
+		
+		return null;
+	}
+	public static Gui waiterGuiFactory(Restaurant r, Role role){
+		if(r.waiterRole.equalsIgnoreCase("RestaurantCMWaiterRole")){
+			return new CMWaiterGui((Waiter) role);
+		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
+			return new EBWaiterGui((EBWaiterRole) role);
 		}
 		
 		return null;

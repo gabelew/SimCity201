@@ -147,7 +147,7 @@ public class PersonAgentTest extends TestCase{
 		
 		if(hasMarketRole){
 			assertTrue("personAgent's Market customer role should be active. Instead it is false", mcr.active);
-			assertTrue("personAgent's Market customer role gui should be present. Instead it is false", mcr.getMarketCustomerGui().isPresent());
+			assertTrue("personAgent's Market customer role gui should be present. Instead it is false", mcr.getGui().isPresent());
 		}else{
 			assertTrue("No marketCustomer was added.", false);
 		}

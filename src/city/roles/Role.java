@@ -1,7 +1,9 @@
 ﻿package city.roles;
 
+import bank.gui.BankCustomerGui;
 import agent.StringUtil;
 import city.PersonAgent;
+import city.gui.Gui;
 
 public abstract class Role 
 {
@@ -76,4 +78,12 @@ public abstract class Role
     }
 	
 	public abstract boolean pickAndExecuteAnAction();
+
+
+
+	public abstract void setGui(Gui waiterGuiFactory);
+
+
+
+	public abstract Gui getGui();
 }
