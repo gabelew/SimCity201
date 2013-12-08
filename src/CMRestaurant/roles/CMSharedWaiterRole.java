@@ -11,6 +11,7 @@ import city.gui.trace.AlertTag;
 public class CMSharedWaiterRole extends CMWaiterRole{
 
 	static final int CHECK_STAND_TIME = 10000;
+	public boolean testingRevolvingMonitor = false;
 	
 	public CMSharedWaiterRole(PersonAgent p, Restaurant r) {
 		super(p, r);
