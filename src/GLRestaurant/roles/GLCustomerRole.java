@@ -5,7 +5,6 @@ package GLRestaurant.roles;
 import GLRestaurant.roles.GLWaiterRole.customerState;
 import GLRestaurant.gui.GLCustomerGui;
 import restaurant.Restaurant;
-//import GLRestaurant.gui.GLRestaurantGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Waiter.Menu;
@@ -26,11 +25,10 @@ public class GLCustomerRole extends Role implements Customer{
 	private final int DECIDINGORDERTIME = 4000;
 	private String choice;
 	private int seatnumber = 0;
-	private int hungerLevel = 5;        // determines length of meal
-	//private double money;
 	private double amountPayable;
 	Timer timer = new Timer();
 	public GLCustomerGui customerGui;
+	
 	private class MyWaiter {
 		GLWaiterRole w;
 		MyWaiter(GLWaiterRole waiter) {
@@ -41,12 +39,7 @@ public class GLCustomerRole extends Role implements Customer{
 	private MyWaiter waiter;
 	Map<String, Double> menu = new ConcurrentHashMap<String, Double>();
 	private Random generator = new Random();
-	
-	// agent correspondents
-	//private GLHostRole host;
-	private GLCashierRole cashier;
 
-	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
 	{DoingNothing, GoingToRestaurant, WaitingInRestaurant, BeingSeated, Seated, Reorder, Ordering, Ordered, Eating, DoneEating, WaitingForCheck, Paying, Leaving};
 	private AgentState state = AgentState.DoingNothing;//The start state
@@ -328,7 +321,7 @@ public class GLCustomerRole extends Role implements Customer{
 		} else {
 			amount = myPerson.cashOnHand;
 		}
-		cashier.msgHereIsMoney(this, amount);
+		((GLCashierRole)restaurant.cashier).msgHereIsMoney(this, amount);
 	}
 
 	private void leaveRestaurant() {
@@ -367,16 +360,16 @@ public class GLCustomerRole extends Role implements Customer{
 		return "customer " + getName();
 	}
 
-	public void setGui(GLCustomerGui g) {
-		customerGui = g;
-	}
+//	public void setGui(GLCustomerGui g) {
+//		customerGui = g;
+//	}
 
-	public GLCustomerGui getGui() {
+	public Gui getGui() {
 		return customerGui;
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		this.customerGui = (GLCustomerGui)waiterGuiFactory;
+	public void setGui(Gui g) {
+		this.customerGui = (GLCustomerGui)g;
 	}
 }

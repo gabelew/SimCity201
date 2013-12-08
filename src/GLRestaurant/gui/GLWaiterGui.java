@@ -202,18 +202,21 @@ public class GLWaiterGui implements Gui {
         g.drawImage(waiterImg, xPos, yPos, null);
         if(customerOrdered) {
 			g.setColor(Color.BLACK);		
-			g.drawString(foodCarried, xPos + 15, yPos);
+			g.drawString(foodCarried, xPos, yPos+5);
 		}
 		else if(bringingFood) {
 			g.setColor(Color.BLACK);
-			g.drawString(foodCarried, xPos + 15, yPos);
+			g.drawString(foodCarried, xPos, yPos+5);
 		}
     }
 
     public void DoLeaveRestaurant() {
     	xDestination = OFFSCREEN_POSITION;
     	yDestination = OFFSCREEN_POSITION;
-    	
+    	if(waitingSpotNumber >= 0){
+			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
+			waitingSpotNumber = -1;
+		}
     	command = Command.LeaveRestaurant;
     }
     
@@ -257,10 +260,6 @@ public class GLWaiterGui implements Gui {
     		xDestination = destination.x + 20;
     		yDestination = destination.y - 20;
     	}
-    	if(waitingSpotNumber >= 0){
-			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
-			waitingSpotNumber = -1;
-		}
     }
 
     public void DoLeaveCustomer() {
@@ -275,10 +274,6 @@ public class GLWaiterGui implements Gui {
     public void GoToCustomer(int x, int y) {
     	xDestination = x + 20;
     	yDestination = y - 20;
-    	if(waitingSpotNumber >= 0){
-			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
-			waitingSpotNumber = -1;
-		}
     }
 
     public int getXPos() {

@@ -1,18 +1,34 @@
 package GLRestaurant.gui;
+import GLRestaurant.gui.GLHostGui.Command;
 import GLRestaurant.roles.GLCashierRole;
 import city.gui.Gui;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class GLCashierGui implements Gui {
-	private static final int PERSONWIDTH = 20;
-	private static final int PERSONHEIGHT = 20;
-    private GLCashierRole agent = null;
+	private BufferedImage cashierImg = null;
+	private final int START_POSITION = -20;
+	private final int xWorkingPosition = 64;
+	private final int yWorkingPosition = 200;
+	enum Command {none, enterRestaurant, leaveRestaurant};
+	Command command = Command.none;
+    private GLCashierRole role = null;
     private boolean isPresent = false;
-    private int xPos = -20, yPos = -20;//default position
-    private int xDestination = -20, yDestination = -20;//default start position
+    private int xPos = START_POSITION, yPos = START_POSITION;//default position
+    private int xDestination = START_POSITION, yDestination = START_POSITION;//default start position
 
     public GLCashierGui(GLCashierRole agent) {
-        this.agent = agent;
+        this.role = agent;
+        try {
+        	cashierImg = ImageIO.read(new File("imgs/cashier_v1.png"));
+        } catch (IOException e) {
+        	
+        }
     }
 
     public void updatePosition() {
@@ -25,17 +41,35 @@ public class GLCashierGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
-
+        if(xPos == xDestination && yPos == yDestination){
+        	if(command == Command.leaveRestaurant){
+        		role.msgAnimationHasLeftRestaurant();
+        		command = Command.none;
+        	}else if(command == Command.enterRestaurant){
+        		command = Command.none;
+        	}
+        		
+        }
 
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        g.fillRect(xPos, yPos, PERSONWIDTH, PERSONHEIGHT);
+        g.drawImage(cashierImg, xPos,yPos,null);
     }
 
     public boolean isPresent() {
         return isPresent;
+    }
+    
+    public void DoLeaveRestaurant() {
+        xDestination = START_POSITION;
+        yDestination = START_POSITION;
+        command = Command.leaveRestaurant;
+    }
+    public void DoEnterRestaurant(){
+        xDestination = xWorkingPosition;
+        yDestination = yWorkingPosition; 
+        command = Command.enterRestaurant;   	
     }
 
     public int getXPos() {

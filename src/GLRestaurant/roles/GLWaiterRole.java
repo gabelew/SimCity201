@@ -73,12 +73,6 @@ public class GLWaiterRole extends Role implements Waiter{
 	private final double SALADPRICE = 5.99;
 	private final double COOKIEPRICE = 8.99;
 	
-	
-	// agent correspondents
-	private GLHostRole host;
-	private GLCookRole cook;
-	private GLCashierRole cashier;
-	
 	/**
 	 * Constructor for WaiterAgent class.
 	 * @param name
@@ -106,7 +100,7 @@ public class GLWaiterRole extends Role implements Waiter{
 
 	public void msgReturnedFromBreak() {
 		print("Finished break.");
-		host.msgFinishedBreak(this);
+		((GLHostRole)restaurant.host).msgFinishedBreak(this);
 		stateChanged();
 	}
 	
@@ -316,7 +310,7 @@ public class GLWaiterRole extends Role implements Waiter{
 	
 	private void requestHostForBreak() {
 		WantToGoOnBreak = false;
-		host.msgIWantToGoOnBreak(this);
+		((GLHostRole)restaurant.host).msgIWantToGoOnBreak(this);
 	}
 
 	private void seatCustomer(MyCustomer mc) {
@@ -356,9 +350,9 @@ public class GLWaiterRole extends Role implements Waiter{
 	}
 	
 	private void sendOrderToCook(MyCustomer mc, String choice) {
-		Do("Giving order to " + cook.getName());	
+		Do("Giving order to " + ((GLCookRole)restaurant.cook).getName());	
 		mc.cs = customerState.waitingForFood;
-		cook.msgHereIsOrder(this, choice, mc.c);
+		((GLCookRole)restaurant.cook).msgHereIsOrder(this, choice, mc.c);
 		waiterGui.DoLeaveCustomer();
 	}
 	
@@ -386,7 +380,7 @@ public class GLWaiterRole extends Role implements Waiter{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cook.msgGotPlate(this, mc.c);
+		((GLCookRole)restaurant.cook).msgGotPlate(this, mc.c);
 		Do("Bringing " + mc.c.getName() + " " + choice);
 		waiterGui.servingFood(choice);
 		waiterGui.GoToTable(mc.c, mc.t.tableNumber);
@@ -398,7 +392,7 @@ public class GLWaiterRole extends Role implements Waiter{
 		}
 		mc.c.msgHereIsFood(choice);
 		checks.add(new Check(mc.c, choice, checkState.pending));
-		cashier.msgProduceCheck(this, mc.c, choice);
+		((GLCashierRole)restaurant.cashier).msgProduceCheck(this, mc.c, choice);
 		mc.cs = customerState.eating;
 		waiterGui.finishedWithOrder(choice);
 		waiterGui.DoLeaveCustomer();
@@ -412,7 +406,7 @@ public class GLWaiterRole extends Role implements Waiter{
 	
 	private void clearTable(MyCustomer mc) {
 		Do("Customer leaving.");
-		host.msgTableAvailable(this, mc.c, mc.t.tableNumber);
+		((GLHostRole)restaurant.host).msgTableAvailable(this, mc.c, mc.t.tableNumber);
 		mc.cs = customerState.leftRestaurant;
 	}
 	
