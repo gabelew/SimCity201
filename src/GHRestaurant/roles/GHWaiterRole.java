@@ -10,6 +10,8 @@ import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.interfaces.Person;
 import city.roles.Role;
 
@@ -492,8 +494,9 @@ public class GHWaiterRole extends Role implements Waiter{
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
+	public void setGui(Gui g) {
+		AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, getName(), "SETTING GUI");
+		waitergui = (GHWaiterGui) g;
 		
 	}
 }

@@ -6,6 +6,8 @@ import javax.swing.*;
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,8 +26,6 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
     static final int TABLE2XLOCATION = 200, TABLE2YLOCATION = 150;
     static final int TABLE3XLOCATION = 200, TABLE3YLOCATION = 50;
     static final int TABLESIZE = 50;
-    
-    private List<Gui> guis = new ArrayList<Gui>();
     
 	private BufferedImage tableImg = null;
 	private BufferedImage grillRightImg = null;
@@ -62,6 +62,7 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
 	            }
 	        }
     	}
+
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();  //Will have paintComponent called
 	}
@@ -92,28 +93,13 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         
         //The grill
         g2.drawImage(grillRightImg,450,150,null);
-        
+
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.draw(g2);
-
+                
             }
         }
     }
 
-    public void addGui(GHCustomerGui gui) {
-        guis.add(gui);
-    }
-
-    public void addGui(GHHostGui gui) {
-        guis.add(gui);
-    }
-    
-    public void addGui(GHWaiterGui gui){
-    	guis.add(gui);
-    }
-    
-    public void addGui(GHCookGui gui){
-    	guis.add(gui);
-    }
 }

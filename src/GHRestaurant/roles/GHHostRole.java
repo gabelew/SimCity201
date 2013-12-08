@@ -229,9 +229,8 @@ public class GHHostRole extends Role implements Host{
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void setGui(Gui g) {
+		hostGui = (GHHostGui) g;
 	}
 
 	public void setRestaurant(Restaurant r) {
