@@ -336,9 +336,8 @@ public class GHCustomerRole extends Role implements Customer{
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void setGui(Gui g) {
+		customerGui = (GHCustomerGui) g;
 	}
 }
 
