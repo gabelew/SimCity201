@@ -45,6 +45,17 @@ import GCRestaurant.roles.GCCookRole;
 import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCHostRole;
 import GCRestaurant.roles.GCWaiterRole;
+import GHRestaurant.gui.GHAnimationPanel;
+import GHRestaurant.gui.GHCookGui;
+import GHRestaurant.gui.GHCustomerGui;
+import GHRestaurant.gui.GHHostGui;
+import GHRestaurant.gui.GHRestaurantPanel;
+import GHRestaurant.gui.GHWaiterGui;
+import GHRestaurant.roles.GHCashierRole;
+import GHRestaurant.roles.GHCookRole;
+import GHRestaurant.roles.GHCustomerRole;
+import GHRestaurant.roles.GHHostRole;
+import GHRestaurant.roles.GHWaiterRole;
 import GLRestaurant.gui.GLCashierGui;
 import GLRestaurant.gui.GLCookGui;
 import GLRestaurant.gui.GLCustomerGui;
@@ -545,6 +556,54 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	//((GLCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
+        	}else if(b.type.equals("restaurant") && i==23){
+        		GHRestaurantPanel restPanel = new GHRestaurantPanel(this);
+	            InsideAnimationPanel restaurantAnimationPanel = new GHAnimationPanel(this);
+	        	
+	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+	            restPanel.setPreferredSize(restDim);
+	            restPanel.setMinimumSize(restDim);
+	            restPanel.setMaximumSize(restDim);
+	
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, restPanel);
+	        	restPanel.setInsideBuildingPanel(bp);
+	        	b.setInsideBuildingPanel(bp);
+	        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
+	        	buildingsPanel.add(bp, "" + i);
+	        	Restaurant r =null;
+	        	
+	        	r = new Restaurant(
+	        						(restaurant.interfaces.Host)(new GHHostRole()), 
+	        						(restaurant.interfaces.Cashier)(new GHCashierRole()), 
+	        						(restaurant.interfaces.Cook)(new GHCookRole(1)), 
+	        						new restaurant.interfaces.Waiter.Menu(), 
+	        						"RestaurantGHCustomerRole", 
+	        						"RestaurantGH", 
+	        						restaurantAnimationPanel, 
+	        						new Point(b.getX(),b.getY()), 
+	        						"RestaurantGHWaiterRole");
+	     
+	        	getRestaurants().add(r);
+	
+	        	((GHHostRole)r.host).setRestaurant(r);
+	        	GHHostGui hg = new GHHostGui(((GHHostRole)r.host));
+	        	((GHHostRole)r.host).setGui(hg);
+	        	restaurantAnimationPanel.addGui(hg);
+	
+	
+	        	((GHCashierRole)r.cashier).setRestaurant(r);
+	        	GHCashierGui cg = new GHCashierGui(((GHCashierRole)r.cashier));
+	        	((GHCashierRole)r.cashier).setGui(cg);
+	        	restaurantAnimationPanel.addGui(cg);
+	        	
+	
+	        	((GHCookRole)r.cook).setRestaurant(r);
+	        	GHCookGui ccg = new GHCookGui(((GHCookRole)r.cook));
+	        	((GHCookRole)r.cook).setGui(ccg);
+	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
+	        	//((GHCookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	restaurantAnimationPanel.addGui(ccg);
+	        	
         	}else if(b.type.equals("restaurant") && i==57){
         		GCRestaurantPanel restPanel = new GCRestaurantPanel(this);
 	            InsideAnimationPanel restaurantAnimationPanel = new GCAnimationPanel(this);
@@ -860,6 +919,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new GCCustomerRole(p,r);
 		}else if(r.customerRole.equalsIgnoreCase("RestaurantGLCustomerRole")){
 			return new GLCustomerRole(p,r);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantGHCustomerRole")){
+			return new GHCustomerRole(p,r);
 		}
 		
 		return null;
@@ -873,6 +934,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new GCCustomerGui((GCCustomerRole) role);
 		}else if(r.customerRole.equalsIgnoreCase("RestaurantGLCustomerRole")){
 			return new GLCustomerGui((GLCustomerRole) role);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantGHCustomerRole")){
+			return new GHCustomerGui((GHCustomerRole) role);
 		}
 		
 		return null;
@@ -890,6 +953,9 @@ public class SimCityGui extends JFrame implements ActionListener {
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GLWaiterRole");
 			return new GLWaiterRole(p,r);
+		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGHWaiterRole")){
+			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GHWaiterRole");
+			return new GHWaiterRole(p,r);
 		}
 		
 		return null;
@@ -903,6 +969,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new GCWaiterGui((GCWaiterRole) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
 			return new GLWaiterGui((GLWaiterRole) role);
+		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGHWaiterRole")){
+			return new GHWaiterGui((GHWaiterRole) role);
 		}
 		
 		return null;
