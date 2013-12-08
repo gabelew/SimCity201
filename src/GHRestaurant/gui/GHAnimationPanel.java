@@ -1,5 +1,6 @@
 package GHRestaurant.gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import city.animationPanels.InsideAnimationPanel;
@@ -9,6 +10,9 @@ import city.gui.SimCityGui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -16,15 +20,30 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
 
     private Image bufferImage;
     private Dimension bufferSize;
-    static final int G2XLOCATION = 200, G2YLOCATION = 250;
-    static final int G3XLOCATION = 200, G3YLOCATION = 150;
-    static final int G4XLOCATION = 200, G4YLOCATION = 50;
+    static final int TABLE1XLOCATION = 200, TABLE1YLOCATION = 250;
+    static final int TABLE2XLOCATION = 200, TABLE2YLOCATION = 150;
+    static final int TABLE3XLOCATION = 200, TABLE3YLOCATION = 50;
     static final int TABLESIZE = 50;
     
     private List<Gui> guis = new ArrayList<Gui>();
+    
+	private BufferedImage tableImg = null;
+	private BufferedImage grillRightImg = null;
+	private BufferedImage platingTableImg = null;
 
     public GHAnimationPanel(SimCityGui gui) {
     	this.simCityGui = gui;
+    	
+		try {
+			StringBuilder path = new StringBuilder("imgs/");
+		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
+		    ImageIO.read(new File(path.toString() + "grill.png"));
+		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
+		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
+		} catch (IOException e) {
+		}
+    	
+    	
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         
@@ -41,10 +60,6 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
-        Graphics2D g3 = (Graphics2D)g;
-        Graphics2D g4 = (Graphics2D)g;
-        Graphics2D g5 = (Graphics2D)g;
-        Graphics2D g6 = (Graphics2D)g;
 
 
         //Clear the screen by painting a rectangle the size of the frame
@@ -52,20 +67,28 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
 
         //Here is the tables
-        g2.setColor(Color.ORANGE);
-        g2.fillRect(G2XLOCATION, G2YLOCATION, TABLESIZE, TABLESIZE);//200 and 250 need to be table params
-
-        g3.setColor(Color.ORANGE);
-        g3.fillRect(G3XLOCATION, G3YLOCATION, TABLESIZE, TABLESIZE);//200 and 150 need to be table params
-
-        g4.setColor(Color.ORANGE);
-        g4.fillRect(G4XLOCATION, G4YLOCATION, TABLESIZE, TABLESIZE);//200 and 50 need to be table params
-
-        g5.setColor(Color.BLACK);
-        g5.fillRect(350,150 ,15 ,100 );
+        //g2.setColor(Color.ORANGE);
+        g2.drawImage(tableImg,TABLE1XLOCATION,TABLE1YLOCATION,null);
         
-        g6.setColor(Color.DARK_GRAY);
-        g6.fillRect(400,150 ,30 ,30 );
+        //g3.setColor(Color.ORANGE);
+        g2.drawImage(tableImg,TABLE2XLOCATION,TABLE2YLOCATION,null);
+        
+        //g4.setColor(Color.ORANGE);
+        g2.drawImage(tableImg,TABLE3XLOCATION,TABLE3YLOCATION,null);
+
+        //g2.setColor(Color.BLACK);
+        g2.drawImage(platingTableImg,350,150,null);
+        g2.drawImage(platingTableImg,350,165,null);
+        g2.drawImage(platingTableImg,350,180,null);
+        g2.drawImage(platingTableImg,350,195,null);
+        g2.drawImage(platingTableImg,350,210,null);
+        g2.drawImage(platingTableImg,350,225,null);
+        g2.drawImage(platingTableImg,350,240,null);
+        g2.drawImage(platingTableImg,350,255,null);
+
+        
+        //g2.setColor(Color.DARK_GRAY);
+        g2.drawImage(grillRightImg,450,150,null);
         
         
         for(Gui gui : guis) {
