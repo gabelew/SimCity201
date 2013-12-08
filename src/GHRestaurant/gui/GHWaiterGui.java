@@ -1,11 +1,14 @@
-package restaurant.gui;
+package GHRestaurant.gui;
 
 
 import restaurant.interfaces.*;
+
 //import restaurant.Waiter;
 import java.awt.*;
 
-public class WaiterGui implements Gui {
+import city.gui.Gui;
+
+public class GHWaiterGui implements Gui {
 
     private Waiter agent = null;
     private boolean isPresent = false;
@@ -22,7 +25,7 @@ public class WaiterGui implements Gui {
     public static final int xTable = 200;
     public static final int yTable = 250;
 
-    public WaiterGui(Waiter agent, RestaurantGui gui) {
+    public GHWaiterGui(Waiter agent, RestaurantGui gui) {
         this.agent = agent;
         this.gui = gui;
     }

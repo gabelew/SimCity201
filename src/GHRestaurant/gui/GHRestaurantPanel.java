@@ -1,6 +1,7 @@
-package restaurant.gui;
+package GHRestaurant.gui;
 
-import restaurant.*;
+import GHRestaurant.*;
+import GHRestaurant.roles.*;
 
 import restaurant.interfaces.*;
 
@@ -13,29 +14,29 @@ import java.util.Vector;
  * Panel in frame that contains all the restaurant information,
  * including host, cook, waiters, and customers.
  */
-public class RestaurantPanel extends JPanel {
+public class GHRestaurantPanel extends JPanel {
 
     //Host, cook, waiters and customers
-    private HostAgent host = new HostAgent("Sarah");
-    private HostGui hostGui = new HostGui(host);
-    private CookAgent cook = new CookAgent("Fred");
-    private CookGui cookGui = new CookGui(cook);
-    private MarketAgent market = new MarketAgent("Market1",200,360,250,250);
-    private MarketAgent market2 = new MarketAgent("Market2",350,150,450,100);
-    private MarketAgent market3 = new MarketAgent("market3",450,550,250,50);
-    private CashierAgent cashier = new CashierAgent("Brenda");
+    private GHHostAgent host = new GHHostAgent("Sarah");
+    private GHHostGui hostGui = new GHHostGui(host);
+    private GHCookAgent cook = new GHCookAgent("Fred");
+    private GHCookGui cookGui = new GHCookGui(cook);
+    private GHMarketAgent market = new GHMarketAgent("Market1",200,360,250,250);
+    private GHMarketAgent market2 = new GHMarketAgent("Market2",350,150,450,100);
+    private GHMarketAgent market3 = new GHMarketAgent("market3",450,550,250,50);
+    private GHCashierAgent cashier = new GHCashierAgent("Brenda");
 
     private Vector<Customer> customers = new Vector<Customer>();
     private Vector<Waiter> waiters = new Vector<Waiter>();
 
     private JPanel restLabel = new JPanel();
-    private ListPanel customerPanel = new ListPanel(this, "Customers");
-    private ListPanel waiterPanel = new ListPanel(this, "Waiters");
+    private GHListPanel customerPanel = new GHListPanel(this, "Customers");
+    private GHListPanel waiterPanel = new GHListPanel(this, "Waiters");
     private JPanel group = new JPanel();
 
-    private RestaurantGui gui; //reference to main gui
+    private GHRestaurantGui gui; //reference to main gui
 
-    public RestaurantPanel(RestaurantGui gui) {
+    public GHRestaurantPanel(GHRestaurantGui gui) {
         this.gui = gui;
         host.setGui(hostGui);
 
@@ -119,8 +120,8 @@ public class RestaurantPanel extends JPanel {
     public void addPerson(String type, String name, boolean ishungry_break) {
 
     	if (type.equals("Customers")) {
-    		CustomerAgent c = new CustomerAgent(name);	
-    		CustomerGui g = new CustomerGui(c, gui);
+    		GHCustomerAgent c = new GHCustomerAgent(name);	
+    		GHCustomerGui g = new GHCustomerGui(c, gui);
     		gui.animationPanel.addGui(g);// dw
     		c.setHost(host);
     		c.setCashier(cashier);
@@ -133,8 +134,8 @@ public class RestaurantPanel extends JPanel {
     	}
     	
     	else if (type.equals("Waiters")) {
-    		WaiterAgent w = new WaiterAgent(name);	
-    		WaiterGui wg = new WaiterGui(w, gui);
+    		GHWaiterAgent w = new GHWaiterAgent(name);	
+    		GHWaiterGui wg = new GHWaiterGui(w, gui);
     		gui.animationPanel.addGui(wg);// dw
     		w.setHost(host);
     		w.setCashier(cashier);

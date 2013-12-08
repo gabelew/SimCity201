@@ -1,24 +1,26 @@
-package restaurant;
+package GHRestaurant.roles;
 
+import GHRestaurant.gui.GHWaiterGui;
 import agent.Agent;
-import restaurant.gui.WaiterGui;
 import restaurant.interfaces.*;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.roles.Role;
+
 /**
  * Restaurant Waiter Agent
  */
 
-public class WaiterAgent extends Agent implements Waiter{
+public class GHWaiterAgent extends Role implements Waiter{
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> waitingCustomers
 	= new ArrayList<MyCustomer>();
 	public List<CustomerCheck> customerChecks
 	= new ArrayList<CustomerCheck>();
-	public WaiterGui waitergui = null;
+	public GHWaiterGui waitergui = null;
 	private boolean WantToGoOnBreak = false;
 	private boolean OnBreak = false;
 	private boolean BackTW = false;
@@ -29,7 +31,7 @@ public class WaiterAgent extends Agent implements Waiter{
 	private Cook cook;
 	enum CustomerState {Waiting, AskedToOrder, Ordered, Reorder, Ready, Done, Idle}
 
-	public WaiterAgent(String name) {
+	public GHWaiterAgent(String name) {
 		super();
 
 		this.name = name;
@@ -150,7 +152,7 @@ public class WaiterAgent extends Agent implements Waiter{
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.
@@ -384,11 +386,11 @@ public class WaiterAgent extends Agent implements Waiter{
 
 	//utilities
 	  
-	  public void setGui(WaiterGui wg){
+	  public void setGui(GHWaiterGui wg){
 		  waitergui = wg;
 	  }
 	  
-	  public WaiterGui getGui(){
+	  public GHWaiterGui getGui(){
 		  return waitergui;
 	  }
 	  

@@ -1,17 +1,19 @@
-package restaurant;
+package GHRestaurant.roles;
 
 import agent.Agent;
 import restaurant.interfaces.*;
-import restaurant.gui.*;
+import GHRestaurant.gui.*;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import city.roles.Role;
 
 /**
  * Restaurant Cook Agent
  */
 
-public class CookAgent extends Agent implements Cook {
+public class GHCookAgent extends Role implements Cook {
 	
 	public List<Order> orders
 	= Collections.synchronizedList(new ArrayList<Order>());
@@ -20,14 +22,14 @@ public class CookAgent extends Agent implements Cook {
 	private Timer timer = new Timer();
 	public enum OrderState {PENDING,COOKING,DONECOOKING}
 	public String name;
-	private CookGui cookgui;
+	private GHCookGui cookgui;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
 	public List<Market> markets
 	= new ArrayList<Market>();
 	private Semaphore atDestination = new Semaphore(0,true);
 
 
-	public CookAgent(String name) {
+	public GHCookAgent(String name) {
 		super();
 
 		this.name = name;
@@ -90,7 +92,7 @@ public class CookAgent extends Agent implements Cook {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 
 		
 		/*for(Map.Entry<String, Food> entry : Inventory.entrySet()){

@@ -1,11 +1,13 @@
-package restaurant;
+package GHRestaurant.roles;
 
 import agent.Agent;
-import restaurant.gui.HostGui;
+import GHRestaurant.gui.GHHostGui;
 import restaurant.interfaces.*;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
+import city.roles.Role;
 
 /**
  * Restaurant Host Agent
@@ -14,7 +16,7 @@ import java.util.concurrent.Semaphore;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostAgent extends Agent implements Host{
+public class GHHostAgent extends Role implements Host{
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -31,9 +33,9 @@ public class HostAgent extends Agent implements Host{
 	private String name;
 	private Semaphore atDestination = new Semaphore(0,true);
 
-	public HostGui hostGui = null;
+	public GHHostGui hostGui = null;
 
-	public HostAgent(String name) {
+	public GHHostAgent(String name) {
 		super();
 
 		this.name = name;
@@ -109,7 +111,7 @@ public class HostAgent extends Agent implements Host{
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.
@@ -144,11 +146,11 @@ public class HostAgent extends Agent implements Host{
 
 	//utilities
 
-	public void setGui(HostGui gui) {
+	public void setGui(GHHostGui gui) {
 		hostGui = gui;
 	}
 
-	public HostGui getGui() {
+	public GHHostGui getGui() {
 		return hostGui;
 	}
 

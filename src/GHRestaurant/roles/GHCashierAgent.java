@@ -1,15 +1,17 @@
-package restaurant;
+package GHRestaurant.roles;
 
 import agent.Agent;
 import restaurant.interfaces.*;
 
 import java.util.*;
 
+import city.roles.Role;
+
 /**
  * Restaurant Cook Agent
  */
 
-public class CashierAgent extends Agent implements Cashier{
+public class GHCashierAgent extends Role implements Cashier{
 	
 	public List<Check> checks
 	= Collections.synchronizedList(new ArrayList<Check>());
@@ -18,7 +20,7 @@ public class CashierAgent extends Agent implements Cashier{
 	private double RestaurantMoney; 
 
 
-	public CashierAgent(String name) {
+	public GHCashierAgent(String name) {
 		super();
 
 		this.name = name;
@@ -69,7 +71,7 @@ public class CashierAgent extends Agent implements Cashier{
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 
 		
 		synchronized(checks){

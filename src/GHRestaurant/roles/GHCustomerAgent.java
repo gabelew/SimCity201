@@ -1,7 +1,6 @@
-package restaurant;
+package GHRestaurant.roles;
 
-import restaurant.gui.CustomerGui;
-import restaurant.gui.RestaurantGui;
+import GHRestaurant.gui.*;
 import restaurant.interfaces.*;
 import agent.Agent;
 
@@ -10,14 +9,16 @@ import java.util.TimerTask;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import city.roles.Role;
+
 /**
  * Restaurant customer agent.
  */
-public class CustomerAgent extends Agent implements Customer{
+public class GHCustomerAgent extends Role implements Customer{
 	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	Timer timer = new Timer();
-	private CustomerGui customerGui;
+	private GHCustomerGui customerGui;
 
 	private int tableNumber; 
 	private String choice;
@@ -47,7 +48,7 @@ public class CustomerAgent extends Agent implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerAgent(String name){
+	public GHCustomerAgent(String name){
 		super();
 		this.name = name;
 		
@@ -178,7 +179,7 @@ public class CustomerAgent extends Agent implements Customer{
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		//	CustomerAgent is a finite state machine
 
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry ){
@@ -317,11 +318,11 @@ public class CustomerAgent extends Agent implements Customer{
 		return "customer " + getName();
 	}
 
-	public void setGui(CustomerGui g) {
+	public void setGui(GHCustomerGui g) {
 		customerGui = g;
 	}
 
-	public CustomerGui getGui() {
+	public GHCustomerGui getGui() {
 		return customerGui;
 	}
 	
