@@ -33,6 +33,11 @@ import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
 import EBRestaurant.roles.EBHostRole;
 import EBRestaurant.roles.EBWaiterRole;
+import GCRestaurant.gui.GCAnimationPanel;
+import GCRestaurant.gui.GCCookGui;
+import GCRestaurant.roles.GCCashierRole;
+import GCRestaurant.roles.GCCookRole;
+import GCRestaurant.roles.GCHostRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.BankAgent;
@@ -471,6 +476,54 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((EBCookRole)r.cook).setGui(ccg);
 	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
 	        	//((EBCookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	restaurantAnimationPanel.addGui(ccg);
+	        	
+        	}else if(b.type.equals("restaurant") && i==57){
+        		GCRestaurantPanel restPanel = new GCRestaurantPanel(this);
+	            InsideAnimationPanel restaurantAnimationPanel = new GCAnimationPanel(this);
+	        	
+	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
+	            restPanel.setPreferredSize(restDim);
+	            restPanel.setMinimumSize(restDim);
+	            restPanel.setMaximumSize(restDim);
+	
+	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,restaurantAnimationPanel, restPanel);
+	        	restPanel.setInsideBuildingPanel(bp);
+	        	b.setInsideBuildingPanel(bp);
+	        	restaurantAnimationPanel.setInsideBuildingPanel(bp);
+	        	buildingsPanel.add(bp, "" + i);
+	        	Restaurant r =null;
+	        	
+	        	r = new Restaurant(
+	        						(restaurant.interfaces.Host)(new GCHostRole()), 
+	        						(restaurant.interfaces.Cashier)(new GCCashierRole()), 
+	        						(restaurant.interfaces.Cook)(new GCCookRole(1)), 
+	        						new restaurant.interfaces.Waiter.Menu(), 
+	        						"RestaurantGCCustomerRole", 
+	        						"RestaurantGC", 
+	        						restaurantAnimationPanel, 
+	        						new Point(b.getX(),b.getY()), 
+	        						"RestaurantGCWaiterRole");
+	     
+	        	getRestaurants().add(r);
+	
+	        	((GCHostRole)r.host).setRestaurant(r);
+	        	GCHostGui hg = new GCHostGui(((GCHostRole)r.host));
+	        	((GCHostRole)r.host).setGui(hg);
+	        	restaurantAnimationPanel.addGui(hg);
+	
+	
+	        	((GCCashierRole)r.cashier).setRestaurant(r);
+	        	GCCashierGui cg = new GCCashierGui(((GCCashierRole)r.cashier));
+	        	((GCCashierRole)r.cashier).setGui(cg);
+	        	restaurantAnimationPanel.addGui(cg);
+	        	
+	
+	        	((GCCookRole)r.cook).setRestaurant(r);
+	        	GCCookGui ccg = new GCCookGui(((GCCookRole)r.cook));
+	        	((GCCookRole)r.cook).setGui(ccg);
+	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
+	        	//((GCCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
         	}else if(b.type.equals("restaurant")){
