@@ -13,7 +13,7 @@ public class GHCashierGui implements Gui {
     private boolean isPresent = false;
 
     private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
+    private int xDestination = 60, yDestination = 60;//default start position
     private int tableNumber;
 
     public static final int xTable = 200;
@@ -41,7 +41,7 @@ public class GHCashierGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
+        g.setColor(Color.RED);
         g.fillRect(xPos, yPos, 20, 20);
     }
 

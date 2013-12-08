@@ -12,8 +12,8 @@ public class GHCookGui implements Gui {
 
     private Cook agent = null;
 
-    private int xPos = 365, yPos = 230;//default waiter position
-    private int xDestination = 365, yDestination = 230;//default start position
+    private int xPos = 382, yPos = 260;//default cook position
+    private int xDestination = 382, yDestination = 260;//default start position
     private int tableNumber;
     private boolean isPresent = false;
 
@@ -41,7 +41,7 @@ public class GHCookGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.fillRect(xPos, yPos, 20, 20);
     }
 

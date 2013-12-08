@@ -27,7 +27,7 @@ public class GHCookRole extends Role implements Cook {
 	private Timer timer = new Timer();
 	public enum OrderState {PENDING,COOKING,DONECOOKING}
 	//public String name;
-	private GHCookGui cookgui;
+	private GHCookGui cookgui = null;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
 	public List<Market> markets
 	= new ArrayList<Market>();
@@ -306,15 +306,13 @@ public class GHCookRole extends Role implements Cook {
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void setGui(Gui g) {
+		cookgui = (GHCookGui) g;
 	}
 
 	@Override
 	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return cookgui;
 	}
 
 	public void setRestaurant(Restaurant r) {
