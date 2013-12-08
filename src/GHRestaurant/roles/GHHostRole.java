@@ -81,7 +81,7 @@ public class GHHostRole extends Role implements Host{
 	public void msgLeavingTable(Customer cust) {
 		for (Table table : tables) {
 			if (table.getOccupant() == cust) {
-				print(cust + " leaving " + table);
+				print("customer leaving " + table);
 				table.setUnoccupied();
 				stateChanged();
 			}
