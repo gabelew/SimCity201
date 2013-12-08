@@ -557,7 +557,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	//((GLCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
-        	}else if(b.type.equals("restaurant") && i==23){
+        	}else if(b.type.equals("restaurant") && i==27){
         		GHRestaurantPanel restPanel = new GHRestaurantPanel(this);
 	            InsideAnimationPanel restaurantAnimationPanel = new GHAnimationPanel(this);
 	        	

@@ -29,14 +29,14 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	protected RevolvingStandMonitor revolvingStand;
 	boolean haveNotRecentlyCheckedStand = true;
 	
-	class MyCustomer{
+	public class MyCustomer{
 		private Customer c;
 		int table;
-		CustomerState s;
+		public CustomerState s;
 		String choice;
 		private double check;
 
-		MyCustomer(Customer nc, int t, CustomerState ns, String nchoice){
+		public MyCustomer(Customer nc, int t, CustomerState ns, String nchoice){
 			c = nc;
 			table = t;
 			s = ns;
