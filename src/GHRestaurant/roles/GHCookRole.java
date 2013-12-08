@@ -1,6 +1,7 @@
 package GHRestaurant.roles;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 import GHRestaurant.gui.*;
 
@@ -25,35 +26,36 @@ public class GHCookRole extends Role implements Cook {
 	int nextmarket;
 	private Timer timer = new Timer();
 	public enum OrderState {PENDING,COOKING,DONECOOKING}
-	public String name;
+	//public String name;
 	private GHCookGui cookgui;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
 	public List<Market> markets
 	= new ArrayList<Market>();
 	private Semaphore atDestination = new Semaphore(0,true);
+	private Restaurant restaurant;
 
 
-	public GHCookRole(String name) {
+	public GHCookRole(int amount) {
 		super();
 
-		this.name = name;
+		//this.name = name;
 		nextmarket = 0;
 		
 		Inventory.put("Steak", new Food("Steak",5000));
 		Inventory.put("Chicken", new Food("Chicken",5000));
-		Inventory.put("Salad", new Food("Salad",3000));
+		Inventory.put("Salad", new Food("Salad",amount));
 		Inventory.put("Pizza", new Food("Pizza",7000));	
 		
-		Inventory.get("Steak").setAmount(10);
+		/*Inventory.get("Steak").setAmount(10);
 		Inventory.get("Chicken").setAmount(10);
 		Inventory.get("Salad").setAmount(10);
-		Inventory.get("Pizza").setAmount(10);
+		Inventory.get("Pizza").setAmount(10);*/
 
 	}
 
-	public String getName() {
+	/*public String getName() {
 		return name;
-	}
+	}*/
 
 	public List getOrders() {
 		return orders;
@@ -313,6 +315,10 @@ public class GHCookRole extends Role implements Cook {
 	public Gui getGui() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 	}
 }
 

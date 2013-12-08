@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
+import city.gui.SimCityGui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,14 +23,16 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
     
     private List<Gui> guis = new ArrayList<Gui>();
 
-    public GHAnimationPanel() {
+    public GHAnimationPanel(SimCityGui gui) {
+    	this.simCityGui = gui;
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         
         bufferSize = this.getSize();
- 
-    	Timer timer = new Timer(20, this );
-    	timer.start();
+        simCityGui.animationPanel.timer.addActionListener(this);
+
+    	//Timer timer = new Timer(20, this );
+    	//timer.start();
     }
 
 	public void actionPerformed(ActionEvent e) {

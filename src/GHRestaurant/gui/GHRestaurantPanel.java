@@ -6,6 +6,7 @@ import restaurant.interfaces.*;
 
 import javax.swing.*;
 
+import city.animationPanels.InsideBuildingPanel;
 import city.gui.SimCityGui;
 
 import java.awt.*;
@@ -19,14 +20,14 @@ import java.util.Vector;
 public class GHRestaurantPanel extends JPanel {
 
     //Host, cook, waiters and customers
-    private GHHostRole host = new GHHostRole("Sarah");
+    private GHHostRole host = new GHHostRole();
     private GHHostGui hostGui = new GHHostGui(host);
-    private GHCookRole cook = new GHCookRole("Fred");
+    private GHCookRole cook = new GHCookRole(1);
     private GHCookGui cookGui = new GHCookGui(cook);
     private GHMarketRole market = new GHMarketRole("Market1",200,360,250,250);
     private GHMarketRole market2 = new GHMarketRole("Market2",350,150,450,100);
     private GHMarketRole market3 = new GHMarketRole("market3",450,550,250,50);
-    private GHCashierRole cashier = new GHCashierRole("Brenda");
+    private GHCashierRole cashier = new GHCashierRole();
 
     private Vector<Customer> customers = new Vector<Customer>();
     private Vector<Waiter> waiters = new Vector<Waiter>();
@@ -37,6 +38,8 @@ public class GHRestaurantPanel extends JPanel {
     private JPanel group = new JPanel();
 
     private SimCityGui gui; //reference to main gui
+    private InsideBuildingPanel insideBuildingPanel;
+
 
     public GHRestaurantPanel(SimCityGui gui) {
         this.gui = gui;
@@ -152,5 +155,9 @@ public class GHRestaurantPanel extends JPanel {
     		}
     	}*/
     }
+
+	public void setInsideBuildingPanel(InsideBuildingPanel bp) {
+		insideBuildingPanel = bp;		
+	}
 
 }

@@ -46,6 +46,7 @@ import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCHostRole;
 import GCRestaurant.roles.GCWaiterRole;
 import GHRestaurant.gui.GHAnimationPanel;
+import GHRestaurant.gui.GHCashierGui;
 import GHRestaurant.gui.GHCookGui;
 import GHRestaurant.gui.GHCustomerGui;
 import GHRestaurant.gui.GHHostGui;

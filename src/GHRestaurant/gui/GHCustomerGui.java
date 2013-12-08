@@ -11,12 +11,12 @@ import city.gui.SimCityGui;
 
 public class GHCustomerGui implements Gui{
 
-	private Customer agent = null;
+	private Customer role = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
 	//private HostAgent host;
-	SimCityGui gui;
+	//SimCityGui gui;
 
 	private int xPos, yPos;
 	private int Cashierx = -50, Cashiery = -50;
@@ -27,13 +27,13 @@ public class GHCustomerGui implements Gui{
 	public static final int xTable = 200;
 	public static final int yTable = 250;
 
-	public GHCustomerGui(Customer c, SimCityGui gui){ //HostAgent m) {
-		agent = c;
+	public GHCustomerGui(GHCustomerRole role){ //HostAgent m) {
+		this.role = role;
 		xPos = -40;
 		yPos = -40;
 		xDestination = -40;
 		yDestination = -40;
-		this.gui = gui;
+		//this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -48,10 +48,10 @@ public class GHCustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) ((GHCustomerRole) agent).msgAnimationFinishedGoToSeat();
-			if (command==Command.GoToCashier) ((GHCustomerRole) agent).msgAnimationFinishedGoToCashier();
+			if (command==Command.GoToSeat) ((GHCustomerRole) role).msgAnimationFinishedGoToSeat();
+			if (command==Command.GoToCashier) ((GHCustomerRole) role).msgAnimationFinishedGoToCashier();
 			 if (command==Command.LeaveRestaurant) {
-				((GHCustomerRole) agent).msgAnimationFinishedLeaveRestaurant();
+				((GHCustomerRole) role).msgAnimationFinishedLeaveRestaurant();
 				//System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 				//setPresent(false);
@@ -71,7 +71,7 @@ public class GHCustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		role.gotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {

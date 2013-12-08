@@ -1,6 +1,7 @@
 package GHRestaurant.roles;
 
 import GHRestaurant.gui.GHHostGui;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 import java.util.*;
@@ -30,16 +31,17 @@ public class GHHostRole extends Role implements Host{
 	//Later we will see how it is implemented
 	
 	private int nextwaiter = 0;
+	private Restaurant restaurant;
 
-	private String name;
+	//private String name;
 	private Semaphore atDestination = new Semaphore(0,true);
 
 	public GHHostGui hostGui = null;
 
-	public GHHostRole(String name) {
+	public GHHostRole() {
 		super();
 
-		this.name = name;
+		//this.name = name;
 		// make some tables
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
@@ -47,13 +49,13 @@ public class GHHostRole extends Role implements Host{
 		}
 	}
 
-	public String getMaitreDName() {
+	/*public String getMaitreDName() {
 		return name;
 	}
 
 	public String getName() {
 		return name;
-	}
+	}*/
 
 	public List getWaitingCustomers() {
 		return waitingCustomers;
@@ -230,5 +232,9 @@ public class GHHostRole extends Role implements Host{
 	public void setGui(Gui waiterGuiFactory) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 	}
 }

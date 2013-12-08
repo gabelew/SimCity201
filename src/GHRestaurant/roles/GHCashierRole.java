@@ -1,6 +1,7 @@
 package GHRestaurant.roles;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 import java.util.*;
@@ -19,20 +20,21 @@ public class GHCashierRole extends Role implements Cashier{
 	public List<Check> checks
 	= Collections.synchronizedList(new ArrayList<Check>());
 	public enum CheckState {PENDING,PROCESSED,GIVECHECK,PAYING,NEXTTIME,MARKET}
-	private String name;
+	//private String name;
 	private double RestaurantMoney; 
+	private Restaurant restaurant;
 
 
-	public GHCashierRole(String name) {
+	public GHCashierRole() {
 		super();
 
-		this.name = name;
+		//this.name = name;
 		RestaurantMoney = 1000;
 		}
 
-	public String getName() {
+	/*public String getName() {
 		return name;
-	}
+	}*/
 
 	public List getChecks() {
 		return checks;
@@ -250,6 +252,15 @@ public class GHCashierRole extends Role implements Cashier{
 	public Gui getGui() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
+	}
+
+	public void msgAtTable() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

@@ -9,7 +9,7 @@ import city.gui.Gui;
 import city.gui.SimCityGui;
 public class GHWaiterGui implements Gui {
 
-    private Waiter agent = null;
+    private GHWaiterRole role = null;
     private boolean isPresent = false;
 
     private int xPos = 20, yPos = 20;//default waiter position
@@ -19,14 +19,14 @@ public class GHWaiterGui implements Gui {
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
-    SimCityGui gui;
+    //SimCityGui gui;
     
     public static final int xTable = 200;
     public static final int yTable = 250;
 
-    public GHWaiterGui(Waiter agent, SimCityGui gui) {
-        this.agent = agent;
-        this.gui = gui;
+    public GHWaiterGui(GHWaiterRole w) {
+        this.role = role;
+        //this.gui = gui;
     }
 
     public void updatePosition() {
@@ -42,11 +42,11 @@ public class GHWaiterGui implements Gui {
 
         if (xPos == xDestination && yPos == yDestination
         		&& (xDestination == xTable + 20) & (yDestination == yTable + (80-(tableNumber*100)))) {
-           ((GHWaiterRole) agent).msgAtTable();
+           ((GHWaiterRole) role).msgAtTable();
         }
            else if(xPos == xDestination && yPos == yDestination
            		&& (xDestination == xCook) & (yDestination == yCook)) {
-               ((GHWaiterRole) agent).msgAtTable();
+               ((GHWaiterRole) role).msgAtTable();
         }
     }
 
@@ -64,20 +64,20 @@ public class GHWaiterGui implements Gui {
     }
     
     public void setWork(){
-    	((GHWaiterRole) agent).gotWork();
+    	((GHWaiterRole) role).gotWork();
     	setPresent(true);
     }
     
     public void GoOnBreak(){
-    	((GHWaiterRole) agent).msgTryToGoOnBreak();
+    	((GHWaiterRole) role).msgTryToGoOnBreak();
     }
     
     public void GoBackToWork(){
-    	((GHWaiterRole) agent).msgGoBackToWork();
+    	((GHWaiterRole) role).msgGoBackToWork();
     }
     
     public boolean OnBreak(){
-    	return ((GHWaiterRole) agent).getOnBreak();
+    	return ((GHWaiterRole) role).getOnBreak();
     }
 
     public void DoBringToTable(Customer customer, int tablenumber) {

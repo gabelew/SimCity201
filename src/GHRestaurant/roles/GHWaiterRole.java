@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.gui.Gui;
+import city.interfaces.Person;
 import city.roles.Role;
 
 /**
@@ -26,22 +27,22 @@ public class GHWaiterRole extends Role implements Waiter{
 	private boolean WantToGoOnBreak = false;
 	private boolean OnBreak = false;
 	private boolean BackTW = false;
-	private String name;
+	//private String name;
 	private Semaphore atDestination = new Semaphore(0,true);
 	private Host host;
 	private Cashier cashier;
 	private Cook cook;
 	enum CustomerState {Waiting, AskedToOrder, Ordered, Reorder, Ready, Done, Idle}
 
-	public GHWaiterRole(String name) {
+	public GHWaiterRole(Person p, Restaurant r) {
 		super();
 
-		this.name = name;
+		//this.name = name;
 	}
 
-	public String getName() {
+	/*public String getName() {
 		return name;
-	}
+	}*/
 
 	public List getWaitingCustomers() {
 		return waitingCustomers;
@@ -407,11 +408,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	  public void setOnBreak(boolean b){
 		  OnBreak = b;
 	  }
-	  
-	  public void setName(String n){
-		  name = n;
-	  }
-	  
+	   
 	private class MyCustomer {
 		Customer customer;
 		int tablenumber;

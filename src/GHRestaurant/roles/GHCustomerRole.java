@@ -1,6 +1,7 @@
 package GHRestaurant.roles;
 
 import GHRestaurant.gui.*;
+import restaurant.Restaurant;
 import restaurant.interfaces.*;
 import agent.Agent;
 
@@ -10,13 +11,14 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import city.gui.Gui;
+import city.interfaces.Person;
 import city.roles.Role;
 
 /**
  * Restaurant customer agent.
  */
 public class GHCustomerRole extends Role implements Customer{
-	private String name;
+	//private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	Timer timer = new Timer();
 	private GHCustomerGui customerGui;
@@ -49,9 +51,9 @@ public class GHCustomerRole extends Role implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public GHCustomerRole(String name){
+	public GHCustomerRole(Person p, Restaurant r){
 		super();
-		this.name = name;
+		//this.name = name;
 		
 		money = 50;
 	}
@@ -65,10 +67,6 @@ public class GHCustomerRole extends Role implements Customer{
 	
 	public void setCashier(Cashier ca){
 		this.cashier = ca;
-	}
-
-	public String getCustomerName() {
-		return name;
 	}
 	
 	public double getMoney(){
@@ -301,9 +299,9 @@ public class GHCustomerRole extends Role implements Customer{
 		return state;
 	}
 	
-	public String getName() {
+	/*public String getName() {
 		return name;
-	}
+	}*/
 	
 	public int getHungerLevel() {
 		return hungerLevel;
