@@ -1,6 +1,5 @@
 package GLRestaurant.roles;
 
-import agent.Agent;
 import GLRestaurant.roles.GLCashierRole.Check;
 import GLRestaurant.roles.GLCashierRole.checkState;
 import GLRestaurant.roles.GLCookRole.Food;

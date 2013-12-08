@@ -3,6 +3,7 @@ package GLRestaurant.gui;
 import GLRestaurant.roles.GLCustomerRole;
 import GLRestaurant.roles.GLWaiterRole;
 import GLRestaurant.roles.GLCookRole;
+import city.animationPanels.GLRestaurantAnimationPanel;
 import city.gui.Gui;
 
 import java.awt.*;
@@ -17,13 +18,23 @@ import javax.imageio.ImageIO;
 
 public class GLWaiterGui implements Gui {
 
+	public int waitingSpotNumber = -1;
+	static final int NWAITSEATS = 16;
+    static final int NWAITSEATS_COLUMNS = 8;
+    static final int NWAITSEATS_ROWS = 2;
+    static final int WAITINGSEATS_X_START = 245;
+    static final int WAITINGSEATS_Y_START = 225;
+    static final int WAITINGSEATS_X_GAP = 15;
+    static final int WAITINGSEATS_Y_GAP = 35;
+    static final int xWAITING_OVERFLOW_POS = 245;
+    static final int yWAITING_OVERFLOW_POS = 345;
 	private final int OFFSCREEN_POSITION = -20;
-	private int ORIGINALX, ORIGINALY;
+	//private int ORIGINALX, ORIGINALY;
 	private static BufferedImage waiterImg = null;
 	private int platex, platey;
 	private boolean isPresent = false;
     private GLWaiterRole role = null;
-
+    private Map<Integer, Point> seatMap = new HashMap<Integer, Point>();
     GLCustomerGui customerGui;
     private int customerx, customery;
     private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtOrigin, IfAtCustomer, IfAtPlate, LeaveRestaurant};
@@ -37,15 +48,6 @@ public class GLWaiterGui implements Gui {
 
     private int xPos, yPos;//waiter's position
     private int xDestination, yDestination; // waiter's destination
-
-    static class Point {
-    	int x;
-    	int y;
-    	Point (int x, int y) {
-    		this.x = x;
-    		this.y = y;
-    	}
-    }
     Map<Integer, Point> tableMap = new HashMap<Integer, Point>();
     
     public static final Point TableOne = new Point(100,100);
@@ -58,10 +60,15 @@ public class GLWaiterGui implements Gui {
     	} catch(IOException e) {
     		
     	}
+    	
         this.role = agent;
         tableMap.put(1, TableOne);
         tableMap.put(2, TableTwo);
         tableMap.put(3, TableThree);
+        for(int i = 0; i<NWAITSEATS/NWAITSEATS_ROWS; i++){
+        	for(int j = 0; j < NWAITSEATS/NWAITSEATS_COLUMNS; j++ )
+        		seatMap.put(j+i*2, new Point(i*WAITINGSEATS_X_GAP+WAITINGSEATS_X_START, j*WAITINGSEATS_Y_GAP+WAITINGSEATS_Y_START));
+        }
     }
     
 //    public GLWaiterGui(GLWaiterRole w, int x, int y){ 
@@ -77,6 +84,24 @@ public class GLWaiterGui implements Gui {
 //        tableMap.put(3, TableThree);
 //	}
     
+    private void findASpotToRest() {	
+		for(int i = 0; i < ((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.size(); i++){
+			if(waitingSpotNumber < 0){
+				if(((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(i).tryAcquire()){
+					System.out.println("\t\t\t\t\t\t"+ i);
+					waitingSpotNumber = i;
+					xDestination = seatMap.get(i).x;
+					yDestination = seatMap.get(i).y;
+					System.out.println(xDestination + "," + yDestination);
+				}
+			}
+		}
+		
+		if(waitingSpotNumber < 0){
+			xDestination = xWAITING_OVERFLOW_POS;
+			yDestination = yWAITING_OVERFLOW_POS;
+		}
+	}
     public void setCustomerGui(GLCustomerGui g) {
     	this.customerGui = g;
     }
@@ -100,13 +125,14 @@ public class GLWaiterGui implements Gui {
         		//gui.setWaiterEnabled(agent);
         	} else if (Command.LeaveRestaurant == command) {
         		role.msgLeftTheRestaurant();
-        	} else if (Command.IfAtOrigin == command && ORIGINALX == xDestination && ORIGINALY == yDestination) {
-        		role.msgAtOrigin();
+//        	} else if (Command.IfAtOrigin == command && ORIGINALX == xDestination && ORIGINALY == yDestination) {
+//        		role.msgAtOrigin();
         	} else if (Command.IfAtCustomer == command && customerx == xDestination && customery == yDestination) {
         		role.msgAtCustomer();
         	} else if (Command.IfAtPlate == command && platex == xDestination && platey == yDestination)
         		role.msgAtPlate();
         	command = Command.noCommand;
+        	findASpotToRest();
         }
     }
 
@@ -150,9 +176,9 @@ public class GLWaiterGui implements Gui {
 		bringingFood = true;
 	}
     
-    public void ifAtOrigin() {
-    	command = Command.IfAtOrigin;
-    }
+//    public void ifAtOrigin() {
+//    	command = Command.IfAtOrigin;
+//    }
     
     public void ifAtCustomer(int x, int y) {
     	command = Command.IfAtCustomer;
@@ -207,13 +233,15 @@ public class GLWaiterGui implements Gui {
     public void goOnBreak() {
     	xDestination = -40;
     	yDestination = -40;
+    	if(waitingSpotNumber >= 0){
+			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
+			waitingSpotNumber = -1;
+		}
     	command = Command.onBreak;
     }
     
     public void breakDone() {
     	goOnBreak = false;
-    	xDestination = ORIGINALX;
-    	yDestination = ORIGINALY;
     	command = Command.ReturnFromBreak;
     	role.msgReturnedFromBreak();
     }
@@ -229,11 +257,14 @@ public class GLWaiterGui implements Gui {
     		xDestination = destination.x + 20;
     		yDestination = destination.y - 20;
     	}
+    	if(waitingSpotNumber >= 0){
+			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
+			waitingSpotNumber = -1;
+		}
     }
 
     public void DoLeaveCustomer() {
-        xDestination = ORIGINALX;
-        yDestination = ORIGINALY;
+        findASpotToRest();
     }
     
     public void GoToPlate(int x, int y) {
@@ -244,6 +275,10 @@ public class GLWaiterGui implements Gui {
     public void GoToCustomer(int x, int y) {
     	xDestination = x + 20;
     	yDestination = y - 20;
+    	if(waitingSpotNumber >= 0){
+			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
+			waitingSpotNumber = -1;
+		}
     }
 
     public int getXPos() {
