@@ -135,7 +135,6 @@ public class CMRevolingStandTest  extends TestCase{
 	public void testCookRemoveOrderWhenEmpty() {
 		//setUp() runs first before this test!
 		waiter.testingRevolvingMonitor = true;
-		waiter.setRevolvingStand(revolvingStand);
 		cook.setRevolvingStand(revolvingStand);
 		
 		// check preconditions
