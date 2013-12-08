@@ -74,17 +74,12 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         g2.setColor(getBackground());
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
 
-        //Here is the tables
-        //g2.setColor(Color.ORANGE);
+        //Here are the tables
         g2.drawImage(tableImg,TABLE1XLOCATION,TABLE1YLOCATION,null);
-        
-        //g3.setColor(Color.ORANGE);
         g2.drawImage(tableImg,TABLE2XLOCATION,TABLE2YLOCATION,null);
-        
-        //g4.setColor(Color.ORANGE);
         g2.drawImage(tableImg,TABLE3XLOCATION,TABLE3YLOCATION,null);
 
-        //g2.setColor(Color.BLACK);
+        //Plating area
         g2.drawImage(platingTableImg,350,150,null);
         g2.drawImage(platingTableImg,350,165,null);
         g2.drawImage(platingTableImg,350,180,null);
@@ -95,14 +90,13 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         g2.drawImage(platingTableImg,350,255,null);
 
         
-        //g2.setColor(Color.DARK_GRAY);
+        //The grill
         g2.drawImage(grillRightImg,450,150,null);
         
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.draw(g2);
-                //gui.draw(g3);
-                //gui.draw(g4);
+
             }
         }
     }

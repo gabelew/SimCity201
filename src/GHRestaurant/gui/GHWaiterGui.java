@@ -25,7 +25,7 @@ public class GHWaiterGui implements Gui {
     public static final int yTable = 250;
 
     public GHWaiterGui(GHWaiterRole w) {
-        this.role = role;
+        this.role = w;
         //this.gui = gui;
     }
 
@@ -63,10 +63,10 @@ public class GHWaiterGui implements Gui {
     	isPresent = p;
     }
     
-    public void setWork(){
+    /*public void setWork(){
     	((GHWaiterRole) role).gotWork();
     	setPresent(true);
-    }
+    }*/
     
     public void GoOnBreak(){
     	((GHWaiterRole) role).msgTryToGoOnBreak();
