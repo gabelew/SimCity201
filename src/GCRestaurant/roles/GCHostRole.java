@@ -2,15 +2,20 @@ package GCRestaurant.roles;
 
 import agent.Agent;
 import restaurant.interfaces.Customer;
+import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 
 import java.util.*;
+
+import city.PersonAgent;
+import city.gui.Gui;
+import city.roles.Role;
 
 /**
  * Restaurant Host Agent
  */
 
-public class GCHostRole extends Agent 
+public class GCHostRole extends Role implements Host 
 {
 	static final int NTABLES = 4;
 
@@ -279,6 +284,60 @@ public class GCHostRole extends Agent
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+	@Override
+	public void msgReleaveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgReadyToWork(Waiter w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgIWantToEat(Customer c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgLeavingRestaurant(Customer c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgCanIBreak(Waiter w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgDoneWorking(Waiter w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

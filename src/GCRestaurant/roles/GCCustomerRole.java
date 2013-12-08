@@ -17,10 +17,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import city.gui.Gui;
+import city.roles.Role;
+
 /**
  * Restaurant customer agent.
  */
-public class GCCustomerRole extends Agent implements Customer{
+public class GCCustomerRole extends Role implements Customer{
 	final int TIMERCONST = 1000;
 	private String name;
 	private int hungerLevel = 5;        // determines length of meal
@@ -474,8 +477,14 @@ public class GCCustomerRole extends Agent implements Customer{
 		customerGui = g;
 	}
 
-	public GCCustomerGui getGui() {
-		return customerGui;
+	public Gui getGui() {
+		return (Gui) customerGui;
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
+import city.gui.Gui;
+import city.roles.Role;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Market;
@@ -20,7 +22,7 @@ import agent.Agent;
  * Restaurant Cook Agent
  */
 
-public class GCCashierRole extends Agent implements Cashier
+public class GCCashierRole extends Role implements Cashier
 {	
 	private String name;
 	private Map<String, Double> menuItems = new HashMap<String, Double>();
@@ -249,6 +251,18 @@ public class GCCashierRole extends Agent implements Cashier
 	{
 		state = State.goToWork;
 		stateChanged();
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -3,6 +3,7 @@ package GCRestaurant.gui;
 import javax.swing.*;
 
 import city.animationPanels.InsideAnimationPanel;
+import city.gui.Gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -92,10 +93,10 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     	guis.add(gui);
     }
     public void addGui(GCCustomerGui gui) {
-        guis.add(gui);
+        guis.add((Gui) gui);
     }
 
     public void addGui(GCWaiterGui gui) {
-        guis.add(gui);
+        guis.add((Gui) gui);
     }
 }

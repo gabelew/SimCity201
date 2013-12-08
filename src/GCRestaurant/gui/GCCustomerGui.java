@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import city.gui.Gui;
 import restaurant.Restaurant;
 import GCRestaurant.roles.GCCustomerRole;
 

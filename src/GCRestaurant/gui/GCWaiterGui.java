@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+import city.gui.Gui;
 import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCWaiterRole;
 
@@ -182,4 +183,10 @@ public class GCWaiterGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	@Override
+	public void setPresent(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

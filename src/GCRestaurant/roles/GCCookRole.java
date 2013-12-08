@@ -14,12 +14,14 @@ import java.util.concurrent.Semaphore;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.Gui;
+import city.roles.Role;
 
 /**
  * Restaurant Cook Agent
  */
 
-public class GCCookRole extends Agent implements Cook
+public class GCCookRole extends Role implements Cook
 {
 	private GCCookGui cookGui;
 	private Semaphore busy = new Semaphore(0,true);
@@ -341,6 +343,18 @@ public class GCCookRole extends Agent implements Cook
 	public void addMarket(MarketAgent m) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

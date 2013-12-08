@@ -11,11 +11,14 @@ import restaurant.interfaces.Waiter;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.gui.Gui;
+import city.roles.Role;
+
 /**
  * Restaurant Waiter Agent
  */
 
-public class GCWaiterRole extends Agent implements Waiter{
+public class GCWaiterRole extends Role implements Waiter{
 	
 	public enum CustomerState{Waiting, Seated, ReadyToOrder, ReorderFood, Ordering, 
 		Ordered, FoodCooking, FoodDoneCooking, orderDone, Served, Leaving, Left, checkGiven}
@@ -327,7 +330,7 @@ public class GCWaiterRole extends Agent implements Waiter{
 /*********************************************
  * Scheduler.  Determine what action is called for, and do it.
 ******************************************* */
-	protected boolean pickAndExecuteAnAction() 
+	public boolean pickAndExecuteAnAction() 
 	{	
 		try
 		{
@@ -474,6 +477,18 @@ public class GCWaiterRole extends Agent implements Waiter{
 	public void goesToWork() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

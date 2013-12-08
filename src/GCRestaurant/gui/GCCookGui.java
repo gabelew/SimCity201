@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import city.gui.Gui;
 import GCRestaurant.roles.GCCookRole;
 
 public class GCCookGui implements Gui{
