@@ -243,8 +243,8 @@ public class GCCookRole extends Role implements Cook
 				}
 			}
 			
-			if(state == state.relieveFromDuty){
-				state = state.none;
+			if(state == CookState.relieveFromDuty){
+				state = CookState.none;
 				myPerson.releavedFromDuty(this);
 				if(replacementPerson != null){
 					replacementPerson.waitingResponse.release();
@@ -252,8 +252,8 @@ public class GCCookRole extends Role implements Cook
 				return true;
 			}
 			
-			if(state == state.goToWork){
-				state = state.free;
+			if(state == CookState.goToWork){
+				state = CookState.free;
 				cookGui.DoEnterRestaurant();
 				return true;
 			}
@@ -361,10 +361,9 @@ public class GCCookRole extends Role implements Cook
 		
 	}
 
-	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+		state = CookState.goToWork;
+		stateChanged();
 	}
 
 	@Override
@@ -373,12 +372,14 @@ public class GCCookRole extends Role implements Cook
 		
 	}
 	
+/**
+ * Utility functions
+ */
 	public void setGui(Gui GuiFactory) {
 		cookGui = (GCCookGui) GuiFactory;
 		
 	}
 
-	@Override
 	public Gui getGui() {
 		return (Gui) cookGui;
 	}

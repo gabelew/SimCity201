@@ -1,6 +1,10 @@
 package GCRestaurant.gui;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -32,8 +36,16 @@ public class GCCustomerGui implements Gui{
 	private final int yTable = 175;
 	private String choice;
 	private int cashierPosX = -10, cashierPosY = -25;
+	private BufferedImage customerImg;
+	private BufferedImage customerSittingImg;
 
-	public GCCustomerGui(GCCustomerRole c){ //HostAgent m) {
+	public GCCustomerGui(GCCustomerRole c){
+		try {
+			StringBuilder path = new StringBuilder("imgs/");
+		    customerImg = ImageIO.read(new File(path.toString() + "customer_v1.png"));
+		    customerSittingImg = ImageIO.read(new File(path.toString() + "customer_sitting_v1.png"));
+		} 
+		catch (IOException e) {}
 		agent = c;
 		xPos = DEFAULT_POS;
 		yPos = DEFAULT_POS;
@@ -90,8 +102,7 @@ public class GCCustomerGui implements Gui{
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, CUST_SIZE, CUST_SIZE);
+		g.drawImage(customerImg, xPos, yPos, null);
 		try
 		{
 		switch(foodState)

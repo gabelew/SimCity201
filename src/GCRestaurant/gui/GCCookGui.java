@@ -1,21 +1,27 @@
 package GCRestaurant.gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import GCRestaurant.roles.GCCookRole;
 
 public class GCCookGui implements Gui{
 
-	private GCCookRole agent = null;
+	private GCCookRole role = null;
 	private boolean isPresent = true;
 	private boolean doneplating = true;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private final int GRILL_EDGE = 200;
+	private final int startPos = -20;
 	private final int DEFAULT_POSX = 200;
 	private final int DEFAULT_POSY = 55;
 	private final int FRIDGEX = 520;
@@ -27,14 +33,17 @@ public class GCCookGui implements Gui{
 	private final int COOK_SIZE = 20;
 	private List<Food> orders = new ArrayList<Food>();
 	private enum foodstate{none, plating, cooking, served, gettingFromFridge, gotFood};
+	private BufferedImage cookImg;
 
-	public GCCookGui(GCCookRole c){ //HostAgent m) {
-		agent = c;
-		xPos = DEFAULT_POSX;
-		yPos = DEFAULT_POSY;
-		xDestination = DEFAULT_POSX;
-		yDestination = DEFAULT_POSY;
-		//maitreD = m;
+	public GCCookGui(GCCookRole r){
+		role = r;
+		try {cookImg = ImageIO.read(new File("imgs/chef_v1.png"));}
+		catch (IOException e) {}
+		
+		xPos = startPos;
+		yPos = startPos;
+		xDestination = startPos;
+		yDestination = startPos;
 	}
 
 	public void updatePosition() {
@@ -55,7 +64,7 @@ public class GCCookGui implements Gui{
 		if (xPos == xDestination && yPos == yDestination
            		& (xDestination == FRIDGEX) & (yDestination == FRIDGEY)) 
         {
-			agent.msgActionDone();
+			role.msgActionDone();
 		   try
 			{
 				for(Food f: orders)
@@ -72,7 +81,7 @@ public class GCCookGui implements Gui{
 		if (xPos == xDestination && yPos == yDestination
            		& (xDestination == GRILLX) & (yDestination == GRILLY)) 
         {
-			agent.msgActionDone();
+			role.msgActionDone();
 		   xDestination = DEFAULT_POSX;
 		   yDestination = DEFAULT_POSY;
 		   try
@@ -92,7 +101,7 @@ public class GCCookGui implements Gui{
 		if(xPos == xDestination && yPos == yDestination
 				& (xDestination == PLATINGX) & (yDestination == PLATINGY))
 		{
-			agent.msgActionDone();
+			role.msgActionDone();
 			try
 			{
 				for(Food f: orders)
@@ -171,9 +180,7 @@ public class GCCookGui implements Gui{
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.BLUE);
-		g.fillRect(xPos, yPos, COOK_SIZE, COOK_SIZE);
-		g.setColor(Color.ORANGE);
+		g.drawImage(cookImg, xPos, yPos, null);
 		try
 		{
 			for(int i = 0; i < orders.size(); i++)

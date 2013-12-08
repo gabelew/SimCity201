@@ -1,10 +1,15 @@
 package GCRestaurant.gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import GCRestaurant.roles.GCCustomerRole;
@@ -14,7 +19,7 @@ public class GCWaiterGui implements Gui {
 
 	private final int TABLE_SPACING = 100;
 	private final int TABLE_Y = 175;
-    private GCWaiterRole agent = null;
+    private GCWaiterRole role = null;
     private boolean atStart = true;
 
     private int DEFAULT_POSY = 110;
@@ -30,15 +35,22 @@ public class GCWaiterGui implements Gui {
     public int yTable;
     private boolean carryFood = false;
     private List<String> foods = Collections.synchronizedList(new ArrayList<String>());
+    private BufferedImage waiterImg;
 
-    public GCWaiterGui(GCWaiterRole agent) {
-        this.agent = agent;
+    public GCWaiterGui(GCWaiterRole r) {
+        this.role = r;
+        try {waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));}
+        catch (IOException e) {}
         this.xTable = TABLE_SPACING;
         this.yTable = TABLE_Y;
-        this.DEFAULT_POSY += 1;//homePos*personSize;
         xDestination = DEFAULT_POSX;
         yDestination = DEFAULT_POSY;
         
+    }
+    
+    public void setWaiterPosition(int homePos)
+    {
+    	this.DEFAULT_POSY += homePos*personSize;
     }
     
     public void updatePosition() {
@@ -56,7 +68,7 @@ public class GCWaiterGui implements Gui {
         if (xPos == xDestination && yPos == yDestination
        		& (xDestination == xTable + personSize) & (yDestination == yTable - personSize)) {
            
-        	agent.msgAtTable();
+        	role.msgAtTable();
         }
         
         if (xPos == xDestination && yPos == yDestination
@@ -65,7 +77,7 @@ public class GCWaiterGui implements Gui {
              //yPos = DEFAULT_POSY;
              xDestination = DEFAULT_POSX;
              yDestination = DEFAULT_POSY;
-        	agent.msgAtTable();
+        	role.msgAtTable();
             }
         if (xPos == xDestination && yPos == yDestination
            		& (xDestination == cashierPosX) & (yDestination == cashierPosY)) {
@@ -73,12 +85,12 @@ public class GCWaiterGui implements Gui {
              //yPos = DEFAULT_POSY;
              xDestination = DEFAULT_POSX;
              yDestination = DEFAULT_POSY;
-        	agent.msgAtTable();
+        	role.msgAtTable();
             }
        if (xPos == xDestination && yPos == yDestination
            		& (xDestination == customerPos) & (yDestination == customerPos)) 
         {
-    	   agent.msgAtTable();
+    	   role.msgAtTable();
         }
         
         if(xPos == DEFAULT_POSX && yPos == DEFAULT_POSY){atStart = true;}
@@ -88,10 +100,7 @@ public class GCWaiterGui implements Gui {
     public void draw(Graphics2D g) {
     	try
     	{
-	        g.setColor(Color.MAGENTA);
-	        g.fillRect(xPos, yPos, personSize, personSize);
-	        g.setColor(Color.BLACK);
-	        g.drawString( "W", xPos, yPos + personSize);
+    		g.drawImage(waiterImg, xPos, yPos, null);
 	        if(carryFood)
 	        {
 	        	g.setColor(Color.BLACK);
