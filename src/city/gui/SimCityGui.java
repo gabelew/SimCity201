@@ -422,7 +422,6 @@ public class SimCityGui extends JFrame implements ActionListener {
 
 	private void createDefaultBuildingPanels() {
     	List<BuildingIcon> buildings = animationPanel.buildings;
-    	System.out.println(buildings.size());
         for(int i =0; i<buildings.size(); i++){
         	
         	BuildingIcon b = buildings.get(i);
@@ -712,7 +711,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}
 			hour = 0;
 		}	
-		System.out.println("" + hour + "\t"+ dayOfWeek.toString());
+
+    	AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, "General City", "" + hour + "\t"+ dayOfWeek.toString());
 		synchronized(persons){
 			for(PersonAgent p:persons){
 				p.msgNextHour(hour, dayOfWeek);
@@ -722,7 +722,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 	}
 
 	public void displayBuildingPanel(InsideBuildingPanel ibp) {
-		System.out.println(ibp.getName());
+    	AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, "General City", "Building Number: " + ibp.getName());
+    	
 		for(int i = 0; i < animationPanel.buildings.size(); i++){
 			animationPanel.buildings.get(i).getInsideBuildingPanel().isVisible = false;
 		}
