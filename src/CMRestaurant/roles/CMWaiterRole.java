@@ -3,7 +3,6 @@ package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
 import CMRestaurant.gui.CMWaiterGui;
 import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;

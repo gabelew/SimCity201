@@ -2,7 +2,6 @@ package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
-
 import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
@@ -487,7 +486,7 @@ public class CMCookRole extends Role implements Cook {
 //Actions
 	
 	public void checkRevolvingStand() {
-		if(revolvingStand.getCount() > 0) {
+		if(!revolvingStand.isEmpty()) {
 			RoleOrder order = revolvingStand.remove();
 			if(order != null) {
 				orders.add(order);

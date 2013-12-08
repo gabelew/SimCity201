@@ -21,7 +21,7 @@ public class CMSharedWaiterRole extends CMWaiterRole{
 	@Override
 	protected void putInOrder(MyCustomer c) {
 		doGoToKitchen(c);
-		if(revolvingStand.getCount() < 5) {
+		if(!revolvingStand.isFull()) {
 			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
 			c.s = CustomerState.orderPlaced;
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Inserting order into revolving stand");
