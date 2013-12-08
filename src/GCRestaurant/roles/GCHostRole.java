@@ -57,11 +57,12 @@ public class GCHostRole extends Role implements Host
 		return tableList;
 	}
 	//Hack to add waiter
+	/*
 	public void addWaiter(GCWaiterRole waiter)
 	{
 		//adds waiter to waiterlist
 		waiters.add(new myWaiter(waiter));
-	}
+	}*/
 
 	/**************************************************
 	 * Messages
@@ -279,7 +280,7 @@ public class GCHostRole extends Role implements Host
 		Waiter w;
 		WaiterState state;
 		int customers;
-		public myWaiter(GCWaiterRole waiter)
+		public myWaiter(Waiter waiter)
 		{
 			customers = 0;
 			this.w = waiter;
@@ -324,9 +325,15 @@ public class GCHostRole extends Role implements Host
 	}
 
 	@Override
-	public void msgReadyToWork(Waiter w) {
-		// TODO Auto-generated method stub
-		
+	public void msgReadyToWork(Waiter w) 
+	{
+		boolean addWaiter = true;
+			for(myWaiter onListWaiter: waiters)
+			{
+				if(onListWaiter.w == w){addWaiter = false;}
+			}
+		myWaiter newWaiter = new myWaiter(w);
+		if(addWaiter){waiters.add(newWaiter);}
 	}
 
 	@Override

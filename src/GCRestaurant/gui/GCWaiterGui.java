@@ -22,6 +22,7 @@ public class GCWaiterGui implements Gui {
     private GCWaiterRole role = null;
     private boolean atStart = true;
 
+    private int startPos = -20;
     private int DEFAULT_POSY = 110;
     private int DEFAULT_POSX = 0;
     private int xPos = DEFAULT_POSX, yPos = DEFAULT_POSY;//default waiter position
@@ -43,8 +44,10 @@ public class GCWaiterGui implements Gui {
         catch (IOException e) {}
         this.xTable = TABLE_SPACING;
         this.yTable = TABLE_Y;
-        xDestination = DEFAULT_POSX;
-        yDestination = DEFAULT_POSY;
+        xPos = startPos;
+        yPos = startPos;
+        xDestination = startPos;
+        yDestination = startPos;
         
     }
     
@@ -195,6 +198,12 @@ public class GCWaiterGui implements Gui {
 
 	@Override
 	public void setPresent(boolean b) {
+		
+	}
+
+	public void enterRestaurant() {
+		xDestination = DEFAULT_POSX;
+		yDestination = DEFAULT_POSY;
 		
 	}
 }

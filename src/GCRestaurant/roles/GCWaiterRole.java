@@ -1,5 +1,6 @@
 package GCRestaurant.roles;
 
+import CMRestaurant.roles.CMWaiterRole.AgentEvent;
 import GCRestaurant.gui.GCWaiterGui;
 import GCRestaurant.roles.GCCashierRole.Check;
 import GCRestaurant.roles.GCCookRole.Order;
@@ -23,7 +24,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	public enum CustomerState{Waiting, Seated, ReadyToOrder, ReorderFood, Ordering, 
 		Ordered, FoodCooking, FoodDoneCooking, orderDone, Served, Leaving, Left, checkGiven}
 	public enum WaiterEvent{onBreak, none,seatingCustomer, goingToCustomer,
-		goingToCook, gettingFood, givingFood, giveCheckToCashier, AlmostOnBreak, gotToWork }
+		goingToCook, gettingFood, givingFood, giveCheckToCashier, AlmostOnBreak, gotToWork, relieveFromDuty }
 	
 	private WaiterEvent event = WaiterEvent.none;
 	public Collection<Table> tables;
@@ -313,6 +314,10 @@ public class GCWaiterRole extends Role implements Waiter{
 			stateChanged();
 		}
 		
+		private void tellHostImHere() {
+			waiterGui.enterRestaurant();
+			restaurant.host.msgReadyToWork(this);
+		}
 /*********************************************
  * Animation Functions
 ******************************************* */
@@ -332,6 +337,21 @@ public class GCWaiterRole extends Role implements Waiter{
 	{	
 		try
 		{
+			
+			if(event == WaiterEvent.relieveFromDuty){
+				event = WaiterEvent.none;
+				myPerson.releavedFromDuty(this);
+				restaurant.insideAnimationPanel.removeGui(waiterGui);
+				return true;
+			}
+			
+			if(event == WaiterEvent.gotToWork)
+			{
+				event = WaiterEvent.none;
+				tellHostImHere();
+				return true;
+			}
+			
 			if(event == WaiterEvent.AlmostOnBreak && customers.size() == 0)
 			{
 				event = WaiterEvent.onBreak;
