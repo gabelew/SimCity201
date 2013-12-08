@@ -12,6 +12,7 @@ import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
+import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Market;
@@ -38,10 +39,10 @@ public class GCCashierRole extends Role implements Cashier
 	State state = State.none;
 	PersonAgent replacementPerson = null;
 	//constructor
-	public GCCashierRole(String name) 
+	public GCCashierRole() 
 	{
 		super();	
-		this.name = name;
+		//this.name = name;
 		menuItems.put("steak", new Double(15.99) );
 		menuItems.put("chicken", new Double(10.99) );
 		menuItems.put("cookie", new Double(8.99) );
@@ -263,6 +264,11 @@ public class GCCashierRole extends Role implements Cashier
 	public Gui getGui() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -121,6 +121,11 @@ public class GCRestaurantPanel extends JPanel {
         restLabel.add(new JLabel("               "), BorderLayout.WEST);
     }
 
+	public void setInsideBuildingPanel(InsideBuildingPanel bp) {
+		// TODO Auto-generated method stub
+		
+	}
+
     /**
      * When a customer or waiter is clicked, this function calls
      * updatedInfoPanel() from the main gui so that person's information

@@ -1,6 +1,7 @@
 package GCRestaurant.roles;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
@@ -27,10 +28,10 @@ public class GCHostRole extends Role implements Host
 	public List<myWaiter> waiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	private enum WaiterState{askedForBreak, onBreak, Working, deniedBreak};
 
-	public GCHostRole(String name) 
+	public GCHostRole() 
 	{
 		super();
-		this.name = name;
+		//this.name = name;
 		// make some tables
 		tableList = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
@@ -338,6 +339,11 @@ public class GCHostRole extends Role implements Host
 	public Gui getGui() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

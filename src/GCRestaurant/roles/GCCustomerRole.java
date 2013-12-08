@@ -61,9 +61,9 @@ public class GCCustomerRole extends Role implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public GCCustomerRole(String name){
+	public GCCustomerRole(){
 		super();
-		this.name = name;
+		//this.name = name;
 		if(name.equals("5")){ cash = 5;}
 		else if(name.equals("6")){ cash = 6;}
 		else{ cash = new Random().nextInt(20); }

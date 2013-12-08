@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
+import city.gui.SimCityGui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,14 +27,17 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     private Dimension bufferSize;
 
     private List<Gui> guis = new ArrayList<Gui>();
-
-    public GCAnimationPanel() {
+    SimCityGui gui;
+    
+    public GCAnimationPanel(SimCityGui g) {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         bufferSize = this.getSize();
  
     	Timer timer = new Timer(20, this );
     	timer.start();
+    	
+    	this.gui = g;
     }
 
 	public void actionPerformed(ActionEvent e) {

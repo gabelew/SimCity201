@@ -1,6 +1,7 @@
 package GCRestaurant.roles;
 
 import agent.Agent;
+import restaurant.Restaurant;
 import restaurant.RoleOrder;
 import GCRestaurant.gui.GCCookGui;
 import GCRestaurant.roles.GCHostRole.Table;
@@ -41,7 +42,7 @@ public class GCCookRole extends Role implements Cook
 	private final int MAXSUPPLY = 6;
 	private int marketCounter = 0;
 
-	public GCCookRole(String name) {
+	public GCCookRole() {
 		super();
 		
 		//foods list
@@ -55,7 +56,7 @@ public class GCCookRole extends Role implements Cook
 		foods.put("pizza",foodList.get(2));
 		foods.put("salad",foodList.get(3));
 				
-		this.name = name;
+		//this.name = name;
 	}
 	
 	public void setGui(GCCookGui cg)
@@ -355,6 +356,11 @@ public class GCCookRole extends Role implements Cook
 	public Gui getGui() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -34,7 +34,10 @@ import EBRestaurant.roles.EBCustomerRole;
 import EBRestaurant.roles.EBHostRole;
 import EBRestaurant.roles.EBWaiterRole;
 import GCRestaurant.gui.GCAnimationPanel;
+import GCRestaurant.gui.GCCashierGui;
 import GCRestaurant.gui.GCCookGui;
+import GCRestaurant.gui.GCHostGui;
+import GCRestaurant.gui.GCRestaurantPanel;
 import GCRestaurant.roles.GCCashierRole;
 import GCRestaurant.roles.GCCookRole;
 import GCRestaurant.roles.GCHostRole;
@@ -497,7 +500,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	r = new Restaurant(
 	        						(restaurant.interfaces.Host)(new GCHostRole()), 
 	        						(restaurant.interfaces.Cashier)(new GCCashierRole()), 
-	        						(restaurant.interfaces.Cook)(new GCCookRole(1)), 
+	        						(restaurant.interfaces.Cook)(new GCCookRole()), 
 	        						new restaurant.interfaces.Waiter.Menu(), 
 	        						"RestaurantGCCustomerRole", 
 	        						"RestaurantGC", 

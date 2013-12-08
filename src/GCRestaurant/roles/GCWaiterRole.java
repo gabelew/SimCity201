@@ -42,10 +42,10 @@ public class GCWaiterRole extends Role implements Waiter{
 	public GCCashierRole cashier;
 	private final int BREAKTIME = 10000;
 	
-	public GCWaiterRole(String name) {
+	public GCWaiterRole() {
 		super();
 
-		this.name = name;
+		//this.name = name;
 	}
 	
 	public void setHost(GCHostRole h)
