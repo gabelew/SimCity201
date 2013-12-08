@@ -3,6 +3,9 @@ package EBRestaurant.gui;
 
 import javax.swing.*;
 
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -20,8 +23,8 @@ public class EBListPanel extends JPanel implements ActionListener {
     public JScrollPane paneWaiter =
             new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    static final int PaneX=170;
-    static final int PaneY=100;
+    static final int PaneX=110;
+    static final int PaneY=80;
     static final int textbox=15;
     private JPanel view = new JPanel();
     private JPanel viewWaiter = new JPanel();
@@ -49,7 +52,7 @@ public class EBListPanel extends JPanel implements ActionListener {
      * @param type indicates if this is for customers or waiters
      */
     public EBListPanel(EBRestaurantPanel rp, String type) {
-        restPanel = rp;
+    	restPanel = rp;
         this.type = type;
 
         setLayout(new FlowLayout());
@@ -169,6 +172,16 @@ public class EBListPanel extends JPanel implements ActionListener {
             validate();*/
         }
     }
+    
+    public void removeWaiter(String name){
+    	for (JButton button:listWaiter){
+    		if(button.getText()==name)
+    			viewWaiter.remove(button);
+    	}
+		invalidate();
+		validate();	
+}
+    
     public void addWaiter(String name) {
         if (name != null) {
         	this.type="waiters";
@@ -182,10 +195,11 @@ public class EBListPanel extends JPanel implements ActionListener {
             buttonWaiter.setMinimumSize(buttonSize);
             buttonWaiter.setMaximumSize(buttonSize);
             buttonWaiter.addActionListener(this);
+            paneWaiter.add(buttonWaiter);
             listWaiter.add(buttonWaiter);
             viewWaiter.add(buttonWaiter);
-        	restPanel.addPerson("Waiters", name, false,amount,false);
-        	//restPanel.showInfo("waiters", name);
+            restPanel.addPerson("Waiters", name, false,amount,false);
+        	restPanel.showInfo("waiters", name);
         	validate();
         }
     }

@@ -5,6 +5,7 @@ import javax.swing.*;
 import city.MarketAgent;
 import city.animationPanels.InsideBuildingPanel;
 import city.gui.SimCityGui;
+import CMRestaurant.gui.CMRestaurantListPanel;
 import EBRestaurant.roles.EBCashierRole;
 import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
@@ -42,6 +43,7 @@ public class EBRestaurantPanel extends JPanel {
     private JPanel group = new JPanel();
     private SimCityGui gui; //reference to main gui
     private InsideBuildingPanel insideBuildingPanel;
+    public EBListPanel waitersPanel = new EBListPanel(this, "Waiters");
 
     public EBRestaurantPanel(SimCityGui simCityGui) {
         this.gui = simCityGui;
@@ -82,9 +84,9 @@ public class EBRestaurantPanel extends JPanel {
      * @param type indicates whether the person is a customer or waiter
      * @param name name of person
      */
-     /*public void showInfo(String type, String name) {
+     public void showInfo(String type, String name) {
     	types=type;
-        if (type.equals("Customers")) {
+        /*if (type.equals("Customers")) {
       
             for (int i = 0; i < customers.size(); i++) {
                 EBCustomerRole temp = customers.get(i);
@@ -92,15 +94,15 @@ public class EBRestaurantPanel extends JPanel {
                     restGui.updateInfoPanel(temp);
             }
         }
-        else if(type.equals("waiters"))
+       if(type.equals("waiters"))
         {
             for (int i = 0; i < waiters.size(); i++) {
                 EBWaiterRole temp = waiters.get(i);
                 if (temp.getName() == name)
                     restGui.updateInfoPanel(temp);
             }
-        }
-    }*/
+        }*/
+    }
 
     /**
      * Adds a customer or waiter to the appropriate list
@@ -186,6 +188,12 @@ public class EBRestaurantPanel extends JPanel {
     	}
     }
 
+	public void addWaiterToList(String name){
+		waitersPanel.addWaiter(name);
+	}
+	public void removeWaiterFromList(String name){
+		waitersPanel.removeWaiter(name);
+	}
     
 	public void setInsideBuildingPanel(InsideBuildingPanel bp) {
 		insideBuildingPanel = bp;

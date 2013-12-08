@@ -435,7 +435,6 @@ public class EBWaiterRole extends Role implements Waiter {
 
 	public void goesToWork() {
 		waiterState = state.gotToWork;
-		print("www");
 		stateChanged();
 	}
 

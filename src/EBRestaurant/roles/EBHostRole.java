@@ -1,11 +1,14 @@
 package EBRestaurant.roles;
 
 import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.roles.CMWaiterRole;
+import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBHostGui;
 
 import java.util.*;
 
 import city.PersonAgent;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -256,6 +259,7 @@ public class EBHostRole extends Role implements Host {
 
 	public void msgReadyToWork(Waiter w){
 		waiters.add(new MyWaiters(w,false));
+		((EBAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((EBWaiterRole) w).getName());
 		stateChanged();
 	}
 	

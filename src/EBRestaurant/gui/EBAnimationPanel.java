@@ -6,6 +6,7 @@ import javax.swing.*;
 import CMRestaurant.gui.CMCashierGui;
 import CMRestaurant.gui.CMCookGui;
 import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.gui.CMRestaurantPanel;
 import CMRestaurant.gui.CMWaiterGui;
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
@@ -118,6 +119,10 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
 	            }
         }
     }
+    
+    public void addWaiterToList(String name){
+		((EBRestaurantPanel) insideBuildingPanel.guiInteractionPanel).addWaiterToList(name);
+	}
 
     public void addGui(EBCustomerGui gui) {
         guis.add(gui);
