@@ -25,7 +25,9 @@ public class BusGui implements Gui{
 	private int xDestination, yDestination;
 	private enum Command {noCommand, atBusStop};
 	private Command command=Command.noCommand;
-	
+
+	static final int B_YPOS_BEGIN = -35;
+	static final int F_YPOS_BEGIN = -405;
     static final int B_XStart = 30;
     static final int B_YStart = 410;
     static final int F_XStart = 825;
@@ -51,15 +53,15 @@ public class BusGui implements Gui{
 		
 		if(type == 'B'){
 			xPos = B_XStart;
-			yPos = B_YStart;
+			yPos = B_YPOS_BEGIN;
 			xDestination = B_XStart;
-			yDestination = B_YStart;
+			yDestination = B_YPOS_BEGIN;
 		}
 		else if(type == 'F'){
 			xPos = F_XStart;
-			yPos = F_YStart;
+			yPos = F_YPOS_BEGIN;
 			xDestination = F_XStart;
-			yDestination = F_YStart;
+			yDestination = F_YPOS_BEGIN;
 		}
         
 		this.gui = gui;
@@ -156,12 +158,12 @@ public class BusGui implements Gui{
 	public void doGoToRest() {
 		if(type == 'B'){
 			xDestination = B_XStart;
-			yDestination = F_YStart;
+			yDestination = B_YStart;
 		}
 		
 		else if(type == 'F'){
 			xDestination = F_XStart;
-			yDestination = B_YStart;
+			yDestination = F_YStart;
 		}
 	}
 

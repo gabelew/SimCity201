@@ -7,6 +7,8 @@ import java.util.concurrent.Semaphore;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import city.gui.BusGui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.interfaces.Bus;
 import city.interfaces.Person;
 import agent.Agent;
@@ -121,13 +123,14 @@ public class BusAgent extends Agent implements Bus{
 	//Messages
 	
 	public void msgWaitingForBus(Person p, Point location){
+		AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msgWaitingForBus recieved from " +p.getName());
 		log.add(new LoggedEvent("msgWaitingForBus recieved from " +p.getName()));
 		MyBusStop b = findBusStop(location);	
 		b.passengers.add(new MyPassenger(p, StopEvent.pickUp));
 		if(getStateChangePermits()==0)
 			stateChanged();
 	}
-	
+
 	private MyBusStop findBusStop(Point location) {
 		
 		if(location.x < 115 && location.y < 115){
@@ -149,6 +152,7 @@ public class BusAgent extends Agent implements Bus{
 		}
 	}
 	public void msgComingAboard(Person p, Point Destination){
+		AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msgComingAboard recieved from " +p.getName());
 		log.add(new LoggedEvent("msgComingAboard recieved from " +p.getName()));
 		MyBusStop b = findBusStop(Destination);	
 		
@@ -160,23 +164,24 @@ public class BusAgent extends Agent implements Bus{
 	}
 	
 	public void msgAtStop(Point busStop){ //from animation
+		AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msgAtStop recieved");
 		for(MyBusStop b : busStops){
 			if(b.location.equals(busStop)){
 				
 				if(b.stopnumber == 0){
-					print("msg at stop 0");
+					AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msg at stop 0");
 					state = State.atStop0;
 				}
 				else if(b.stopnumber == 1){
-					print("msg at stop 1");
+					AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msg at stop 1");
 					state = State.atStop1;
 				}
 				else if(b.stopnumber == 2){
-					print("msg at stop 2");
+					AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msg at stop 2");
 					state = State.atStop2;
 				}
 				else if(b.stopnumber == 3){
-					print("msg at stop 3");
+					AlertLog.getInstance().logMessage(AlertTag.BUS, getName(), "msg at stop 3");
 					state = State.atStop3;
 				}
 			}
