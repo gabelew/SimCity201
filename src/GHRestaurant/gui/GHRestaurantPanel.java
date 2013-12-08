@@ -2,10 +2,12 @@ package GHRestaurant.gui;
 
 import GHRestaurant.*;
 import GHRestaurant.roles.*;
-
 import restaurant.interfaces.*;
 
 import javax.swing.*;
+
+import city.gui.SimCityGui;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -34,14 +36,14 @@ public class GHRestaurantPanel extends JPanel {
     private GHListPanel waiterPanel = new GHListPanel(this, "Waiters");
     private JPanel group = new JPanel();
 
-    private GHRestaurantGui gui; //reference to main gui
+    private SimCityGui gui; //reference to main gui
 
-    public GHRestaurantPanel(GHRestaurantGui gui) {
+    public GHRestaurantPanel(SimCityGui gui) {
         this.gui = gui;
        // host.setGui(hostGui);
 
-        gui.animationPanel.addGui(hostGui);
-        gui.animationPanel.addGui(cookGui);
+        //gui.animationPanel.addGui(hostGui);
+        //gui.animationPanel.addGui(cookGui);
        /* host.startThread();
         cashier.startThread();
         cook.setMarket(market);

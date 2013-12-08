@@ -1,13 +1,12 @@
 package GHRestaurant.gui;
-
-
+import GHRestaurant.roles.*;
 import restaurant.interfaces.*;
 
 //import restaurant.Waiter;
 import java.awt.*;
 
 import city.gui.Gui;
-
+import city.gui.SimCityGui;
 public class GHWaiterGui implements Gui {
 
     private Waiter agent = null;
@@ -20,12 +19,12 @@ public class GHWaiterGui implements Gui {
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
-    RestaurantGui gui;
+    SimCityGui gui;
     
     public static final int xTable = 200;
     public static final int yTable = 250;
 
-    public GHWaiterGui(Waiter agent, RestaurantGui gui) {
+    public GHWaiterGui(Waiter agent, SimCityGui gui) {
         this.agent = agent;
         this.gui = gui;
     }
@@ -43,11 +42,11 @@ public class GHWaiterGui implements Gui {
 
         if (xPos == xDestination && yPos == yDestination
         		&& (xDestination == xTable + 20) & (yDestination == yTable + (80-(tableNumber*100)))) {
-           agent.msgAtTable();
+           ((GHWaiterRole) agent).msgAtTable();
         }
            else if(xPos == xDestination && yPos == yDestination
            		&& (xDestination == xCook) & (yDestination == yCook)) {
-               agent.msgAtTable();
+               ((GHWaiterRole) agent).msgAtTable();
         }
     }
 
@@ -65,20 +64,20 @@ public class GHWaiterGui implements Gui {
     }
     
     public void setWork(){
-    	agent.gotWork();
+    	((GHWaiterRole) agent).gotWork();
     	setPresent(true);
     }
     
     public void GoOnBreak(){
-    	agent.msgTryToGoOnBreak();
+    	((GHWaiterRole) agent).msgTryToGoOnBreak();
     }
     
     public void GoBackToWork(){
-    	agent.msgGoBackToWork();
+    	((GHWaiterRole) agent).msgGoBackToWork();
     }
     
     public boolean OnBreak(){
-    	return agent.getOnBreak();
+    	return ((GHWaiterRole) agent).getOnBreak();
     }
 
     public void DoBringToTable(Customer customer, int tablenumber) {

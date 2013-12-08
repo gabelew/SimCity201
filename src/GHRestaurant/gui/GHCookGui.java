@@ -1,8 +1,8 @@
 package GHRestaurant.gui;
 
 
-import restaurant.CustomerAgent;
 import restaurant.interfaces.*;
+import GHRestaurant.roles.*;
 
 import java.awt.*;
 
@@ -15,6 +15,7 @@ public class GHCookGui implements Gui {
     private int xPos = 365, yPos = 230;//default waiter position
     private int xDestination = 365, yDestination = 230;//default start position
     private int tableNumber;
+    private boolean isPresent = false;
 
     public static final int xTable = 200;
     public static final int yTable = 250;
@@ -35,7 +36,7 @@ public class GHCookGui implements Gui {
             yPos--;
 
         if (xPos == xDestination && yPos == yDestination) {
-          agent.msgAtTable();
+          ((GHCookRole) agent).msgAtTable();
         }
     }
 
@@ -45,7 +46,7 @@ public class GHCookGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
 
     public void DoCookIt() {
@@ -72,4 +73,9 @@ public class GHCookGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	@Override
+	public void setPresent(boolean b) {
+		isPresent = b;
+	}
 }

@@ -81,15 +81,15 @@ public class GHListPanel extends JPanel implements ActionListener {
         	// Chapter 2.19 describes showInputDialog()
             addPerson(textfield.getText());
         }        
-        else{
+       /* else{
         	// Isn't the second for loop more beautiful?
             /*for (int i = 0; i < list.size(); i++) {
-                JButton temp = list.get(i);*/
+                JButton temp = list.get(i);*//*
         	for (JButton temp:list){
                 if (e.getSource() == temp)
                     restPanel.showInfo(type, temp.getText());
             }
-        }
+        }*/
     }
 
     /**
@@ -101,7 +101,7 @@ public class GHListPanel extends JPanel implements ActionListener {
      */
     public void addPerson(String name) {
         if (name != null) {
-            JButton button = new JButton(name);
+          /*  JButton button = new JButton(name);
             button.setBackground(Color.white);
 
             Dimension paneSize = pane.getSize();
@@ -121,7 +121,7 @@ public class GHListPanel extends JPanel implements ActionListener {
             
             restPanel.addPerson(type, name, checkb.isSelected());//puts customer on list
             restPanel.showInfo(type, name);//puts hungry button on panel
-            validate();
+            validate();*/
         }
     }   
     }

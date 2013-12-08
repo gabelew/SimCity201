@@ -1,5 +1,5 @@
 package GHRestaurant.gui;
-
+import GHRestaurant.roles.*;
 //import restaurant.Customer;
 import restaurant.interfaces.*;
 import GHRestaurant.*;
@@ -7,6 +7,7 @@ import GHRestaurant.*;
 import java.awt.*;
 
 import city.gui.Gui;
+import city.gui.SimCityGui;
 
 public class GHCustomerGui implements Gui{
 
@@ -15,7 +16,7 @@ public class GHCustomerGui implements Gui{
 	private boolean isHungry = false;
 
 	//private HostAgent host;
-	RestaurantGui gui;
+	SimCityGui gui;
 
 	private int xPos, yPos;
 	private int Cashierx = -50, Cashiery = -50;
@@ -26,7 +27,7 @@ public class GHCustomerGui implements Gui{
 	public static final int xTable = 200;
 	public static final int yTable = 250;
 
-	public GHCustomerGui(Customer c, RestaurantGui gui){ //HostAgent m) {
+	public GHCustomerGui(Customer c, SimCityGui gui){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
@@ -47,14 +48,14 @@ public class GHCustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
-			if (command==Command.GoToCashier) agent.msgAnimationFinishedGoToCashier();
+			if (command==Command.GoToSeat) ((GHCustomerRole) agent).msgAnimationFinishedGoToSeat();
+			if (command==Command.GoToCashier) ((GHCustomerRole) agent).msgAnimationFinishedGoToCashier();
 			 if (command==Command.LeaveRestaurant) {
-				agent.msgAnimationFinishedLeaveRestaurant();
+				((GHCustomerRole) agent).msgAnimationFinishedLeaveRestaurant();
 				//System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 				//setPresent(false);
-				gui.setCustomerEnabled(agent);
+				//gui.setCustomerEnabled(agent);
 			}
 			command=Command.noCommand;
 		}
