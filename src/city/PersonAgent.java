@@ -9,6 +9,8 @@ import java.util.concurrent.Semaphore;
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
 import restaurant.Restaurant;
+import restaurant.interfaces.Cashier;
+import restaurant.interfaces.Cook;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -978,9 +980,9 @@ public class PersonAgent extends Agent implements Person
             	role.getGui().setPresent(true);
             	((Host) role).goesToWork();
     		}else if(job.type.equalsIgnoreCase("cook")){
-    			CMCookRole role = (CMCookRole)(r.cook);
+    			Role role = (Role)(r.cook);
     			if(role.getPerson() != null){
-    				role.msgRelieveFromDuty(this);
+    				((Cook) role).msgRelieveFromDuty(this);
     				try {
     					waitingResponse.acquire();
     				} catch (InterruptedException e) {
@@ -991,11 +993,11 @@ public class PersonAgent extends Agent implements Person
     			role.setPerson(this);
             	role.active = true;
             	role.getGui().setPresent(true);
-            	role.goesToWork();
+            	((Cook) role).goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
-    			CMCashierRole role = (CMCashierRole)(r.cashier);
+    			Role role = (CMCashierRole)(r.cashier);
     			if(role.getPerson() != null){
-    				role.msgReleaveFromDuty(this);
+    				((Cashier) role).msgReleaveFromDuty(this);
     				try {
     					waitingResponse.acquire();
     				} catch (InterruptedException e) {
@@ -1006,7 +1008,7 @@ public class PersonAgent extends Agent implements Person
     			role.setPerson(this);
             	role.active = true;
             	role.getGui().setPresent(true);
-            	role.goesToWork();
+            	((Cashier) role).goesToWork();
             	role.active = true;
     		}
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){

@@ -83,7 +83,5 @@ public abstract class Role
 
 	public abstract void setGui(Gui waiterGuiFactory);
 
-
-
 	public abstract Gui getGui();
 }
