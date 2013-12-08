@@ -15,7 +15,7 @@ import city.roles.Role;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class GHHostAgent extends Role implements Host{
+public class GHHostRole extends Role implements Host{
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -34,7 +34,7 @@ public class GHHostAgent extends Role implements Host{
 
 	public GHHostGui hostGui = null;
 
-	public GHHostAgent(String name) {
+	public GHHostRole(String name) {
 		super();
 
 		this.name = name;

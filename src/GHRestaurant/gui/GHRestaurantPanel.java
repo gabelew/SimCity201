@@ -17,14 +17,14 @@ import java.util.Vector;
 public class GHRestaurantPanel extends JPanel {
 
     //Host, cook, waiters and customers
-    private GHHostAgent host = new GHHostAgent("Sarah");
+    private GHHostRole host = new GHHostRole("Sarah");
     private GHHostGui hostGui = new GHHostGui(host);
-    private GHCookAgent cook = new GHCookAgent("Fred");
+    private GHCookRole cook = new GHCookRole("Fred");
     private GHCookGui cookGui = new GHCookGui(cook);
-    private GHMarketAgent market = new GHMarketAgent("Market1",200,360,250,250);
-    private GHMarketAgent market2 = new GHMarketAgent("Market2",350,150,450,100);
-    private GHMarketAgent market3 = new GHMarketAgent("market3",450,550,250,50);
-    private GHCashierAgent cashier = new GHCashierAgent("Brenda");
+    private GHMarketRole market = new GHMarketRole("Market1",200,360,250,250);
+    private GHMarketRole market2 = new GHMarketRole("Market2",350,150,450,100);
+    private GHMarketRole market3 = new GHMarketRole("market3",450,550,250,50);
+    private GHCashierRole cashier = new GHCashierRole("Brenda");
 
     private Vector<Customer> customers = new Vector<Customer>();
     private Vector<Waiter> waiters = new Vector<Waiter>();

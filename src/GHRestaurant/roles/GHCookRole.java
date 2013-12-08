@@ -13,7 +13,7 @@ import city.roles.Role;
  * Restaurant Cook Agent
  */
 
-public class GHCookAgent extends Role implements Cook {
+public class GHCookRole extends Role implements Cook {
 	
 	public List<Order> orders
 	= Collections.synchronizedList(new ArrayList<Order>());
@@ -29,7 +29,7 @@ public class GHCookAgent extends Role implements Cook {
 	private Semaphore atDestination = new Semaphore(0,true);
 
 
-	public GHCookAgent(String name) {
+	public GHCookRole(String name) {
 		super();
 
 		this.name = name;

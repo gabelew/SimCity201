@@ -11,7 +11,7 @@ import city.roles.Role;
  * Restaurant Cook Agent
  */
 
-public class GHCashierAgent extends Role implements Cashier{
+public class GHCashierRole extends Role implements Cashier{
 	
 	public List<Check> checks
 	= Collections.synchronizedList(new ArrayList<Check>());
@@ -20,7 +20,7 @@ public class GHCashierAgent extends Role implements Cashier{
 	private double RestaurantMoney; 
 
 
-	public GHCashierAgent(String name) {
+	public GHCashierRole(String name) {
 		super();
 
 		this.name = name;
@@ -147,14 +147,14 @@ public class GHCashierAgent extends Role implements Cashier{
 	}
 	
 	private void GiveCheck(Check c){
-		print("Giving check to " + c.waiter.getName());
+		print("Giving check to " + c.waiter);
 		c.waiter.msgHereIsCheck(c.customer, c.choice, c.cost, c.tablenumber);
 		checks.remove(c);
 	}
 	
 
 	private void PayingBill(Check c){
-		print("Check being payed by " + c.customer.getName());
+		print("Check being payed by " + c.customer);
 		
 		if(c.customer.getMoney() >= c.cost){
 			double temp = c.customer.getMoney() - c.cost;

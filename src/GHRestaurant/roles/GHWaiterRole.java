@@ -13,7 +13,7 @@ import city.roles.Role;
  * Restaurant Waiter Agent
  */
 
-public class GHWaiterAgent extends Role implements Waiter{
+public class GHWaiterRole extends Role implements Waiter{
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<MyCustomer> waitingCustomers
@@ -31,7 +31,7 @@ public class GHWaiterAgent extends Role implements Waiter{
 	private Cook cook;
 	enum CustomerState {Waiting, AskedToOrder, Ordered, Reorder, Ready, Done, Idle}
 
-	public GHWaiterAgent(String name) {
+	public GHWaiterRole(String name) {
 		super();
 
 		this.name = name;
