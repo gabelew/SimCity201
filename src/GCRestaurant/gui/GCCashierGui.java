@@ -15,7 +15,7 @@ public class GCCashierGui implements Gui{
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private int xWorkingPos = 100;
-	private int yWorkingPos = 100;
+	private int yWorkingPos = 50;
 	
 	final int DEFAULT_POS = -20;
 	private BufferedImage cashierImg;
@@ -25,6 +25,7 @@ public class GCCashierGui implements Gui{
 	public GCCashierGui(GCCashierRole r){
 		try {cashierImg = ImageIO.read(new File("imgs/cashier_v1.png"));}
 		catch (IOException e) {}
+		
 		this.role = r;
 		xPos = DEFAULT_POS;
 		yPos = DEFAULT_POS;
@@ -33,20 +34,15 @@ public class GCCashierGui implements Gui{
 	}
 
 	public void updatePosition() {
-		if(xPos != xDestination)
-		{
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
 				xPos--;
-		}
-		else
-		{
 			if (yPos < yDestination)
 				yPos++;
 			else if (yPos > yDestination)
 				yPos--;
-		}
+			
 		if(xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
         		role.msgAnimationHasLeftRestaurant();

@@ -7,6 +7,7 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
@@ -35,6 +36,7 @@ public class GCCashierRole extends Role implements Cashier
 	private enum CheckState{none, calculated, ReceivedPayment };
 	public double cash = 10;
 	private DecimalFormat df = new DecimalFormat("#.##"); //formats all numbers to 2 decimal place
+	private Semaphore waitingResponse = new Semaphore(0,true);
 	
 	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
@@ -46,10 +48,10 @@ public class GCCashierRole extends Role implements Cashier
 	{
 		super();	
 		//this.name = name;
-		menuItems.put("steak", new Double(15.99) );
-		menuItems.put("chicken", new Double(10.99) );
-		menuItems.put("cookie", new Double(8.99) );
-		menuItems.put("salad", new Double(5.99) );		
+		menuItems.put("Steak", new Double(15.99) );
+		menuItems.put("Chicken", new Double(10.99) );
+		menuItems.put("Cookie", new Double(8.99) );
+		menuItems.put("Salad", new Double(5.99) );		
 	}
 
 	public String getMaitreDName() {
@@ -165,6 +167,31 @@ public class GCCashierRole extends Role implements Cashier
 	{
 		try
 		{
+			if(state == State.releaveFromDuty){
+				state = State.none;
+				myPerson.releavedFromDuty(this);
+				if(replacementPerson != null){
+					replacementPerson.waitingResponse.release();
+				}
+			}
+			if(state == State.goToWork){
+				state = State.working;
+				cashierGui.DoEnterRestaurant();
+				return true;
+			}
+			if(state == State.leaving){
+				state = State.none;
+				if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
+					DepositBusinessCash();
+				cashierGui.DoLeaveRestaurant();
+				try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+			
 			for(Check c : checks)
 			{
 				if(c.state == CheckState.calculated)
@@ -200,6 +227,11 @@ public class GCCashierRole extends Role implements Cashier
 		}
 	}
 	
+	private void DepositBusinessCash() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * Check objects cannot be created outside of a CashierAgent
 	 * to workaround for JUnit testing, this function is a function that generates

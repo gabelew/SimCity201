@@ -3,12 +3,12 @@ package GCRestaurant.roles;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
+import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.interfaces.Waiter.MenuItem;
 import GCRestaurant.gui.GCCustomerGui;
 import GCRestaurant.roles.GCCashierRole.Check;
-import agent.Agent;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -27,7 +27,6 @@ import city.roles.Role;
  */
 public class GCCustomerRole extends Role implements Customer{
 	final int TIMERCONST = 1000;
-	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
 	Timer timer = new Timer();
@@ -35,7 +34,7 @@ public class GCCustomerRole extends Role implements Customer{
 	private Semaphore busy = new Semaphore(0,true);
 	private Semaphore atCashier = new Semaphore(0,true);
 	// agent correspondents
-	private GCHostRole host;
+	private Host host;
 	private Waiter waiter;
 	private Cashier cashier;
 
@@ -51,7 +50,6 @@ public class GCCustomerRole extends Role implements Customer{
 	
 	private Menu menu = null;
 	private List<String> badChoices = new ArrayList<String>();
-	private double cash;
 	private Check check;
 	
 	//default states
@@ -60,7 +58,8 @@ public class GCCustomerRole extends Role implements Customer{
 	
 	public GCCustomerRole(PersonAgent p, Restaurant r){
 		super(p);
-		
+		this.host = r.host;
+		this.cashier = r.cashier;
 	}
 
 	/**
@@ -76,14 +75,11 @@ public class GCCustomerRole extends Role implements Customer{
 	public void setCashier(GCCashierRole c) {
 		this.cashier = c;
 	}
-	public String getCustomerName() {
-		return name;
-	}
 /**************************************************
 * Messages
 **************************************************/
 	public void gotHungry() {//from animation
-		print("I'm hungry and have " + cash + " dollars");
+		print("I'm hungry and have " + myPerson.cashOnHand + " dollars");
 		state=AgentState.DoingNothing;
 		event = AgentEvent.gotHungry;
 		stateChanged();
@@ -128,7 +124,7 @@ public class GCCustomerRole extends Role implements Customer{
 	public void receivedChangeMsg(double c)
 	{
 		print("Received Change, Thank You");
-		cash += c;
+		myPerson.cashOnHand += c;
 	}
 	
 	public void restaurantFullMsg()
@@ -158,7 +154,7 @@ public class GCCustomerRole extends Role implements Customer{
 	// (2) Msg to waiter giving order
 	private void giveOrder()
 	{
-		if(cash == 0)
+		if(myPerson.cashOnHand == 0)
 		{
 			print("My choice is: steak");
 			((GCWaiterRole)waiter).HereIsChoiceMsg(this, "Steak");
@@ -167,10 +163,9 @@ public class GCCustomerRole extends Role implements Customer{
 		}
 		if(canAffordOneItem())
 		{
-			print("~~~~~~~~~~~~~~~~~");
 			for(MenuItem food : menu.menuItems)
 			{
-				if(cash >= food.cost)
+				if(myPerson.cashOnHand >= food.cost)
 				{
 					this.choice_ = food.item;
 					print("My choice is: " + choice_);
@@ -190,10 +185,10 @@ public class GCCustomerRole extends Role implements Customer{
 		else
 		{
 			//Randomly Choose a Food
-			if(name.equals("steak"))//hack to make customer order steak
+			if(myPerson.getName().equals("Steak"))//hack to make customer order steak
 			{
-				print("My choice is: " + name);
-				((GCWaiterRole)waiter).HereIsChoiceMsg(this, name);
+				print("My choice is: " + myPerson.getName());
+				((GCWaiterRole)waiter).HereIsChoiceMsg(this, myPerson.getName());
 			}
 			else
 			{
@@ -211,7 +206,7 @@ public class GCCustomerRole extends Role implements Customer{
 		int count = 0;
 		for(MenuItem food : menu.menuItems)
 		{
-			if(cash < food.cost){ count++;}
+			if(myPerson.cashOnHand < food.cost){ count++;}
 		}
 		if(menu.menuItems.size()-count == 1){ return true; }
 		return false;
@@ -220,7 +215,7 @@ public class GCCustomerRole extends Role implements Customer{
 	{
 		for(MenuItem food : menu.menuItems)
 		{
-			if(cash >= food.cost){ return true;}
+			if(myPerson.cashOnHand >= food.cost){ return true;}
 		}
 		return false;
 	}
@@ -228,14 +223,6 @@ public class GCCustomerRole extends Role implements Customer{
 	private void EatFoodAction() {
 		customerGui.servedFood(choice_);
 		Do("Eating Food");
-		//This next complicated line creates and starts a timer thread.
-		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
-		//When that time elapses, it will call back to the run routine
-		//located in the anonymous class created right there inline:
-		//TimerTask is an interface that we implement right there inline.
-		//Since Java does not all us to pass functions, only objects.
-		//So, we use Java syntactic mechanism to create an
-		//anonymous inner class that has the public method run() in it.
 		timer.schedule(new TimerTask() {
 			Object cookie = 1;
 			public void run() {
@@ -245,15 +232,14 @@ public class GCCustomerRole extends Role implements Customer{
 				stateChanged();
 			}
 		},
-		hungerLevel*TIMERCONST);//getHungerLevel() * 1000);//how long to wait before running task
+		hungerLevel*TIMERCONST);//how long to wait before running task
 	}
 	// (4) Customer Leaves Restaurant, Sends Msg to Waiter
 	private void LeaveTableAction() {
 		Do("Leaving Table");
-		customerGui.leftRest();
+		customerGui.leftTable();
 		customerGui.goToCashier();
 		((GCWaiterRole)waiter).DoneEatingMsg(this);
-		//customerGui.DoExitRestaurant();
 	}
 	// (6) Paying check
 	public void PayingCheckAction()
@@ -262,7 +248,7 @@ public class GCCustomerRole extends Role implements Customer{
 		try {atCashier.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
 		print("Paying Bill Now");
-		if(cash >= check.amountDue)
+		if(myPerson.cashOnHand >= check.amountDue)
 		{
 			((GCCashierRole)cashier).msgPayment(this, check.amountDue);
 		}
@@ -271,6 +257,9 @@ public class GCCustomerRole extends Role implements Customer{
 			print("I will pay you guys next time");
 			((GCCashierRole)cashier).cannotPayCheckMsg(this, check.amountDue);
 		}
+		customerGui.DoExitRestaurant();
+		try {busy.acquire();} 
+		catch (InterruptedException e) { e.printStackTrace();}
 		//replenishes money for next time
 		//cash = 100;
 	}
@@ -312,11 +301,11 @@ public class GCCustomerRole extends Role implements Customer{
 	
 	private void RestaurantFullAction()
 	{
-		if(name.equals("leaving"))
+		if((myPerson.name).equals("leaving"))
 		{
 			print("the wait is too long, i'm leaving");
 			state = AgentState.Leaving;
-			host.waitingCustomerLeft(this);
+			((GCHostRole)host).waitingCustomerLeft(this);
 			return;
 		}
 		int decidedToLeave = 2;
@@ -325,7 +314,7 @@ public class GCCustomerRole extends Role implements Customer{
 		{
 			print("the wait is too long, i'm leaving");
 			state = AgentState.Leaving;
-			host.waitingCustomerLeft(this);
+			((GCHostRole)host).waitingCustomerLeft(this);
 		}
 		stateChanged();
 	}
@@ -335,7 +324,6 @@ public class GCCustomerRole extends Role implements Customer{
 		stateChanged();
 	}
 	public void msgAtCashier() {//from animation
-		//print("msgAtTable() called");
 		atCashier.release();// = true;
 		stateChanged();
 	}
@@ -435,7 +423,7 @@ public class GCCustomerRole extends Role implements Customer{
 		customerGui.enterRestaurant();
 		try {busy.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
-		host.msgIWantFood(this);//send our instance, so he can respond to us
+		host.msgIWantToEat(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown() {
@@ -449,10 +437,6 @@ public class GCCustomerRole extends Role implements Customer{
 	{
 		tableNumber = tn;
 	}
-	public String getName() {
-		return name;
-	}
-	
 	public int getHungerLevel() {
 		return hungerLevel;
 	}

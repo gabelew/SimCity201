@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+import restaurant.interfaces.Customer;
 import city.gui.Gui;
 import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCWaiterRole;
@@ -29,7 +30,7 @@ public class GCWaiterGui implements Gui {
     private int xDestination = DEFAULT_POSX, yDestination = DEFAULT_POSY;//default start position
     private int personSize = 20;
     private int cookPosX = 200, cookPosY = 95;
-    private int cashierPosX = -10, cashierPosY = -25;
+    private int cashierPosX = 97, cashierPosY = 50;
     private int customerPos = 40;
     
     public int xTable;
@@ -62,7 +63,6 @@ public class GCWaiterGui implements Gui {
             xPos++;
         else if (xPos > xDestination)
             xPos--;
-
         if (yPos < yDestination)
             yPos++;
         else if (yPos > yDestination)
@@ -147,7 +147,7 @@ public class GCWaiterGui implements Gui {
     	xDestination = customerPos;
     	yDestination = customerPos;
     }
-    public void DoBringToTable(GCCustomerRole customer, int tableNumber) {
+    public void DoBringToTable(Customer c, int tableNumber) {
     	xTable = tableNumber*TABLE_SPACING;
     	
         xDestination = xTable + personSize;

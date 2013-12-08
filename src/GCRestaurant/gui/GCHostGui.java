@@ -18,8 +18,8 @@ public class GCHostGui implements Gui{
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private final int StartPos = -20;
-	private final int xWorkPos = 50;
-	private final int yWorkPos = 55;
+	private final int xWorkPos = 75;
+	private final int yWorkPos = 20;
 
 	private BufferedImage hostImg = null;
 	enum Command {none,enterRestaurant, leaveRestaurant };
@@ -37,20 +37,16 @@ public class GCHostGui implements Gui{
 	}
 
 	public void updatePosition() {
-		if(xPos != xDestination)
-		{
-			if (xPos < xDestination)
-				xPos++;
-			else if (xPos > xDestination)
-				xPos--;
-		}
-		else
-		{
-			if (yPos < yDestination)
-				yPos++;
-			else if (yPos > yDestination)
-				yPos--;
-		}
+		
+		if (xPos < xDestination)
+			xPos++;
+		else if (xPos > xDestination)
+			xPos--;		
+		if (yPos < yDestination)
+			yPos++;
+		else if (yPos > yDestination)
+			yPos--;
+		
 	
 		if(xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){

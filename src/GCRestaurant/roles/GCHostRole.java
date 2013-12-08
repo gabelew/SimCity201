@@ -21,7 +21,7 @@ public class GCHostRole extends Role implements Host
 {
 	static final int NTABLES = 4;
 
-	public List<GCCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<GCCustomerRole>());
+	public List<Customer> waitingCustomers = Collections.synchronizedList(new ArrayList<Customer>());
 	public Collection<Table> tableList;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	public Restaurant restaurant;
@@ -56,25 +56,18 @@ public class GCHostRole extends Role implements Host
 	public Collection getTables() {
 		return tableList;
 	}
-	//Hack to add waiter
-	/*
-	public void addWaiter(GCWaiterRole waiter)
-	{
-		//adds waiter to waiterlist
-		waiters.add(new myWaiter(waiter));
-	}*/
 
 	/**************************************************
 	 * Messages
 	 **************************************************/
-	public void msgIWantFood(GCCustomerRole cust) 
-	{
+	
+	public void msgIWantToEat(Customer cust) {
 		waitingCustomers.add(cust);
 		stateChanged();
 	}
-
 	// msg from waiter, add a free table to lit
-	public void tableFreeMsg(Customer c) {
+	public void tableFreeMsg(Customer c) 
+	{
 		for (Table table : tableList) {
 			if (table.getOccupant() == c) {
 				print(c + " leaving " + table);
@@ -94,7 +87,7 @@ public class GCHostRole extends Role implements Host
 		}
 		stateChanged();
 	}
-	public void breakIsOverMsg(GCWaiterRole waiter)
+	public void breakIsOverMsg(Waiter waiter)
 	{
 		for(myWaiter w: waiters)
 		{
@@ -105,7 +98,7 @@ public class GCHostRole extends Role implements Host
 	public void waitingCustomerLeft(GCCustomerRole c)
 	{
 		print("Customer: " + c.getName() + ", decided to leave");
-		for(GCCustomerRole customer: waitingCustomers)
+		for(Customer customer: waitingCustomers)
 		{
 			if( customer == c)
 			{
@@ -124,18 +117,21 @@ public class GCHostRole extends Role implements Host
 	 * Seating will go sequentially, from Waiter 1 - Waiter N
 	 * then start over again after N
 	 */
-	private void ActionSeatCustomer(myWaiter waiter, GCCustomerRole customer, Table table) 
+	private void ActionSeatCustomer(myWaiter waiter, Customer customer, Table table) 
 	{
-		//increases customer count
-		waiter.customers++;
-		//Sends Messages
-		print("telling waiter to seat " + customer.getName());
-		((GCWaiterRole) waiter.w).SeatCustomerMsg(customer, table);
-		table.setOccupant(customer);
-		table.waiter = waiter;
-		customer.setWaiter(waiter.w);//hack
-		waitingCustomers.remove(0); //pops first customer out of list
-		stateChanged();
+		if(waitingCustomers.size() > 0)
+		{
+			//increases customer count
+			waiter.customers++;
+			//Sends Messages
+			print("telling waiter to seat " + ((GCCustomerRole)customer).getName());
+			((GCWaiterRole) waiter.w).SeatCustomerMsg(customer, table);
+			table.setOccupant(customer);
+			table.waiter = waiter;
+			((GCCustomerRole)customer).setWaiter(waiter.w);//hack
+			waitingCustomers.remove(0); //pops first customer out of list
+			stateChanged();
+		}
 	}
 
 	private void grantBreakAction(myWaiter w)
@@ -222,11 +218,11 @@ public class GCHostRole extends Role implements Host
 			}
 			if(!waitingCustomers.isEmpty())
 			{
-				for(GCCustomerRole c : waitingCustomers)
+				for(Customer c : waitingCustomers)
 				{
 					if(checkTablesFull())
 					{
-						c.restaurantFullMsg();
+						((GCCustomerRole)c).restaurantFullMsg();
 					}
 				}
 			}
@@ -256,7 +252,7 @@ public class GCHostRole extends Role implements Host
 					}
 					if(w!=null && !table.isOccupied())
 					{
-						waitingCustomers.get(0).setTableNumber(table.tableNumber);
+						((GCCustomerRole)waitingCustomers.get(0)).setTableNumber(table.tableNumber);
 						print("Seat customer at table: " + table.tableNumber);
 						ActionSeatCustomer(w, waitingCustomers.get(0), table);//the action
 						return true;//return true to the abstract agent to reinvoke the scheduler.
@@ -289,7 +285,7 @@ public class GCHostRole extends Role implements Host
 	}
 
 	public class Table {
-		GCCustomerRole occupiedBy;
+		Customer occupiedBy;
 		myWaiter waiter;
 		int tableNumber;
 
@@ -297,15 +293,15 @@ public class GCHostRole extends Role implements Host
 			this.tableNumber = tableNumber;
 		}
 
-		void setOccupant(GCCustomerRole cust) {
-			occupiedBy = cust;
+		void setOccupant(Customer customer) {
+			occupiedBy = customer;
 		}
 
 		void setUnoccupied() {
 			occupiedBy = null;
 		}
 
-		GCCustomerRole getOccupant() {
+		Customer getOccupant() {
 			return occupiedBy;
 		}
 
@@ -324,7 +320,6 @@ public class GCHostRole extends Role implements Host
 		
 	}
 
-	@Override
 	public void msgReadyToWork(Waiter w) 
 	{
 		boolean addWaiter = true;
@@ -336,16 +331,10 @@ public class GCHostRole extends Role implements Host
 		if(addWaiter){waiters.add(newWaiter);}
 	}
 
-	@Override
-	public void msgIWantToEat(Customer c) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void msgLeavingRestaurant(Customer c) {
-		state = State.releaveFromDuty;
-		waitingResponse.release();
+		
 	}
 
 	@Override

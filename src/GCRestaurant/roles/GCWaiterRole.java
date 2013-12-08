@@ -1,11 +1,14 @@
 package GCRestaurant.roles;
 
-import CMRestaurant.roles.CMWaiterRole.AgentEvent;
 import GCRestaurant.gui.GCWaiterGui;
 import GCRestaurant.roles.GCCashierRole.Check;
 import GCRestaurant.roles.GCCookRole.Order;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.Restaurant;
+import restaurant.interfaces.Cashier;
+import restaurant.interfaces.Cook;
+import restaurant.interfaces.Customer;
+import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 
 import java.util.*;
@@ -40,14 +43,17 @@ public class GCWaiterRole extends Role implements Waiter{
 	GCWaiterGui waiterGui = null;
 	//link to other agents
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
-	public GCHostRole host;
-	private GCCookRole cook;
-	public GCCashierRole cashier;
+	public Host host;
+	private Cook cook;
+	public Cashier cashier;
 	private final int BREAKTIME = 10000;
 	
 	public GCWaiterRole(PersonAgent p, Restaurant r) {
 		super(p);
 		this.restaurant = r;
+		this.host = r.host;
+		this.cook = r.cook;
+		this.cashier = r.cashier;
 	}
 	
 	public void setHost(GCHostRole h)
@@ -81,7 +87,7 @@ public class GCWaiterRole extends Role implements Waiter{
  ***********************************************/
 	
 	//(1) Message from host to seat customer
-	public void SeatCustomerMsg(GCCustomerRole customer, GCRestaurant.roles.GCHostRole.Table table)
+	public void SeatCustomerMsg(Customer customer, Table table)
 	{
 		print("Received msg SeatCustomer");
 		customers.add(new MyCustomer(customer, table));
@@ -119,25 +125,18 @@ public class GCWaiterRole extends Role implements Waiter{
 	// (4) Msg from Cook that Food is done
 	public void getFoodFromCookMsg(Order o)
 	{
-		try
-		{
 			for(MyCustomer c: customers)
 			{
 				if(c.c == o.customer)
 				{
+					c.order = o;
 					c.state = CustomerState.FoodDoneCooking;
+					event = WaiterEvent.givingFood;
 				}
 			}
-			event = WaiterEvent.givingFood;
 			stateChanged();
-		}
-		catch(Exception e)
-		{
-			return;
-		}
-		
 	}
-	
+	 
 	// (5) Msg from Customer, Done Eating, Leaving Table
 	public void DoneEatingMsg(GCCustomerRole c)
 	{
@@ -146,7 +145,7 @@ public class GCWaiterRole extends Role implements Waiter{
 			if( customer.c == c )
 			{
 				customer.state = CustomerState.Leaving;
-				host.waitingCustomerLeft(c);
+				((GCHostRole)host).waitingCustomerLeft(c);
 				break;
 			}
 		}
@@ -173,7 +172,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	}
 	
 	// (7) Food Out of Stock
-	public void OutOfStockMsg(GCCustomerRole c)
+	public void OutOfStockMsg(Customer c)
 	{
 		for(MyCustomer customer: customers)
 		{
@@ -210,11 +209,11 @@ public class GCWaiterRole extends Role implements Waiter{
 	// (1) brings customer to table
 		public void FollowMeAction(MyCustomer customer)
 		{
-			print("Seating Customer " + customer.c.getName());
+			print("Seating Customer " + ((GCCustomerRole)customer.c).getName());
 			waiterGui.getWaitingCustomer();
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			customer.c.msgSitAtTable(m);
+			((GCCustomerRole)customer.c).msgSitAtTable(m);
 			customer.table.setOccupant(customer.c);
 			seatCustomerAnimation(customer.c, customer.table.tableNumber);
 			//Waits for semaphore
@@ -231,8 +230,8 @@ public class GCWaiterRole extends Role implements Waiter{
 			//Waits for semaphore
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			print("taking " + c.c.getName() +"'s order" );
-			c.c.tellMeOrderMsg();
+			print("taking " + ((GCCustomerRole)c.c).getName() +"'s order" );
+			((GCCustomerRole)c.c).tellMeOrderMsg();
 			waiterGui.DoLeaveCustomer();
 			stateChanged();
 		}
@@ -247,7 +246,7 @@ public class GCWaiterRole extends Role implements Waiter{
 			catch (InterruptedException e) { e.printStackTrace();}
 			
 			//sends msg to cook
-			cook.HereIsOrderMsg(this, c.c, c.table, c.choice);
+			((GCCookRole)cook).HereIsOrderMsg(this, c.c, c.table, c.choice);
 			stateChanged();
 		}
 
@@ -258,14 +257,14 @@ public class GCWaiterRole extends Role implements Waiter{
 			waiterGui.goToCook();
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			cook.gotFoodMsg();
+			((GCCookRole)cook).gotFoodMsg(c.order);
 			print("giving food to table: " + c.table.tableNumber);
 			waiterGui.bringFood(c.choice);
 			goToCustomerAnimation(c.table.tableNumber);
 			//Waits for semaphore
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			c.c.receivedFoodMsg();
+			((GCCustomerRole)c.c).receivedFoodMsg();
 			waiterGui.DoLeaveCustomer();
 			waiterGui.servedFood();
 			stateChanged();
@@ -277,24 +276,25 @@ public class GCWaiterRole extends Role implements Waiter{
 			waiterGui.goToCashier();
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			cashier.msgProduceCheck(this, c.c,c.choice);
+			((GCCashierRole)cashier).msgProduceCheck(this, c.c,c.choice);
 			
 			waiterGui.goToTable(c.table.tableNumber);
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			c.c.receivedCheckMsg(c.check);
+			((GCCustomerRole)c.c).receivedCheckMsg(c.check);
 			waiterGui.DoLeaveCustomer();
 			stateChanged();
 		}
 		public void onBreakAction()
 		{
+			final GCWaiterRole wr = this;
 				//host.takingBreakMsg(this);
 				print("I'm going on break");
 				timer.schedule(new TimerTask(){
 					public void run()
 					{		
 						onBreak = false;  
-						host.breakIsOverMsg(GCWaiterRole.this);
+						((GCHostRole)host).breakIsOverMsg(wr);
 						print("Back from Break");
 						stateChanged();
 					}
@@ -308,8 +308,8 @@ public class GCWaiterRole extends Role implements Waiter{
 			//Waits for semaphore
 			try {busy.acquire();} 
 			catch (InterruptedException e) { e.printStackTrace();}
-			print("taking " + c.c.getName() +"'s order" );
-			c.c.anotherOrderMsg(c.choice);
+			print("taking " + ((GCCustomerRole)c.c).getName() +"'s order" );
+			((GCCustomerRole)c.c).anotherOrderMsg(c.choice);
 			waiterGui.DoLeaveCustomer();
 			stateChanged();
 		}
@@ -321,9 +321,9 @@ public class GCWaiterRole extends Role implements Waiter{
 /*********************************************
  * Animation Functions
 ******************************************* */
-		private void seatCustomerAnimation(GCCustomerRole customer, int tableNumber)
+		private void seatCustomerAnimation(Customer c, int tableNumber)
 		{
-			waiterGui.DoBringToTable(customer, tableNumber);
+			waiterGui.DoBringToTable(c, tableNumber);
 		}
 		private void goToCustomerAnimation(int tableNumber)
 		{
@@ -411,20 +411,17 @@ public class GCWaiterRole extends Role implements Waiter{
 			}
 			
 			// (4) Gives Order to Customer
-			if(event == WaiterEvent.givingFood)
-			{
 				for (MyCustomer customer : customers)
 				{
 					//if there exists a customer whose state is ordered
 					//give the order to the cook
 					if( customer.state == CustomerState.FoodDoneCooking)
 					{
-						customer.state = CustomerState.Served;
 						HereIsFoodAction(customer);
+						customer.state = CustomerState.Served;
 						return true;
 					}
 				}
-			}
 			// (6) Handles the check
 				for (MyCustomer customer : customers)
 				{
@@ -432,8 +429,8 @@ public class GCWaiterRole extends Role implements Waiter{
 					//give the order to the cook
 					if( customer.state == CustomerState.Served)
 					{
-						customer.state = CustomerState.checkGiven;
 						giveCheckAction(customer);
+						customer.state = CustomerState.checkGiven;
 						return true;
 					}
 				}
@@ -445,7 +442,7 @@ public class GCWaiterRole extends Role implements Waiter{
 				if( customer.state == CustomerState.Leaving)
 				{
 					customer.state = CustomerState.Left;
-					host.tableFreeMsg(customer.c);
+					((GCHostRole)host).tableFreeMsg(customer.c);
 					customers.remove(customer);
 					//onBreakAction();
 					return true;
@@ -461,13 +458,13 @@ public class GCWaiterRole extends Role implements Waiter{
 
 	public class MyCustomer 
 	{
-		public GCCustomerRole c;
-		public GCRestaurant.roles.GCHostRole.Table table;
+		public Customer c;
+		public Table table;
 		public CustomerState state;
 		public String choice;
 		public Check check;
-		//public Order order;
-		MyCustomer(GCCustomerRole customer, Table t)
+		public Order order;
+		MyCustomer(Customer customer, Table t)
 		{
 			this.c = customer;
 			this.table = t;

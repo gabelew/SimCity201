@@ -1,13 +1,13 @@
 package GCRestaurant.roles;
 
 import restaurant.Restaurant;
-import restaurant.RoleOrder;
 import GCRestaurant.gui.GCCookGui;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.interfaces.Cook;
+import restaurant.interfaces.Customer;
+import restaurant.interfaces.Waiter;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
@@ -46,15 +46,15 @@ public class GCCookRole extends Role implements Cook
 		super();
 		
 		//foods list
-		foodList.add( new Food("steak",5, 3) );
-		foodList.add( new Food("chicken",4, 3) );
-		foodList.add( new Food("pizza",3, 5) );
-		foodList.add( new Food("salad",2, 0) );
+		foodList.add( new Food("Steak",5, 50) );
+		foodList.add( new Food("Chicken",4, 50) );
+		foodList.add( new Food("Cookie",3, 50) );
+		foodList.add( new Food("Salad",2, 50) );
 		//hashmap values
-		foods.put("steak", foodList.get(0));
-		foods.put("chicken",foodList.get(1));
-		foods.put("pizza",foodList.get(2));
-		foods.put("salad",foodList.get(3));
+		foods.put("Steak", foodList.get(0));
+		foods.put("Chicken",foodList.get(1));
+		foods.put("Cookie",foodList.get(2));
+		foods.put("Salad",foodList.get(3));
 				
 		//this.name = name;
 	}
@@ -77,9 +77,9 @@ public class GCCookRole extends Role implements Cook
 	* Messages
 	**************************************************/
 	//Order Received from Waiter
-	public void HereIsOrderMsg(GCWaiterRole w, GCCustomerRole c, Table t, String choice)
+	public void HereIsOrderMsg(Waiter w, Customer c, Table t, String choice)
 	{
-		print("Received order from " + w.getName());
+		print("Received order from " + ((GCWaiterRole)w).getName());
 		//Food food = new Food(choice,getCookingTime(choice));
 		orders.add(new Order(w,c,t,choice));
 		stateChanged();
@@ -115,10 +115,10 @@ public class GCCookRole extends Role implements Cook
 		stateChanged();
 	}*/
 
-	public void gotFoodMsg() 
+	public void gotFoodMsg(Order o) 
 	{
 		print("Waiter received order");
-		cookGui.pickedUpFood();
+		cookGui.pickedUpFood(o);
 	}
 	/****************************************************
 	 * Actions
@@ -140,7 +140,7 @@ public class GCCookRole extends Role implements Cook
 			else
 			{
 				print(o.food.choice + " is out of stock");
-				o.waiter.OutOfStockMsg(o.customer);
+				((GCWaiterRole)o.waiter).OutOfStockMsg(o.customer);
 				orders.remove(o);
 				marketCounter = 0;
 				state = CookState.makingMarketOrder;
@@ -154,18 +154,16 @@ public class GCCookRole extends Role implements Cook
 	{
 		//gets food from fridge
 		print("Getting food from fridge");
-		cookGui.goToFridge(o.choice, orders.indexOf(o));
+		cookGui.goToFridge(o);
 		try {busy.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
-		//cookGui.doGoHome();
-		//try {busy.acquire();} 
-		//catch (InterruptedException e) { e.printStackTrace();}
+		
 		//puts it on grill
 		print("putting order on grill");
-		cookGui.cookOrder(orders.indexOf(o));
-		cookGui.goToGrill(orders.indexOf(o));
+		cookGui.cookFoodOnGrill(o,orders.indexOf(o));
 		try {busy.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
+		
 		o.food.amount--;//Decrease inventory
 		int cookingTime = o.food.cookingTime;
 		//Runs Timer for Food's Cooking time
@@ -173,12 +171,14 @@ public class GCCookRole extends Role implements Cook
 			public void run() 
 			{
 				print("Order: " + o.choice + " is done");
-				cookGui.goToGrill(orders.indexOf(o));
+				cookGui.getFoodFromGrill(o);
 				try { busy.acquire();} 
 				catch (InterruptedException e) {e.printStackTrace();}
-				cookGui.plateFood(orders.indexOf(o));
+				print("getting food from grill");
+				cookGui.plateFood(o);
 				try { busy.acquire();} 
 				catch (InterruptedException e) {e.printStackTrace();}
+				print("FOOD IS DONE ~_~~~~~~~_!");
 				o.state = OrderState.done;
 				state = CookState.free;
 				stateChanged();
@@ -190,8 +190,8 @@ public class GCCookRole extends Role implements Cook
 	// (3) Food is done, Alert Waiter
 	private void OrderDone(Order o)
 		{
-			print(o.waiter.getName() + ", " + o.customer.getName() + "'s order is done");
-			o.waiter.getFoodFromCookMsg(o);
+			print(((GCWaiterRole)o.waiter).getName() + ", " + ((GCCustomerRole)o.customer).getName() + "'s order is done");
+			((GCWaiterRole)o.waiter).getFoodFromCookMsg(o);
 			orders.remove(o);
 			stateChanged();
 		}
@@ -293,7 +293,7 @@ public class GCCookRole extends Role implements Cook
 	public void msgActionDone() {//from animation
 		//print("msgAtTable() called");
 		busy.release();// = true;
-		stateChanged();
+		//stateChanged();
 	}
 	//Utility classes
 	public class Food
@@ -312,14 +312,14 @@ public class GCCookRole extends Role implements Cook
 	
 	public class Order 
 	{
-		Food food;
-		Table table;
-		GCWaiterRole waiter;
-		GCCustomerRole customer;
-		OrderState state;
-		String choice;
+		public Food food;
+		public Table table;
+		public Waiter waiter;
+		public Customer customer;
+		public OrderState state;
+		public String choice;
 		
-		Order(GCWaiterRole w, GCCustomerRole c, Table t, String choice)
+		Order(Waiter w, Customer c, Table t, String choice)
 		{
 			this.choice = choice;
 			food = foods.get(choice);

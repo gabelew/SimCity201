@@ -14,7 +14,7 @@ import GCRestaurant.roles.GCCustomerRole;
 
 public class GCCustomerGui implements Gui{
 
-	private GCCustomerRole agent = null;
+	private GCCustomerRole role = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
@@ -23,7 +23,7 @@ public class GCCustomerGui implements Gui{
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, EnterRestaurant, GoToSeat, LeaveRestaurant};
+	private enum Command {noCommand, EnterRestaurant, GoToSeat, LeaveRestaurant, GoToCashier, GoToWaitingArea};
 	private enum FoodState{none, ordered, served};
 	private FoodState foodState = FoodState.none;
 	private Command command=Command.noCommand;
@@ -35,70 +35,89 @@ public class GCCustomerGui implements Gui{
 	private int xTable = 100;
 	private final int yTable = 175;
 	private String choice;
-	private int cashierPosX = -10, cashierPosY = -25;
+	private int cashierPosX = 110, cashierPosY = 47;
 	private BufferedImage customerImg;
 	private BufferedImage customerSittingImg;
 
-	public GCCustomerGui(GCCustomerRole c){
+	public GCCustomerGui(GCCustomerRole r){
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
 		    customerImg = ImageIO.read(new File(path.toString() + "customer_v1.png"));
 		    customerSittingImg = ImageIO.read(new File(path.toString() + "customer_sitting_v1.png"));
 		} 
 		catch (IOException e) {}
-		agent = c;
+		this.role = r;
 		xPos = DEFAULT_POS;
 		yPos = DEFAULT_POS;
 		xDestination = DEFAULT_POS;
 		yDestination = DEFAULT_POS;
-		//maitreD = m;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {
-		if(xPos != xDestination)
+		if(command == Command.LeaveRestaurant)
 		{
-			if (xPos < xDestination)
-				xPos++;
-			else if (xPos > xDestination)
-				xPos--;
-			if (yPos < yDestination+DEFAULT_POS)
-				yPos++;
-			else if (yPos > yDestination+DEFAULT_POS)
-				yPos--;
+			if(xPos != xDestination)
+	        {
+                if (xPos < xDestination)
+                        xPos++;
+                else if (xPos > xDestination)
+                        xPos--;
+	        }
+	        else
+	        {
+                if (yPos < yDestination)
+                        yPos++;
+                else if (yPos > yDestination)
+                        yPos--;
+	        }
 		}
 		else
 		{
-			if (yPos < yDestination)
-				yPos++;
-			else if (yPos > yDestination)
-				yPos--;
+			if(xPos != xDestination)
+	        {
+                if (xPos < xDestination)
+                        xPos++;
+                else if (xPos > xDestination)
+                        xPos--;
+                if (yPos < yDestination+DEFAULT_POS)
+                        yPos++;
+                else if (yPos > yDestination+DEFAULT_POS)
+                        yPos--;
+	        }
+	        else
+	        {
+                if (yPos < yDestination)
+                        yPos++;
+                else if (yPos > yDestination)
+                        yPos--;
+	        }
 		}
-		
-		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
+		if (xPos == xDestination && yPos == yDestination && ((command==Command.GoToSeat) ||(command==Command.LeaveRestaurant) )) 
+		{
+			if (command==Command.GoToSeat)
+			{
+				command=Command.noCommand;
+				role.msgAnimationFinishedGoToSeat();
+			}
 			else if (command==Command.LeaveRestaurant) {
-				agent.msgAnimationFinishedLeaveRestaurant();
+				role.msgActionDone();
+				command=Command.noCommand;
+				role.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				//gui.setCustomerEnabled(agent);
 			}
-			command=Command.noCommand;
+			
 		}
-		 if (xPos == xDestination && yPos == yDestination
-	           		& (xDestination == cashierPosX) & (yDestination == cashierPosY)) 
-		 {
-	             xPos = DEFAULT_POS;
-	             yPos = DEFAULT_POS;
-	             xDestination = DEFAULT_POS;
-	             yDestination = DEFAULT_POS;
-	        	agent.msgAtCashier();
-		 }
-		 if (xPos == xDestination && yPos == yDestination
-	           		& (xDestination == WAITING_AREA) & (yDestination == WAITING_AREA)) 
-		 {
-	        	agent.msgActionDone();
-		 }
+		if (xPos == xDestination && yPos == yDestination && command == Command.GoToCashier) 
+		{
+			command = Command.noCommand;
+	        role.msgAtCashier();
+		}
+		if (xPos == xDestination && yPos == yDestination && command == Command.GoToWaitingArea) 
+		{
+			command = Command.noCommand;
+	        role.msgActionDone();
+		}
 	}
 
 	public void draw(Graphics2D g) {
@@ -134,7 +153,7 @@ public class GCCustomerGui implements Gui{
 		choice = c;
 		this.foodState = FoodState.served;
 	}
-	public void leftRest()
+	public void leftTable()
 	{
 		this.foodState = FoodState.none;
 	}
@@ -142,8 +161,9 @@ public class GCCustomerGui implements Gui{
 		return isPresent;
 	}
 	public void setHungry() {
+		command = Command.GoToWaitingArea;
 		isHungry = true;
-		agent.gotHungry();
+		role.gotHungry();
 		setPresent(true);
 		xDestination = WAITING_AREA;
 		yDestination = WAITING_AREA;
@@ -158,14 +178,15 @@ public class GCCustomerGui implements Gui{
 	
 	public void enterRestaurant()
 	{
+		command = Command.GoToWaitingArea;
 		xDestination = WAITING_AREA;
 		yDestination = WAITING_AREA;
 	}
 	public void goToCashier()
 	{
+		command = Command.GoToCashier;
 		xDestination = cashierPosX;
 		yDestination = cashierPosY;
-		isHungry = false;
 	}
 	//seatnumber determines table destination
 	public void DoGoToSeat(int seatnumber) 
@@ -177,8 +198,8 @@ public class GCCustomerGui implements Gui{
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = DEFAULT_POS;
-		yDestination = DEFAULT_POS;
+		xDestination = -60;//DEFAULT_POS;
+		yDestination = -60;
 		command = Command.LeaveRestaurant;
 	}
 }
