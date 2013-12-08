@@ -1,5 +1,6 @@
 package GCRestaurant.roles;
 
+import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
@@ -17,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 
@@ -57,11 +59,13 @@ public class GCCustomerRole extends Role implements Customer{
 	public AgentState state = AgentState.DoingNothing;//The start state
 	/**
 	 * Constructor for CustomerAgent class
+	 * @param r 
+	 * @param p 
 	 *
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public GCCustomerRole(){
+	public GCCustomerRole(PersonAgent p, Restaurant r){
 		super();
 		//this.name = name;
 		if(name.equals("5")){ cash = 5;}

@@ -11,6 +11,7 @@ import restaurant.interfaces.Waiter;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 
@@ -42,7 +43,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	public GCCashierRole cashier;
 	private final int BREAKTIME = 10000;
 	
-	public GCWaiterRole() {
+	public GCWaiterRole(PersonAgent p, Restaurant r) {
 		super();
 
 		//this.name = name;

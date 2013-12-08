@@ -31,11 +31,11 @@ public class GCWaiterGui implements Gui {
     private boolean carryFood = false;
     private List<String> foods = Collections.synchronizedList(new ArrayList<String>());
 
-    public GCWaiterGui(GCWaiterRole agent, int homePos) {
+    public GCWaiterGui(GCWaiterRole agent) {
         this.agent = agent;
         this.xTable = TABLE_SPACING;
         this.yTable = TABLE_Y;
-        this.DEFAULT_POSY += homePos*personSize;
+        this.DEFAULT_POSY += 1;//homePos*personSize;
         xDestination = DEFAULT_POSX;
         yDestination = DEFAULT_POSY;
         

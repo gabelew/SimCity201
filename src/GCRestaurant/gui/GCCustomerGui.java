@@ -33,7 +33,7 @@ public class GCCustomerGui implements Gui{
 	private String choice;
 	private int cashierPosX = -10, cashierPosY = -25;
 
-	public GCCustomerGui(GCCustomerRole c, Restaurant gui){ //HostAgent m) {
+	public GCCustomerGui(GCCustomerRole c){ //HostAgent m) {
 		agent = c;
 		xPos = DEFAULT_POS;
 		yPos = DEFAULT_POS;
