@@ -280,7 +280,7 @@ public class GHCustomerRole extends Role implements Customer{
 				stateChanged();
 			}
 		},
-		5000);//getHungerLevel() * 1000);//how long to wait before running task
+		1000);//getHungerLevel() * 1000);//how long to wait before running task
 	}
 
 	private void leaveTable() {
@@ -291,7 +291,7 @@ public class GHCustomerRole extends Role implements Customer{
 	
 	private void PayBill(){
 		print("Going to pay bill");
-		((GHCashierRole) cashier).msgCustomerPaying(this,check.choice,check.cost,tableNumber);
+		((GHCashierRole) restaurant.cashier).msgCustomerPaying(this,check.choice,check.cost,tableNumber);
 		customerGui.DoExitRestaurant();
 	}
 
