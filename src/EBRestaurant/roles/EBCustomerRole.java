@@ -1,8 +1,6 @@
 package EBRestaurant.roles;
 
-import CMRestaurant.gui.CMCustomerGui;
 import EBRestaurant.gui.EBCustomerGui;
-import agent.Agent;
 
 import java.text.NumberFormat;
 import java.util.Timer;
@@ -23,9 +21,8 @@ public class EBCustomerRole extends Role implements Customer {
 	private int hungerLevel = 5;        // determines length of meal
 	private int food;
 	private int tableNumber;
-	private float money;
 	Timer timer = new Timer();
-	private EBCustomerGui customerGui;
+	private EBCustomerGui ebcustomerGui;
 	public String choice;
 	// agent correspondents
 	private Host host;
@@ -42,7 +39,7 @@ public class EBCustomerRole extends Role implements Customer {
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
-	{DoingNothing, WaitingInRestaurant,WaitingInArea,inArea,full,staying,BeingSeated, Seated,WaitingToOrder,Ordered,reOrdered,waitingForFood, Eating,Finishing, DoneEating,gotBill,paying, Leaving};
+	{DoingNothing, WaitingInRestaurant,WaitingInArea,inArea,full,staying,BeingSeated, Seated,WaitingToOrder,Ordered,reOrdered,waitingForFood, Eating,Finishing, DoneEating,gotBill,paying,payed, Leaving};
 	private AgentState state = AgentState.DoingNothing;//The start state
 
 	public enum AgentEvent 
@@ -61,17 +58,6 @@ public class EBCustomerRole extends Role implements Customer {
 		restaurant=r;
 		responsible=true;
 	}
-
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-	public void setHost(Host host) {
-		this.host = host;
-	}
-	
-	public void setAmount(float amount){
-		money=amount;
-	}
 	
 	public void setResponsible(boolean resp){
 		responsible=resp;
@@ -82,8 +68,7 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 	// Messages
 
-	public void gotHungry() {//from animation
-		print("I'm hungry");
+	public void gotHungry() {
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
@@ -125,6 +110,12 @@ public class EBCustomerRole extends Role implements Customer {
 		event = AgentEvent.seated;
 		stateChanged();
 	}
+	
+	public void msgAnimationFinishedGoToCashier(){
+		state=AgentState.payed;
+		stateChanged();
+	}
+	
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
 		event = AgentEvent.doneLeaving;
@@ -201,6 +192,10 @@ public class EBCustomerRole extends Role implements Customer {
 			leaveTable();
 			return true;
 		}
+		if(state==AgentState.payed){
+			state=AgentState.Leaving;
+			leave();
+		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			Done();
 			//no action
@@ -216,14 +211,14 @@ public class EBCustomerRole extends Role implements Customer {
 	// Actions
 	
 	private void waitingArea(){
-		customerGui.DoGoToWaitingArea(waitY);
+		ebcustomerGui.DoGoToWaitingArea(waitY);
 		state=AgentState.inArea;
 	}
 
 	private void goToRestaurant() {
 		state = AgentState.WaitingInRestaurant;
-		Do("Going to restaurant");
-		((EBHostRole) host).msgIWantToEat(this);//send our instance, so he can respond to us
+		restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
+		print("12345");
 	}
 	
 	private void readyToOrder(){
@@ -241,41 +236,40 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 	
 	private void SitDown() {
-		Do("Being seated. Going to table");
-		customerGui.DoGoToSeat(tableNumber);
+		ebcustomerGui.DoGoToSeat(tableNumber);
 		state=AgentState.Seated;
 		stateChanged();
 		
 	}
 	
 	private void giveOrder(){
-		if(money<5.99){
+		if(myPerson.cashOnHand<5.99){
 			Do("Everything too expensive. Leaving");
 			((EBWaiterRole) waiter).msgLeavingTable(this);
 			state=AgentState.DoingNothing;
-			customerGui.DoExitRestaurant();
+			ebcustomerGui.DoExitRestaurant();
 			stateChanged();
 		}
 		else{
 		generator=new Random();
 		food=generator.nextInt(4);
-		if ((food==2&&(money>5.99||!responsible))||(money<8.98))
-			((EBWaiterRole) waiter).msgHereIsMyOrder("Salad",this);
-		else if (food==0&&(money>15.99||!responsible))
-			((EBWaiterRole) waiter).msgHereIsMyOrder("Steak",this);
-		else if (food==1&&(money>10.99||!responsible))
-			((EBWaiterRole) waiter).msgHereIsMyOrder("Chicken",this);
-		else if (food==3&&(money>8.99||!responsible))
-			((EBWaiterRole) waiter).msgHereIsMyOrder("Pizza",this);
+		if ((food==2&&(myPerson.cashOnHand>5.99||!responsible))||(myPerson.cashOnHand<8.98))
+			((EBWaiterRole) waiter).msgHereIsMyOrder("salad",this);
+		else if (food==0&&(myPerson.cashOnHand>15.99||!responsible))
+			((EBWaiterRole) waiter).msgHereIsMyOrder("steak",this);
+		else if (food==1&&(myPerson.cashOnHand>10.99||!responsible))
+			((EBWaiterRole) waiter).msgHereIsMyOrder("chicken",this);
+		else if (food==3&&(myPerson.cashOnHand>8.99||!responsible))
+			((EBWaiterRole) waiter).msgHereIsMyOrder("cookie",this);
 		else{
 			if(food==0)
-				giveOrderAgain("Steak");
+				giveOrderAgain("steak");
 			else if(food==1)
-				giveOrderAgain("Chicken");
+				giveOrderAgain("chicken");
 			else if(food==2)
-				giveOrderAgain("Salad");
+				giveOrderAgain("salad");
 			else
-				giveOrderAgain("Pizza");
+				giveOrderAgain("cookie");
 		}
 		}
 	}
@@ -283,43 +277,42 @@ public class EBCustomerRole extends Role implements Customer {
 	private void giveOrderAgain(String choice){
 		generator=new Random();
 		food=generator.nextInt(4);
-		if (food==0&&(money>15.99||!responsible))
+		if (food==0&&(myPerson.cashOnHand>15.99||!responsible))
 		{
-			if(choice=="Steak"){
+			if(choice=="steak"){
 				giveOrder();
 			}
 			else
-				((EBWaiterRole) waiter).msgHereIsMyOrder("Steak",this);
+				((EBWaiterRole) waiter).msgHereIsMyOrder("steak",this);
 		}
-		else if (food==1&&(money>=10.99||!responsible))
+		else if (food==1&&(myPerson.cashOnHand>=10.99||!responsible))
 		{
-			if(choice=="Chicken"){
+			if(choice=="chicken"){
 				giveOrder();
 			}
 			else
-				((EBWaiterRole) waiter).msgHereIsMyOrder("Chicken",this);
+				((EBWaiterRole) waiter).msgHereIsMyOrder("chicken",this);
 		}
-		else if (food==2&&(money>=5.99||!responsible))
+		else if (food==2&&(myPerson.cashOnHand>=5.99||!responsible))
 		{
-			if(choice=="Salad"){
+			if(choice=="salad"){
 				giveOrder();
 			}
 			else
-				((EBWaiterRole) waiter).msgHereIsMyOrder("Salad",this);
+				((EBWaiterRole) waiter).msgHereIsMyOrder("salad",this);
 		}
-		else if (food==3&&(money>=8.99||!responsible))
+		else if (food==3&&(myPerson.cashOnHand>=8.99||!responsible))
 		{
-			if(choice=="Pizza"){
+			if(choice=="cookie"){
 				giveOrder();
 			}
 			else
-				((EBWaiterRole) waiter).msgHereIsMyOrder("Pizza",this);
+				((EBWaiterRole) waiter).msgHereIsMyOrder("cookie",this);
 		}
 		else{
-			Do("Can't afford choice. Leaving");
 			((EBWaiterRole) waiter).msgLeavingTable(this);
 			state=AgentState.DoingNothing;
-			customerGui.DoExitRestaurant();
+			ebcustomerGui.DoExitRestaurant();
 			stateChanged();
 		}
 	}
@@ -353,11 +346,11 @@ public class EBCustomerRole extends Role implements Customer {
 		{
 			state=AgentState.staying;
 			Do("Leaving because restaurant is full");
-			((EBHostRole) host).msgLeavingRestaurant(this);
+			restaurant.host.msgLeavingRestaurant(this);
 			stateChanged();
 		}
 		else{
-			((EBHostRole) host).msgStaying(this);
+			((EBHostRole) restaurant.host).msgStaying(this);
 			Do("Staying and waiting");
 			state=AgentState.WaitingInArea;
 			stateChanged();
@@ -370,43 +363,41 @@ public class EBCustomerRole extends Role implements Customer {
 
 	private void leaveTable() {
 		state=AgentState.Leaving;
-		Do("Paying Cashier");
 		((EBWaiterRole) waiter).msgLeavingTable(this);
-		if (money>amountOwed)
+		if (myPerson.cashOnHand>amountOwed)
 		{
 			Do("I owe "+amountOwed);
-			((EBCashierRole) cashier).msgPaying(amountOwed, tableNumber,true);
-			money=money-amountOwed;
-			NumberFormat formatter=NumberFormat.getCurrencyInstance();
-			String moneys = formatter.format(money);
-			Do("I now have "+moneys+" left");
-			customerGui.DoExitRestaurant();
-			event=AgentEvent.doneLeaving;
+			((EBCashierRole) restaurant.cashier).msgPaying(amountOwed, tableNumber,true);
+			myPerson.cashOnHand=myPerson.cashOnHand-amountOwed;
+			ebcustomerGui.DoGoToCashier();
 			stateChanged();
 		}
 		else
 		{
-			if(money>0)
+			if(myPerson.cashOnHand>0)
 			{
-				((EBCashierRole) cashier).msgAddToTab(amountOwed-money,this);
-				((EBCashierRole) cashier).msgPaying(money, tableNumber,false);
-				customerGui.DoExitRestaurant();
-				event=AgentEvent.doneLeaving;
+				((EBCashierRole) restaurant.cashier).msgAddToTab(amountOwed-myPerson.cashOnHand,this);
+				((EBCashierRole) restaurant.cashier).msgPaying(myPerson.cashOnHand, tableNumber,false);
+				ebcustomerGui.DoGoToCashier();
 				stateChanged();
 			}
 			else
 			{
-				((EBCashierRole) cashier).msgAddToTab(amountOwed,this);
-				customerGui.DoExitRestaurant();
-				event=AgentEvent.doneLeaving;
+				((EBCashierRole) restaurant.cashier).msgAddToTab(amountOwed,this);
+				ebcustomerGui.DoGoToCashier();
 				stateChanged();
 			}
 		}
 	}
 	
+	private void leave(){
+		ebcustomerGui.DoExitRestaurant();
+	}
+	
 	private void Done(){
 		state = AgentState.DoingNothing;
-		stateChanged();
+		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(ebcustomerGui);
 	}
 
 	// Accessors, etc.
@@ -430,11 +421,11 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 
 	public void setGui(EBCustomerGui g) {
-		customerGui = g;
+		ebcustomerGui = g;
 	}
 
 	public EBCustomerGui getGui() {
-		return customerGui;
+		return ebcustomerGui;
 	}
 	
 	public void setCashier(Cashier c){
@@ -450,7 +441,7 @@ public class EBCustomerRole extends Role implements Customer {
 
 	@Override
 	public void setGui(Gui g) {
-		customerGui = (EBCustomerGui) g;
+		ebcustomerGui = (EBCustomerGui) g;
 	}
 }
 

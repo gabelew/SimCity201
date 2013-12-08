@@ -83,9 +83,9 @@ public class EBHostRole extends Role implements Host {
 		hostState=state.goToWork;
 		this.stateChanged();
 	}
+	
 	public void msgIWantToEat(Customer cust) {
-		Do("Customer added");
-		waitingCustomers.add(new Customers(cust,custState.staying));
+		waitingCustomers.add(new Customers(cust,custState.assigned));
 		stateChanged();
 	}
 	
@@ -138,7 +138,6 @@ public class EBHostRole extends Role implements Host {
 		}
 		else{
 			((EBWaiterRole) w).msgDontGoOnBreak();
-			Do("Break denied");
 		}
 	}
 	
@@ -164,6 +163,7 @@ public class EBHostRole extends Role implements Host {
 				if(replacementPerson != null){
 					replacementPerson.waitingResponse.release();
 				}
+				reactivatePerson();
 			}
 			if(hostState == state.goToWork){
 				hostState = state.atWork;
@@ -175,6 +175,7 @@ public class EBHostRole extends Role implements Host {
 					if (!waitingCustomers.isEmpty())	 {
 						if (!waiters.isEmpty())
 						{
+							print("testing123");
 							seatCustomer(waitingCustomers.get(0), table,pickWaiter());//the action
 							return true;//return true to the abstract agent to reinvoke the scheduler.
 						}
@@ -246,6 +247,11 @@ public class EBHostRole extends Role implements Host {
 
 	}
 
+	private void reactivatePerson(){
+		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(hostGui);
+	}
+	
 	//utilities
 
 	public void msgReadyToWork(Waiter w){

@@ -63,8 +63,8 @@ public class EBCashierGui implements Gui {
     }
 
 	public void DoEnterRestaurant() {
-		xDestination=100;
-		yDestination=100;
+		xDestination=40;
+		yDestination=400;
 	}
 
 	public void DoLeaveRestaurant() {

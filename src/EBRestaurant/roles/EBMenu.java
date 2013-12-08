@@ -8,9 +8,9 @@ public class EBMenu {
 	public EBMenu(){
 		super();
 		
-		hm.put("Steak", (float) 15.99);
-		hm.put("Chicken", (float) 10.99);
-		hm.put("Salad", (float) 5.99);
-		hm.put("Pizza", (float) 8.99);
+		hm.put("steak", (float) 15.99);
+		hm.put("chicken", (float) 10.99);
+		hm.put("salad", (float) 5.99);
+		hm.put("cookie", (float) 8.99);
 	}
 }

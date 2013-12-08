@@ -14,7 +14,7 @@ import EBRestaurant.roles.EBCookRole;
 
 public class EBCookGui implements Gui {
 
-    private EBCookRole agent = null;
+    private EBCookRole role = null;
     private BufferedImage cookImg = null;
     private boolean isPresent = true;
     private int xPos = -20, yPos = -20;//default waiter position
@@ -38,12 +38,12 @@ public class EBCookGui implements Gui {
     private String wait3="";
     HashMap<String,String>shortChoice=new HashMap<String,String>();
 
-    public EBCookGui(EBCookRole agent) {
-        this.agent = agent;
-        shortChoice.put("Steak", "St");
-        shortChoice.put("Salad", "Sa");
-        shortChoice.put("Chicken", "Ch");
-        shortChoice.put("Pizza", "Pi");
+    public EBCookGui(EBCookRole role) {
+        this.role = role;
+        shortChoice.put("steak", "St");
+        shortChoice.put("salad", "Sa");
+        shortChoice.put("chicken", "Ch");
+        shortChoice.put("cookie", "Co");
         shortChoice.put("", "");
         try {
 		    cookImg = ImageIO.read(new File("imgs/chef_v1.png"));
@@ -67,7 +67,7 @@ public class EBCookGui implements Gui {
 
     public void draw(Graphics2D g) {
         g.setColor(Color.RED);
-        g.fillRect(xPos, yPos, xChange, xChange);
+        //g.fillRect(xPos, yPos, xChange, xChange);
         g.drawString(choice1, Choice1X, ChoiceY);
         g.drawString(choice2, Choice2X, ChoiceY);
         g.drawString(choice3, Choice3X, ChoiceY);
@@ -118,12 +118,12 @@ public class EBCookGui implements Gui {
         return yPos;
     }
 
-	public static void DoEnterRestaurant() {
+	public void DoEnterRestaurant() {
 		xDestination=330;
 		yDestination=240;
 	}
 
-	public static void DoLeaveRestaurant() {
+	public void DoLeaveRestaurant() {
 		xDestination=-20;
 		yDestination=-20;
 	}

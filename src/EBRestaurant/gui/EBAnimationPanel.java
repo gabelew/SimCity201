@@ -3,6 +3,10 @@ package EBRestaurant.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import CMRestaurant.gui.CMCashierGui;
+import CMRestaurant.gui.CMCookGui;
+import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.gui.CMWaiterGui;
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
@@ -95,16 +99,24 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
         //g2.fillRect(300, 230, 20, 100);
         //g2.fillRect(300, 200, 80, 20);
 
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
+        for(Gui gui : getGuis()) {
+        	if(!(gui instanceof EBCustomerGui || gui instanceof EBWaiterGui))
+	            if (gui.isPresent()) {
+	                gui.draw(g2);
+	            }
         }
 
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
+        for(Gui gui : getGuis()) {
+        	if(gui instanceof EBCustomerGui || gui instanceof EBWaiterGui)
+	            if (gui.isPresent()) {
+	                gui.draw(g2);
+	            }
+        }
+       for(Gui gui : getGuis()) {
+        	if(gui instanceof EBCashierGui)
+	            if (gui.isPresent()) {
+	                gui.draw(g2);
+	            }
         }
     }
 

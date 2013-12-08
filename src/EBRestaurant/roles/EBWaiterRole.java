@@ -51,7 +51,6 @@ public class EBWaiterRole extends Role implements Waiter {
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 	private String outOf;
-	private String name;
 	private Semaphore atTable = new Semaphore(0,true);
 
 	public EBHostGui hostGui = null;
@@ -66,13 +65,7 @@ public class EBWaiterRole extends Role implements Waiter {
 		restaurant=r;
 	}
 
-	public String getMaitreDName() {
-		return name;
-	}
 
-	public String getName() {
-		return name;
-	}
 	public void setCook(Cook cook) {
 		this.cook = cook;
 	}
@@ -194,7 +187,6 @@ public class EBWaiterRole extends Role implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		try{
 			if(waiterState == state.relieveFromDuty){
 				waiterState = state.none;
 				myPerson.releavedFromDuty(this);
@@ -214,6 +206,7 @@ public class EBWaiterRole extends Role implements Waiter {
 				tellHost();
 				return true;
 			}
+			try{
 			for (MyCustomer cust : Customers)
 			{
 				if (cust.S==customerState.foodReady&&atCook)
@@ -291,7 +284,7 @@ public class EBWaiterRole extends Role implements Waiter {
 		
 		return false;
 		}
-		catch(Exception e){
+		catch(ConcurrentModificationException e){
 			return false;
 		}
 		//we have tried all our rules and found
@@ -313,11 +306,8 @@ public class EBWaiterRole extends Role implements Waiter {
 		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
-		try {
-			atTable.acquire();
-		} catch (InterruptedException e) {
-			
-		}
+		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(waiterGui);
 	}
 
 	private void tellHost() {
@@ -326,7 +316,6 @@ public class EBWaiterRole extends Role implements Waiter {
 	
 	private void seatCustomer(MyCustomer mc) {
 		((EBCustomerRole) mc.C).msgFollowMe(this, mc.tableNumber);
-		print("Seating Customer");
 		waiterGui.DoBringToTable(mc.C, mc.tableNumber);
 		try {
 			atTable.acquire();
@@ -351,7 +340,6 @@ public class EBWaiterRole extends Role implements Waiter {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		print("Taking order");
 		((EBCustomerRole) mc.C).msgWhatDoYouWant();
 		mc.S=customerState.asked;
 		waiterGui.DoGoToCook();
@@ -364,17 +352,15 @@ public class EBWaiterRole extends Role implements Waiter {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		print("Taking order");
 		((EBCustomerRole) mc.C).msgWhatDoYouWantAgain(outOf);
 		mc.S=customerState.asked;
 		waiterGui.DoLeaveCustomer();
 	}
 	
 	private void giveOrderToCook(MyCustomer mc){
-		atCook=false;
-		Do("Customer ordered "+mc.choice);
-		((EBCookRole) cook).msgHereIsOrder(mc.choice, mc.tableNumber,this);
 		mc.S=customerState.waitForFood;
+		atCook=false;
+		((EBCookRole) restaurant.cook).msgHereIsOrder(mc.choice, mc.tableNumber,this);
 		waiterGui.DoLeaveCustomer();
 	}
 	
@@ -393,7 +379,7 @@ public class EBWaiterRole extends Role implements Waiter {
 	
 	private void giveOrderToCustomer(MyCustomer mc){
 		atCook=false;
-		((EBCookRole) cook).msgAnimationTakingFood(mc.tableNumber);
+		((EBCookRole) restaurant.cook).msgAnimationTakingFood(mc.tableNumber);
 		waiterGui.DoBringToTable(mc.C,mc.tableNumber);//animation
 		try {
 			atTable.acquire();
@@ -410,7 +396,7 @@ public class EBWaiterRole extends Role implements Waiter {
 	
 	private void tellHostCustomerLeft(MyCustomer mc){
 		Do("Done Eating and Leaving");
-		((EBHostRole) host).msgTableEmpty(mc.tableNumber);
+		((EBHostRole) restaurant.host).msgTableEmpty(mc.tableNumber);
 		waiterGui.setChoice("", mc.tableNumber);
 		waiterGui.DoLeaveCustomer();
 		Customers.remove(mc);
@@ -419,7 +405,7 @@ public class EBWaiterRole extends Role implements Waiter {
 	private void createCheck(MyCustomer mc){
 		mc.check=false;
 		Do("Cashier please create check");
-		((EBCashierRole) Cashier).msgHereIsCheck(this,mc.choice, mc.tableNumber);
+		((EBCashierRole) restaurant.cashier).msgHereIsCheck(this,mc.choice, mc.tableNumber);
 	}
 
 	//utilities
@@ -452,6 +438,7 @@ public class EBWaiterRole extends Role implements Waiter {
 
 	public void goesToWork() {
 		waiterState = state.gotToWork;
+		print("www");
 		stateChanged();
 	}
 
