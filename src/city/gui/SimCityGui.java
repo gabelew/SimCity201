@@ -12,6 +12,7 @@ import bank.BankBuilding;
 import bank.gui.BankPanel;
 import CMRestaurant.gui.CMCashierGui;
 import CMRestaurant.gui.CMCookGui;
+import CMRestaurant.gui.CMCustomerGui;
 import CMRestaurant.gui.CMHostGui;
 import CMRestaurant.gui.CMRestaurantPanel;
 import CMRestaurant.gui.CMWaiterGui;
@@ -23,6 +24,7 @@ import CMRestaurant.roles.CMNormalWaiterRole;
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBCashierGui;
 import EBRestaurant.gui.EBCookGui;
+import EBRestaurant.gui.EBCustomerGui;
 import EBRestaurant.gui.EBHostGui;
 import EBRestaurant.gui.EBRestaurantPanel;
 import EBRestaurant.gui.EBWaiterGui;
@@ -733,6 +735,15 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new CMCustomerRole(p, r);
 		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBCustomerRole")){
 			return new EBCustomerRole(p,r);
+		}
+		
+		return null;
+	}
+	public static Gui customerGuiFactory(Restaurant r,Role role){
+		if(r.customerRole.equalsIgnoreCase("RestaurantCMCustomerRole")){
+			return new CMCustomerGui((CMCustomerRole) role);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBCustomerRole")){
+			return new EBCustomerGui((EBCustomerRole) role);
 		}
 		
 		return null;

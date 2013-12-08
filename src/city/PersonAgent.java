@@ -11,6 +11,7 @@ import bank.gui.BankCustomerGui;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
+import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -995,7 +996,7 @@ public class PersonAgent extends Agent implements Person
             	role.getGui().setPresent(true);
             	((Cook) role).goesToWork();
     		}else if(job.type.equalsIgnoreCase("cashier")){
-    			Role role = (CMCashierRole)(r.cashier);
+    			Role role = (Role)(r.cashier);
     			if(role.getPerson() != null){
     				((Cashier) role).msgReleaveFromDuty(this);
     				try {
@@ -1193,13 +1194,13 @@ public class PersonAgent extends Agent implements Person
     	state = State.eating;
     	
     	Restaurant r = findRestaurant(destination);
-    	CMCustomerRole role = (CMCustomerRole) SimCityGui.customerFactory(this, r);
-    	role.setGui(new CMCustomerGui(role));
+    	Role role = (Role) SimCityGui.customerFactory(this, r);
+    	role.setGui(SimCityGui.customerGuiFactory(r,role));
     	roles.add(role);
     	role.active = true;
     	r.insideAnimationPanel.addGui(role.getGui());
     	role.getGui().setPresent(true);
-    	role.gotHungry();
+    	((Customer) role).gotHungry();
     }
     
     private void goToBank() {
