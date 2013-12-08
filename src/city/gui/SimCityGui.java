@@ -38,9 +38,12 @@ import GCRestaurant.gui.GCCashierGui;
 import GCRestaurant.gui.GCCookGui;
 import GCRestaurant.gui.GCHostGui;
 import GCRestaurant.gui.GCRestaurantPanel;
+import GCRestaurant.gui.GCWaiterGui;
 import GCRestaurant.roles.GCCashierRole;
 import GCRestaurant.roles.GCCookRole;
+import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCHostRole;
+import GCRestaurant.roles.GCWaiterRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
 import city.BankAgent;
@@ -792,6 +795,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new CMCustomerRole(p, r);
 		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBCustomerRole")){
 			return new EBCustomerRole(p,r);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantGCCustomerRole")){
+			return new GCCustomerRole(p,r);
 		}
 		
 		return null;
@@ -801,6 +806,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new CMCustomerGui((CMCustomerRole) role);
 		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBCustomerRole")){
 			return new EBCustomerGui((EBCustomerRole) role);
+		}else if(r.customerRole.equalsIgnoreCase("RestaurantGCCustomerRole")){
+			return new GCCustomerGui((GCCustomerRole) role);
 		}
 		
 		return null;
@@ -812,6 +819,9 @@ public class SimCityGui extends JFrame implements ActionListener {
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating EMWaiterRole");
 			return new EBWaiterRole(p,r);
+		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
+			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GCWaiterRole");
+			return new GCWaiterRole(p,r);
 		}
 		
 		return null;
@@ -821,6 +831,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 			return new CMWaiterGui((Waiter) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
 			return new EBWaiterGui((EBWaiterRole) role);
+		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
+			return new GCWaiterGui((GCWaiterRole) role);
 		}
 		
 		return null;
