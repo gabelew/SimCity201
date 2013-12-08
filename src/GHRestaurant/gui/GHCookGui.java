@@ -3,11 +3,12 @@ package GHRestaurant.gui;
 
 import restaurant.CustomerAgent;
 import restaurant.interfaces.*;
-//import restaurant.Host;
 
 import java.awt.*;
 
-public class CookGui implements Gui {
+import city.gui.Gui;
+
+public class GHCookGui implements Gui {
 
     private Cook agent = null;
 
@@ -18,7 +19,7 @@ public class CookGui implements Gui {
     public static final int xTable = 200;
     public static final int yTable = 250;
 
-    public CookGui(Cook agent) {
+    public GHCookGui(Cook agent) {
         this.agent = agent;
     }
 

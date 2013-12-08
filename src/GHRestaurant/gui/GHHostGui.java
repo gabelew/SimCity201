@@ -1,13 +1,14 @@
-package restaurant.gui;
+package GHRestaurant.gui;
 
 
 import restaurant.CustomerAgent;
 import restaurant.interfaces.*;
-//import restaurant.Host;
 
 import java.awt.*;
 
-public class HostGui implements Gui {
+import city.gui.Gui;
+
+public class GHHostGui implements Gui {
 
     private Host agent = null;
 
@@ -18,7 +19,7 @@ public class HostGui implements Gui {
     public static final int xTable = 200;
     public static final int yTable = 250;
 
-    public HostGui(Host agent) {
+    public GHHostGui(Host agent) {
         this.agent = agent;
     }
 
@@ -48,11 +49,6 @@ public class HostGui implements Gui {
         return true;
     }
 
-    public void DoBringToTable(CustomerAgent customer, int tablenumber) {
-    	xDestination = xTable + 20;
-        yDestination = yTable + (80-(tablenumber*100));
-        tableNumber = tablenumber;
-    }
 
     public void DoLeaveCustomer() {
         xDestination = -20;

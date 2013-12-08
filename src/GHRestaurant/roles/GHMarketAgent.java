@@ -1,4 +1,4 @@
-package restaurant;
+package GHRestaurant.roles;
 
 import agent.Agent;
 import restaurant.interfaces.*;
@@ -6,11 +6,13 @@ import restaurant.interfaces.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.roles.Role;
+
 /**
  * Restaurant Market Agent
  */
 
-public class MarketAgent extends Agent implements Market {
+public class MarketAgent extends Role implements Market {
 	public List<Order> orders
 	= Collections.synchronizedList(new ArrayList<Order>());
 	public enum OrderState {PENDING,PROCESSED,SENT}
@@ -61,7 +63,7 @@ public class MarketAgent extends Agent implements Market {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 
 		synchronized(orders){
 		for (Order o : orders) {

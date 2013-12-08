@@ -1,12 +1,14 @@
-package restaurant.gui;
+package GHRestaurant.gui;
 
 //import restaurant.Customer;
 import restaurant.interfaces.*;
-import restaurant.HostAgent;
+import GHRestaurant.*;
 
 import java.awt.*;
 
-public class CustomerGui implements Gui{
+import city.gui.Gui;
+
+public class GHCustomerGui implements Gui{
 
 	private Customer agent = null;
 	private boolean isPresent = false;
@@ -24,7 +26,7 @@ public class CustomerGui implements Gui{
 	public static final int xTable = 200;
 	public static final int yTable = 250;
 
-	public CustomerGui(Customer c, RestaurantGui gui){ //HostAgent m) {
+	public GHCustomerGui(Customer c, RestaurantGui gui){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;

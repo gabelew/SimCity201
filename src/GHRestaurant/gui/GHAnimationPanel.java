@@ -1,6 +1,9 @@
-package restaurant.gui;
+package GHRestaurant.gui;
 
 import javax.swing.*;
+
+import city.animationPanels.InsideAnimationPanel;
+import city.gui.Gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,10 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
 
-public class AnimationPanel extends JPanel implements ActionListener {
+public class GHAnimationPanel extends InsideAnimationPanel implements ActionListener {
 
-    private final int WINDOWX = 450;
-    private final int WINDOWY = 350;
     private Image bufferImage;
     private Dimension bufferSize;
     static final int G2XLOCATION = 200, G2YLOCATION = 250;
@@ -21,7 +22,7 @@ public class AnimationPanel extends JPanel implements ActionListener {
     
     private List<Gui> guis = new ArrayList<Gui>();
 
-    public AnimationPanel() {
+    public GHAnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         

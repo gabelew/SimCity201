@@ -1,7 +1,7 @@
-package restaurant.gui;
+package GHRestaurant.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
+//import restaurant.CustomerAgent;
+//import restaurant.HostAgent;
 
 import javax.swing.*;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Subpanel of restaurantPanel.
  * This holds the scroll panes for the customers and, later, for waiters
  */
-public class ListPanel extends JPanel implements ActionListener {
+public class GHListPanel extends JPanel implements ActionListener {
 
     public JScrollPane pane =
             new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -26,7 +26,7 @@ public class ListPanel extends JPanel implements ActionListener {
     private JTextField textfield = new JTextField();
     private JCheckBox checkb;
     
-    private GCRestaurantPanel restPanel;
+    private GHRestaurantPanel restPanel;
     private String type;
 
     /**
@@ -35,7 +35,7 @@ public class ListPanel extends JPanel implements ActionListener {
      * @param rp   reference to the restaurant panel
      * @param type indicates if this is for customers or waiters
      */
-    public ListPanel(GCRestaurantPanel rp, String type) {
+    public GHListPanel(GHRestaurantPanel rp, String type) {
         restPanel = rp;
         this.type = type;
         
