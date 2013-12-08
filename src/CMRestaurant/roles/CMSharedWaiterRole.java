@@ -11,24 +11,29 @@ import city.gui.trace.AlertTag;
 public class CMSharedWaiterRole extends CMWaiterRole{
 
 	static final int CHECK_STAND_TIME = 10000;
-	public boolean testingRevolvingMonitor = false;
 	
 	public CMSharedWaiterRole(PersonAgent p, Restaurant r) {
 		super(p, r);
-
+		haveNotRecentlyCheckedStand = true;
 		revolvingStand = ((CMCookRole) this.restaurant.cook).getRevolvingStand();
 	}
 	
 	@Override
 	protected void putInOrder(MyCustomer c) {
-		doGoToKitchen(c);
+		if(waiterGui!=null){
+			doGoToKitchen(c);
+		}
 		if(!revolvingStand.isFull()) {
 			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
 			c.s = CustomerState.orderPlaced;
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Inserting order into revolving stand");
-			waiterGui.placedOrder();
+			if(waiterGui!=null){
+				waiterGui.placedOrder();
+			}
 		} else {
-			waiterGui.placeOrderInPocket();
+			if(waiterGui!=null){
+				waiterGui.placeOrderInPocket();
+			}
 			timer.schedule(new TimerTask() {
 				public void run() {
 					haveNotRecentlyCheckedStand = false;

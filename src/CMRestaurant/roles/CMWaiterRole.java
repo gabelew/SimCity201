@@ -27,7 +27,8 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	Timer timer = new Timer();
 	private final int THIRTY_SECONDS = 30000;
 	protected RevolvingStandMonitor revolvingStand;
-	boolean haveNotRecentlyCheckedStand = true;
+	protected boolean haveNotRecentlyCheckedStand = false;
+	public boolean testingRevolvingMonitor = false;
 	
 	public class MyCustomer{
 		private Customer c;
@@ -286,7 +287,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 			return false;
 		}
 
-		if(waiterGui.waitingSeatNumber < 0){
+		if(waiterGui != null && waiterGui.waitingSeatNumber < 0){
 			doGoToRestPos();
 		}
 		
