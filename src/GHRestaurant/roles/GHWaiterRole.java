@@ -495,7 +495,6 @@ public class GHWaiterRole extends Role implements Waiter{
 
 	@Override
 	public void setGui(Gui g) {
-		AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, getName(), "SETTING GUI");
 		waitergui = (GHWaiterGui) g;
 		
 	}

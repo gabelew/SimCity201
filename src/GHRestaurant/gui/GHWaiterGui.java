@@ -14,8 +14,8 @@ public class GHWaiterGui implements Gui {
     private GHWaiterRole role = null;
     private boolean isPresent = false;
 
-    private int xPos = 120, yPos = 120;//default waiter position
-    private int xDestination = 120, yDestination = 120;//default start position
+    private int xPos = -20, yPos = -20;//default waiter position
+    private int xDestination = 20, yDestination = 20;//default start position
     private int xCook = 330, yCook = 230;
     private int tableNumber;
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
@@ -56,7 +56,6 @@ public class GHWaiterGui implements Gui {
     public void draw(Graphics2D g) {
         g.setColor(Color.BLUE);
         g.fillRect(xPos, yPos, 20, 20);
-        AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, role.getName(), "xPos: " + getXPos() + "     yPos: " + getYPos() + "isPresent: " + isPresent());
     	
     }
 
