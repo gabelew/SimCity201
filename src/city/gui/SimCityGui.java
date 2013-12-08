@@ -36,6 +36,7 @@ import EBRestaurant.roles.EBWaiterRole;
 import GCRestaurant.gui.GCAnimationPanel;
 import GCRestaurant.gui.GCCashierGui;
 import GCRestaurant.gui.GCCookGui;
+import GCRestaurant.gui.GCCustomerGui;
 import GCRestaurant.gui.GCHostGui;
 import GCRestaurant.gui.GCRestaurantPanel;
 import GCRestaurant.gui.GCWaiterGui;
