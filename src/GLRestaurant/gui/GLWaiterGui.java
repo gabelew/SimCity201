@@ -6,23 +6,27 @@ import GLRestaurant.roles.GLCookRole;
 import city.gui.Gui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import javax.imageio.ImageIO;
+
 public class GLWaiterGui implements Gui {
 
-	private static final int PERSONWIDTH = 20;
-	private static final int PERSONHEIGHT = 20;
+	private final int OFFSCREEN_POSITION = -20;
 	private int ORIGINALX, ORIGINALY;
+	private static BufferedImage waiterImg = null;
 	private int platex, platey;
 	private boolean isPresent = false;
-    private GLWaiterRole agent = null;
-    
-    //RestaurantGui gui;
+    private GLWaiterRole role = null;
+
     GLCustomerGui customerGui;
     private int customerx, customery;
-    private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtOrigin, IfAtCustomer, IfAtPlate};
+    private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtOrigin, IfAtCustomer, IfAtPlate, LeaveRestaurant};
     private Command command = Command.noCommand;
     String customerChoice;
     boolean customerOrdered = false;
@@ -49,25 +53,29 @@ public class GLWaiterGui implements Gui {
     public static final Point TableThree = new Point(300,100);
 
     public GLWaiterGui(GLWaiterRole agent) {
-        this.agent = agent;
+    	try {
+    		waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
+    	} catch(IOException e) {
+    		
+    	}
+        this.role = agent;
         tableMap.put(1, TableOne);
         tableMap.put(2, TableTwo);
         tableMap.put(3, TableThree);
     }
     
-    public GLWaiterGui(GLWaiterRole w, int x, int y){ 
-		this.agent = w;
-		ORIGINALX = x;
-		ORIGINALY = y;
-		xPos = -40;
-		yPos = -40;
-		xDestination = ORIGINALX;
-		yDestination = ORIGINALY;
-		//this.gui = gui;
-		tableMap.put(1, TableOne);
-        tableMap.put(2, TableTwo);
-        tableMap.put(3, TableThree);
-	}
+//    public GLWaiterGui(GLWaiterRole w, int x, int y){ 
+//		this.role = w;
+//		ORIGINALX = x;
+//		ORIGINALY = y;
+//		xPos = -40;
+//		yPos = -40;
+//		xDestination = ORIGINALX;
+//		yDestination = ORIGINALY;
+//		tableMap.put(1, TableOne);
+//        tableMap.put(2, TableTwo);
+//        tableMap.put(3, TableThree);
+//	}
     
     public void setCustomerGui(GLCustomerGui g) {
     	this.customerGui = g;
@@ -85,17 +93,19 @@ public class GLWaiterGui implements Gui {
         if (xDestination == xPos && yDestination == yPos) {
         	if (((TableOne.x + 20 == xDestination) || (TableTwo.x + 20 == xDestination) || (TableThree.x + 20 == xDestination)) 
         	&& ((TableOne.y - 20 == yDestination) || (TableTwo.y - 20 == yDestination) || (TableThree.y - 20 == yDestination))) {
-        		agent.msgAtTable();
+        		role.msgAtTable();
         	} else if (Command.onBreak == command) {
         		//gui.setWaiterOnBreak(agent);
         	} else if (Command.ReturnFromBreak == command) {
         		//gui.setWaiterEnabled(agent);
+        	} else if (Command.LeaveRestaurant == command) {
+        		role.msgLeftTheRestaurant();
         	} else if (Command.IfAtOrigin == command && ORIGINALX == xDestination && ORIGINALY == yDestination) {
-        		agent.msgAtOrigin();
+        		role.msgAtOrigin();
         	} else if (Command.IfAtCustomer == command && customerx == xDestination && customery == yDestination) {
-        		agent.msgAtCustomer();
+        		role.msgAtCustomer();
         	} else if (Command.IfAtPlate == command && platex == xDestination && platey == yDestination)
-        		agent.msgAtPlate();
+        		role.msgAtPlate();
         	command = Command.noCommand;
         }
     }
@@ -163,8 +173,7 @@ public class GLWaiterGui implements Gui {
     }
     
     public void draw(Graphics2D g) {
-        g.setColor(Color.darkGray);
-        g.fillRect(xPos, yPos, PERSONWIDTH, PERSONHEIGHT);
+        g.drawImage(waiterImg, xPos, yPos, null);
         if(customerOrdered) {
 			g.setColor(Color.BLACK);		
 			g.drawString(foodCarried, xPos + 15, yPos);
@@ -175,6 +184,13 @@ public class GLWaiterGui implements Gui {
 		}
     }
 
+    public void DoLeaveRestaurant() {
+    	xDestination = OFFSCREEN_POSITION;
+    	yDestination = OFFSCREEN_POSITION;
+    	
+    	command = Command.LeaveRestaurant;
+    }
+    
     public boolean isPresent() {
         return isPresent;
     }
@@ -185,7 +201,7 @@ public class GLWaiterGui implements Gui {
     
     public void wantGoOnBreak() {
     	goOnBreak = true;
-    	agent.msgWantToGoOnBreak();
+    	role.msgWantToGoOnBreak();
     }
     
     public void goOnBreak() {
@@ -199,7 +215,7 @@ public class GLWaiterGui implements Gui {
     	xDestination = ORIGINALX;
     	yDestination = ORIGINALY;
     	command = Command.ReturnFromBreak;
-    	agent.msgReturnedFromBreak();
+    	role.msgReturnedFromBreak();
     }
     
     public void noBreak() {

@@ -10,12 +10,6 @@ public class GLCookGui implements Gui {
 	
 	private final int NGRILLS = 3;
 	private final int NPLATES = 3;
-	private static final int PERSONWIDTH = 20;
-	private static final int PERSONHEIGHT = 20;
-	private static final int GRILLWIDTH = 20;
-	private static final int GRILLHEIGHT = 20;
-	private static final int PLATEWIDTH = 20;
-	private static final int PLATEHEIGHT = 20;
 	private static final int GRILLX = 490;
 	private static final int GRILLONEY = 160;
 	private static final int GRILLTWOY = 190;
@@ -79,16 +73,16 @@ public class GLCookGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        g.fillRect(xPos, yPos, PERSONWIDTH, PERSONHEIGHT);
-        g.setColor(Color.BLUE);
-        g.fillRect(GRILLX, GRILLONEY, GRILLWIDTH, GRILLHEIGHT);  
-        g.fillRect(GRILLX, GRILLTWOY, GRILLWIDTH, GRILLHEIGHT);
-        g.fillRect(GRILLX, GRILLTHREEY, GRILLWIDTH, GRILLHEIGHT); 
-        g.setColor(Color.WHITE);
-        g.fillRect(PLATEX, PLATEONEY, PLATEWIDTH, PLATEHEIGHT);
-        g.fillRect(PLATEX, PLATETWOY, PLATEWIDTH, PLATEHEIGHT);
-        g.fillRect(PLATEX, PLATETHREEY, PLATEWIDTH, PLATEHEIGHT);
+//        g.setColor(Color.RED);
+//        g.fillRect(xPos, yPos, PERSONWIDTH, PERSONHEIGHT);
+//        g.setColor(Color.BLUE);
+//        g.fillRect(GRILLX, GRILLONEY, GRILLWIDTH, GRILLHEIGHT);  
+//        g.fillRect(GRILLX, GRILLTWOY, GRILLWIDTH, GRILLHEIGHT);
+//        g.fillRect(GRILLX, GRILLTHREEY, GRILLWIDTH, GRILLHEIGHT); 
+//        g.setColor(Color.WHITE);
+//        g.fillRect(PLATEX, PLATEONEY, PLATEWIDTH, PLATEHEIGHT);
+//        g.fillRect(PLATEX, PLATETWOY, PLATEWIDTH, PLATEHEIGHT);
+//        g.fillRect(PLATEX, PLATETHREEY, PLATEWIDTH, PLATEHEIGHT);
         g.setColor(Color.black);
         if(grills.get(0).occupied) {
         	g.drawString(grills.get(0).item, GRILLX, GRILLONEY);
@@ -123,8 +117,8 @@ public class GLCookGui implements Gui {
     			else if("salad".equals(item)) {
     				g.item = "SD";
     			}
-    			else if("pizza".equals(item)){
-    				g.item = "PZ";
+    			else if("cookie".equals(item)){
+    				g.item = "CK";
     			}
     			g.orderNum = orderNum;
     			break;
@@ -156,8 +150,8 @@ public class GLCookGui implements Gui {
     			else if("salad".equals(item)) {
     				p.item = "SD";
     			}
-    			else if("pizza".equals(item)){
-    				p.item = "PZ";
+    			else if("cookie".equals(item)){
+    				p.item = "CK";
     			}
     			p.orderNum = orderNum;
     			break;

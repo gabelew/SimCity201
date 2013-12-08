@@ -36,7 +36,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 	public final int TABLE2X = 200;
 	public final int TABLE3X = 300;
 	public final int TABLEY = 100;
-	public final int CHAIR_OFFSET = 15;
+	public final int CHAIR_OFFSET = 22;
 	public static final int ZERO = 0;
 	
 	private BufferedImage kitchenCounterImg = null;
@@ -100,24 +100,26 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
         g2.setColor(getBackground());
         g2.fillRect(ZERO, ZERO, WINDOWX, WINDOWY );
 
+      //draw chairs
+        g.drawImage(chairImg, TABLE1X+CHAIR_OFFSET, TABLEY, null);
+        g.drawImage(chairImg, TABLE2X+CHAIR_OFFSET, TABLEY, null);
+        g.drawImage(chairImg, TABLE3X+CHAIR_OFFSET, TABLEY, null);
+        
         //draw table area
         g.drawImage(tableImg, TABLE1X, TABLEY, null);
         g.drawImage(tableImg, TABLE2X, TABLEY, null);
         g.drawImage(tableImg, TABLE3X, TABLEY, null);
         
 
-        //draw chairs
-        g.drawImage(chairImg, TABLE1X, TABLEY-CHAIR_OFFSET, null);
-        g.drawImage(chairImg, TABLE2X, TABLEY-CHAIR_OFFSET, null);
-        g.drawImage(chairImg, TABLE3X, TABLEY-CHAIR_OFFSET, null);
+        
         
 		//draw Host Stand
     	g.drawImage(hostStandImg, 50, 89, null);
 
         // draw kitchen
-		g.drawImage(kitchenCounterImg, 490, 190, null);
-		g.drawImage(grillRightImg, 490,160, null);
-		g.drawImage(fidgeImg, 530, 160, null);
+		g.drawImage(kitchenCounterImg, 500, 120, null);
+		g.drawImage(grillRightImg, 560,120, null);
+		g.drawImage(fidgeImg, 630, 160, null);
 		g.drawImage(platingTableImg, 460, 160, null);
         g.drawImage(platingTableImg, 460, 190, null);
         g.drawImage(platingTableImg, 460, 220, null);

@@ -1,6 +1,9 @@
 package GLRestaurant.roles;
 
 import agent.Agent;
+import CMRestaurant.roles.CMWaiterRole;
+import CMRestaurant.roles.CMHostRole.MyWaiter;
+import CMRestaurant.roles.CMHostRole.wState;
 import GLRestaurant.gui.GLHostGui;
 
 import java.util.*;
@@ -45,10 +48,10 @@ public class GLHostRole extends Role implements Host{
 	}
 	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
-	public Collection<Table> tables;
+	public Collection<Table> tables = Collections.synchronizedList(new ArrayList<Table>());
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
-	public enum waiterState {serving, wantToGoOnBreak, onBreak, onDuty, offDuty};
+	public enum waiterState {serving, wantToGoOnBreak, onBreak, offDuty};
 	public enum customerState {waiting, seated, done};
 	enum State {none, goToWork, working, leaving, relieveFromDuty};
 	State state = State.none;
@@ -148,7 +151,36 @@ public class GLHostRole extends Role implements Host{
 	
 	@Override
 	public void msgReadyToWork(Waiter w) {
-		msgFinishedBreak((GLWaiterRole) w);
+		boolean addWaiter = true;
+		synchronized(waiters) {
+			for(MyWaiter onListWaiter: waiters) {
+				if (w.equals(onListWaiter.w)) {
+					addWaiter = false;
+					onListWaiter.ws = waiterState.serving;
+				}
+			}
+		}
+		
+		if(addWaiter) {
+			if(((GLWaiterRole) w).getName().toLowerCase().contains("day")){
+				for(MyWaiter existingW: waiters){
+					if(((GLWaiterRole) existingW.w).getName().toLowerCase().contains("night")){
+						existingW.ws = waiterState.offDuty;
+					}
+				}
+			}else if(((GLWaiterRole) w).getName().toLowerCase().contains("night")){
+				for(MyWaiter existingW: waiters){
+					if(((GLWaiterRole) existingW.w).getName().toLowerCase().contains("day")){
+						existingW.ws = waiterState.offDuty;
+					}
+				}
+			}
+			
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((GLWaiterRole)w).getName());
+			waiters.add(new MyWaiter((GLWaiterRole)w));
+		}
+		
+		stateChanged();
 	}
 
 	@Override
@@ -194,17 +226,17 @@ public class GLHostRole extends Role implements Host{
 		}
 		if(state == State.goToWork){
 			state = State.working;
-			//hostGui.DoEnterRestaurant();
+			hostGui.DoEnterRestaurant();
 			return true;
 		}
 		if(state == State.leaving){
 			state = State.none;
-//			hostGui.DoLeaveRestaurant();
-//			try {
-//				waitingResponse.acquire();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
+			hostGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		
@@ -304,7 +336,7 @@ public class GLHostRole extends Role implements Host{
 			mw = waiters.get(0);
 			synchronized(waiters) {
 				for (MyWaiter waiter : waiters) {
-					if (mw.ws == waiterState.onBreak)
+					if (mw.ws == waiterState.onBreak && waiter.ws == waiterState.serving)
 						mw = waiter;
 					if (waiter.customers < mw.customers)
 						mw = waiter;

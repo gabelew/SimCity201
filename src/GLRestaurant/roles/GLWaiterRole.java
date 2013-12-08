@@ -17,6 +17,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 
 /**
@@ -56,8 +58,9 @@ public class GLWaiterRole extends Role implements Waiter{
 	private Semaphore atOrigin = new Semaphore(0,true);
 	private Semaphore atCustomer = new Semaphore(0,true);
 	private Semaphore atPlate = new Semaphore(0,true);
+	private Semaphore waitingResponse = new Semaphore(0,true);
 	public enum customerState {waiting, seated, askedToOrder, ordering, ordered, reorder, waitingForFood, readyToEat, eating, eatingDone, waitingForCheck, checkReceived, leaving, leftRestaurant};
-	public enum agentEvent {none, goOnBreak, onBreak, relieveFromDuty};
+	public enum agentEvent {none, goOnBreak, onBreak, relieveFromDuty, goToWork};
 	public enum checkState {pending, preparing, finished};
 	agentEvent event = agentEvent.none;
 	public GLWaiterGui waiterGui = null;
@@ -203,6 +206,24 @@ public class GLWaiterRole extends Role implements Waiter{
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(event == agentEvent.relieveFromDuty) {
+			event = agentEvent.none;
+			myPerson.releavedFromDuty(this);
+			restaurant.insideAnimationPanel.removeGui(waiterGui);
+			return true;
+		}
+		if(customers.size() == 0 && (
+				(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
+				(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
+			leaveWork();
+			return true;
+		}
+		if(event == agentEvent.goToWork)
+		{
+			event = agentEvent.none;
+			tellHost();
+			return true;
+		}
 		
 		try {
 			// First rule: Seats any waiting customers on the list
@@ -401,6 +422,17 @@ public class GLWaiterRole extends Role implements Waiter{
 		event = agentEvent.onBreak;
 		waiterGui.goOnBreak(); // waiter goes to origin
 	}
+	
+	private void leaveWork() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+		waiterGui.DoLeaveRestaurant();
+		restaurant.host.msgDoneWorking(this);
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			
+		}
+	}
 
 	// The animation DoXYZ() routines
 	private void DoSeatCustomer(GLCustomerRole customer, Table table) {
@@ -443,20 +475,6 @@ public class GLWaiterRole extends Role implements Waiter{
 		return waiterGui;
 	}
 	
-	/**
-	 * hack to establish connections.
-	 */
-	public void setHost(GLHostRole host) {
-		this.host = host;
-	}
-	
-	public void setCook(GLCookRole cook) {
-		this.cook = cook;
-	}
-	
-	public void setCashier(GLCashierRole cashier) {
-		this.cashier = cashier;
-	}
 	
 	private class Table {
 		GLCustomerRole occupiedBy;
@@ -501,25 +519,27 @@ public class GLWaiterRole extends Role implements Waiter{
 
 	@Override
 	public void msgLeftTheRestaurant() {
-		// TODO Auto-generated method stub
-		
+		waitingResponse.release();
+		event = agentEvent.relieveFromDuty;
 	}
 
 	@Override
 	public Restaurant getRestaurant() {
-		// TODO Auto-generated method stub
-		return null;
+		return restaurant;
 	}
 
 	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+		event = agentEvent.goToWork;
+		stateChanged();
+	}
+	
+	public void tellHost() {
+		restaurant.host.msgReadyToWork(this);
 	}
 
 	@Override
 	public void msgAskForBreak() {
-		// TODO Auto-generated method stub
 		msgWantToGoOnBreak();
 	}
 

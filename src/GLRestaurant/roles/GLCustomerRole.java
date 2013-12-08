@@ -43,7 +43,7 @@ public class GLCustomerRole extends Role implements Customer{
 	private Random generator = new Random();
 	
 	// agent correspondents
-	private GLHostRole host;
+	//private GLHostRole host;
 	private GLCashierRole cashier;
 
 	//    private boolean isHungry = false; //hack for gui
@@ -65,17 +65,6 @@ public class GLCustomerRole extends Role implements Customer{
 		super(p);
 		myPerson = p;
 		restaurant = r;
-	}
-
-	/**
-	 * hack to establish connections.
-	 */
-	public void setHost(GLHostRole host) {
-		this.host = host;
-	}
-	
-	public void setCashier(GLCashierRole cashier) {
-		this.cashier = cashier;
 	}
 
 
@@ -242,7 +231,7 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 	
 	public void tellHost() {
-		host.msgIWantFood(this);
+		restaurant.host.msgIWantToEat(this);
 	}
 
 	private void SitDown() {
@@ -347,7 +336,7 @@ public class GLCustomerRole extends Role implements Customer{
 		if(AgentState.Leaving == state && AgentEvent.paid == event)
 			waiter.w.msgIAmLeaving(this);
 		else if(AgentState.Leaving == state && AgentEvent.tiredOfWaiting == event) 
-			host.msgIAmLeaving(this);
+			restaurant.host.msgLeavingRestaurant(this);
 		customerGui.DoExitRestaurant();
 	}
 	
