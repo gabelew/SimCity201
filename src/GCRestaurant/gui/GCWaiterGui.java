@@ -186,7 +186,6 @@ public class GCWaiterGui implements Gui {
 
 	@Override
 	public void setPresent(boolean b) {
-		// TODO Auto-generated method stub
 		
 	}
 }

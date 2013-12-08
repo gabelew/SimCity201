@@ -1,12 +1,10 @@
 package GCRestaurant.roles;
 
-import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.RoleOrder;
 import GCRestaurant.gui.GCCookGui;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.interfaces.Cook;
-import restaurant.interfaces.Waiter;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -37,10 +35,12 @@ public class GCCookRole extends Role implements Cook
 	
 	private CookState state = CookState.makingMarketOrder;
 	private enum OrderState{pending, cooking, done, served}
-	private enum CookState {free, cooking, makingMarketOrder}
+	private enum CookState {free, cooking, makingMarketOrder, wantsOffWork, leaving, relieveFromDuty, none, goToWork}
 	private final int THRESHOLD = 2;
 	private final int MAXSUPPLY = 6;
 	private int marketCounter = 0;
+	public PersonAgent replacementPerson = null;
+	Restaurant restaurant;
 
 	public GCCookRole() {
 		super();
@@ -59,10 +59,6 @@ public class GCCookRole extends Role implements Cook
 		//this.name = name;
 	}
 	
-	public void setGui(GCCookGui cg)
-	{
-		this.cookGui = cg;
-	}
 	public void setMarket(MarketAgent m)
 	{
 		markets.add(m);
@@ -231,6 +227,37 @@ public class GCCookRole extends Role implements Cook
 	{
 		try
 		{
+			
+			if(state == CookState.wantsOffWork){
+				boolean canGetOffWork = true;
+				for (Order o : orders)
+				{
+					if(o.state != OrderState.pending)
+					{
+						canGetOffWork = false;
+						break;
+					}
+				}
+				if(canGetOffWork){
+					state = CookState.leaving;
+				}
+			}
+			
+			if(state == state.relieveFromDuty){
+				state = state.none;
+				myPerson.releavedFromDuty(this);
+				if(replacementPerson != null){
+					replacementPerson.waitingResponse.release();
+				}
+				return true;
+			}
+			
+			if(state == state.goToWork){
+				state = state.free;
+				cookGui.DoEnterRestaurant();
+				return true;
+			}
+			
 			if(state == CookState.makingMarketOrder && marketCounter < markets.size())
 			{
 				state = CookState.free;
@@ -345,22 +372,19 @@ public class GCCookRole extends Role implements Cook
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
+	
+	public void setGui(Gui GuiFactory) {
+		cookGui = (GCCookGui) GuiFactory;
 		
 	}
 
 	@Override
 	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return (Gui) cookGui;
 	}
 
 	public void setRestaurant(Restaurant r) {
-		// TODO Auto-generated method stub
-		
+		this.restaurant = r;
 	}
 
 }

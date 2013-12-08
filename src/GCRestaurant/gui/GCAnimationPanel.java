@@ -92,6 +92,15 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         }
     }
 
+    public void addGui(Gui g)
+    {
+    	guis.add(g);
+    }
+    /*
+    public void addGui(GCHostGui gui)
+    {
+    	guis.add(gui);
+    }
     public void addGui(GCCookGui gui)
     {
     	guis.add(gui);
@@ -102,5 +111,5 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
 
     public void addGui(GCWaiterGui gui) {
         guis.add((Gui) gui);
-    }
+    }*/
 }

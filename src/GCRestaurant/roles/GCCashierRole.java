@@ -17,6 +17,7 @@ import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Market;
 import restaurant.interfaces.Waiter;
+import GCRestaurant.gui.GCCashierGui;
 import agent.Agent;
 
 /**
@@ -37,7 +38,9 @@ public class GCCashierRole extends Role implements Cashier
 	
 	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
+	Restaurant restaurant;
 	PersonAgent replacementPerson = null;
+	public GCCashierGui cashierGui = null;
 	//constructor
 	public GCCashierRole() 
 	{
@@ -254,19 +257,20 @@ public class GCCashierRole extends Role implements Cashier
 		stateChanged();
 	}
 
-	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
 	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return (Gui) cashierGui;
 	}
 
 	public void setRestaurant(Restaurant r) {
+		this.restaurant = r;
+	}
+
+	public void setGui(Gui GuiFactory) {
+		cashierGui = (GCCashierGui) GuiFactory;
+	}
+
+	public void msgAnimationHasLeftRestaurant() {
 		// TODO Auto-generated method stub
 		
 	}

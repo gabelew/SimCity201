@@ -1,32 +1,39 @@
 package GCRestaurant.gui;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
-import GCRestaurant.roles.GCCookRole;
 import GCRestaurant.roles.GCHostRole;
 
 public class GCHostGui implements Gui{
 
-	private GCHostRole agent = null;
+	private GCHostRole role = null;
 	private boolean isPresent = true;
-	private boolean doneplating = true;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private final int DEFAULT_POSX = 200;
-	private final int DEFAULT_POSY = 55;
-	private enum foodstate{none, plating, cooking, served, gettingFromFridge, gotFood};
+	private final int StartPos = -20;
+	private final int xWorkPos = 50;
+	private final int yWorkPos = 55;
 
-	public GCHostGui(GCHostRole c){ //HostAgent m) {
-		agent = c;
-		xPos = DEFAULT_POSX;
-		yPos = DEFAULT_POSY;
-		xDestination = DEFAULT_POSX;
-		yDestination = DEFAULT_POSY;
-		//maitreD = m;
+	private BufferedImage hostImg = null;
+	enum Command {none,enterRestaurant, leaveRestaurant };
+    Command command = Command.none;
+    
+	public GCHostGui(GCHostRole r){
+		this.role = r;
+		try {hostImg = ImageIO.read(new File("imgs/host_v1.png"));} 
+		catch (IOException e) {}
+		
+		xPos = StartPos;
+		yPos = StartPos;
+		xDestination = StartPos;
+		yDestination = StartPos;
 	}
 
 	public void updatePosition() {
@@ -45,15 +52,20 @@ public class GCHostGui implements Gui{
 				yPos--;
 		}
 	
-        
+		if(xPos == xDestination && yPos == yDestination){
+        	if(command == Command.leaveRestaurant){
+        		role.msgAnimationHasLeftRestaurant();
+        		command = Command.none;
+        	}else if(command == Command.enterRestaurant){
+        		command = Command.none;
+        	}
+        		
+        }
 		
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.BLUE);
-		g.fillRect(xPos, yPos, 50, 50);
-		g.setColor(Color.ORANGE);
-		
+		g.drawImage(hostImg, xPos, yPos, null);
 	}
 	
 	public boolean isPresent() {
@@ -63,4 +75,15 @@ public class GCHostGui implements Gui{
 	public void setPresent(boolean p) {
 		isPresent = p;
 	}
+
+	public void DoLeaveRestaurant() {
+        xDestination = StartPos;
+        yDestination = StartPos;
+        command = Command.leaveRestaurant;
+    }
+    public void DoEnterRestaurant(){
+        xDestination = xWorkPos;
+        yDestination = yWorkPos; 
+        command = Command.enterRestaurant;   	
+    }
 }

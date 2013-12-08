@@ -4,7 +4,6 @@ import GCRestaurant.gui.GCWaiterGui;
 import GCRestaurant.roles.GCCashierRole.Check;
 import GCRestaurant.roles.GCCookRole.Order;
 import GCRestaurant.roles.GCHostRole.Table;
-import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.interfaces.Waiter;
 
@@ -24,7 +23,8 @@ public class GCWaiterRole extends Role implements Waiter{
 	public enum CustomerState{Waiting, Seated, ReadyToOrder, ReorderFood, Ordering, 
 		Ordered, FoodCooking, FoodDoneCooking, orderDone, Served, Leaving, Left, checkGiven}
 	public enum WaiterEvent{onBreak, none,seatingCustomer, goingToCustomer,
-		goingToCook, gettingFood, givingFood, giveCheckToCashier, AlmostOnBreak }
+		goingToCook, gettingFood, givingFood, giveCheckToCashier, AlmostOnBreak, gotToWork }
+	
 	private WaiterEvent event = WaiterEvent.none;
 	public Collection<Table> tables;
 	
@@ -35,6 +35,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	Timer timer = new Timer();
 	
 	//gui
+	Restaurant restaurant;
 	GCWaiterGui waiterGui = null;
 	//link to other agents
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
@@ -44,9 +45,8 @@ public class GCWaiterRole extends Role implements Waiter{
 	private final int BREAKTIME = 10000;
 	
 	public GCWaiterRole(PersonAgent p, Restaurant r) {
-		super();
-
-		//this.name = name;
+		super(p);
+		this.restaurant = r;
 	}
 	
 	public void setHost(GCHostRole h)
@@ -58,10 +58,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	{
 		this.cook = c;
 	}
-	public void setGui(GCWaiterGui wg)
-	{
-		this.waiterGui = wg;
-	}
+	
 	public String getMaitreDName() {
 		return name;
 	}
@@ -460,36 +457,27 @@ public class GCWaiterRole extends Role implements Waiter{
 		
 	}
 
-	
-
 	@Override
 	public void msgLeftTheRestaurant() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public Restaurant getRestaurant() {
-		// TODO Auto-generated method stub
-		return null;
+		return restaurant;
 	}
 
-	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+		event = WaiterEvent.gotToWork;
+		stateChanged();
 	}
 
-	@Override
 	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+		waiterGui = (GCWaiterGui) waiterGuiFactory;
 	}
 
-	@Override
 	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return (Gui) waiterGui;
 	}
 
 	

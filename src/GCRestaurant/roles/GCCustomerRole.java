@@ -57,20 +57,10 @@ public class GCCustomerRole extends Role implements Customer{
 	//default states
 	AgentEvent event = AgentEvent.none;
 	public AgentState state = AgentState.DoingNothing;//The start state
-	/**
-	 * Constructor for CustomerAgent class
-	 * @param r 
-	 * @param p 
-	 *
-	 * @param name name of the customer
-	 * @param gui  reference to the customergui so the customer can send it messages
-	 */
+	
 	public GCCustomerRole(PersonAgent p, Restaurant r){
-		super();
-		//this.name = name;
-		if(name.equals("5")){ cash = 5;}
-		else if(name.equals("6")){ cash = 6;}
-		else{ cash = new Random().nextInt(20); }
+		super(p);
+		
 	}
 
 	/**
@@ -477,18 +467,12 @@ public class GCCustomerRole extends Role implements Customer{
 		return "customer " + getName();
 	}
 
-	public void setGui(GCCustomerGui g) {
-		customerGui = g;
-	}
-
 	public Gui getGui() {
 		return (Gui) customerGui;
 	}
 
-	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void setGui(Gui GuiFactory) {
+		customerGui = (GCCustomerGui) GuiFactory;
 	}
 }
 

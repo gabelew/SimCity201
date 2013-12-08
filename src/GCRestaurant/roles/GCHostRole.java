@@ -1,12 +1,13 @@
 package GCRestaurant.roles;
 
-import agent.Agent;
+import GCRestaurant.gui.GCHostGui;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.gui.Gui;
@@ -22,16 +23,18 @@ public class GCHostRole extends Role implements Host
 
 	public List<GCCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<GCCustomerRole>());
 	public Collection<Table> tableList;
-	private String name;
-
-	//public GCWaiterGui waiterGui = null;
+	private Semaphore waitingResponse = new Semaphore(0,true);
+	public Restaurant restaurant;
+	PersonAgent replacementPerson = null;
+	public GCHostGui hostGui = null;
 	public List<myWaiter> waiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	private enum WaiterState{askedForBreak, onBreak, Working, deniedBreak};
+	enum State {none, goToWork, working, leaving, releaveFromDuty};
+	State state = State.none;
 
 	public GCHostRole() 
 	{
 		super();
-		//this.name = name;
 		// make some tables
 		tableList = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
@@ -39,14 +42,13 @@ public class GCHostRole extends Role implements Host
 		}
 	}
 
-	public String getMaitreDName() {
-		return name;
+	public Gui getGui() {
+		return (Gui) hostGui;
 	}
 
-	public String getName() {
-		return name;
+	public void setRestaurant(Restaurant r) {
+		this.restaurant = r;
 	}
-
 	public List getWaitingCustomers() {
 		return waitingCustomers;
 	}
@@ -175,6 +177,34 @@ public class GCHostRole extends Role implements Host
 		 */
 		try
 		{
+			/**
+			 * Animation to enter restaurant ->> START
+			 */
+			if(state == State.releaveFromDuty){
+				state = State.none;
+				myPerson.releavedFromDuty(this);
+				if(replacementPerson != null){
+					replacementPerson.waitingResponse.release();
+				}
+			}
+			if(state == State.goToWork){
+				state = State.working;
+				hostGui.DoEnterRestaurant();
+				return true;
+			}
+			if(state == State.leaving){
+				state = State.none;
+				hostGui.DoLeaveRestaurant();
+				try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+			/**
+			 * Animation to enter restaurant ->> END
+			 */
 			myWaiter w = null;
 			//Keeps Scheduler active until waiter appears
 			if(!(waiters.size() > 0))
@@ -307,8 +337,8 @@ public class GCHostRole extends Role implements Host
 
 	@Override
 	public void msgLeavingRestaurant(Customer c) {
-		// TODO Auto-generated method stub
-		
+		state = State.releaveFromDuty;
+		waitingResponse.release();
 	}
 
 	@Override
@@ -325,25 +355,20 @@ public class GCHostRole extends Role implements Host
 
 	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
+		state = State.goToWork;
+		this.stateChanged();
+	}
+
+	public void setGui(Gui GuiFactory) {
+		hostGui = (GCHostGui) GuiFactory;
 		
 	}
 
-	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.releaveFromDuty;
+		waitingResponse.release();
 	}
 
-	@Override
-	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setRestaurant(Restaurant r) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
 

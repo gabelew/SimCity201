@@ -216,4 +216,9 @@ public class GCCookGui implements Gui{
 			this.choice = c;
 		}
 	}
+	public void DoEnterRestaurant() {
+		xDestination = DEFAULT_POSX;
+		yDestination = DEFAULT_POSY;
+		
+	}
 }
