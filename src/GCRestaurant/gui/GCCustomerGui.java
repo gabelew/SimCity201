@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import restaurant.Restaurant;
 import GCRestaurant.roles.GCCustomerRole;
 
-public class CustomerGui implements Gui{
+public class GCCustomerGui implements Gui{
 
 	private GCCustomerRole agent = null;
 	private boolean isPresent = false;
@@ -32,7 +32,7 @@ public class CustomerGui implements Gui{
 	private String choice;
 	private int cashierPosX = -10, cashierPosY = -25;
 
-	public CustomerGui(GCCustomerRole c, Restaurant gui){ //HostAgent m) {
+	public GCCustomerGui(GCCustomerRole c, Restaurant gui){ //HostAgent m) {
 		agent = c;
 		xPos = DEFAULT_POS;
 		yPos = DEFAULT_POS;

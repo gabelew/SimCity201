@@ -31,15 +31,18 @@ public class GCCashierRole extends Agent implements Cashier
 	private enum CheckState{none, calculated, ReceivedPayment };
 	public double cash = 10;
 	private DecimalFormat df = new DecimalFormat("#.##"); //formats all numbers to 2 decimal place
+	
+	enum State {none, goToWork, working, leaving, releaveFromDuty};
+	State state = State.none;
+	PersonAgent replacementPerson = null;
 	//constructor
 	public GCCashierRole(String name) 
 	{
 		super();	
 		this.name = name;
-		
 		menuItems.put("steak", new Double(15.99) );
 		menuItems.put("chicken", new Double(10.99) );
-		menuItems.put("pizza", new Double(8.99) );
+		menuItems.put("cookie", new Double(8.99) );
 		menuItems.put("salad", new Double(5.99) );		
 	}
 
@@ -112,11 +115,12 @@ public class GCCashierRole extends Agent implements Cashier
 		
 	}
 
-	@Override
+	
 	public void msgReleaveFromDuty(PersonAgent p) 
 	{
-		// TODO Auto-generated method stub
-		
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
 	}
 	/****************************************************
 	 * Actions
@@ -241,9 +245,10 @@ public class GCCashierRole extends Agent implements Cashier
 	}
 
 	@Override
-	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+	public void goesToWork() 
+	{
+		state = State.goToWork;
+		stateChanged();
 	}
 
 }

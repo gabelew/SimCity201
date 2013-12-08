@@ -5,7 +5,7 @@ import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.interfaces.Waiter.MenuItem;
-import GCRestaurant.gui.CustomerGui;
+import GCRestaurant.gui.GCCustomerGui;
 import GCRestaurant.roles.GCCashierRole.Check;
 import agent.Agent;
 
@@ -26,7 +26,7 @@ public class GCCustomerRole extends Agent implements Customer{
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
 	Timer timer = new Timer();
-	private CustomerGui customerGui;
+	private GCCustomerGui customerGui;
 	private Semaphore busy = new Semaphore(0,true);
 	private Semaphore atCashier = new Semaphore(0,true);
 	// agent correspondents
@@ -470,11 +470,11 @@ public class GCCustomerRole extends Agent implements Customer{
 		return "customer " + getName();
 	}
 
-	public void setGui(CustomerGui g) {
+	public void setGui(GCCustomerGui g) {
 		customerGui = g;
 	}
 
-	public CustomerGui getGui() {
+	public GCCustomerGui getGui() {
 		return customerGui;
 	}
 }
