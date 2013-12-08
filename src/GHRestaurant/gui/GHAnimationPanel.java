@@ -80,19 +80,19 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         }
     }
 
-    public void addGui(CustomerGui gui) {
+    public void addGui(GHCustomerGui gui) {
         guis.add(gui);
     }
 
-    public void addGui(HostGui gui) {
+    public void addGui(GHHostGui gui) {
         guis.add(gui);
     }
     
-    public void addGui(WaiterGui gui){
+    public void addGui(GHWaiterGui gui){
     	guis.add(gui);
     }
     
-    public void addGui(CookGui gui){
+    public void addGui(GHCookGui gui){
     	guis.add(gui);
     }
 }

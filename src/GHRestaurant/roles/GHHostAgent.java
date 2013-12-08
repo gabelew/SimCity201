@@ -1,6 +1,5 @@
 package GHRestaurant.roles;
 
-import agent.Agent;
 import GHRestaurant.gui.GHHostGui;
 import restaurant.interfaces.*;
 
@@ -65,7 +64,7 @@ public class GHHostAgent extends Role implements Host{
 
 	public void msgIWantFood(Customer cust) {
 		waitingCustomers.add(cust);
-		print("msgIWantFood, from " + cust.getName());
+		print("msgIWantFood");
 		stateChanged();
 	}
 	

@@ -12,7 +12,7 @@ import city.roles.Role;
  * Restaurant Market Agent
  */
 
-public class MarketAgent extends Role implements Market {
+public class GHMarketAgent extends Role implements Market {
 	public List<Order> orders
 	= Collections.synchronizedList(new ArrayList<Order>());
 	public enum OrderState {PENDING,PROCESSED,SENT}
@@ -21,7 +21,7 @@ public class MarketAgent extends Role implements Market {
 	public Cashier cashier;
 	Map<String,Food> Inventory = new HashMap<String,Food>();
 
-	public MarketAgent(String name, int s, int c, int sa, int p) {
+	public GHMarketAgent(String name, int s, int c, int sa, int p) {
 		super();
 
 		this.name = name;

@@ -38,11 +38,11 @@ public class GHRestaurantPanel extends JPanel {
 
     public GHRestaurantPanel(GHRestaurantGui gui) {
         this.gui = gui;
-        host.setGui(hostGui);
+       // host.setGui(hostGui);
 
         gui.animationPanel.addGui(hostGui);
         gui.animationPanel.addGui(cookGui);
-        host.startThread();
+       /* host.startThread();
         cashier.startThread();
         cook.setMarket(market);
         cook.setMarket(market2);
@@ -52,7 +52,7 @@ public class GHRestaurantPanel extends JPanel {
         market.startThread();
         market2.startThread();
         market3.startThread();
-        cook.startThread();
+        cook.startThread();*/
 
         setLayout(new GridLayout(1, 2, 20, 20));
         group.setLayout(new GridLayout(1, 3, 20, 20));
@@ -60,7 +60,7 @@ public class GHRestaurantPanel extends JPanel {
         group.add(customerPanel);
         group.add(waiterPanel);
 
-        initRestLabel();
+        //initRestLabel();
         add(restLabel);
         add(group);
     }
@@ -69,7 +69,7 @@ public class GHRestaurantPanel extends JPanel {
      * Sets up the restaurant label that includes the menu,
      * and host and cook information
      */
-    private void initRestLabel() {
+   /* private void initRestLabel() {
         JLabel label = new JLabel();
         //restLabel.setLayout(new BoxLayout((Container)restLabel, BoxLayout.Y_AXIS));
         restLabel.setLayout(new BorderLayout());
@@ -80,7 +80,7 @@ public class GHRestaurantPanel extends JPanel {
         restLabel.add(label, BorderLayout.CENTER);
         restLabel.add(new JLabel("               "), BorderLayout.EAST);
         restLabel.add(new JLabel("               "), BorderLayout.WEST);
-    }
+    }*/
 
     /**
      * When a customer or waiter is clicked, this function calls
@@ -90,7 +90,7 @@ public class GHRestaurantPanel extends JPanel {
      * @param type indicates whether the person is a customer or waiter
      * @param name name of person
      */
-    public void showInfo(String type, String name) {
+    /*public void showInfo(String type, String name) {
 
         if (type.equals("Customers")) {
 
@@ -109,7 +109,7 @@ public class GHRestaurantPanel extends JPanel {
                     gui.updateInfoPanel(temp);
             }
         }     
-    }
+    }*/
 
     /**
      * Adds a customer or waiter to the appropriate list
@@ -119,7 +119,7 @@ public class GHRestaurantPanel extends JPanel {
      */
     public void addPerson(String type, String name, boolean ishungry_break) {
 
-    	if (type.equals("Customers")) {
+    	/*if (type.equals("Customers")) {
     		GHCustomerAgent c = new GHCustomerAgent(name);	
     		GHCustomerGui g = new GHCustomerGui(c, gui);
     		gui.animationPanel.addGui(g);// dw
@@ -148,7 +148,7 @@ public class GHRestaurantPanel extends JPanel {
     		if(ishungry_break){
     			wg.GoOnBreak();
     		}
-    	}
+    	}*/
     }
 
 }
