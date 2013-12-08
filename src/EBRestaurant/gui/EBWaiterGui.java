@@ -153,6 +153,11 @@ public class EBWaiterGui implements Gui {
     	}
     }
     
+    public void setWaitingPosition(int x){
+    	 xWaitingPosition=xWaitingPosition+x;
+    	 xDestination=xWaitingPosition;
+    }
+    
     
 	public void setBreak() {
 		onBreak=true;

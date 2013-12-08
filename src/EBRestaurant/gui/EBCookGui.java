@@ -26,13 +26,15 @@ public class EBCookGui implements Gui {
     public String choice2="";
     public String choice3="";
     private int ChoiceY=210;
-    private int Choice1X=300;
-    private int Choice2X=330;
+    private int Choice1X=340;
+    private int Choice2X=350;
     private int Choice3X=360;
-    private int wait1Y=250;
-    private int wait2Y=280;
-    private int wait3Y=310;
-    private int waitX=302;
+    private int wait1Y=288;
+    private int wait2Y=296;
+    private int wait3Y=304;
+    private int wait1X=317;
+    private int wait2X=334;
+    private int wait3X=351;
     private String wait1="";
     private String wait2="";
     private String wait3="";
@@ -66,14 +68,13 @@ public class EBCookGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        //g.fillRect(xPos, yPos, xChange, xChange);
+        g.setColor(Color.WHITE);
         g.drawString(choice1, Choice1X, ChoiceY);
         g.drawString(choice2, Choice2X, ChoiceY);
         g.drawString(choice3, Choice3X, ChoiceY);
-        g.drawString(wait1, waitX, wait1Y);
-        g.drawString(wait2, waitX, wait2Y);
-        g.drawString(wait3, waitX, wait3Y);
+        g.drawString(wait1, wait1X, wait1Y);
+        g.drawString(wait2, wait2X, wait2Y);
+        g.drawString(wait3, wait3X, wait3Y);
         g.drawImage(cookImg, xPos, yPos, null);
     }
     

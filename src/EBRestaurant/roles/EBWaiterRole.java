@@ -404,13 +404,10 @@ public class EBWaiterRole extends Role implements Waiter {
 	
 	private void createCheck(MyCustomer mc){
 		mc.check=false;
-		Do("Cashier please create check");
 		((EBCashierRole) restaurant.cashier).msgHereIsCheck(this,mc.choice, mc.tableNumber);
 	}
 
 	//utilities
-
-
 	public void setGui(EBWaiterGui g) {
 		waiterGui = g;
 	}
@@ -448,6 +445,8 @@ public class EBWaiterRole extends Role implements Waiter {
 
 	public void setGui(Gui g) {
 		waiterGui = (EBWaiterGui) g;
+		if(getName().toLowerCase().contains("car"))
+			waiterGui.setWaitingPosition(50);
 	}
 }
 

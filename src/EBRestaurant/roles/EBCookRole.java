@@ -41,8 +41,8 @@ public class EBCookRole extends Role implements Cook {
 		List<String>inStock=new ArrayList<String>();
 	}
 	private class marketOrder{
-		public marketOrder(String choice, int amount,states waiting,MarketAgent m) {
-			order.put(choice,amount);
+		public marketOrder(HashMap<String,Integer>orders,states waiting,MarketAgent m) {
+			order=orders;
 			marketState=waiting;
 			market=m;
 		}
@@ -204,12 +204,19 @@ public class EBCookRole extends Role implements Cook {
 			if(markets.size()>0)
 			{
 				if (Inventory.get(key)<2&&!putOrder){
+					boolean ordered=false;
+					HashMap<String,Integer> marketorder=new HashMap<String,Integer>();
 					for(String in:markets.get(numMarket).inStock)
 					{
 						if(in==key){
-							orderIt(key,numMarket);
-							return true;
+							marketorder.put(key, 50);
+							ordered=true;
 						}
+					}
+					if(ordered){
+						putOrder=true;
+						orderIt(marketorder,numMarket);
+						return true;
 					}
 					numMarket++;
 					if (numMarket>=markets.size()){
@@ -230,12 +237,6 @@ public class EBCookRole extends Role implements Cook {
 		if (Inventory.get(O.choice)==0)
 		{
 			((EBWaiterRole) O.w).msgOutOfOrder(O.choice, O.tableNumber);
-			Do("Out of "+O.choice+" please re-order");
-			if(markets.size()>0)
-			{
-				//markets.get(numMarket).market.msgHereIsOrder(O.choice,this);
-				//putOrder=true;
-			}
 			Orders.remove(O);
 		}
 		else
@@ -253,7 +254,6 @@ public class EBCookRole extends Role implements Cook {
 		stateChanged();
 		cookgui.setCooking("",O.tableNumber);
 		cookgui.setReady(O.choice, O.tableNumber);
-		Do("Food done cooking");
 	}
 	
 	private void giveInvoice(marketOrder order){
@@ -265,13 +265,12 @@ public class EBCookRole extends Role implements Cook {
 		order.delivery.msgHereIsOrder(order.order);
 	}
 	
-	private void orderIt(String choice, int numMarket){
-		marketOrders.add(new marketOrder(choice,50,states.waiting,markets.get(numMarket).market));
+	private void orderIt(HashMap<String,Integer>orders, int numMarket){
+		marketOrders.add(new marketOrder(orders,states.waiting,markets.get(numMarket).market));
 		markets.get(numMarket).market.msgPlaceDeliveryOrder(this);
 	}
 	
 	private void doneCooking(Order O){
-		Do("Waiter, "+O.choice+" is ready for table "+O.tableNumber);
 		((EBWaiterRole) O.w).msgOrderIsReady(O.choice, O.tableNumber);
 		Orders.remove(O);
 	}
@@ -315,14 +314,15 @@ public class EBCookRole extends Role implements Cook {
 			if(order.delivery==Dm){
 				order.marketState=states.received;
 				order.amountOwed=amount;
+				break;
 			}
 		}
 		for(String key:choices.keySet()){
 			Inventory.put(key, choices.get(key));
 		}
+		putOrder=false;
 	}
 
-	@Override
 	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
 		for (market m:markets){
 			if(m.market==((city.roles.DeliveryManRole)deliveryMan).Market){
@@ -361,7 +361,6 @@ public class EBCookRole extends Role implements Cook {
 		cookgui = (EBCookGui) g;
 	}
 
-	@Override
 	public Gui getGui() {
 		return cookgui;
 	}

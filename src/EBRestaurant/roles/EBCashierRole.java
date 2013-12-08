@@ -4,7 +4,6 @@ import java.util.*;
 import java.lang.Object;
 import java.text.NumberFormat;
 
-import CMRestaurant.gui.CMCashierGui;
 import EBRestaurant.gui.EBCashierGui;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
@@ -15,7 +14,6 @@ import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
 import restaurant.test.mock.EventLog;
 /**
  * Restaurant Cook Agent
@@ -71,7 +69,8 @@ public class EBCashierRole extends Role implements Cashier {
 			S=created;
 		}
 	}
-	public enum payState{receivedBill,receivedInvoice,paying,lastTime,owes,paid};
+	public enum payState{receivedBill,paying,lastTime,owes,paid};
+	boolean receivedInvoice;
 	
 	HashMap<String,Integer>Inventory=new HashMap<String,Integer>();
 	HashMap<String,Integer> hm=new HashMap<String,Integer>();
@@ -127,21 +126,9 @@ public class EBCashierRole extends Role implements Cashier {
 	}
 	
 	public void msgHereIsInvoice(double amount,DeliveryMan DM){
-		boolean exists=false;
-		for(payment p:Payments){
-			if(p.delivery==DM){
-				exists=true;
-				if(p.pState==payState.receivedBill){
-					p.pState=payState.paying;
-					if(p.amount!=amount){
-						p.pState=payState.lastTime;
-					}
-				}
-			}
-		}
-		if(!exists){
-			Payments.add(new payment(amount,DM,payState.receivedBill,payNumber));	
-		}
+		receivedInvoice=true;
+		print("Got Invoice");
+		stateChanged();
 	}
 	
 
@@ -171,7 +158,8 @@ public class EBCashierRole extends Role implements Cashier {
 				return true;
 			}
 			for (payment p:Payments){
-				if(p.pState==payState.paying&&bank>0){
+				if(p.pState==payState.receivedBill&&receivedInvoice&&bank>0){
+					print("xxxx");
 					payMarket(p);
 					return true;
 				}
@@ -200,7 +188,7 @@ public class EBCashierRole extends Role implements Cashier {
 		}
 		return false;
 		}
-		catch(Exception e){
+		catch(ConcurrentModificationException e){
 			return false;
 		}
 		//we have tried all our rules and found
@@ -221,7 +209,6 @@ public class EBCashierRole extends Role implements Cashier {
 			p.pState=payState.paid;
 			p.delivery.msgHereIsPayment(p.amount, this);
 			bank=bank-p.amount;
-			Do("Payment "+ p.payNum+" sent");
 			Payments.remove(p);
 		}
 		/*else
@@ -277,8 +264,8 @@ public class EBCashierRole extends Role implements Cashier {
 		boolean exists=false;
 		for(payment p:Payments){
 			if(p.delivery==DMR){
-				exists=true;
-				if(p.pState==payState.receivedInvoice){
+				if(receivedInvoice){
+					exists=true;
 					p.pState=payState.paying;
 					if(p.amount!=bill){
 						p.pState=payState.lastTime;
@@ -287,8 +274,10 @@ public class EBCashierRole extends Role implements Cashier {
 			}
 		}
 		if(!exists){
-			Payments.add(new payment(bill,DMR,payState.receivedInvoice,payNumber));	
+			Payments.add(new payment(bill,DMR,payState.receivedBill,payNumber));	
 		}
+		print("Got Bill");
+		stateChanged();
 	}
 
 	public void msgReleaveFromDuty(PersonAgent p) {
