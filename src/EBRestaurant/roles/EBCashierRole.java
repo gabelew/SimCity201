@@ -31,7 +31,6 @@ public class EBCashierRole extends Role implements Cashier {
 	PersonAgent replacementPerson = null;
 	private String name;
 	private boolean exists;
-	public double money;
 	private EBMenu menu=new EBMenu();
 	private int payNumber;
 	enum CashState {none, goToWork, working, leaving, releaveFromDuty};
@@ -82,7 +81,6 @@ public class EBCashierRole extends Role implements Cashier {
 	public EventLog log=new EventLog();
 	public EBCashierRole() {
 		super();
-		money=50;
 		payNumber=0;
 	}
 	
@@ -97,7 +95,7 @@ public class EBCashierRole extends Role implements Cashier {
 		stateChanged();
 	}
 	
-	public void msgPaying(float amount, int tableNumber,boolean payInFull){
+	public void msgPaying(double amount, int tableNumber,boolean payInFull){
 		for (Check c: Checks){
 			if (c.tableNumber==tableNumber){
 				if(payInFull){
@@ -106,23 +104,23 @@ public class EBCashierRole extends Role implements Cashier {
 				else{
 					c.S=state.waiting;
 				}
-				money=money+amount;
+				bank=bank+amount;
 			}
 		}
 	}
 	
-	public void msgAddToTab(float amount,Customer cust){
+	public void msgAddToTab(double amount,Customer cust){
 			exists=false;
 			for(customer c:Customers){
 				if(c.cust==cust){
-					c.owed=c.owed+amount;
+					c.owed=c.owed+(float)amount;
 					Do("Tab: "+c.owed);
 					exists=true;
 				}
 			}
 			if (!exists)
 			{
-				Customers.add(new customer(cust,amount));
+				Customers.add(new customer(cust,(float)amount));
 				Do("Tab: "+amount);
 			}
 
@@ -169,24 +167,20 @@ public class EBCashierRole extends Role implements Cashier {
 				if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
 					DepositBusinessCash();
 				cashierGui.DoLeaveRestaurant();
-				/*try {
-					waitingResponse.acquire();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}*/
+				reactivatePerson();
 				return true;
 			}
 			for (payment p:Payments){
-				if(p.pState==payState.paying&&money>0){
+				if(p.pState==payState.paying&&bank>0){
 					payMarket(p);
 					return true;
 				}
-				if(p.pState==payState.lastTime&&money>0){
+				if(p.pState==payState.lastTime&&bank>0){
 					neverOrderFromMarketAgain(p);
 					payMarket(p);
 					return true;
 				}
-				if(p.pState==payState.owes&&money>0){
+				if(p.pState==payState.owes&&bank>0){
 					payMarket(p);
 					return true;
 				}
@@ -219,14 +213,14 @@ public class EBCashierRole extends Role implements Cashier {
 		restaurant.cook.msgNeverOrderFromMarketAgain(((DeliveryManRole)p.delivery).Market);
 	}
 	private void payMarket(payment p){
-		if (money<p.amount){
+		if (bank<p.amount){
 			p.pState=payState.owes;
 		}
 		else
 		{
 			p.pState=payState.paid;
 			p.delivery.msgHereIsPayment(p.amount, this);
-			money=money-p.amount;
+			bank=bank-p.amount;
 			Do("Payment "+ p.payNum+" sent");
 			Payments.remove(p);
 		}
@@ -263,6 +257,11 @@ public class EBCashierRole extends Role implements Cashier {
 			myPerson.businessFunds += cash;
 			myPerson.msgDepositBusinessCash();
 		}
+	}
+	
+	private void reactivatePerson(){
+		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(cashierGui);
 	}
 	
 	/*public void pauseIt(){

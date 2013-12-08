@@ -22,7 +22,7 @@ public class EBCustomerGui implements Gui{
 	private final int startX=-40;
 	private final int startY=-40;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
+	private enum Command {noCommand, GoToSeat,GoPay, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
 	public static final int xTable = 100;
@@ -36,8 +36,8 @@ public class EBCustomerGui implements Gui{
 		agent = c;
 		xPos = -40;
 		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = 40;
+		yDestination = 80;
 		yArea=60;
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
@@ -60,6 +60,8 @@ public class EBCustomerGui implements Gui{
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command==Command.GoToSeat) 
 				agent.msgAnimationFinishedGoToSeat();
+			else if(command==Command.GoPay)
+				agent.msgAnimationFinishedGoToCashier();
 			else if (command==Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				isHungry = false;
@@ -91,6 +93,12 @@ public class EBCustomerGui implements Gui{
 	public void DoGoToWaitingArea(int y){
 		xDestination = xArea;
 		yDestination = y;
+	}
+	
+	public void DoGoToCashier(){
+		xDestination = 80;
+		yDestination = 380;
+		command = Command.GoPay;
 	}
 
 	public void DoGoToSeat(int seatnumber) {//later you will map seatnumber to table coordinates.

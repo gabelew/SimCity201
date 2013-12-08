@@ -97,8 +97,8 @@ public class EBHostGui implements Gui {
     }
 
 	public void DoEnterRestaurant() {
-		xDestination=80;
-		yDestination=80;
+		xDestination=40;
+		yDestination=100;
 	}
 
 	@Override
