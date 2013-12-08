@@ -29,8 +29,8 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 
     private List<Table> tables = new ArrayList<Table>();
 
-//	public List<Semaphore> waitingSeatsWaiter = new ArrayList<Semaphore>();
-//	public List<Semaphore> waitingSeats = new ArrayList<Semaphore>();
+	public List<Semaphore> waitingSeatsWaiter = new ArrayList<Semaphore>();
+	public List<Semaphore> waitingSeats = new ArrayList<Semaphore>();
 	
 	public final int TABLE1X = 100;
 	public final int TABLE2X = 200;
@@ -38,6 +38,16 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 	public final int TABLEY = 100;
 	public final int CHAIR_OFFSET = 22;
 	public static final int ZERO = 0;
+	
+	static final int NWAITSEATS = 6;
+    static final int NWAITSEATS_COLUMNS = 3;
+    static final int NWAITSEATS_ROWS = 2;
+    static final int WAITINGSEATS_X_START = 90;
+    static final int WAITINGSEATS_Y_START = 10;
+    static final int WAITINGSEATS_X_GAP = 30;
+    static final int WAITINGSEATS_Y_GAP = 30;
+    
+    static final int NRESTSEATS = 16;
 	
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
@@ -71,12 +81,12 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 
         simCityGui.animationPanel.timer.addActionListener(this);
 		
-//    	for(int i = 0; i < NWAITSEATS; i++){
-//			waitingSeats.add(new Semaphore(1,true));
-//		}
-//    	for(int i = 0; i < NRESTSEATS; i++){
-//			waitingSeatsWaiter.add(new Semaphore(1,true));
-//		}	
+    	for(int i = 0; i < NWAITSEATS; i++){
+			waitingSeats.add(new Semaphore(1,true));
+		}
+    	for(int i = 0; i < NRESTSEATS; i++){
+			waitingSeatsWaiter.add(new Semaphore(1,true));
+		}	
 		
 	}
 
@@ -100,6 +110,11 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
         g2.setColor(getBackground());
         g2.fillRect(ZERO, ZERO, WINDOWX, WINDOWY );
 
+        for(int i = ZERO; i<NWAITSEATS/NWAITSEATS_ROWS; i++){
+        	for(int j = ZERO; j < NWAITSEATS/NWAITSEATS_COLUMNS; j++ )
+        	g.drawImage(chairImg, i*WAITINGSEATS_X_GAP+WAITINGSEATS_X_START, j*WAITINGSEATS_Y_GAP+WAITINGSEATS_Y_START, null);
+        }
+        
       //draw chairs
         g.drawImage(chairImg, TABLE1X+CHAIR_OFFSET, TABLEY, null);
         g.drawImage(chairImg, TABLE2X+CHAIR_OFFSET, TABLEY, null);
@@ -126,14 +141,6 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
         
         //draw Register Stand
     	g.drawImage(registerImg, 70, 200, null);
-
-    	synchronized(getGuis()){
-	    	for(Gui gui : getGuis()) {
-	        	if (gui.isPresent()) {
-	        		gui.updatePosition();
-		        }
-	        }
-    	}
     	
     	synchronized(getGuis()){
 	    	for(Gui gui : getGuis()) {
