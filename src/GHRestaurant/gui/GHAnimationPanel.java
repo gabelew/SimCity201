@@ -55,7 +55,15 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
     }
 
 	public void actionPerformed(ActionEvent e) {
-		repaint();  //Will have paintComponent called
+    	synchronized(getGuis()){
+			for(Gui gui : getGuis()) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+    	}
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
+			repaint();  //Will have paintComponent called
 	}
 
     public void paintComponent(Graphics g) {
@@ -90,13 +98,6 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         //g2.setColor(Color.DARK_GRAY);
         g2.drawImage(grillRightImg,450,150,null);
         
-        
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
-
         for(Gui gui : guis) {
             if (gui.isPresent()) {
                 gui.draw(g2);

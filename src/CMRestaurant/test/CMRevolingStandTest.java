@@ -127,7 +127,7 @@ public class CMRevolingStandTest  extends TestCase{
 			}
 			i++;
 			try {
-			    Thread.sleep(5010);
+			    Thread.sleep(7010);
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			}

@@ -10,7 +10,7 @@ import city.gui.trace.AlertTag;
 
 public class CMSharedWaiterRole extends CMWaiterRole{
 
-	static final int CHECK_STAND_TIME = 10000;
+	static final int CHECK_STAND_TIME = 7000;
 	
 	public CMSharedWaiterRole(PersonAgent p, Restaurant r) {
 		super(p, r);
