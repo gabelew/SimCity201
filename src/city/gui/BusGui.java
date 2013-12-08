@@ -54,14 +54,10 @@ public class BusGui implements Gui{
 		if(type == 'B'){
 			xPos = B_XStart;
 			yPos = B_YPOS_BEGIN;
-			xDestination = B_XStart;
-			yDestination = B_YPOS_BEGIN;
 		}
 		else if(type == 'F'){
 			xPos = F_XStart;
 			yPos = F_YPOS_BEGIN;
-			xDestination = F_XStart;
-			yDestination = F_YPOS_BEGIN;
 		}
         
 		this.gui = gui;
