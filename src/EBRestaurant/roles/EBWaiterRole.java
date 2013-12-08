@@ -148,11 +148,13 @@ public class EBWaiterRole extends Role implements Waiter {
 	}
 	
 	public void msgAtStart(){
+		atTable.release();
 		atStart=true;
 		stateChanged();
 	}
 	
 	public void msgAtCook(){
+		atTable.release();
 		atCook=true;
 		stateChanged();
 	}
@@ -241,7 +243,7 @@ public class EBWaiterRole extends Role implements Waiter {
 			}
 			for (MyCustomer cust : Customers)
 			{
-				if (cust.S==customerState.ordered&&atCook)
+				if (cust.S==customerState.ordered)
 				{
 					giveOrderToCook(cust);
 					return true;
@@ -300,14 +302,18 @@ public class EBWaiterRole extends Role implements Waiter {
 	
 	private void goPickUpFood(){
 		waiterGui.DoGoToCook();
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void leaveWork() {
-		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+		waiterState = state.none;
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
 		myPerson.msgDoneEatingAtRestaurant();
-		restaurant.insideAnimationPanel.removeGui(waiterGui);
 	}
 
 	private void tellHost() {
@@ -343,6 +349,11 @@ public class EBWaiterRole extends Role implements Waiter {
 		((EBCustomerRole) mc.C).msgWhatDoYouWant();
 		mc.S=customerState.asked;
 		waiterGui.DoGoToCook();
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void goReTakeOrder(MyCustomer mc,String outOf){
@@ -354,7 +365,12 @@ public class EBWaiterRole extends Role implements Waiter {
 		}
 		((EBCustomerRole) mc.C).msgWhatDoYouWantAgain(outOf);
 		mc.S=customerState.asked;
-		waiterGui.DoLeaveCustomer();
+		waiterGui.DoGoToCook();
+		try {
+			atTable.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void giveOrderToCook(MyCustomer mc){
