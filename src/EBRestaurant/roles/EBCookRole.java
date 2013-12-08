@@ -84,18 +84,18 @@ public class EBCookRole extends Role implements Cook {
 	}
 	public EBCookRole(int amount) {
 		super();
-		hm.put("Steak",20*1000);
-		hm.put("Salad", 7*1000);
-		hm.put("Pizza", 12*1000);
-		hm.put("Chicken", 15*1000);
-		Inventory.put("Steak",50);
-		Inventory.put("Salad", 50);
-		Inventory.put("Cookie", 50);
-		Inventory.put("Chicken", amount);
-		stock.add("Steak");
-		stock.add("Chicken");
-		stock.add("Cookie");
-		stock.add("Salad");
+		hm.put("steak",20*1000);
+		hm.put("salad", 7*1000);
+		hm.put("cookie", 12*1000);
+		hm.put("chicken", 15*1000);
+		Inventory.put("steak",50);
+		Inventory.put("salad", 50);
+		Inventory.put("cookie", 50);
+		Inventory.put("chicken", amount);
+		stock.add("steak");
+		stock.add("chicken");
+		stock.add("cookie");
+		stock.add("salad");
 	}
 	
 	public String getName() {
@@ -162,7 +162,7 @@ public class EBCookRole extends Role implements Cook {
 		
 		if(cookState == CState.goToWork){
 			cookState = CState.working;
-			cookGui.DoEnterRestaurant();
+			cookgui.DoEnterRestaurant();
 			return true;
 		}
 		
@@ -358,8 +358,7 @@ public class EBCookRole extends Role implements Cook {
 
 	@Override
 	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return cookgui;
 	}
 
 }

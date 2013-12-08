@@ -86,7 +86,8 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
         g.drawImage(grillRightImg, 340, 190, null);
         g.drawImage(fidgeImg, 390, 210, null);
         g.drawImage(kitchenCounterImg,280,200,null);
-        g.drawImage(hostStandImg,180,100,null);
+        g.drawImage(hostStandImg,40,100,null);
+        g.drawImage(registerImg,40,400,null);
         g.drawImage(kitchenCounterImg,280,200,null);
         for(int i = 0; i<4; i++){
   			g.drawImage(platingTableImg, 300+17*i, 280+8*i, null);
