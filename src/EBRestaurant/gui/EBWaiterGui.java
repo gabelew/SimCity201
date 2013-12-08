@@ -71,15 +71,15 @@ public class EBWaiterGui implements Gui {
         		& (xDestination == xTable + xChange) & ((yDestination == yTable1 + yChange)||(yDestination == yTable2 + yChange)||(yDestination == yTable3 + yChange))) {
            agent.msgAtTable();
         }
-        if (xPos==xWaitingPosition && yPos==yWaitingPosition)
+        else if (xPos==xWaitingPosition && yPos==yWaitingPosition)
         {
         	agent.msgAtStart();
         }
-        if (xPos==290 && yPos==220)
+        else if (xPos==290 && yPos==220)
         {
         	agent.msgAtCook();
         }
-        if (xPos==-40 && yPos==-40){
+        else if (xPos==-40 && yPos==-40){
         	agent.msgLeftTheRestaurant();
         }
     }

@@ -1,11 +1,14 @@
 package EBRestaurant.roles;
 
 import CMRestaurant.gui.CMCustomerGui;
+import CMRestaurant.roles.CMWaiterRole;
+import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBHostGui;
 
 import java.util.*;
 
 import city.PersonAgent;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -103,7 +106,6 @@ public class EBHostRole extends Role implements Host {
 	public void msgTableEmpty(int tableNumber) {
 		for (Table table : tables) {
 			if (table.tableNumber == tableNumber) {
-				print(table+" now empty");
 				table.setUnoccupied();
 				stateChanged();
 			}
@@ -175,7 +177,6 @@ public class EBHostRole extends Role implements Host {
 					if (!waitingCustomers.isEmpty())	 {
 						if (!waiters.isEmpty())
 						{
-							print("testing123");
 							seatCustomer(waitingCustomers.get(0), table,pickWaiter());//the action
 							return true;//return true to the abstract agent to reinvoke the scheduler.
 						}
@@ -239,8 +240,6 @@ public class EBHostRole extends Role implements Host {
 	}
 	
 	private void seatCustomer(Customers c, Table table,Waiter waiter) {
-
-				print("Please seat customer");
 				((EBWaiterRole) waiter).msgSeatCustomer(c.cust, table.tableNumber);
 				table.setOccupant(c.cust);
 				waitingCustomers.remove(c);
@@ -256,6 +255,7 @@ public class EBHostRole extends Role implements Host {
 
 	public void msgReadyToWork(Waiter w){
 		waiters.add(new MyWaiters(w,false));
+		((EBAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((EBWaiterRole) w).getName());
 		stateChanged();
 	}
 	

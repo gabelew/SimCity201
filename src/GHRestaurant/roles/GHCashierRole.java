@@ -1,5 +1,6 @@
 package GHRestaurant.roles;
 
+import GHRestaurant.gui.GHCashierGui;
 import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
@@ -23,6 +24,7 @@ public class GHCashierRole extends Role implements Cashier{
 	//private String name;
 	private double RestaurantMoney; 
 	private Restaurant restaurant;
+	public GHCashierGui cashiergui = null;
 
 
 	public GHCashierRole() {
@@ -243,15 +245,13 @@ public class GHCashierRole extends Role implements Cashier{
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void setGui(Gui g) {
+		cashiergui = (GHCashierGui) g;
 	}
 
 	@Override
 	public Gui getGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return cashiergui;
 	}
 
 	public void setRestaurant(Restaurant r) {

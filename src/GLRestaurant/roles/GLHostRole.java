@@ -64,9 +64,6 @@ public class GLHostRole extends Role implements Host{
 
 	public GLHostGui hostGui = null;
 
-	// agent correspondents
-
-
 	public GLHostRole() {
 		super();
 		// make some tables
@@ -270,7 +267,7 @@ public class GLHostRole extends Role implements Host{
 	 * Find an empty table and tell waiter to seat a waiting customer
 	 */
 	private void AssignCustomerToTable(MyCustomer mc) {
-		if(firstRestock) {
+		//if(firstRestock) {
 			MyWaiter mw = findWaiter();
 			if (mw != null) {
 				Table t = findOpenTable();
@@ -283,7 +280,7 @@ public class GLHostRole extends Role implements Host{
 					mc.cs = customerState.seated;
 				}
 			}
-		}
+		//}
 	}
 	
 	private void ReviewBreakRequest(MyWaiter mw) {

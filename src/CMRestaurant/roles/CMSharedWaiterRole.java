@@ -10,7 +10,7 @@ import city.gui.trace.AlertTag;
 
 public class CMSharedWaiterRole extends CMWaiterRole{
 
-	static final int CHECK_STAND_TIME = 10000;
+	static final int CHECK_STAND_TIME = 7000;
 	
 	public CMSharedWaiterRole(PersonAgent p, Restaurant r) {
 		super(p, r);
@@ -31,12 +31,13 @@ public class CMSharedWaiterRole extends CMWaiterRole{
 				waiterGui.placedOrder();
 			}
 		} else {
+			haveNotRecentlyCheckedStand = false;
 			if(waiterGui!=null){
 				waiterGui.placeOrderInPocket();
 			}
 			timer.schedule(new TimerTask() {
 				public void run() {
-					haveNotRecentlyCheckedStand = false;
+					haveNotRecentlyCheckedStand = true;
 					stateChanged();
 				}
 			}, CHECK_STAND_TIME);

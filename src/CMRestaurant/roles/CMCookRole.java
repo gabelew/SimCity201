@@ -26,7 +26,7 @@ public class CMCookRole extends Role implements Cook {
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
 	private RevolvingStandMonitor revolvingStand;
-	private boolean checkStand;
+	public boolean checkStand;
 	public CMCookGui cookGui = null;
 
 	static final int CHECK_STAND_TIME = 4000;
@@ -472,9 +472,9 @@ public class CMCookRole extends Role implements Cook {
 			return true;
 		}
 		
-//		if(checkStand) {
-//			checkRevolvingStand();
-//		}
+		if(checkStand) {
+			checkRevolvingStand();
+		}
 		
 		goToRestPost();
 		return false;
@@ -491,14 +491,15 @@ public class CMCookRole extends Role implements Cook {
 			if(order != null) {
 				orders.add(order);
 			}
+		}else{
+			checkStand = false;
+			timer.schedule(new TimerTask() {
+				public void run() {
+					checkStand = true;
+					stateChanged();
+				}
+			}, CHECK_STAND_TIME);
 		}
-		checkStand = false;
-		timer.schedule(new TimerTask() {
-			public void run() {
-				checkStand = true;
-				stateChanged();
-			}
-		}, CHECK_STAND_TIME);
 	}
 	
 	private void plateIt(RoleOrder o) {
@@ -636,7 +637,9 @@ public class CMCookRole extends Role implements Cook {
 	}
 	
 	private void goToRestPost() {
-		cookGui.doGoToRestPost();
+		if(cookGui!=null){
+			cookGui.doGoToRestPost();
+		}
 	}
 
 	private MyMarket findMarket(MarketAgent m) {

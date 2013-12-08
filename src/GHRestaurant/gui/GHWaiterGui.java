@@ -4,20 +4,29 @@ import restaurant.interfaces.*;
 
 //import restaurant.Waiter;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 public class GHWaiterGui implements Gui {
 
     private GHWaiterRole role = null;
     private boolean isPresent = false;
 
-    private int xPos = 20, yPos = 20;//default waiter position
+    private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = 20, yDestination = 20;//default start position
     private int xCook = 330, yCook = 230;
     private int tableNumber;
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
+	private static BufferedImage waiterImg = null;
+
 
     //SimCityGui gui;
     
@@ -25,11 +34,16 @@ public class GHWaiterGui implements Gui {
     public static final int yTable = 250;
 
     public GHWaiterGui(GHWaiterRole w) {
-        this.role = role;
+        this.role = w;
         //this.gui = gui;
+		try {
+		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
+    	
         if (xPos < xDestination)
             xPos++;
         else if (xPos > xDestination)
@@ -51,8 +65,8 @@ public class GHWaiterGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLUE);
-        g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(waiterImg, xPos, yPos, null);
+    	
     }
 
     public boolean isPresent() {
@@ -63,10 +77,10 @@ public class GHWaiterGui implements Gui {
     	isPresent = p;
     }
     
-    public void setWork(){
+    /*public void setWork(){
     	((GHWaiterRole) role).gotWork();
     	setPresent(true);
-    }
+    }*/
     
     public void GoOnBreak(){
     	((GHWaiterRole) role).msgTryToGoOnBreak();

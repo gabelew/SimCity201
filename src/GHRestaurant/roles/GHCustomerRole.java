@@ -30,6 +30,7 @@ public class GHCustomerRole extends Role implements Customer{
 	private Random generator = new Random();
 	private Semaphore atDestination = new Semaphore(0,true);
 	private Check check;
+	private Restaurant restaurant = null;
 	
 	// agent correspondents
 	private Host host;
@@ -54,6 +55,7 @@ public class GHCustomerRole extends Role implements Customer{
 	public GHCustomerRole(Person p, Restaurant r){
 		super();
 		//this.name = name;
+		this.restaurant = r;
 		
 		money = 50;
 	}
@@ -241,7 +243,7 @@ public class GHCustomerRole extends Role implements Customer{
 
 	private void goToRestaurant() {
 	    print("Going to restaurant");
-		((GHHostRole) host).msgIWantFood(this);//send our instance, so he can respond to us
+		((GHHostRole) restaurant.host).msgIWantFood(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown(int tablenumber) {
@@ -336,9 +338,8 @@ public class GHCustomerRole extends Role implements Customer{
 	}
 
 	@Override
-	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+	public void setGui(Gui g) {
+		customerGui = (GHCustomerGui) g;
 	}
 }
 

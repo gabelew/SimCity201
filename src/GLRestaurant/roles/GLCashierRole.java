@@ -2,6 +2,7 @@ package GLRestaurant.roles;
 
 import agent.Agent;
 import GLRestaurant.gui.GLCashierGui;
+import GLRestaurant.roles.GLCookRole.State;
 import CMRestaurant.roles.CMCashierRole.Bill;
 import CMRestaurant.roles.CMCashierRole.BillState;
 import restaurant.Restaurant;
@@ -13,6 +14,7 @@ import restaurant.test.mock.LoggedEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
@@ -34,20 +36,10 @@ public class GLCashierRole extends Role implements Cashier {
 	private final double CHICKENCOST = 5.00;
 	private final double SALADCOST = 1.00;
 	private final double PIZZACOST = 3.00;
-	
-//	public class MarketBill {
-//		public Market m;
-//		String choice;
-//		public int amount;
-//		double cost = 0.0;
-//		public BillState bs;
-//		MarketBill(Market m, String choice, int amount, BillState bs) {
-//			this.m = m;
-//			this.choice = choice;
-//			this.amount = amount;
-//			this.bs = bs;
-//		}
-//	}
+	enum State {none, goToWork, working, leaving, relieveFromDuty};
+	State state = State.none;
+	PersonAgent replacementPerson = null;
+	private Semaphore waitingResponse = new Semaphore(0,true);
 	
 	public class Bill{
 		public DeliveryMan deliveryMan;
@@ -101,7 +93,19 @@ public class GLCashierRole extends Role implements Cashier {
 //		bills.add(new MarketBill(mkt, choice, amount, BillState.pending));
 //		stateChanged();
 //	}
-	
+	public void goesToWork() {
+		state = State.goToWork;
+		stateChanged();
+	}
+	public void msgReleaveFromDuty(PersonAgent p) {
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
+	}
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.relieveFromDuty;
+		waitingResponse.release();
+	}
 	/**
 	 * Invoice from Cook to confirm price
 	 * @param price
@@ -138,6 +142,28 @@ public class GLCashierRole extends Role implements Cashier {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(state == State.relieveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
+		if(state == State.goToWork){
+			state = State.working;
+			cashierGui.DoEnterRestaurant();
+			return true;
+		}
+		if(state == State.leaving){
+			state = State.none;
+			cashierGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
 		
 		synchronized(checks) {
 			for (Check c : checks) {
@@ -268,18 +294,6 @@ public class GLCashierRole extends Role implements Cashier {
 	
 	public GLCashierGui getGui() {
 		return cashierGui;
-	}
-
-	@Override
-	public void msgReleaveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

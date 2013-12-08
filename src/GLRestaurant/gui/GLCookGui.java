@@ -1,13 +1,23 @@
 package GLRestaurant.gui;
+import GLRestaurant.gui.GLHostGui.Command;
 import GLRestaurant.roles.GLCookRole;
 import city.gui.Gui;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 public class GLCookGui implements Gui {
-	
+    private BufferedImage cookImg = null;
+	private final int START_POSITION = -20;
+	private final int xWorkingPosition = 525;
+	private final int yWorkingPosition = 160;
 	private final int NGRILLS = 3;
 	private final int NPLATES = 3;
 	private static final int GRILLX = 490;
@@ -19,6 +29,8 @@ public class GLCookGui implements Gui {
 	private static final int PLATETWOY = 190;
 	private static final int PLATETHREEY = 220;
 	private boolean isPresent = false;
+	enum Command {none, enterRestaurant, leaveRestaurant};
+	Command command = Command.none;
 	
 	private class Grill {
 		int grillNum;
@@ -41,7 +53,7 @@ public class GLCookGui implements Gui {
 		}
 	}
 	
-    private GLCookRole agent = null;
+    private GLCookRole role = null;
     private List<Grill> grills;
     private List<Plate> plates;
     private List<String> orders = new ArrayList<String>();
@@ -49,7 +61,11 @@ public class GLCookGui implements Gui {
     private int xDestination = 530, yDestination = 190;//default start position
 
     public GLCookGui(GLCookRole agent) {
-        this.agent = agent;
+    	try {
+		    cookImg = ImageIO.read(new File("imgs/chef_v1.png"));
+		} catch (IOException e) {
+		}
+        this.role = agent;
         grills = new ArrayList<Grill>(NGRILLS);
         for(int i = 1; i <= NGRILLS; i++) {
         	grills.add(new Grill(i));
@@ -70,19 +86,20 @@ public class GLCookGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
+        
+        if(xPos == xDestination && yPos == yDestination){
+        	if(command == Command.leaveRestaurant){
+        		role.msgAnimationHasLeftRestaurant();
+        		command = Command.none;
+        	}else if(command == Command.enterRestaurant){
+        		command = Command.none;
+        	}
+        		
+        }
     }
 
     public void draw(Graphics2D g) {
-//        g.setColor(Color.RED);
-//        g.fillRect(xPos, yPos, PERSONWIDTH, PERSONHEIGHT);
-//        g.setColor(Color.BLUE);
-//        g.fillRect(GRILLX, GRILLONEY, GRILLWIDTH, GRILLHEIGHT);  
-//        g.fillRect(GRILLX, GRILLTWOY, GRILLWIDTH, GRILLHEIGHT);
-//        g.fillRect(GRILLX, GRILLTHREEY, GRILLWIDTH, GRILLHEIGHT); 
-//        g.setColor(Color.WHITE);
-//        g.fillRect(PLATEX, PLATEONEY, PLATEWIDTH, PLATEHEIGHT);
-//        g.fillRect(PLATEX, PLATETWOY, PLATEWIDTH, PLATEHEIGHT);
-//        g.fillRect(PLATEX, PLATETHREEY, PLATEWIDTH, PLATEHEIGHT);
+    	g.drawImage(cookImg, xPos, yPos, null);
         g.setColor(Color.black);
         if(grills.get(0).occupied) {
         	g.drawString(grills.get(0).item, GRILLX, GRILLONEY);
@@ -135,6 +152,17 @@ public class GLCookGui implements Gui {
     			break;
     		}
     	}
+    }
+    
+    public void DoLeaveRestaurant() {
+        xDestination = START_POSITION;
+        yDestination = START_POSITION;
+        command = Command.leaveRestaurant;
+    }
+    public void DoEnterRestaurant(){
+        xDestination = xWorkingPosition;
+        yDestination = yWorkingPosition; 
+        command = Command.enterRestaurant;   	
     }
     
     public void plate(String item, int orderNum) {

@@ -5,6 +5,11 @@ import restaurant.interfaces.*;
 import GHRestaurant.*;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import city.gui.SimCityGui;
@@ -18,22 +23,26 @@ public class GHCustomerGui implements Gui{
 	//private HostAgent host;
 	//SimCityGui gui;
 
-	private int xPos, yPos;
-	private int Cashierx = -50, Cashiery = -50;
+	private int xPos = -20, yPos = -20;
+	private int Cashierx = 50, Cashiery = 50;
 	private int xDestination, yDestination;
 	private enum Command {noCommand, GoToSeat, GoToCashier, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
 	public static final int xTable = 200;
 	public static final int yTable = 250;
+	
+	private static BufferedImage customerImg = null;
+
 
 	public GHCustomerGui(GHCustomerRole role){ //HostAgent m) {
 		this.role = role;
-		xPos = -40;
-		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
 		//this.gui = gui;
+		try {
+			StringBuilder path = new StringBuilder("imgs/");
+		    customerImg = ImageIO.read(new File(path.toString() + "customer_v1.png"));
+		} catch (IOException e) {
+		}
 	}
 
 	public void updatePosition() {
@@ -62,8 +71,7 @@ public class GHCustomerGui implements Gui{
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(customerImg, xPos, yPos, null);
 	}
 
 	public boolean isPresent() {

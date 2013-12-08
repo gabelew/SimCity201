@@ -459,8 +459,7 @@ public class CMHostRole extends Role implements Host {
 
 	@Override
 	public void setGui(Gui g) {
-		
-		
+		hostGui = (CMHostGui) g;
 	}
 
 

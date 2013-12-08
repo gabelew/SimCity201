@@ -1,27 +1,36 @@
 package GHRestaurant.gui;
 import GHRestaurant.roles.*;
-
-
 import restaurant.interfaces.*;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 
 public class GHHostGui implements Gui {
 
-    private Host agent = null;
+    private GHHostRole role = null;
     private boolean isPresent = false;
 
     private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
+    private int xDestination = 100, yDestination = 100;//default start position
     private int tableNumber;
 
     public static final int xTable = 200;
     public static final int yTable = 250;
+	private BufferedImage hostImg = null;
 
-    public GHHostGui(Host agent) {
-        this.agent = agent;
+
+    public GHHostGui(GHHostRole role) {
+        this.role = role;
+        try {
+		    hostImg = ImageIO.read(new File("imgs/host_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
@@ -37,13 +46,12 @@ public class GHHostGui implements Gui {
 
         if (xPos == xDestination && yPos == yDestination
         		&& (xDestination == xTable + 20) & (yDestination == yTable + (80-(tableNumber*100)))) {
-           ((GHHostRole) agent).msgAtTable();
+           ((GHHostRole) role).msgAtTable();
         }
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
-        g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(hostImg, xPos, yPos, null);
     }
 
     public boolean isPresent() {

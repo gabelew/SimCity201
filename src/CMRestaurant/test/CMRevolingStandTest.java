@@ -117,6 +117,21 @@ public class CMRevolingStandTest  extends TestCase{
 		
 		// check postconditions for step 7 and preconditions for step 8
 		assertTrue("Revolving stand should have 4 orders in it. It doesn't.", 4 == revolvingStand.getCount());
+
+
+		assertFalse("Waiter scheduler should return false.", waiter.pickAndExecuteAnAction());
+		int i =0;
+		while(!waiter.haveNotRecentlyCheckedStand){
+			if(i==5){
+				assertTrue("haveNotRecentlyCheckedStand is never is set back to true" , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(7010);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
 		
 		/**
 		 * Step 8: Call the waiter's schedule again for it to reattempt putting order in stand.
@@ -139,6 +154,7 @@ public class CMRevolingStandTest  extends TestCase{
 		
 		// check preconditions
 		assertTrue("Revolving stand should have no orders in it. It does.", 0 == revolvingStand.getCount());
+		assertTrue("Cook should check inventory", cook.pickAndExecuteAnAction());
 		
 		/**
 		 * Step 1: Cook tries to take an order from the revolving stand but moves on because there is nothing to take
@@ -147,7 +163,20 @@ public class CMRevolingStandTest  extends TestCase{
 		
 		// check postconditions of step 1 and preconditions of step 2
 		assertTrue("Revolving stand should have no orders in it. It does.", 0 == revolvingStand.getCount());
-		assertTrue("Cook goes on to do other things.", cook.pickAndExecuteAnAction());
+		assertFalse("Cook should not recheck stand.", cook.pickAndExecuteAnAction());
+		
+		int i =0;
+		while(!cook.checkStand){
+			if(i==5){
+				assertTrue("checkStand is never is set back to true" , false);
+			}
+			i++;
+			try {
+			    Thread.sleep(4010);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		}
 		
 		/**
 		 * Step 2: Waiter adds an order

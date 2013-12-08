@@ -27,7 +27,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	Timer timer = new Timer();
 	private final int THIRTY_SECONDS = 30000;
 	protected RevolvingStandMonitor revolvingStand;
-	protected boolean haveNotRecentlyCheckedStand = false;
+	public boolean haveNotRecentlyCheckedStand = false;
 	public boolean testingRevolvingMonitor = false;
 	
 	public class MyCustomer{

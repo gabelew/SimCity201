@@ -3,10 +3,12 @@ package GLRestaurant.roles;
 import agent.Agent;
 import CMRestaurant.roles.CMCookRole.marketOrderState;
 import GLRestaurant.gui.GLCookGui;
+import GLRestaurant.roles.GLHostRole.State;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
@@ -31,6 +33,9 @@ public class GLCookRole extends Role implements Cook{
 	private int orderNumber = 1;
 	boolean firstRestock = false;
 	int restockCount = 0;
+	PersonAgent replacementPerson = null;
+	private Semaphore waitingResponse = new Semaphore(0,true);
+
 	
 	public Restaurant restaurant;
 	Timer timer = new Timer();
@@ -86,11 +91,13 @@ public class GLCookRole extends Role implements Cook{
 	
 	public enum orderState {outOfFood, pending, preparing, cooked, finished};
 	public enum restockState {none, outOfStock, pending, finished};
+	enum State {none, goToWork, working, leaving, relieveFromDuty};
+	State state = State.none;
+	
 	List<WaiterOrder> orders = Collections.synchronizedList(new ArrayList<WaiterOrder>());
 	
 	// agent correspondents
 	private List<MyMarket> markets = new CopyOnWriteArrayList<MyMarket>(); 
-	private GLHostRole host;
 	
 	Map<String, Food> foods = new ConcurrentHashMap<String, Food>();
 	
@@ -107,6 +114,20 @@ public class GLCookRole extends Role implements Cook{
 
 	
 	// Messages
+	
+	public void goesToWork() {
+		state = State.goToWork;
+		stateChanged();
+	}
+	public void msgRelieveFromDuty(PersonAgent p) {
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
+	}
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.relieveFromDuty;
+		waitingResponse.release();
+	}
 	
 	/**
 	 * Hack to empty cook inventory of all foods to zero.
@@ -153,7 +174,7 @@ public class GLCookRole extends Role implements Cook{
 		if(!firstRestock) {
 			restockCount++;
 			if(4 == restockCount) {
-				host.msgCookHasRestocked();
+				((GLHostRole)restaurant.host).msgCookHasRestocked();
 				firstRestock = true;
 			}
 		}
@@ -185,6 +206,28 @@ public class GLCookRole extends Role implements Cook{
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		if(state == State.relieveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
+		if(state == State.goToWork){
+			state = State.working;
+			cookGui.DoEnterRestaurant();
+			return true;
+		}
+		if(state == State.leaving){
+			state = State.none;
+			cookGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
 		
 		synchronized(orders) {
 			for (WaiterOrder o : orders) {
@@ -319,10 +362,6 @@ public class GLCookRole extends Role implements Cook{
 	public GLCookGui getGui() {
 		return cookGui;
 	}
-	
-	public void setHost(GLHostRole h) {
-		this.host = h;
-	}
 
 	@Override
 	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
@@ -345,18 +384,6 @@ public class GLCookRole extends Role implements Cook{
 
 	@Override
 	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgRelieveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void goesToWork() {
 		// TODO Auto-generated method stub
 		
 	}
