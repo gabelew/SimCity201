@@ -8,6 +8,7 @@ import restaurant.interfaces.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import city.gui.Gui;
 import city.interfaces.Person;
 import city.roles.Role;
@@ -33,9 +34,14 @@ public class GHWaiterRole extends Role implements Waiter{
 	private Cashier cashier;
 	private Cook cook;
 	enum CustomerState {Waiting, AskedToOrder, Ordered, Reorder, Ready, Done, Idle}
-
-	public GHWaiterRole(Person p, Restaurant r) {
-		super();
+	enum WaiterState{None,GoingToWork}
+	WaiterState wState = WaiterState.None;
+	private Restaurant restaurant;
+	
+	
+	public GHWaiterRole(PersonAgent p, Restaurant r) {
+		super(p);
+		restaurant = r;
 
 		//this.name = name;
 	}
@@ -61,8 +67,9 @@ public class GHWaiterRole extends Role implements Waiter{
 	}
 	// Messages
 	
-	public void gotWork() {//from animation
+	public void goesToWork() {//from animation
 		print("Going to work");
+		wState = WaiterState.GoingToWork;
 		stateChanged();
 	}
 	
@@ -174,6 +181,12 @@ public class GHWaiterRole extends Role implements Waiter{
 		    return true;
 		 }
 		
+		if(wState == WaiterState.GoingToWork){
+			wState = WaiterState.None;
+			MsgHost();
+			return true;
+		}
+		
 		for (MyCustomer customer : waitingCustomers) {
 		  if(customer.getState() == CustomerState.Waiting){
 			  SeatCustomer(customer);
@@ -229,7 +242,14 @@ public class GHWaiterRole extends Role implements Waiter{
 		//and wait.
 	}
 
+
 	// Actions
+	
+	private void MsgHost() {
+		((GHHostRole) restaurant.host).msgSetWaiter(this);
+	}
+	
+	
 	private void SeatCustomer(MyCustomer customer) {
 		//customer.cs = CustomerState.Seated;
 		((GHCustomerRole) customer.customer).msgFollowMeToTable(customer.tablenumber,this);
@@ -464,11 +484,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		return null;
 	}
 
-	@Override
-	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void msgAskForBreak() {
