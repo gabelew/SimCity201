@@ -8,6 +8,7 @@ import CMRestaurant.gui.CMCashierGui;
 import EBRestaurant.gui.EBCashierGui;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.DeliveryManRole;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -302,13 +303,21 @@ public class EBCashierRole extends Role implements Cashier {
 		stateChanged();
 	}
 
+
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
+	}
+
 	public void setGui(EBCashierGui g) {
 		cashierGui = g;
 	}
 
-	public void setRestaurant(Restaurant r) {
-		restaurant = r;
-	}	
+	public EBCashierGui getGui() {
+		return cashierGui;
+	}
 
+	public void setGui(Gui g) {
+		cashierGui = (EBCashierGui) g;
+	}
 }
 

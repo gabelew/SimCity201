@@ -1,10 +1,12 @@
 package EBRestaurant.roles;
 
+import CMRestaurant.gui.CMCustomerGui;
 import EBRestaurant.gui.EBHostGui;
 
 import java.util.*;
 
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
@@ -302,6 +304,11 @@ public class EBHostRole extends Role implements Host {
 
 	public void setRestaurant(Restaurant r) {
 		restaurant=r;
+	}
+
+	@Override
+	public void setGui(Gui g) {
+		hostGui = (EBHostGui) g;
 	}
 	
 	/*public void pauseIt(){

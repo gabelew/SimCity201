@@ -55,7 +55,6 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
 		}
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
-        
         bufferSize = this.getSize();
         simCityGui.animationPanel.timer.addActionListener(this);
     	Timer timer = new Timer(time, this );
@@ -82,12 +81,18 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
         //Here is the table
         g2.setColor(Color.ORANGE);
         g.drawImage(tableImg, RectX, Rect1Y, null);
-        //g2.fillRect(RectX, Rect1Y, RectWH, RectWH);
-        g2.fillRect(RectX, Rect2Y, RectWH, RectWH);
-        g2.fillRect(RectX, Rect3Y, RectWH, RectWH);
-        
-        g2.fillRect(300, 230, 20, 100);
-        g2.fillRect(300, 200, 80, 20);
+        g.drawImage(tableImg, RectX, Rect2Y, null);
+        g.drawImage(tableImg, RectX, Rect3Y, null);
+        g.drawImage(grillRightImg, 340, 190, null);
+        g.drawImage(fidgeImg, 390, 210, null);
+        g.drawImage(kitchenCounterImg,280,200,null);
+        g.drawImage(hostStandImg,180,100,null);
+        g.drawImage(kitchenCounterImg,280,200,null);
+        for(int i = 0; i<4; i++){
+  			g.drawImage(platingTableImg, 300+17*i, 280+8*i, null);
+      	}
+        //g2.fillRect(300, 230, 20, 100);
+        //g2.fillRect(300, 200, 80, 20);
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {

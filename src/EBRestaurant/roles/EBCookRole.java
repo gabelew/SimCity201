@@ -7,6 +7,7 @@ import java.util.*;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
@@ -349,6 +350,16 @@ public class EBCookRole extends Role implements Cook {
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;
 		
+	}
+
+	public void setGui(Gui g) {
+		cookgui = (EBCookGui) g;
+	}
+
+	@Override
+	public Gui getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,6 @@
 package EBRestaurant.roles;
 
+import CMRestaurant.gui.CMCustomerGui;
 import EBRestaurant.gui.EBCustomerGui;
 import agent.Agent;
 
@@ -9,6 +10,7 @@ import java.util.TimerTask;
 import java.util.Random;
 
 import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
@@ -445,5 +447,10 @@ public class EBCustomerRole extends Role implements Customer {
 	public void resumeIt(){
 		resume();
 	}*/
+
+	@Override
+	public void setGui(Gui g) {
+		customerGui = (EBCustomerGui) g;
+	}
 }
 

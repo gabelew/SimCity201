@@ -16,6 +16,7 @@ import restaurant.interfaces.*;
 public class EBWaiterGui implements Gui {
 	private static BufferedImage waiterImg = null;
     private EBWaiterRole agent = null;
+    private boolean isPresent = true;
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
     private final int xChange = 20;
@@ -174,5 +175,10 @@ public class EBWaiterGui implements Gui {
 	public void DoLeaveRestaurant() {
 		xDestination=-40;
 		yDestination=-40;
+	}
+
+	@Override
+	public void setPresent(boolean b) {
+		isPresent=b;
 	}
 }

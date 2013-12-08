@@ -15,7 +15,7 @@ public class EBCashierGui implements Gui {
 
     private EBCashierRole agent = null;
     private BufferedImage cashierImg = null;
-    
+    private boolean isPresent = true;
     private int xPos = -40, yPos = -40;//default cashier position
     private int xDestination = -40, yDestination = -40;//default start position
     private final int xChange = 20;
@@ -70,5 +70,9 @@ public class EBCashierGui implements Gui {
 	public void DoLeaveRestaurant() {
 		xDestination=-40;
 		yDestination=-40;
+	}
+
+	public void setPresent(boolean b) {
+		isPresent = b;
 	}
 }

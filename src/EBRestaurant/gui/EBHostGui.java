@@ -16,6 +16,7 @@ public class EBHostGui implements Gui {
 
     private EBHostRole agent = null;
     private BufferedImage hostImg = null;
+    private boolean isPresent = true;
     private int xPos = -20, yPos = -20;//default host position
     private int xDestination = -20, yDestination = -20;//default host position
     private final int xChange = 20;
@@ -98,5 +99,10 @@ public class EBHostGui implements Gui {
 	public void DoEnterRestaurant() {
 		xDestination=80;
 		yDestination=80;
+	}
+
+	@Override
+	public void setPresent(boolean b) {
+		isPresent=b;
 	}
 }

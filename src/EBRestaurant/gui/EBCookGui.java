@@ -16,7 +16,7 @@ public class EBCookGui implements Gui {
 
     private EBCookRole agent = null;
     private BufferedImage cookImg = null;
-    
+    private boolean isPresent = true;
     private int xPos = -20, yPos = -20;//default waiter position
     private static int xDestination = -20;//default start position
 	private static int yDestination = -20;
@@ -126,5 +126,10 @@ public class EBCookGui implements Gui {
 	public static void DoLeaveRestaurant() {
 		xDestination=-20;
 		yDestination=-20;
+	}
+
+	@Override
+	public void setPresent(boolean b) {
+		isPresent=b;
 	}
 }

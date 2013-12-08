@@ -1,5 +1,6 @@
 package EBRestaurant.roles;
 
+import CMRestaurant.gui.CMCustomerGui;
 import EBRestaurant.gui.EBHostGui;
 import EBRestaurant.gui.EBWaiterGui;
 
@@ -7,6 +8,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
+import city.gui.Gui;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.roles.Role;
@@ -455,6 +457,10 @@ public class EBWaiterRole extends Role implements Waiter {
 
 	public void msgAskForBreak() {
 		requestBreak=true;
+	}
+
+	public void setGui(Gui g) {
+		waiterGui = (EBWaiterGui) g;
 	}
 }
 
