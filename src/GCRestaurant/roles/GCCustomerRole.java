@@ -37,6 +37,7 @@ public class GCCustomerRole extends Role implements Customer{
 	private Host host;
 	private Waiter waiter;
 	private Cashier cashier;
+	private Restaurant restaurant;
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
@@ -60,6 +61,7 @@ public class GCCustomerRole extends Role implements Customer{
 		super(p);
 		this.host = r.host;
 		this.cashier = r.cashier;
+		this.restaurant = r;
 	}
 
 	/**
@@ -237,6 +239,7 @@ public class GCCustomerRole extends Role implements Customer{
 	// (4) Customer Leaves Restaurant, Sends Msg to Waiter
 	private void LeaveTableAction() {
 		Do("Leaving Table");
+		myPerson.hungerLevel = 0;
 		customerGui.leftTable();
 		customerGui.goToCashier();
 		((GCWaiterRole)waiter).DoneEatingMsg(this);
@@ -260,6 +263,8 @@ public class GCCustomerRole extends Role implements Customer{
 		customerGui.DoExitRestaurant();
 		try {busy.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
+		state = AgentState.Leaving;
+		event = AgentEvent.doneLeaving;
 		//replenishes money for next time
 		//cash = 100;
 	}
@@ -305,7 +310,7 @@ public class GCCustomerRole extends Role implements Customer{
 		{
 			print("the wait is too long, i'm leaving");
 			state = AgentState.Leaving;
-			((GCHostRole)host).waitingCustomerLeft(this);
+			((GCHostRole)host).msgLeavingRestaurant(this);
 			return;
 		}
 		int decidedToLeave = 2;
@@ -314,7 +319,7 @@ public class GCCustomerRole extends Role implements Customer{
 		{
 			print("the wait is too long, i'm leaving");
 			state = AgentState.Leaving;
-			((GCHostRole)host).waitingCustomerLeft(this);
+			((GCHostRole)host).msgLeavingRestaurant(this);
 		}
 		stateChanged();
 	}
@@ -326,6 +331,13 @@ public class GCCustomerRole extends Role implements Customer{
 	public void msgAtCashier() {//from animation
 		atCashier.release();// = true;
 		stateChanged();
+	}
+	
+	public void reactivatePerson()
+	{
+		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(customerGui);
+		print("##############");
 	}
 /*******************************
  * Scheduler.  Determine what action is called for, and do it.
@@ -391,8 +403,13 @@ public class GCCustomerRole extends Role implements Customer{
 			
 			if(state == AgentState.Paying)
 			{
-				state = AgentState.DoingNothing;
 				PayingCheckAction();
+				return true;
+			}
+			if(state == AgentState.Leaving && event == AgentEvent.doneLeaving)
+			{
+				state = AgentState.DoingNothing;
+				reactivatePerson();
 				return true;
 			}
 			
@@ -443,8 +460,6 @@ public class GCCustomerRole extends Role implements Customer{
 
 	public void setHungerLevel(int hungerLevel) {
 		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
 	}
 
 	public String toString() {

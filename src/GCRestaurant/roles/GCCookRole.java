@@ -36,8 +36,8 @@ public class GCCookRole extends Role implements Cook
 	private CookState state = CookState.makingMarketOrder;
 	private enum OrderState{pending, cooking, done, served}
 	private enum CookState {free, cooking, makingMarketOrder, wantsOffWork, leaving, relieveFromDuty, none, goToWork}
-	private final int THRESHOLD = 2;
-	private final int MAXSUPPLY = 6;
+	private final int THRESHOLD = 52;
+	private final int MAXSUPPLY = 70;
 	private int marketCounter = 0;
 	public PersonAgent replacementPerson = null;
 	Restaurant restaurant;
@@ -55,8 +55,6 @@ public class GCCookRole extends Role implements Cook
 		foods.put("Chicken",foodList.get(1));
 		foods.put("Cookie",foodList.get(2));
 		foods.put("Salad",foodList.get(3));
-				
-		//this.name = name;
 	}
 	
 	public void setMarket(MarketAgent m)
@@ -301,7 +299,6 @@ public class GCCookRole extends Role implements Cook
 		public String choice;
 		public int amount;
 		public int cookingTime;
-		//public int orderAmount;
 		public Food(String _food, int cooktime, int inventory)
 		{
 			this.choice = _food;

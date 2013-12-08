@@ -29,7 +29,7 @@ public class GCWaiterGui implements Gui {
     private int xPos = DEFAULT_POSX, yPos = DEFAULT_POSY;//default waiter position
     private int xDestination = DEFAULT_POSX, yDestination = DEFAULT_POSY;//default start position
     private int personSize = 20;
-    private int cookPosX = 200, cookPosY = 95;
+    private int cookPosX = 200, cookPosY = 80;
     private int cashierPosX = 97, cashierPosY = 50;
     private int customerPos = 40;
     

@@ -138,14 +138,14 @@ public class GCWaiterRole extends Role implements Waiter{
 	}
 	 
 	// (5) Msg from Customer, Done Eating, Leaving Table
-	public void DoneEatingMsg(GCCustomerRole c)
+	public void DoneEatingMsg(Customer c)
 	{
 		for(MyCustomer customer : customers)
 		{
 			if( customer.c == c )
 			{
 				customer.state = CustomerState.Leaving;
-				((GCHostRole)host).waitingCustomerLeft(c);
+				((GCHostRole)host).msgLeavingRestaurant(c);
 				break;
 			}
 		}

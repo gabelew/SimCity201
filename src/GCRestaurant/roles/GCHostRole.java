@@ -87,6 +87,7 @@ public class GCHostRole extends Role implements Host
 		}
 		stateChanged();
 	}
+	
 	public void breakIsOverMsg(Waiter waiter)
 	{
 		for(myWaiter w: waiters)
@@ -95,19 +96,32 @@ public class GCHostRole extends Role implements Host
 		}
 	}
 	
-	public void waitingCustomerLeft(GCCustomerRole c)
-	{
-		print("Customer: " + c.getName() + ", decided to leave");
-		for(Customer customer: waitingCustomers)
+	public void msgLeavingRestaurant(Customer cust) {
+		synchronized(waitingCustomers)
 		{
-			if( customer == c)
+			print("Customer: " + ((GCCustomerRole)cust).getName() + ", decided to leave");
+			for (Customer c: waitingCustomers) 
 			{
-				waitingCustomers.remove(c);
+				if(c == cust){
+					waitingCustomers.remove(c);
+					break;
+				}
 			}
 		}
-		stateChanged();
-		
+		this.stateChanged();
 	}
+	
+	public void msgReadyToWork(Waiter w) 
+	{
+		boolean addWaiter = true;
+			for(myWaiter onListWaiter: waiters)
+			{
+				if(onListWaiter.w == w){addWaiter = false;}
+			}
+		myWaiter newWaiter = new myWaiter(w);
+		if(addWaiter){waiters.add(newWaiter);}
+	}
+	
 	/****************************************************
 	 * Actions
 	 ***************************************************/
@@ -320,28 +334,14 @@ public class GCHostRole extends Role implements Host
 		
 	}
 
-	public void msgReadyToWork(Waiter w) 
-	{
-		boolean addWaiter = true;
-			for(myWaiter onListWaiter: waiters)
-			{
-				if(onListWaiter.w == w){addWaiter = false;}
-			}
-		myWaiter newWaiter = new myWaiter(w);
-		if(addWaiter){waiters.add(newWaiter);}
-	}
+	
 
 	
-	@Override
-	public void msgLeavingRestaurant(Customer c) {
-		
-	}
 
-	@Override
-	public void msgCanIBreak(Waiter w) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
+	//needed for interface, not needed for GCRestaurant
+	public void msgCanIBreak(Waiter w) {}
 
 	@Override
 	public void msgDoneWorking(Waiter w) {
@@ -349,7 +349,10 @@ public class GCHostRole extends Role implements Host
 		
 	}
 
-	@Override
+	
+	/**
+	 * Animation Metods
+	 */
 	public void goesToWork() {
 		state = State.goToWork;
 		this.stateChanged();
