@@ -4,6 +4,11 @@ import GHRestaurant.roles.*;
 import restaurant.interfaces.*;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 
@@ -18,9 +23,15 @@ public class GHCashierGui implements Gui {
 
     public static final int xTable = 200;
     public static final int yTable = 250;
+	private BufferedImage cashierImg = null;
+
 
     public GHCashierGui(GHCashierRole role) {
         this.role = role;
+		try {
+		    cashierImg = ImageIO.read(new File("imgs/cashier_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
@@ -41,8 +52,7 @@ public class GHCashierGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(cashierImg, xPos, yPos, null);
     }
 
     public boolean isPresent() {

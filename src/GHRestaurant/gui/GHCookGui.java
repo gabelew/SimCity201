@@ -5,23 +5,34 @@ import restaurant.interfaces.*;
 import GHRestaurant.roles.*;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 
 public class GHCookGui implements Gui {
 
-    private Cook agent = null;
+    private GHCookRole role = null;
 
-    private int xPos = 382, yPos = 260;//default cook position
+    private int xPos = -20, yPos = -20;//default cook position
     private int xDestination = 382, yDestination = 260;//default start position
     private int tableNumber;
     private boolean isPresent = false;
 
     public static final int xTable = 200;
     public static final int yTable = 250;
+	private BufferedImage cookImg = null;
 
-    public GHCookGui(Cook agent) {
-        this.agent = agent;
+
+    public GHCookGui(GHCookRole role) {
+        this.role = role;
+		try {
+		    cookImg = ImageIO.read(new File("imgs/chef_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
@@ -36,13 +47,12 @@ public class GHCookGui implements Gui {
             yPos--;
 
         if (xPos == xDestination && yPos == yDestination) {
-          ((GHCookRole) agent).msgAtTable();
+          ((GHCookRole) role).msgAtTable();
         }
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(cookImg, xPos, yPos, null);
     }
 
     public boolean isPresent() {

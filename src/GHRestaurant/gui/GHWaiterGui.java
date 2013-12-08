@@ -4,6 +4,11 @@ import restaurant.interfaces.*;
 
 //import restaurant.Waiter;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.gui.Gui;
 import city.gui.SimCityGui;
@@ -20,6 +25,8 @@ public class GHWaiterGui implements Gui {
     private int tableNumber;
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
+	private static BufferedImage waiterImg = null;
+
 
     //SimCityGui gui;
     
@@ -29,6 +36,10 @@ public class GHWaiterGui implements Gui {
     public GHWaiterGui(GHWaiterRole w) {
         this.role = w;
         //this.gui = gui;
+		try {
+		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
+		} catch (IOException e) {
+		}
     }
 
     public void updatePosition() {
@@ -54,8 +65,7 @@ public class GHWaiterGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLUE);
-        g.fillRect(xPos, yPos, 20, 20);
+		g.drawImage(waiterImg, xPos, yPos, null);
     	
     }
 
