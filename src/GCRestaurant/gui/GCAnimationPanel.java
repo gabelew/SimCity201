@@ -31,11 +31,15 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     private final int yGRILL = -2;
     private final int xFRIDGE = 265; 
     private final int yFRIDGE = 23;
+    private final int platingTableDist = 30;
+    private final int xPlatingTable = 184;
+    private final int yPlatingTable = 80;
     private BufferedImage fridgeImg;
     private BufferedImage grillImg;
     private BufferedImage tableImg;
     private BufferedImage hostStandImg;
     private BufferedImage registerImg;
+    private BufferedImage platingTableImg;
     private Dimension bufferSize;
 
     private List<Gui> guis = new ArrayList<Gui>();
@@ -57,6 +61,7 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
  			tableImg = ImageIO.read(new File(path.toString() + "table.png"));
  			hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
 		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
+		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
     	}
     	catch(Exception e){}
     }
@@ -72,25 +77,12 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         //Clear the screen by painting a rectangle the size of the frame
         g2.setColor(getBackground());
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
-
-        //Borders for waiting area
-        //g2.setColor(Color.BLACK);
-        //g2.fillRect(80,40,5,50);
-        //g2.fillRect(0,100,40,5);
         
-        //makes plating
-        g2.setColor(Color.lightGray);
-        int x = 200;
-        int y = 75;
-        g2.fillRect(x, y, GRILL_SIZEX, GRILL_SIZEY);
-        
-        
-        
-        //making cooking area
-        //g2.setColor(Color.BLACK);
-        //g2.fillRect(200, 0, GRILL_SIZEX, GRILL_SIZEY);
-        //g2.setColor(Color.RED);
-        //g2.fillRect(210, 6, GRILL_SIZEX-25, 7);
+        //makes plating area
+        for(int i = 0; i < 4; i++)
+        {
+        	g2.drawImage(platingTableImg, xPlatingTable+ (i*platingTableDist), yPlatingTable, null);
+        }
         //makes fridge
         g2.setColor(Color.GRAY);
         g2.fillRect(WINDOWX-10, GRILL_SIZEY, 10, 55);
@@ -102,11 +94,9 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         g2.drawImage(hostStandImg, xHostStand, yHostStand, null);
         //draws register for cashier
         g2.drawImage(registerImg, xRegister, yRegister, null);
-        //Here is the table
-        g2.setColor(Color.RED);
+        //draws tables
         for(int i = 0; i < N_TABLES; i++)
         {
-        	//g2.fillRect(TABLEX_START+ (i*TABLE_SPACING), TABLEY_START, CUST_SIZE, CUST_SIZE);
         	g2.drawImage(tableImg, TABLEX_START+ (i*TABLE_SPACING), TABLEY_START, null);
         }
 
