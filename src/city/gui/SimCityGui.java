@@ -43,6 +43,8 @@ import city.animationPanels.InsideAnimationPanel;
 import city.animationPanels.InsideBuildingPanel;
 import city.animationPanels.MarketAnimationPanel;
 import city.animationPanels.CMRestaurantAnimationPanel;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.gui.trace.TraceControlPanel;
 import city.gui.trace.TracePanel;
 import city.roles.Role;
@@ -736,9 +738,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 		return null;
 	}
 	public static Role waiterFactory(PersonAgent p, Restaurant r){
+		AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", r.waiterRole);
 		if(r.waiterRole.equalsIgnoreCase("RestaurantCMWaiterRole")){
 			return new CMNormalWaiterRole(p, r);
-		}else if(r.customerRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
+		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
+			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating EMWaiterRole");
 			return new EBWaiterRole(p,r);
 		}
 		
