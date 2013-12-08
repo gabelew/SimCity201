@@ -7,7 +7,7 @@ public class GLCashierGui implements Gui {
 	private static final int PERSONWIDTH = 20;
 	private static final int PERSONHEIGHT = 20;
     private GLCashierRole agent = null;
-
+    private boolean isPresent = false;
     private int xPos = -20, yPos = -20;//default position
     private int xDestination = -20, yDestination = -20;//default start position
 
@@ -35,7 +35,7 @@ public class GLCashierGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
 
     public int getXPos() {
@@ -48,7 +48,6 @@ public class GLCashierGui implements Gui {
 
 	@Override
 	public void setPresent(boolean b) {
-		// TODO Auto-generated method stub
-		
+		isPresent = b;
 	}
 }

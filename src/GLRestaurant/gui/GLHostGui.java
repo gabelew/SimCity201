@@ -13,7 +13,7 @@ public class GLHostGui implements Gui {
 	private static final int PERSONWIDTH = 20;
 	private static final int PERSONHEIGHT = 20;
     private GLHostRole agent = null;
-
+    private boolean isPresent = false;
     private int xPos = -20, yPos = -20;//default host position
     private int xDestination = -20, yDestination = -20;//default start position
     static class Point {
@@ -55,7 +55,7 @@ public class GLHostGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
 
 
@@ -69,7 +69,6 @@ public class GLHostGui implements Gui {
 
 	@Override
 	public void setPresent(boolean b) {
-		// TODO Auto-generated method stub
-		
+		isPresent = b;
 	}
 }

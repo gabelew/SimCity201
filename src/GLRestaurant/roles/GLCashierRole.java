@@ -284,8 +284,7 @@ public class GLCashierRole extends Role implements Cashier {
 
 	@Override
 	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+		this.cashierGui = (GLCashierGui) waiterGuiFactory;
 	}
 	
 	public void setRestaurant(Restaurant r) {

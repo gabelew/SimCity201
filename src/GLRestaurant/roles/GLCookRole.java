@@ -363,8 +363,7 @@ public class GLCookRole extends Role implements Cook{
 
 	@Override
 	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+		this.cookGui = (GLCookGui) waiterGuiFactory;
 	}
 	
 	public void setRestaurant(Restaurant r) {

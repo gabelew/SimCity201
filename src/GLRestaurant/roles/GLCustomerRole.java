@@ -388,7 +388,6 @@ public class GLCustomerRole extends Role implements Customer{
 
 	@Override
 	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+		this.customerGui = (GLCustomerGui)waiterGuiFactory;
 	}
 }

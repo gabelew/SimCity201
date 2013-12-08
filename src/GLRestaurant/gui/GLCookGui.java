@@ -24,6 +24,7 @@ public class GLCookGui implements Gui {
 	private static final int PLATEONEY = 160;
 	private static final int PLATETWOY = 190;
 	private static final int PLATETHREEY = 220;
+	private boolean isPresent = false;
 	
 	private class Grill {
 		int grillNum;
@@ -196,7 +197,7 @@ public class GLCookGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
 
     public int getXPos() {
@@ -209,7 +210,6 @@ public class GLCookGui implements Gui {
 
 	@Override
 	public void setPresent(boolean b) {
-		// TODO Auto-generated method stub
-		
+		isPresent = b;
 	}
 }

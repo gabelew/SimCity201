@@ -525,8 +525,7 @@ public class GLWaiterRole extends Role implements Waiter{
 
 	@Override
 	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+		this.waiterGui = (GLWaiterGui) waiterGuiFactory;
 	}
 }
 

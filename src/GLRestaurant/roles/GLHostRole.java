@@ -381,8 +381,7 @@ public class GLHostRole extends Role implements Host{
 	
 	@Override
 	public void setGui(Gui waiterGuiFactory) {
-		// TODO Auto-generated method stub
-		
+		this.hostGui = (GLHostGui)waiterGuiFactory;
 	}
 
 }

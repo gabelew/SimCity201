@@ -16,7 +16,7 @@ public class GLWaiterGui implements Gui {
 	private static final int PERSONHEIGHT = 20;
 	private int ORIGINALX, ORIGINALY;
 	private int platex, platey;
-	
+	private boolean isPresent = false;
     private GLWaiterRole agent = null;
     
     //RestaurantGui gui;
@@ -176,7 +176,7 @@ public class GLWaiterGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
     }
     
     public boolean onBreak() {
@@ -240,7 +240,6 @@ public class GLWaiterGui implements Gui {
 
 	@Override
 	public void setPresent(boolean b) {
-		// TODO Auto-generated method stub
-		
+		isPresent = b;
 	}
 }
