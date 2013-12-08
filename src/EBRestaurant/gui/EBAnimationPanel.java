@@ -29,7 +29,6 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
     private final int Rect3Y=300;
     private final int RectWH=45;
     private final int RectPos=0;
-    private final int time=15;
     private Dimension bufferSize;
     private List<Gui> guis = new ArrayList<Gui>();
     
@@ -61,8 +60,8 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
         setVisible(true);
         bufferSize = this.getSize();
         simCityGui.animationPanel.timer.addActionListener(this);
-    	Timer timer = new Timer(time, this );
-    	timer.start();
+    	//Timer timer = new Timer(time, this );
+    	//timer.start();
     }
 
 	public void actionPerformed(ActionEvent e) {
