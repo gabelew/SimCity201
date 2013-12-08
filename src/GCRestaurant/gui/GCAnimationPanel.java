@@ -2,17 +2,19 @@ package GCRestaurant.gui;
 
 import javax.swing.*;
 
+import city.animationPanels.InsideAnimationPanel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
 
-public class GCAnimationPanel extends JPanel implements ActionListener {
+public class GCAnimationPanel extends InsideAnimationPanel implements ActionListener {
 
 	private final int N_TABLES = 4;
-    private final int WINDOWX = 500;
-    private final int WINDOWY = 300;
+    //private final int WINDOWX = 500;
+    //private final int WINDOWY = 300;
     private final int TABLEX_START = 100;
     private final int TABLEY_START = 175;
     private final int CUST_SIZE = 50;
