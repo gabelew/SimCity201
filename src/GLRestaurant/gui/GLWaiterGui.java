@@ -115,8 +115,8 @@ public class GLWaiterGui implements Gui {
 		else if("salad".equals(choice)) {
 			this.customerChoice = "SD";
 		}
-		else if("pizza".equals(choice)){
-			this.customerChoice = "PZ";
+		else if("cookie".equals(choice)){
+			this.customerChoice = "CK";
 		}
 		orders.add(customerChoice);
 		foodCarried += customerChoice + "? ";
@@ -133,8 +133,8 @@ public class GLWaiterGui implements Gui {
 		else if("salad".equals(choice)) {
 			this.customerChoice = "SD";
 		}
-		else if("pizza".equals(choice)){
-			this.customerChoice = "PZ";
+		else if("cookie".equals(choice)){
+			this.customerChoice = "CK";
 		}
 		foodCarried = customerChoice;
 		bringingFood = true;

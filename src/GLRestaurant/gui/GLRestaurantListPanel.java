@@ -4,6 +4,7 @@ import GLRestaurant.roles.GLCustomerRole;
 import GLRestaurant.roles.GLHostRole;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -13,17 +14,18 @@ import java.util.ArrayList;
  * Subpanel of restaurantPanel.
  * This holds the scroll panes for the customers and, later, for waiters
  */
+@SuppressWarnings("serial")
 public class GLRestaurantListPanel extends JPanel implements ActionListener {
 
     public JScrollPane pane =
             new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     private JPanel view = new JPanel();
-    private List<JButton> list = new ArrayList<JButton>();
-    private JButton addPersonB = new JButton("Add");
-    private JButton pauseB = new JButton("Pause");
-    private JButton zeroInventoryB = new JButton("NoFood");
-    private JTextField nameInput = new JTextField();
+//    private List<JButton> list = new ArrayList<JButton>();
+//    private JButton addPersonB = new JButton("Add");
+//    private JButton pauseB = new JButton("Pause");
+//    private JButton zeroInventoryB = new JButton("NoFood");
+//    private JTextField nameInput = new JTextField();
     private JCheckBox hungryState;
     private GLRestaurantPanel restPanel;
     private String type;
@@ -41,41 +43,42 @@ public class GLRestaurantListPanel extends JPanel implements ActionListener {
 
         setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
         JLabel panelType = new JLabel("<html><pre> <u>" + type + "</u><br></pre></html>");
-        JPanel topPane = new JPanel();
-        pauseB.addActionListener(this);
-        zeroInventoryB.addActionListener(this);
-        topPane.add(pauseB);
-        topPane.add(zeroInventoryB);
-        topPane.add(panelType);
-        add(topPane);
-        topPane.setMaximumSize(new Dimension(200,2));
         
-        JPanel inputPane = new JPanel();
-        
-        addPersonB.addActionListener(this);
-        add(addPersonB);
-        addPersonB.setMaximumSize(new Dimension(200,2));
- 
-        Dimension maximumSize = new Dimension(200,1);
-        nameInput.setMaximumSize(maximumSize);
-        nameInput.addActionListener(this);
-        inputPane.setLayout(new GridLayout(0,2));
-        inputPane.add(nameInput);
-        
-        hungryState = new JCheckBox();
-        hungryState.setText("Hungry?");
-        add(hungryState);
-        inputPane.add(hungryState);
-        add(inputPane);
-        inputPane.setMaximumSize(new Dimension(500,2));
-        
-        if(type == "Waiters") {
-        	hungryState.setVisible(false);
-        	pauseB.setVisible(false);
-        } else {
-        	zeroInventoryB.setVisible(false);
-        }
-        
+//        JPanel topPane = new JPanel();
+//        pauseB.addActionListener(this);
+//        zeroInventoryB.addActionListener(this);
+//        topPane.add(pauseB);
+//        topPane.add(zeroInventoryB);
+//        topPane.add(panelType);
+//        add(topPane);
+//        topPane.setMaximumSize(new Dimension(200,2));
+//        
+//        JPanel inputPane = new JPanel();
+//        
+//        addPersonB.addActionListener(this);
+//        add(addPersonB);
+//        addPersonB.setMaximumSize(new Dimension(200,2));
+// 
+//        Dimension maximumSize = new Dimension(200,1);
+//        nameInput.setMaximumSize(maximumSize);
+//        nameInput.addActionListener(this);
+//        inputPane.setLayout(new GridLayout(0,2));
+//        inputPane.add(nameInput);
+//        
+//        hungryState = new JCheckBox();
+//        hungryState.setText("Hungry?");
+//        add(hungryState);
+//        inputPane.add(hungryState);
+//        add(inputPane);
+//        inputPane.setMaximumSize(new Dimension(500,2));
+//        
+//        if(type == "Waiters") {
+//        	hungryState.setVisible(false);
+//        	pauseB.setVisible(false);
+//        } else {
+//        	zeroInventoryB.setVisible(false);
+//        }
+//        
         view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
         pane.setViewportView(view);
         add(pane);

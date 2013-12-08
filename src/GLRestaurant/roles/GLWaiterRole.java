@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 
@@ -50,6 +51,7 @@ public class GLWaiterRole extends Role implements Waiter{
 			this.cs = cs;
 		}
 	}
+	public Restaurant restaurant;
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atOrigin = new Semaphore(0,true);
 	private Semaphore atCustomer = new Semaphore(0,true);
@@ -67,7 +69,7 @@ public class GLWaiterRole extends Role implements Waiter{
 	private final double STEAKPRICE = 15.99;
 	private final double CHICKENPRICE = 10.99;
 	private final double SALADPRICE = 5.99;
-	private final double PIZZAPRICE = 8.99;
+	private final double COOKIEPRICE = 8.99;
 	
 	
 	// agent correspondents
@@ -79,12 +81,13 @@ public class GLWaiterRole extends Role implements Waiter{
 	 * Constructor for WaiterAgent class.
 	 * @param name
 	 */
-	public GLWaiterRole() {
-		super();
+	public GLWaiterRole(PersonAgent p, Restaurant r) {
+		super(p);
+		restaurant = r;
 		menu.put("steak", STEAKPRICE);
 		menu.put("chicken", CHICKENPRICE);
 		menu.put("salad", SALADPRICE);
-		menu.put("pizza", PIZZAPRICE);
+		menu.put("cookie", COOKIEPRICE);
 	}
 
 	public List getCustomers() {

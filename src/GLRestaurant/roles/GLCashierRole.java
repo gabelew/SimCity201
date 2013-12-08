@@ -4,6 +4,7 @@ import agent.Agent;
 import GLRestaurant.gui.GLCashierGui;
 import CMRestaurant.roles.CMCashierRole.Bill;
 import CMRestaurant.roles.CMCashierRole.BillState;
+import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Market;
@@ -28,7 +29,7 @@ public class GLCashierRole extends Role implements Cashier {
 	private final double STEAKPRICE = 15.99;
 	private final double CHICKENPRICE = 10.99;
 	private final double SALADPRICE = 5.99;
-	private final double PIZZAPRICE = 8.99;
+	private final double COOKIEPRICE = 8.99;
 	private final double STEAKCOST = 8.00;
 	private final double CHICKENCOST = 5.00;
 	private final double SALADCOST = 1.00;
@@ -75,7 +76,7 @@ public class GLCashierRole extends Role implements Cashier {
 			this.cs = cs;
 		}
 	}
-	
+	public Restaurant restaurant;
 	public enum checkState {pending, preparing, unpaid, paying, processingPayment, paid, debt};
 //	public enum BillState {pending, paying, debt, paid};
 	public List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
@@ -91,7 +92,7 @@ public class GLCashierRole extends Role implements Cashier {
 		menu.put("steak", STEAKPRICE);
 		menu.put("chicken", CHICKENPRICE);
 		menu.put("salad", SALADPRICE);
-		menu.put("pizza", PIZZAPRICE);
+		menu.put("cookie", COOKIEPRICE);
 	}
 
 	// Messages
@@ -285,6 +286,10 @@ public class GLCashierRole extends Role implements Cashier {
 	public void setGui(Gui waiterGuiFactory) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 	}
 
 }

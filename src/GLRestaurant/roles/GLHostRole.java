@@ -375,6 +375,10 @@ public class GLHostRole extends Role implements Host{
 		}
 	}
 
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
+	}
+	
 	@Override
 	public void setGui(Gui waiterGuiFactory) {
 		// TODO Auto-generated method stub

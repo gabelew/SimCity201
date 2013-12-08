@@ -13,6 +13,7 @@ import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
+import restaurant.Restaurant;
 import restaurant.RoleOrder;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
@@ -26,11 +27,12 @@ public class GLCookRole extends Role implements Cook{
 	private final int STEAKTIME = 5000;
 	private final int CHICKENTIME = 6000;
 	private final int SALADTIME = 4000;
-	private final int PIZZATIME = 7000;
+	private final int COOKIETIME = 7000;
 	private int orderNumber = 1;
 	boolean firstRestock = false;
 	int restockCount = 0;
 	
+	public Restaurant restaurant;
 	Timer timer = new Timer();
 	private class MyMarket {
 		MarketAgent m;
@@ -94,12 +96,12 @@ public class GLCookRole extends Role implements Cook{
 	
 	public GLCookGui cookGui = null;
 
-	public GLCookRole() {
+	public GLCookRole(int amount) {
 		super();
 		foods.put("steak", new Food("steak", STEAKTIME, 3));
 		foods.put("chicken", new Food("chicken", CHICKENTIME, 3));
 		foods.put("salad", new Food("salad", SALADTIME, 3));
-		foods.put("pizza", new Food("pizza", PIZZATIME, 3));
+		foods.put("cookie", new Food("cookie", COOKIETIME, amount));
 	}
 
 
@@ -363,6 +365,10 @@ public class GLCookRole extends Role implements Cook{
 	public void setGui(Gui waiterGuiFactory) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setRestaurant(Restaurant r) {
+		restaurant = r;
 	}
 
 }

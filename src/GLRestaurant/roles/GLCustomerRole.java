@@ -4,6 +4,7 @@ package GLRestaurant.roles;
 
 import GLRestaurant.roles.GLWaiterRole.customerState;
 import GLRestaurant.gui.GLCustomerGui;
+import restaurant.Restaurant;
 //import GLRestaurant.gui.GLRestaurantGui;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
@@ -13,6 +14,7 @@ import agent.Agent;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 
@@ -22,11 +24,10 @@ import city.roles.Role;
 public class GLCustomerRole extends Role implements Customer{
 	private final int EATINGTIME = 5000;
 	private final int DECIDINGORDERTIME = 4000;
-	private String name;
 	private String choice;
 	private int seatnumber = 0;
 	private int hungerLevel = 5;        // determines length of meal
-	private double money;
+	//private double money;
 	private double amountPayable;
 	Timer timer = new Timer();
 	public GLCustomerGui customerGui;
@@ -36,6 +37,7 @@ public class GLCustomerRole extends Role implements Customer{
 			w = waiter;
 		}
 	}
+	public Restaurant restaurant;
 	private MyWaiter waiter;
 	Map<String, Double> menu = new ConcurrentHashMap<String, Double>();
 	private Random generator = new Random();
@@ -59,28 +61,10 @@ public class GLCustomerRole extends Role implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public GLCustomerRole(String name){
-		super();
-		this.name = name;
-		if ("zero".equals(this.name) || "runner".equals(this.name)) {
-			this.money = 0;
-		} else if ("six".equals(this.name)) {
-			this.money = 6;
-		}else if ("ten".equals(this.name)) {
-			this.money = 10;
-		} else if ("twenty".equals(this.name)) {
-			this.money = 20;
-		} else if ("salad".equals(this.name)) {
-			this.money = 5.99;
-		} else if ("pizza".equals(this.name)) {
-			this.money = 8.99;
-		} else if ("chicken".equals(this.name)) {
-			this.money = 10.99;
-		} else if ("steak".equals(this.name)) {
-			this.money = 15.99;
-		} else {
-			this.money = 40; // default money
-		}
+	public GLCustomerRole(PersonAgent p, Restaurant r){
+		super(p);
+		myPerson = p;
+		restaurant = r;
 	}
 
 	/**
@@ -94,9 +78,7 @@ public class GLCustomerRole extends Role implements Customer{
 		this.cashier = cashier;
 	}
 
-	public String getCustomerName() {
-		return name;
-	}
+
 	// Messages
 
 	public void gotHungry() {//from animation
@@ -280,25 +262,25 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 
 	private void orderFood() {
-		if("steak".equals(this.name)) {
-			choice = "steak";
-		} else if("chicken".equals(this.name)) {
-			choice = "chicken";
-		} else if("pizza".equals(this.name)) {
-			choice = "pizza";
-		} else if("salad".equals(this.name)) {
-			choice = "salad";
-		} else if("runner".equals(this.name)) {
-			List<String> keys = new ArrayList<String>(menu.keySet());
-			int randomIndex = generator.nextInt(keys.size());
-			choice = keys.get(randomIndex);
-		} else {
+//		if("steak".equals(this.name)) {
+//			choice = "steak";
+//		} else if("chicken".equals(this.name)) {
+//			choice = "chicken";
+//		} else if("cookie".equals(this.name)) {
+//			choice = "cookie";
+//		} else if("salad".equals(this.name)) {
+//			choice = "salad";
+//		} else if("runner".equals(this.name)) {
+//			List<String> keys = new ArrayList<String>(menu.keySet());
+//			int randomIndex = generator.nextInt(keys.size());
+//			choice = keys.get(randomIndex);
+//		} else {
 			// Removes items from the menu that customer cannot afford
 			Iterator<String> it1 = menu.keySet().iterator();
 			while(it1.hasNext()) {
 				String key = it1.next();
 				double foodPrice = menu.get(key);
-				int priceDifference = Double.compare(foodPrice, money);
+				int priceDifference = Double.compare(foodPrice, myPerson.cashOnHand);
 				if(priceDifference > 0) {
 					menu.remove(key);
 				}
@@ -312,9 +294,8 @@ public class GLCustomerRole extends Role implements Customer{
 				choice = null;
 				event = AgentEvent.paid;
 				state = AgentState.Paying;
-				money = 40; // hack to replenish money
 			}		
-		}
+		
 		if (choice != null) {
 			Do("Ordering " + choice + ".");
 			waiter.w.msgHereIsChoice(this, choice);
@@ -352,12 +333,11 @@ public class GLCustomerRole extends Role implements Customer{
 	private void payCashier() {
 		Do("Paying cashier.");
 		double amount;
-		if (money >= amountPayable) {
+		if (myPerson.cashOnHand >= amountPayable) {
 			amount = amountPayable;
-			money -= amountPayable;
+			myPerson.cashOnHand -= amountPayable;
 		} else {
-			amount = money;
-			money = 40; // hack to replenish money
+			amount = myPerson.cashOnHand;
 		}
 		cashier.msgHereIsMoney(this, amount);
 	}
@@ -379,20 +359,6 @@ public class GLCustomerRole extends Role implements Customer{
 	
 	private void setWaiter(GLWaiterRole w) {
 		waiter = new MyWaiter(w);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getHungerLevel() {
-		return hungerLevel;
-	}
-
-	public void setHungerLevel(int hungerLevel) {
-		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
 	}
 	
 	private void removeItemFromMenu(String item) {

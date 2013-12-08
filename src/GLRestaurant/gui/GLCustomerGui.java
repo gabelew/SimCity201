@@ -14,15 +14,13 @@ public class GLCustomerGui implements Gui{
 	private static final int PERSONHEIGHT = 20;
 	private int ORIGINALX = -40;
 	private int ORIGINALY = -40;
-	private GLCustomerRole agent = null;
+	private GLCustomerRole role = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 	private boolean orderedFood = false;
 	private boolean eatingFood = false;
 	private String choice;
-
-	//private HostAgent host;
-	//RestaurantGui gui;
+	
 	GLWaiterGui waiterGui;
 
 	private int xPos, yPos;
@@ -47,7 +45,7 @@ public class GLCustomerGui implements Gui{
 	public GLCustomerGui(GLCustomerRole c, int x, int y){
 		ORIGINALX = x;
 		ORIGINALY = y;
-		agent = c;
+		role = c;
 		xPos = -40;
 		yPos = -40;
 		xDestination = ORIGINALX;
@@ -57,7 +55,21 @@ public class GLCustomerGui implements Gui{
         tableMap.put(2, TableTwo);
         tableMap.put(3, TableThree);
 		
-		//this.gui = gui;
+	}
+	
+	public GLCustomerGui(GLCustomerRole c){
+		ORIGINALX = 30;
+		ORIGINALY = 30;
+		role = c;
+		xPos = -40;
+		yPos = -40;
+		xDestination = ORIGINALX;
+		yDestination = ORIGINALY;
+		
+		tableMap.put(1, TableOne);
+        tableMap.put(2, TableTwo);
+        tableMap.put(3, TableThree);
+
 	}
 	
 	public int getXPos() {
@@ -84,13 +96,13 @@ public class GLCustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
+			if (command==Command.GoToSeat) role.msgAnimationFinishedGoToSeat();
 			else if (command==Command.LeaveRestaurant) {
-				agent.msgAnimationFinishedLeaveRestaurant();
+				role.msgAnimationFinishedLeaveRestaurant();
 				//System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 				//gui.setCustomerEnabled(agent);
-			} else if (command == Command.GoToWait) agent.msgAnimationFinishedGoingToWaitingArea();
+			} else if (command == Command.GoToWait) role.msgAnimationFinishedGoingToWaitingArea();
 			command=Command.noCommand;
 		}
 	}
@@ -106,8 +118,8 @@ public class GLCustomerGui implements Gui{
 		else if(choice == "salad") {
 			this.choice = "SD";
 		}
-		else if(choice == "pizza"){
-			this.choice = "PZ";
+		else if(choice == "cookie"){
+			this.choice = "CK";
 		}
 	}
 	
@@ -139,7 +151,7 @@ public class GLCustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		role.gotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {
