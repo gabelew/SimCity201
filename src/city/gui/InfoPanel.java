@@ -240,13 +240,11 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     				for(PersonAgent currentP: gui.persons){
     					if(currentP.job!=null){
     						if(currentP.job.location == r.location && currentP.job.shift == PersonAgent.Shift.day && currentP.job.type.equalsIgnoreCase("host")){
-    		    				System.out.println("already has host");
     							hasHost = true;
     						}
     					}
     				}
     				if(!hasHost){
-    	    			System.out.println("making host");
     					p.job = p.new MyJob(r.location , "host", PersonAgent.Shift.day);
     				}
         			

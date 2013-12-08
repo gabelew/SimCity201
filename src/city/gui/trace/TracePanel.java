@@ -97,6 +97,7 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		visibleLevels.add(AlertLevel.WARNING);
 		visibleLevels.add(AlertLevel.INFO);
 		visibleLevels.add(AlertLevel.DEBUG);
+		visibleTags.add(AlertTag.GENERAL_CITY);
 		
 		//Sets up the TracePanel to automatically be tied with the AlertLog.
 		AlertLog.getInstance().addAlertListener(this);
