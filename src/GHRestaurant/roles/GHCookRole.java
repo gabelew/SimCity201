@@ -137,13 +137,13 @@ public class GHCookRole extends Role implements Cook {
 			print("Out of order! Please go back to customer and ask to reorder");
 			Order temp = o;
 			orders.remove(o);
-			temp.waiter.msgOutOfOrder(temp.tablenumber, temp.choice);
+			((GHWaiterRole) temp.waiter).msgOutOfOrder(temp.tablenumber, temp.choice);
 		}
 		else{
 			
 		//if food is "low" then the cook orders from different market.
 		if(Inventory.get(o.choice).getAmount() <= Inventory.get(o.choice).getThreshold()){
-			markets.get(nextmarket).msgHereIsTheOrder(this, Inventory.get(o.choice).getFoodType(), ORDERAMOUNT);
+			((GHMarketRole) markets.get(nextmarket)).msgHereIsTheOrder(this, Inventory.get(o.choice).getFoodType(), ORDERAMOUNT);
 			nextmarket = (nextmarket+1)%markets.size();
 		}
 			
@@ -179,7 +179,7 @@ public class GHCookRole extends Role implements Cook {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		o.waiter.msgOrderIsReady(o.choice, o.tablenumber);
+		((GHWaiterRole) o.waiter).msgOrderIsReady(o.choice, o.tablenumber);
 		orders.remove(o);
 		
 	}
@@ -192,7 +192,7 @@ public class GHCookRole extends Role implements Cook {
 	
 	//utilities
 	
-	public void setGui(CookGui cg){
+	public void setGui(GHCookGui cg){
 		cookgui = cg;
 	}
 

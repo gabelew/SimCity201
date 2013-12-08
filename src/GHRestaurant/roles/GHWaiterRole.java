@@ -229,7 +229,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	// Actions
 	private void SeatCustomer(MyCustomer customer) {
 		//customer.cs = CustomerState.Seated;
-		customer.customer.msgFollowMeToTable(customer.tablenumber,this);
+		((GHCustomerRole) customer.customer).msgFollowMeToTable(customer.tablenumber,this);
 		DoSeatCustomer(customer.customer, customer.tablenumber);
 		try {
 			atDestination.acquire();
@@ -255,7 +255,7 @@ public class GHWaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
-		c.customer.msgWhatWouldYouLike();
+		((GHCustomerRole) c.customer).msgWhatWouldYouLike();
 	  }
 	
 	private void DoTakeOrder(MyCustomer c){
@@ -273,7 +273,7 @@ public class GHWaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
-		c.customer.msgOutOfChoiceReorder(c.choice);
+		((GHCustomerRole) c.customer).msgOutOfChoiceReorder(c.choice);
 	}
 
 	
@@ -286,11 +286,11 @@ public class GHWaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
-		cook.msgHereIsAnOrder(this,c.choice,c.tablenumber);
+		((GHCookRole) cook).msgHereIsAnOrder(this,c.choice,c.tablenumber);
 	}
 	  
 	private void DoTakeOrderToCook(){
-		print("Taking order to " + cook.getName());
+		print("Taking order to cook");
 		waitergui.GoToCook();		
 	}
 	
@@ -324,45 +324,45 @@ public class GHWaiterRole extends Role implements Waiter{
 		//c.customer.msgHereIsYourOrder();
 		for(CustomerCheck cc : customerChecks){
 			if((!(customerChecks.isEmpty())) && (cc.customer == c.customer) ){
-				c.customer.msgHeresCheck(cc.choice, cc.cost);
+				((GHCustomerRole) c.customer).msgHeresCheck(cc.choice, cc.cost);
 			}
 		}
-		c.customer.msgHereIsYourOrder();
+		((GHCustomerRole) c.customer).msgHereIsYourOrder();
 
 	}
 	  
 	private void DoGoToCook(){
-		print("Going to " + cook.getName() + " to pick up order");
+		print("Going to cook to pick up order");
 		waitergui.GoToCook();
 	}
 	
 	private void DoTakeOrderToCustomer(MyCustomer c){
 		print("Taking order to table " + c.tablenumber);
-		cashier.msgProduceCheck(this, c.customer, c.choice, c.tablenumber);
+		((GHCashierRole) cashier).msgProduceCheck(this, c.customer, c.choice, c.tablenumber);
 		waitergui.DoGoToTable(c.tablenumber);
 	}
 	
 	private void DoGiveCheck(MyCustomer c){
 		print("Giving check to customer");
-		cashier.msgGiveMeCheck(this);
+		((GHCashierRole) cashier).msgGiveMeCheck(this);
 		waitergui.DoGoToTable(c.tablenumber);
 	}
 	
 	private void TellHost(MyCustomer c){
 		print("Telling host a table is free");
-		host.msgLeavingTable(c.customer);
+		((GHHostRole) host).msgLeavingTable(c.customer);
 		c.cs = CustomerState.Idle;
 	  
 	}
 	  
 	private void AskForBreak(){
 		print("Asking for break");
-		host.msgCanIGoOnBreak(this);
+		((GHHostRole) host).msgCanIGoOnBreak(this);
 	}
 	  
 	private void BackToWork(){
 		print("Going Back To Work");
-		host.msgSetWaiter(this);
+		((GHHostRole) host).msgSetWaiter(this);
 		BackTW = false;
 	}
 	 

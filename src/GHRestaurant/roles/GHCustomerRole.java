@@ -242,7 +242,7 @@ public class GHCustomerRole extends Role implements Customer{
 
 	private void goToRestaurant() {
 	    print("Going to restaurant");
-		host.msgIWantFood(this);//send our instance, so he can respond to us
+		((GHHostRole) host).msgIWantFood(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown(int tablenumber) {
@@ -251,13 +251,13 @@ public class GHCustomerRole extends Role implements Customer{
 	}
 	
 	private void SignalWaiter(){
-		print("Signaling Waiter "+ waiter.getName());
-		waiter.msgImReadyToOrder(this);
+		print("Signaling Waiter "+ waiter);
+		((GHWaiterRole) waiter).msgImReadyToOrder(this);
 	}
 	
 	private void Order(){
 		print("My choice is " + choice);
-		waiter.msgHereIsMyOrder(this, choice);	
+		((GHWaiterRole) waiter).msgHereIsMyOrder(this, choice);	
 	}
 
 	private void EatFood() {
@@ -284,13 +284,13 @@ public class GHCustomerRole extends Role implements Customer{
 
 	private void leaveTable() {
 		print("Leaving.");
-		waiter.msgDoneEatingandLeaving(this);
+		((GHWaiterRole) waiter).msgDoneEatingandLeaving(this);
 		customerGui.DoGoToCashier();
 	}
 	
 	private void PayBill(){
 		print("Going to pay bill");
-		cashier.msgCustomerPaying(this,check.choice,check.cost,tableNumber);
+		((GHCashierRole) cashier).msgCustomerPaying(this,check.choice,check.cost,tableNumber);
 		customerGui.DoExitRestaurant();
 	}
 

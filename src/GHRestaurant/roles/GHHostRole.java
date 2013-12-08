@@ -6,6 +6,8 @@ import restaurant.interfaces.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
+import city.gui.Gui;
 import city.roles.Role;
 
 /**
@@ -88,14 +90,14 @@ public class GHHostRole extends Role implements Host{
 		print("Recieved msgCanIGoOnBreak");
 		
 		if(waiters.size() > 1){
-			w.setWantToGoOnBreak(false);
-			w.setOnBreak(true);
+			((GHWaiterRole) w).setWantToGoOnBreak(false);
+			((GHWaiterRole) w).setOnBreak(true);
 			waiters.remove(w);		
 			nextwaiter = (nextwaiter+1)%waiters.size();	
 		}
 		else{
 			print("Cannot give break go back to work please");
-			w.setWantToGoOnBreak(false);
+			((GHWaiterRole) w).setWantToGoOnBreak(false);
 		}
 		
 		stateChanged();
@@ -137,7 +139,7 @@ public class GHHostRole extends Role implements Host{
 	// Actions
 
 	private void seatCustomer(Customer customer, Table table) {
-		waiters.get(nextwaiter).msgSitAtTable(customer, table.tableNumber);
+		((GHWaiterRole) waiters.get(nextwaiter)).msgSitAtTable(customer, table.tableNumber);
 		table.setOccupant(customer);
 		waitingCustomers.remove(customer);
 		nextwaiter = (nextwaiter+1)%waiters.size();	
@@ -180,5 +182,53 @@ public class GHHostRole extends Role implements Host{
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+	@Override
+	public void msgReleaveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgReadyToWork(Waiter w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgIWantToEat(Customer c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgLeavingRestaurant(Customer c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgCanIBreak(Waiter w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgDoneWorking(Waiter w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goesToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGui(Gui waiterGuiFactory) {
+		// TODO Auto-generated method stub
+		
 	}
 }

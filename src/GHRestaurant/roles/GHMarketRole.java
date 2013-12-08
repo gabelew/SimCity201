@@ -87,13 +87,13 @@ public class GHMarketRole extends Role implements Market {
 			print("Out of order! Sorry for the inconvenience");
 			Order temp = o;
 			orders.remove(o);
-			temp.cook.msgOutOfOrder();
+			((GHCookRole) temp.cook).msgOutOfOrder();
 		}
 		else{
 		print("processing order of " + o.amount + " " + o.choice + "'s");
-		o.cook.msgDelivery(o.choice, o.amount);
+		((GHCookRole) o.cook).msgDelivery(o.choice, o.amount);
 		Inventory.get(o.choice).decAmount(o.amount);
-		cashier.msgPayMarket(this,o.getCost());
+		((GHCashierRole) cashier).msgPayMarket(this,o.getCost());
 		orders.remove(o);
 		}
 	}

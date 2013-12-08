@@ -148,7 +148,7 @@ public class GHCashierRole extends Role implements Cashier{
 	
 	private void GiveCheck(Check c){
 		print("Giving check to " + c.waiter);
-		c.waiter.msgHereIsCheck(c.customer, c.choice, c.cost, c.tablenumber);
+		((GHWaiterRole) c.waiter).msgHereIsCheck(c.customer, c.choice, c.cost, c.tablenumber);
 		checks.remove(c);
 	}
 	
@@ -156,15 +156,15 @@ public class GHCashierRole extends Role implements Cashier{
 	private void PayingBill(Check c){
 		print("Check being payed by " + c.customer);
 		
-		if(c.customer.getMoney() >= c.cost){
-			double temp = c.customer.getMoney() - c.cost;
-			c.customer.setMoney(temp);
+		if(((GHCashierRole) c.customer).getMoney() >= c.cost){
+			double temp = ((GHCashierRole) c.customer).getMoney() - c.cost;
+			((GHCustomerRole) c.customer).setMoney(temp);
 			RestaurantMoney+=c.cost;
-			print("Checked payed by " + c.customer.getName());
+			print("Checked payed by " + c.customer);
 			checks.remove(c);
 		}
 		
-		else if(c.customer.getMoney() < c.cost){
+		else if(((GHCashierRole) c.customer).getMoney() < c.cost){
 			c.os = CheckState.NEXTTIME;
 			print("Check Can Be Payed Next Time");
 		}
@@ -174,7 +174,7 @@ public class GHCashierRole extends Role implements Cashier{
 	private void PayMarket(Check c){
 		print("Paying " + c.market.getName() + " for order");
 		RestaurantMoney -= c.cost;
-		c.market.msgHereIsPayment(c.cost);
+		((GHMarketRole) c.market).msgHereIsPayment(c.cost);
 		checks.remove(c);
 	}
 	
