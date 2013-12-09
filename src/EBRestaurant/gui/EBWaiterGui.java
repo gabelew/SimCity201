@@ -15,7 +15,7 @@ import restaurant.interfaces.*;
 
 public class EBWaiterGui implements Gui {
 	private static BufferedImage waiterImg = null;
-    private EBWaiterRole agent = null;
+    private Waiter agent = null;
     private boolean isPresent = true;
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -38,7 +38,7 @@ public class EBWaiterGui implements Gui {
     private enum command {none,onBreak,goToStart,goToCook};
     command commands;
 
-    public EBWaiterGui(EBWaiterRole w){
+    public EBWaiterGui(Waiter w){
     	try {
 		    waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
 		} catch (IOException e) {
@@ -71,15 +71,15 @@ public class EBWaiterGui implements Gui {
 
         if (xPos == xDestination && yPos == yDestination
         		& (xDestination == xTable + xChange) & ((yDestination == yTable1 + yChange)||(yDestination == yTable2 + yChange)||(yDestination == yTable3 + yChange))) {
-           agent.msgAtTable();
+           ((EBWaiterRole) agent).msgAtTable();
         }
         else if (xPos==xWaitingPosition && yPos==yWaitingPosition&&commands==command.goToStart)
         {
-        	agent.msgAtStart();
+        	((EBWaiterRole) agent).msgAtStart();
         }
         else if (xPos==290 && yPos==220&&commands==command.goToCook)
         {
-        	agent.msgAtCook();
+        	((EBWaiterRole) agent).msgAtCook();
         }
         else if (xPos==-40 && yPos==-40){
         	agent.msgLeftTheRestaurant();
@@ -172,7 +172,7 @@ public class EBWaiterGui implements Gui {
 	
 	public void unsetBreak(){
 		commands=command.none;
-		agent.backFromBreak();
+		((EBWaiterRole) agent).backFromBreak();
 	}
 	
 	public void breakDenied(){

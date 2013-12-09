@@ -981,7 +981,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 		if(r.waiterRole.equalsIgnoreCase("RestaurantCMWaiterRole")){
 			return new CMWaiterGui((Waiter) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
-			return new EBWaiterGui((EBWaiterRole) role);
+			return new EBWaiterGui((Waiter) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
 			return new GCWaiterGui((GCWaiterRole) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
