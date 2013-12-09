@@ -37,8 +37,14 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 	public final int TABLE3X = 300;
 	public final int TABLEY = 100;
 	public final int CHAIR_OFFSET = 22;
+	
 	public static final int ZERO = 0;
 	
+	private final int xPlatePosition = 485;
+	private final int yPlatePosition = 140;
+	static final int xPLATINGTABLE_OFFSET = 25;
+	static final int yPLATINGTABLE_OFFSET = 60;
+	    
 	static final int NWAITSEATS = 6;
     static final int NWAITSEATS_COLUMNS = 3;
     static final int NWAITSEATS_ROWS = 2;
@@ -48,6 +54,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
     static final int WAITINGSEATS_Y_GAP = 30;
     
     static final int NRESTSEATS = 16;
+    static final int NPLATINGTABLES=3;
 	
 	private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
@@ -120,10 +127,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
         g.drawImage(chairImg, TABLE2X+CHAIR_OFFSET, TABLEY, null);
         g.drawImage(chairImg, TABLE3X+CHAIR_OFFSET, TABLEY, null);
         
-        //draw table area
-        g.drawImage(tableImg, TABLE1X, TABLEY, null);
-        g.drawImage(tableImg, TABLE2X, TABLEY, null);
-        g.drawImage(tableImg, TABLE3X, TABLEY, null);
+        
         
 
         
@@ -135,13 +139,14 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 		g.drawImage(kitchenCounterImg, 500, 120, null);
 		g.drawImage(grillRightImg, 560,120, null);
 		g.drawImage(fidgeImg, 630, 160, null);
-		g.drawImage(platingTableImg, 460, 160, null);
-        g.drawImage(platingTableImg, 460, 190, null);
-        g.drawImage(platingTableImg, 460, 220, null);
-        
+		
         //draw Register Stand
     	g.drawImage(registerImg, 70, 200, null);
-    	
+    	 //Plating  tables
+  		for(int i = 0; i<NPLATINGTABLES; i++){
+  			g.drawImage(platingTableImg, xPlatePosition+xPLATINGTABLE_OFFSET+17*i, yPlatePosition+yPLATINGTABLE_OFFSET+8*i, null);
+      	}
+  		
     	synchronized(getGuis()){
 	    	for(Gui gui : getGuis()) {
 	        	if (gui.isPresent()) {
@@ -149,6 +154,11 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 		        }
 	        }
     	}
+    	
+    	//draw table area
+        g.drawImage(tableImg, TABLE1X, TABLEY, null);
+        g.drawImage(tableImg, TABLE2X, TABLEY, null);
+        g.drawImage(tableImg, TABLE3X, TABLEY, null);
 
     }	
 	

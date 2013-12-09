@@ -171,7 +171,7 @@ public class GLWaiterRole extends Role implements Waiter{
 	}
 
 	public void msgAtTable() {//from animation
-		//print("msgAtTable received");
+		print("msgAtTable received");
 		atTable.release();// = true;
 		stateChanged();
 	}
@@ -291,15 +291,13 @@ public class GLWaiterRole extends Role implements Waiter{
 				if(finishedServing)
 					goOnBreak();
 				return true;
-			}
-			
-			if (event != agentEvent.onBreak) 
-				waiterGui.DoLeaveCustomer();		
+			}		
 			
 		} catch(ConcurrentModificationException cme) {
 			return false;
 		}
-		
+		if (event != agentEvent.onBreak) 
+			waiterGui.DoLeaveCustomer();
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent

@@ -37,7 +37,7 @@ public class GLWaiterGui implements Gui {
     private Map<Integer, Point> seatMap = new HashMap<Integer, Point>();
     GLCustomerGui customerGui;
     private int customerx, customery;
-    private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtOrigin, IfAtCustomer, IfAtPlate, LeaveRestaurant};
+    private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtTable, IfAtOrigin, IfAtCustomer, IfAtPlate, LeaveRestaurant};
     private Command command = Command.noCommand;
     String customerChoice;
     boolean customerOrdered = false;
@@ -92,7 +92,6 @@ public class GLWaiterGui implements Gui {
 					waitingSpotNumber = i;
 					xDestination = seatMap.get(i).x;
 					yDestination = seatMap.get(i).y;
-					System.out.println(xDestination + "," + yDestination);
 				}
 			}
 		}
@@ -116,8 +115,10 @@ public class GLWaiterGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
         if (xDestination == xPos && yDestination == yPos) {
-        	if (((TableOne.x + 20 == xDestination) || (TableTwo.x + 20 == xDestination) || (TableThree.x + 20 == xDestination)) 
-        	&& ((TableOne.y - 20 == yDestination) || (TableTwo.y - 20 == yDestination) || (TableThree.y - 20 == yDestination))) {
+         
+//        	if (((TableOne.x + 20 == xDestination) || (TableTwo.x + 20 == xDestination) || (TableThree.x + 20 == xDestination)) 
+//        	&& ((TableOne.y - 20 == yDestination) || (TableTwo.y - 20 == yDestination) || (TableThree.y - 20 == yDestination))) {        		
+        	if(Command.IfAtTable == command){
         		role.msgAtTable();
         	} else if (Command.onBreak == command) {
         		//gui.setWaiterOnBreak(agent);
@@ -125,12 +126,11 @@ public class GLWaiterGui implements Gui {
         		//gui.setWaiterEnabled(agent);
         	} else if (Command.LeaveRestaurant == command) {
         		role.msgLeftTheRestaurant();
-//        	} else if (Command.IfAtOrigin == command && ORIGINALX == xDestination && ORIGINALY == yDestination) {
-//        		role.msgAtOrigin();
         	} else if (Command.IfAtCustomer == command && customerx == xDestination && customery == yDestination) {
         		role.msgAtCustomer();
-        	} else if (Command.IfAtPlate == command && platex == xDestination && platey == yDestination)
+        	} else if (Command.IfAtPlate == command && platex == xDestination && platey == yDestination) {
         		role.msgAtPlate();
+        	}
         	command = Command.noCommand;
         	findASpotToRest();
         }
@@ -175,10 +175,6 @@ public class GLWaiterGui implements Gui {
 		foodCarried = customerChoice;
 		bringingFood = true;
 	}
-    
-//    public void ifAtOrigin() {
-//    	command = Command.IfAtOrigin;
-//    }
     
     public void ifAtCustomer(int x, int y) {
     	command = Command.IfAtCustomer;
@@ -255,11 +251,16 @@ public class GLWaiterGui implements Gui {
     }
 
     public void GoToTable(GLCustomerRole customer, int tablenumber) {
+    	command = Command.IfAtTable;
     	Point destination = tableMap.get(tablenumber);
     	if(null != destination) {
     		xDestination = destination.x + 20;
     		yDestination = destination.y - 20;
-    	}
+    	} 	
+    	if(waitingSpotNumber >= 0){
+			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
+			waitingSpotNumber = -1;
+		}
     }
 
     public void DoLeaveCustomer() {

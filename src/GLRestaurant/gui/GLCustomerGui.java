@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 
 public class GLCustomerGui implements Gui{
 	
+	static final int xCashier = 70, yCashier = 186;
 	static final int xWAITING_AREA = 50;
 	static final int yWAITING_AREA = 70;
 	private int waitingSeatNumber = -1;
@@ -34,7 +35,7 @@ public class GLCustomerGui implements Gui{
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, GoToWait, GoToSeat, LeaveRestaurant};
+	private enum Command {noCommand, GoToWait, GoToSeat, GoToCashier, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
 	private final int START_POSITION = -20;
@@ -119,6 +120,8 @@ public class GLCustomerGui implements Gui{
 			if (command==Command.GoToSeat){ 
 				state = State.sitting;
 				role.msgAnimationFinishedGoToSeat();
+			} else if (command == Command.GoToCashier) {
+				role.msgAnimationFinishedGoingToCashier();
 			}
 			else if (command==Command.LeaveRestaurant) {
 				role.msgAnimationFinishedLeaveRestaurant();
@@ -168,11 +171,11 @@ public class GLCustomerGui implements Gui{
 		}
 		if(orderedFood) {
 			g.setColor(Color.BLACK);
-			g.drawString(choice + "?", xPos+5, yPos + 10);
+			g.drawString(choice + "?", xPos+10, yPos);
 		}
 		else if(eatingFood) {
 			g.setColor(Color.BLACK);
-			g.drawString(choice, xPos+5, yPos + 10);
+			g.drawString(choice, xPos+10, yPos);
 		}
 	}
 
@@ -190,6 +193,14 @@ public class GLCustomerGui implements Gui{
 
 	public void setPresent(boolean p) {
 		isPresent = p;
+	}
+	
+	public void DoGoToCashier() {
+		state = State.standing;
+		eatingFood = false;
+		xDestination = xCashier;
+		yDestination = yCashier;
+		command = Command.GoToCashier;
 	}
 
 	public void DoGoToSeat(int seatnumber) {
@@ -232,7 +243,6 @@ public class GLCustomerGui implements Gui{
 			((GLRestaurantAnimationPanel)role.restaurant.insideAnimationPanel).waitingSeats.get(waitingSeatNumber).release();
 			waitingSeatNumber = -1;
 		}
-		eatingFood = false;
 		xDestination = -40;
 		yDestination = -40;
 		command = Command.LeaveRestaurant;

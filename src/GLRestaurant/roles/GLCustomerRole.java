@@ -109,7 +109,7 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 	
 	public void msgHereIsReceipt(double paid) {
-		event = AgentEvent.paid;
+		//event = AgentEvent.paid;
 		amountPayable = 0;
 		stateChanged();
 	}
@@ -117,6 +117,11 @@ public class GLCustomerRole extends Role implements Customer{
 	public void msgAnimationFinishedGoToSeat() {
 		//from animation
 		event = AgentEvent.seated;
+		stateChanged();
+	}
+	
+	public void msgAnimationFinishedGoingToCashier() {
+		event = AgentEvent.paid;
 		stateChanged();
 	}
 	
@@ -236,7 +241,7 @@ public class GLCustomerRole extends Role implements Customer{
 		Do("Deciding on what to order.");
 		timer.schedule(new TimerTask() {
 			public void run() {
-				print("Decided order, calling waiter now.");
+				//print("Decided order, calling waiter now.");
 				callWaiter();
 			}
 		},
@@ -309,10 +314,12 @@ public class GLCustomerRole extends Role implements Customer{
 	
 	private void askForCheck() {
 		Do("Asking for check");
+		myPerson.hungerLevel = 0;
 		waiter.w.msgEatingDone(this);
 	}
 	
 	private void payCashier() {
+		customerGui.DoGoToCashier();
 		Do("Paying cashier.");
 		double amount;
 		if (myPerson.cashOnHand >= amountPayable) {
@@ -365,10 +372,9 @@ public class GLCustomerRole extends Role implements Customer{
 //	}
 
 	public Gui getGui() {
-		return customerGui;
+		return this.customerGui;
 	}
 
-	@Override
 	public void setGui(Gui g) {
 		this.customerGui = (GLCustomerGui)g;
 	}

@@ -293,7 +293,7 @@ public class GLCookRole extends Role implements Cook{
 		Do ("Plating " + o.choice);
 		o.s = orderState.finished;
 		cookGui.plate(o.choice, o.orderNum);
-		o.w.msgOrderDone(o.c, o.choice, cookGui.getPlateX(), cookGui.getPlateY(o.orderNum));
+		o.w.msgOrderDone(o.c, o.choice, cookGui.getPlateX(o.orderNum), cookGui.getPlateY(o.orderNum));
 	}
 	
 //	private void orderFoodFromMarket() {

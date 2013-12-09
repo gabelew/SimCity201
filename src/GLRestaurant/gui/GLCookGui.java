@@ -20,14 +20,20 @@ public class GLCookGui implements Gui {
 	private final int yWorkingPosition = 160;
 	private final int NGRILLS = 3;
 	private final int NPLATES = 3;
-	private static final int GRILLX = 490;
-	private static final int GRILLONEY = 160;
-	private static final int GRILLTWOY = 190;
-	private static final int GRILLTHREEY = 220;
-	private static final int PLATEX = 460;
-	private static final int PLATEONEY = 160;
-	private static final int PLATETWOY = 190;
-	private static final int PLATETHREEY = 220;
+	private static final int GRILLY = 140;
+	private static final int GRILLONEX = 565;
+	private static final int GRILLTWOX = 585;
+	private static final int GRILLTHREEX = 510;
+	
+	private static final int PLATEONEX = 514;
+	private static final int PLATEONEY = 212;
+	
+	private static final int PLATETWOX = 531;
+	private static final int PLATETWOY = 220;
+	
+	private static final int PLATETHREEX = 540;
+	private static final int PLATETHREEY = 226;
+	
 	private boolean isPresent = false;
 	enum Command {none, enterRestaurant, leaveRestaurant};
 	Command command = Command.none;
@@ -45,7 +51,6 @@ public class GLCookGui implements Gui {
 	private class Plate {
 		int plateNum;
 		int orderNum;
-		int tableNum;
 		boolean occupied = false;
 		String item;
 		Plate(int plateNum) {
@@ -56,9 +61,8 @@ public class GLCookGui implements Gui {
     private GLCookRole role = null;
     private List<Grill> grills;
     private List<Plate> plates;
-    private List<String> orders = new ArrayList<String>();
-    private int xPos = 530, yPos = 190;//default position
-    private int xDestination = 530, yDestination = 190;//default start position
+    private int xPos = START_POSITION, yPos = START_POSITION;//default position
+    private int xDestination = START_POSITION, yDestination = START_POSITION;//default start position
 
     public GLCookGui(GLCookRole agent) {
     	try {
@@ -90,34 +94,34 @@ public class GLCookGui implements Gui {
         if(xPos == xDestination && yPos == yDestination){
         	if(command == Command.leaveRestaurant){
         		role.msgAnimationHasLeftRestaurant();
-        		command = Command.none;
         	}else if(command == Command.enterRestaurant){
-        		command = Command.none;
         	}
-        		
+        	command = Command.none;	
         }
     }
 
     public void draw(Graphics2D g) {
     	g.drawImage(cookImg, xPos, yPos, null);
-        g.setColor(Color.black);
+        g.setColor(Color.white);
         if(grills.get(0).occupied) {
-        	g.drawString(grills.get(0).item, GRILLX, GRILLONEY);
+        	g.drawString(grills.get(0).item, GRILLONEX, GRILLY);
         }
         if(grills.get(1).occupied) {
-        	g.drawString(grills.get(1).item, GRILLX, GRILLTWOY);
+        	g.drawString(grills.get(1).item, GRILLTWOX, GRILLY);
         }
         if(grills.get(2).occupied) {
-        	g.drawString(grills.get(2).item, GRILLX, GRILLTHREEY);
+        	g.drawString(grills.get(2).item, GRILLTHREEX, GRILLY);
         }
+        
+        g.setColor(Color.black);
         if(plates.get(0).occupied) {
-        	g.drawString(plates.get(0).item, PLATEX, PLATEONEY);
+        	g.drawString(plates.get(0).item, PLATEONEX, PLATEONEY);
         }
         if(plates.get(1).occupied) {
-        	g.drawString(plates.get(1).item, PLATEX, PLATETWOY);
+        	g.drawString(plates.get(1).item, PLATETWOX, PLATETWOY);
         }
         if(plates.get(2).occupied) {
-        	g.drawString(plates.get(2).item, PLATEX, PLATETHREEY);
+        	g.drawString(plates.get(2).item, PLATETHREEX, PLATETHREEY);
         }
     }
     
@@ -167,6 +171,10 @@ public class GLCookGui implements Gui {
     
     public void plate(String item, int orderNum) {
     	for(Plate p: plates) {
+    		System.out.println("Plating " + item + " " + p.plateNum + " is occupied?: " + p.occupied);
+    		if(p.occupied) {
+    			System.out.println("Platenum " + p.plateNum + " is occupied with: " + p.item);
+    		}
     		if(!p.occupied) {
     			p.occupied = true;
     			if("steak".equals(item)) {
@@ -187,8 +195,20 @@ public class GLCookGui implements Gui {
     	}
     }
     
-    public int getPlateX() {
-    	return PLATEX;
+    public int getPlateX(int orderNum) {
+    	int numPlate = -1;
+    	for(Plate p : plates) {
+    		if (p.orderNum == orderNum) {
+    			numPlate = p.plateNum;
+    		}
+    	}
+    	if(1 == numPlate)
+    		return PLATEONEX;
+    	else if (2 == numPlate)
+    		return PLATETWOX;
+    	else if (3 == numPlate)
+    		return PLATETHREEX;
+    	else return xWorkingPosition;
     }
     
     public int getPlateY(int orderNum) {
@@ -204,7 +224,7 @@ public class GLCookGui implements Gui {
     		return PLATETWOY;
     	else if (3 == numPlate)
     		return PLATETHREEY;
-    	else return numPlate;
+    	else return yWorkingPosition;
     }
     
     public void finPlate(int orderNum) {
