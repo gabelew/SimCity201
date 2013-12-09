@@ -10,6 +10,7 @@ import java.util.TimerTask;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import city.PersonAgent;
 import city.gui.Gui;
 import city.interfaces.Person;
 import city.roles.Role;
@@ -52,8 +53,8 @@ public class GHCustomerRole extends Role implements Customer{
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public GHCustomerRole(Person p, Restaurant r){
-		super();
+	public GHCustomerRole(PersonAgent p, Restaurant r){
+		super(p);
 		//this.name = name;
 		this.restaurant = r;
 		
@@ -280,7 +281,7 @@ public class GHCustomerRole extends Role implements Customer{
 				stateChanged();
 			}
 		},
-		1000);//getHungerLevel() * 1000);//how long to wait before running task
+		5000);//getHungerLevel() * 1000);//how long to wait before running task
 	}
 
 	private void leaveTable() {
