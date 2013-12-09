@@ -22,6 +22,7 @@ public EventLog log = new EventLog();
 public InsideAnimationPanel insideAnimationPanel;
 public Point location;
 public List<chair>chairs=new ArrayList<chair>();
+public boolean isOpen = true;
 public class chair{
 	public chair(int i, boolean b) {
 		number=i;
@@ -281,6 +282,19 @@ public void offWork(DeliveryMan DM){
 
 public void setPanel(MarketPanel p){
 	panel=p;
+}
+
+
+public boolean isOpen() {
+	return isOpen;
+}
+public void closeRestaurant(){
+	isOpen = false;
+	//TODO:notify employee to leave once no more customers
+	
+}
+public void openRestaurant(){
+	isOpen = true;
 }
 
 }

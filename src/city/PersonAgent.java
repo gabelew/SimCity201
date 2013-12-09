@@ -384,8 +384,8 @@ public class PersonAgent extends Agent implements Person
 		this.hungerLevel += 1;
 		
 		if(job!=null){
-			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 5)) ||
-					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 10 && currentHour < 17))){
+			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 8)) ||
+					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 10 && currentHour < 21))){
 				boolean inList = false;
 				for(Task t: taskList){
 					if(t == Task.goToWork)
