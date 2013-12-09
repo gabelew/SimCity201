@@ -927,8 +927,8 @@ public class PersonAgent extends Agent implements Person
 		}
 		for(MarketAgent m: simCityGui.getMarkets()){
 			if(job.location.equals(m.location)){
-				//TODO: if(m.isOpen()==false)
-				//return true;
+				TODO: if(m.isOpen()==false)
+					return true;
 			}
 		}
 		
