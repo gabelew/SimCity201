@@ -33,10 +33,6 @@ public class GLCashierRole extends Role implements Cashier {
 	private final double CHICKENPRICE = 10.99;
 	private final double SALADPRICE = 5.99;
 	private final double COOKIEPRICE = 8.99;
-	private final double STEAKCOST = 8.00;
-	private final double CHICKENCOST = 5.00;
-	private final double SALADCOST = 1.00;
-	private final double PIZZACOST = 3.00;
 	enum State {none, goToWork, working, leaving, relieveFromDuty};
 	State state = State.none;
 	PersonAgent replacementPerson = null;
@@ -238,7 +234,6 @@ public class GLCashierRole extends Role implements Cashier {
 		if(billFromDman.bill == billFromCook.bill){
 			bank = bank - billFromDman.bill;
 			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
-			print("YO I PAID DA BILL GABE");
 			bills.remove(billFromDman);
 			bills.remove(billFromCook);
 		}else{

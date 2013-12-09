@@ -1,10 +1,9 @@
 package GLRestaurant.roles;
 
 import agent.Agent;
-import CMRestaurant.roles.CMCookRole.OrderState;
-import CMRestaurant.roles.CMCookRole.marketOrderState;
 import GLRestaurant.gui.GLCookGui;
 import GLRestaurant.roles.GLHostRole.State;
+import GLRestaurant.roles.WaiterOrder;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -17,9 +16,9 @@ import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
-import restaurant.RoleOrder;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.LoggedEvent;
 
 /**
  * Restaurant Cook Agent
@@ -27,18 +26,22 @@ import restaurant.interfaces.Waiter;
 
 public class GLCookRole extends Role implements Cook{
 
+	private GLRevolvingStandMonitor revolvingStand;
+	public boolean checkStand;
 	private final int STEAKTIME = 5000;
 	private final int CHICKENTIME = 6000;
 	private final int SALADTIME = 4000;
 	private final int COOKIETIME = 7000;
+	private final int CHECKSTANDTIME = 5000;
 	private final int STARTAMOUNT = 50;
-	private int orderNumber = 1;
+	
 	boolean firstRestock = false;
 	int restockCount = 0;
 	PersonAgent replacementPerson = null;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	boolean marketsAreStocked = true;
 	
+	private int orderNum = 1;
 	public Restaurant restaurant;
 	Timer timer = new Timer();
 	private class MyMarket {
@@ -61,20 +64,7 @@ public class GLCookRole extends Role implements Cook{
 			amount = a;
 		}
 	}
-	class WaiterOrder {
-		int orderNum;
-		GLWaiterRole w;
-		String choice;
-		GLCustomerRole c;
-		orderState s;
-		WaiterOrder(GLWaiterRole w, String choice, GLCustomerRole c, orderState os) {
-			this.w = w;
-			this.choice = choice;
-			this.c = c;
-			this.s = os;
-			this.orderNum = orderNumber++;
-		}
-	}
+	
 	
 	public class MarketOrder{
 		public MarketOrder(Map<String, Integer> foodsToOrder,MarketAgent market,marketOrderState s) {
@@ -110,6 +100,7 @@ public class GLCookRole extends Role implements Cook{
 
 	public GLCookRole(int amount) {
 		super();
+		checkStand = true;
 		foods.put("steak", new Food("steak", STEAKTIME, STARTAMOUNT));
 		foods.put("chicken", new Food("chicken", CHICKENTIME, STARTAMOUNT));
 		foods.put("salad", new Food("salad", SALADTIME, STARTAMOUNT));
@@ -147,10 +138,10 @@ public class GLCookRole extends Role implements Cook{
 
 	public void msgHereIsOrder(GLWaiterRole w, String choice, GLCustomerRole c) {
 		if(foods.get(choice).amount > 0) {
-			orders.add(new WaiterOrder(w, choice, c, orderState.pending));
+			orders.add(new WaiterOrder(w, choice, c, orderState.pending, orderNum++));
 			foods.get(choice).amount--;
 		} else {
-			orders.add(new WaiterOrder(w, choice, c, orderState.outOfFood));
+			orders.add(new WaiterOrder(w, choice, c, orderState.outOfFood, orderNum++));
 		}
 		stateChanged();
 	}
@@ -178,7 +169,7 @@ public class GLCookRole extends Role implements Cook{
 		
 		if(!firstRestock) {
 			firstRestock = true;
-			currentMarket = markets.get(4);
+			currentMarket = markets.get(0);
 		}
 		
 		if(state == State.wantsOffWork){
@@ -267,7 +258,12 @@ public class GLCookRole extends Role implements Cook{
 
 		// Order food from market if nothing else on scheduler to be done
 		orderFoodFromMarket();
-
+		
+		if(checkStand) {
+			checkRevolvingStand();
+			return true;
+		}
+		
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
@@ -330,19 +326,42 @@ public class GLCookRole extends Role implements Cook{
 	}
 
 	private void changeMarket() {
-		if(currentMarket.equals(markets.get(5))) {
-			currentMarket = markets.get(0);			
-		} else if(currentMarket.equals(markets.get(0))) {
+		if(currentMarket.equals(markets.get(0))) {
 			currentMarket = markets.get(1);			
 		} else if(currentMarket.equals(markets.get(1))) {
 			currentMarket = markets.get(2);			
 		} else if(currentMarket.equals(markets.get(2))) {
-			currentMarket = markets.get(3);				
+			currentMarket = markets.get(3);			
+		} else if(currentMarket.equals(markets.get(3))) {
+			currentMarket = markets.get(4);				
 		} else if(currentMarket.equals(markets.get(4))) {
 			currentMarket = markets.get(5);			
 		} else {
 			marketsAreStocked = false;
 		}
+	}
+	
+	public void checkRevolvingStand() {
+//		if(!revolvingStand.isEmpty()){
+//			log.add(new LoggedEvent("Checked Revolving Stand and it had orders in it."));
+//		}else{
+//			log.add(new LoggedEvent("Checked Revolving Stand and it was empty."));
+//		}
+		while(!revolvingStand.isEmpty()) {
+			WaiterOrder order = revolvingStand.remove();
+			order.orderNum = orderNum++;
+			if(order != null) {
+				orders.add(order);
+			}
+		}
+			checkStand = false;
+			timer.schedule(new TimerTask() {
+				public void run() {
+					checkStand = true;
+					stateChanged();
+				}
+			}, CHECKSTANDTIME);
+		
 	}
 	
 	private void placeOrder(MarketOrder mOrder) {
@@ -424,6 +443,14 @@ public class GLCookRole extends Role implements Cook{
 	
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;
+	}
+	
+	public void setRevolvingStand(GLRevolvingStandMonitor r) {
+		this.revolvingStand = r;
+	}
+	
+	public GLRevolvingStandMonitor getRevolvingStand() {
+		return revolvingStand;
 	}
 
 }

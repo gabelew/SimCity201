@@ -16,6 +16,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.imageio.ImageIO;
 
+import restaurant.interfaces.Waiter;
+
 public class GLWaiterGui implements Gui {
 
 	public int waitingSpotNumber = -1;
@@ -33,11 +35,11 @@ public class GLWaiterGui implements Gui {
 	private static BufferedImage waiterImg = null;
 	private int platex, platey;
 	private boolean isPresent = false;
-    private GLWaiterRole role = null;
+    private Waiter role = null;
     private Map<Integer, Point> seatMap = new HashMap<Integer, Point>();
     GLCustomerGui customerGui;
     private int customerx, customery;
-    private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtTable, IfAtOrigin, IfAtCustomer, IfAtPlate, LeaveRestaurant};
+    private enum Command {noCommand, onBreak, ReturnFromBreak, IfAtTable, IfAtOrigin, IfAtCustomer, IfAtPlate, LeaveRestaurant, IfAtStand};
     private Command command = Command.noCommand;
     String customerChoice;
     boolean customerOrdered = false;
@@ -54,7 +56,7 @@ public class GLWaiterGui implements Gui {
     public static final Point TableTwo = new Point(200,100);
     public static final Point TableThree = new Point(300,100);
 
-    public GLWaiterGui(GLWaiterRole agent) {
+    public GLWaiterGui(Waiter agent) {
     	try {
     		waiterImg = ImageIO.read(new File("imgs/waiter_v1.png"));
     	} catch(IOException e) {
@@ -84,11 +86,16 @@ public class GLWaiterGui implements Gui {
 //        tableMap.put(3, TableThree);
 //	}
     
+    public void DoGoToRevolvingStand() {
+    	xDestination = 460;
+    	yDestination = 180;
+    	command = Command.IfAtStand;
+    }
+    
     private void findASpotToRest() {	
 		for(int i = 0; i < ((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.size(); i++){
 			if(waitingSpotNumber < 0){
 				if(((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(i).tryAcquire()){
-					System.out.println("\t\t\t\t\t\t"+ i);
 					waitingSpotNumber = i;
 					xDestination = seatMap.get(i).x;
 					yDestination = seatMap.get(i).y;
@@ -130,6 +137,8 @@ public class GLWaiterGui implements Gui {
         		role.msgAtCustomer();
         	} else if (Command.IfAtPlate == command && platex == xDestination && platey == yDestination) {
         		role.msgAtPlate();
+        	} else if (Command.IfAtStand == command) {
+        		role.msgAtStand();
         	}
         	command = Command.noCommand;
         	findASpotToRest();

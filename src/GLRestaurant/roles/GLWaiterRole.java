@@ -23,12 +23,12 @@ import city.roles.Role;
 /**
  * Restaurant Waiter Agent
  */
-public class GLWaiterRole extends Role implements Waiter{
+public abstract class GLWaiterRole extends Role implements Waiter{
 	//Notice that we implement customers using ArrayList, but type it
 	//with List semantics.
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
-	private class MyCustomer {
+	protected class MyCustomer {
 		GLCustomerRole c;
 		customerState cs;
 		Table t;
@@ -57,7 +57,7 @@ public class GLWaiterRole extends Role implements Waiter{
 	private Semaphore atOrigin = new Semaphore(0,true);
 	private Semaphore atCustomer = new Semaphore(0,true);
 	private Semaphore atPlate = new Semaphore(0,true);
-	private Semaphore waitingResponse = new Semaphore(0,true);
+	protected Semaphore waitingResponse = new Semaphore(0,true);
 	public enum customerState {waiting, seated, askedToOrder, ordering, ordered, reorder, waitingForFood, readyToEat, eating, eatingDone, waitingForCheck, checkReceived, leaving, leftRestaurant};
 	public enum agentEvent {none, goOnBreak, onBreak, relieveFromDuty, goToWork};
 	public enum checkState {pending, preparing, finished};
@@ -65,7 +65,7 @@ public class GLWaiterRole extends Role implements Waiter{
 	public GLWaiterGui waiterGui = null;
 	private boolean WantToGoOnBreak = false;
 	private boolean finishedServing = false;
-	
+	protected GLRevolvingStandMonitor revolvingStand;
 	private String unstockedFood;
 	Map<String, Double> menu = new ConcurrentHashMap<String, Double>();
 	private final double STEAKPRICE = 15.99;
@@ -238,7 +238,7 @@ public class GLWaiterRole extends Role implements Waiter{
 			// Third rule: Sends order to the cook to prepare
 			for (MyCustomer mc : customers) {
 				if(customerState.ordered == mc.cs){
-					sendOrderToCook(mc, mc.choice);
+					sendOrderToCook(mc);
 					return true;
 				}
 			}
@@ -347,12 +347,7 @@ public class GLWaiterRole extends Role implements Waiter{
 		mc.c.msgChooseFood();
 	}
 	
-	private void sendOrderToCook(MyCustomer mc, String choice) {
-		Do("Giving order to " + ((GLCookRole)restaurant.cook).getName());	
-		mc.cs = customerState.waitingForFood;
-		((GLCookRole)restaurant.cook).msgHereIsOrder(this, choice, mc.c);
-		waiterGui.DoLeaveCustomer();
-	}
+	protected abstract void sendOrderToCook(MyCustomer mc);
 	
 	private void getCustomerToReorder(MyCustomer mc) {
 		Do("Letting customer reorder.");
@@ -514,6 +509,10 @@ public class GLWaiterRole extends Role implements Waiter{
 		waitingResponse.release();
 		event = agentEvent.relieveFromDuty;
 	}
+	
+	public void msgAtStand() {
+		waitingResponse.release();
+	}
 
 	@Override
 	public Restaurant getRestaurant() {
@@ -524,6 +523,10 @@ public class GLWaiterRole extends Role implements Waiter{
 	public void goesToWork() {
 		event = agentEvent.goToWork;
 		stateChanged();
+	}
+	
+	public void setRevolvingStand(GLRevolvingStandMonitor r) {
+		this.revolvingStand = r;
 	}
 	
 	public void tellHost() {

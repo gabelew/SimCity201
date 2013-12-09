@@ -68,6 +68,8 @@ import GLRestaurant.roles.GLCashierRole;
 import GLRestaurant.roles.GLCookRole;
 import GLRestaurant.roles.GLCustomerRole;
 import GLRestaurant.roles.GLHostRole;
+import GLRestaurant.roles.GLNormalWaiterRole;
+import GLRestaurant.roles.GLSharedWaiterRole;
 import GLRestaurant.roles.GLWaiterRole;
 import atHome.city.Apartment;
 import atHome.city.Home;
@@ -957,8 +959,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GCWaiterRole");
 			return new GCWaiterRole(p,r);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
-			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GLWaiterRole");
-			return new GLWaiterRole(p,r);
+			if(p.getName().toLowerCase().contains("shared")){
+				return new GLSharedWaiterRole(p, r);
+			}else{
+				return new GLNormalWaiterRole(p, r);
+			}
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGHWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GHWaiterRole");
 			return new GHWaiterRole(p,r);
@@ -974,7 +979,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
 			return new GCWaiterGui((GCWaiterRole) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
-			return new GLWaiterGui((GLWaiterRole) role);
+			return new GLWaiterGui((Waiter) role);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGHWaiterRole")){
 			return new GHWaiterGui((GHWaiterRole) role);
 		}

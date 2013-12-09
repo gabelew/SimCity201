@@ -139,6 +139,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 		g.drawImage(kitchenCounterImg, 500, 120, null);
 		g.drawImage(grillRightImg, 560,120, null);
 		g.drawImage(fidgeImg, 630, 160, null);
+		g.drawImage(hostStandImg, 475, 180, null);
 		
         //draw Register Stand
     	g.drawImage(registerImg, 70, 200, null);
