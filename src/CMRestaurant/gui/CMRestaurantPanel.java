@@ -128,11 +128,13 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
         if (type.equals("Waiters")) {
 
     		for(Restaurant r: gui.getRestaurants()){
-    	        for (CMHostRole.MyWaiter temp: ((CMHostRole)r.host).waiters) {
-    	            if (((CMWaiterRole) temp.w).getName() == name){
-    	            	((CMWaiterRole) temp.w).getGui().setWorking();
-    	            }
-    	        }
+    			if(r.waiterRole.toLowerCase().contains("cmwaiter")){
+	    	        for (CMHostRole.MyWaiter temp: ((CMHostRole)r.host).waiters) {
+	    	            if (((CMWaiterRole) temp.w).getName() == name){
+	    	            	((CMWaiterRole) temp.w).getGui().setWorking();
+	    	            }
+	    	        }
+    			}
     		}
         }
     }
@@ -140,12 +142,14 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 	public void askBreak(String name) {
 		AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "CMRestaurantPanel", "Recieved asked for break from GUI");
 		for(Restaurant r: gui.getRestaurants()){
-			if(((CMHostRole)r.host).waiters != null){
-	        for (CMHostRole.MyWaiter temp: ((CMHostRole)r.host).waiters) {
-	            if (((CMWaiterRole) temp.w).getName() == name){
-	            	((CMWaiterRole) temp.w).getGui().askBreak();
-	            }
-	        }
+			if(r.waiterRole.toLowerCase().contains("cmwaiter")){
+				if(((CMHostRole)r.host).waiters != null){
+			        for (CMHostRole.MyWaiter temp: ((CMHostRole)r.host).waiters) {
+			            if (((CMWaiterRole) temp.w).getName() == name){
+			            	((CMWaiterRole) temp.w).getGui().askBreak();
+			            }
+			        }
+				}
 			}
 		}
 	}
