@@ -22,6 +22,7 @@ import restaurant.interfaces.*;
 //is proceeded as he wishes.
 public class EBHostRole extends Role implements Host {
 	public Restaurant restaurant;
+	private boolean restaurantClosed=false;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
@@ -160,6 +161,16 @@ public class EBHostRole extends Role implements Host {
             If so seat him at the table.
 		 */
 		try{
+			if(waitingCustomers.size()==0&&restaurantClosed){
+				tellStaff();
+				return true;
+			}
+			if(waitingCustomers.size()!=0&&restaurantClosed){
+				for(Customers cust:waitingCustomers){
+					tellClosed(cust);	
+				}
+				return true;
+			}
 			if(hostState==state.relieveDuty){
 				hostState=state.none;
 				myPerson.releavedFromDuty(this);
@@ -227,6 +238,13 @@ public class EBHostRole extends Role implements Host {
 		}
 }
 
+	private void tellClosed(Customers cust) {
+		// TODO Auto-generated method stub
+		((EBCustomerRole) cust.cust).msgRestaurantClosed();
+		waitingCustomers.remove(cust);
+		stateChanged();
+	}
+
 	// Actions
 	private void assignWaitingSpace(Customers c){
 		((EBCustomerRole) c.cust).msgWaitHere(yIndex);
@@ -253,7 +271,10 @@ public class EBHostRole extends Role implements Host {
 				table.setOccupant(c.cust);
 				waitingCustomers.remove(c);
 	}
-
+	
+	private void tellStaff(){
+		
+	}
 	
 	//utilities
 
@@ -330,8 +351,8 @@ public class EBHostRole extends Role implements Host {
 
 	@Override
 	public void msgCloseRestaurant() {
-		// TODO Auto-generated method stub
-		
+		restaurantClosed=true;
+		stateChanged();
 	}
 	
 	/*public void pauseIt(){

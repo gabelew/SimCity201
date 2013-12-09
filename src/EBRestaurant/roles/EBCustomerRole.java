@@ -93,13 +93,12 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 	
 	public void msgHereIsOrder(String choice){
-		Do("Eating my "+choice);
 		state=AgentState.Eating;
 		stateChanged();
 	}
 	
 	public void msgBill(float amount){
-		Do("Received bill");
+		myPerson.hungerLevel = 0;
 		state=AgentState.gotBill;
 		amountOwed=amount;
 		stateChanged();
@@ -115,7 +114,10 @@ public class EBCustomerRole extends Role implements Customer {
 		state=AgentState.payed;
 		stateChanged();
 	}
-	
+	public void msgRestaurantClosed() {
+		state=AgentState.payed;
+		stateChanged();
+	}
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
 		event = AgentEvent.doneLeaving;
@@ -198,7 +200,6 @@ public class EBCustomerRole extends Role implements Customer {
 		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			Done();
-			//no action
 			return true;
 		}
 		return false;
@@ -388,13 +389,11 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 	
 	private void leave(){
-		print("leaving now");
 		ebcustomerGui.DoExitRestaurant();
 	}
 	
 	private void Done(){
 		state = AgentState.DoingNothing;
-		myPerson.hungerLevel = 0;
 		myPerson.msgDoneEatingAtRestaurant();
 		restaurant.insideAnimationPanel.removeGui(ebcustomerGui);
 	}
@@ -442,5 +441,6 @@ public class EBCustomerRole extends Role implements Customer {
 	public void setGui(Gui g) {
 		ebcustomerGui = (EBCustomerGui) g;
 	}
+
 }
 
