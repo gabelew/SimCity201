@@ -53,4 +53,8 @@ public class Restaurant {
 	public void openRestaurant(){
 		isOpen = true;
 	}
+
+	/*public boolean isEmpty() {
+		return this.host.isRestaurantEmpty();
+	}*/
 }

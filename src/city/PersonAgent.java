@@ -962,7 +962,8 @@ public class PersonAgent extends Agent implements Person
     	else if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
-	    		if(r.isOpen){
+    		//TODO: add isEmpty method to restaurant
+	    	/*if(r.isOpen && r.isEmpty()){*/
 	    		if(job.type.equalsIgnoreCase("waiter")){
 	    			Role role = (Role) SimCityGui.waiterFactory(this, r);
 	            	role.setGui(SimCityGui.waiterGuiFactory(r, (Role) role));
@@ -1018,13 +1019,14 @@ public class PersonAgent extends Agent implements Person
 	            	((Cashier) role).goesToWork();
 	            	role.active = true;
 	    		}
-	    	}else{
+	    	/*}else{
 	    		state = State.doingNothing;
 	    		location = Location.InCity;
-	    	}
+	    	}*/
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
     		MarketAgent ma = findMarket(destination);
-    		if(ma.isOpen){
+    		//TODO: add isEmpty method to market
+    		/*if(ma.isOpen && ma.isEmpty()){*/
     		if(job.type.equalsIgnoreCase("clerk")){
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
@@ -1044,10 +1046,10 @@ public class PersonAgent extends Agent implements Person
 		            role.getGui().setPresent(true);
 		            role.goesToWork();		
 			}
-    		}else{
+    		/*}else{
 	    		state = State.doingNothing;
 	    		location = Location.InCity;
-    		}
+    		}*/
     	}
     }
 
