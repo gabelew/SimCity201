@@ -406,6 +406,7 @@ public class GLWaiterRole extends Role implements Waiter{
 		Do("Customer leaving.");
 		((GLHostRole)restaurant.host).msgTableAvailable(this, mc.c, mc.t.tableNumber);
 		mc.cs = customerState.leftRestaurant;
+		customers.remove(mc);
 	}
 	
 	private void goOnBreak() {

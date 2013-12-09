@@ -178,14 +178,14 @@ public class GLCookRole extends Role implements Cook{
 		
 		if(!firstRestock) {
 			firstRestock = true;
-			currentMarket = markets.get(0);
+			currentMarket = markets.get(4);
 		}
 		
 		if(state == State.wantsOffWork){
 			boolean canGetOffWork = true;
 			for (WaiterOrder o : orders)
 			{
-				if(o.s != orderState.pending)
+				if(o.s != orderState.finished)
 				{
 					canGetOffWork = false;
 					break;
@@ -248,6 +248,22 @@ public class GLCookRole extends Role implements Cook{
 				}
 			}
 		}
+		
+		
+		for (MarketOrder mOrder : marketOrders) {
+			if(mOrder.marketState == marketOrderState.paying) {
+				giveCashierMarketBill(mOrder);
+				return true;
+			}
+		}
+		
+		for (MarketOrder mOrder : marketOrders) {
+			if(mOrder.marketState == marketOrderState.ordering) {
+				mOrder.marketState = marketOrderState.ordered;
+				placeOrder(mOrder);
+				return true;
+			}
+		}
 
 		// Order food from market if nothing else on scheduler to be done
 		orderFoodFromMarket();
@@ -259,6 +275,11 @@ public class GLCookRole extends Role implements Cook{
 	}
 
 	// Actions
+	
+	private void giveCashierMarketBill(MarketOrder mOrder) {
+		((GLCashierRole)restaurant.cashier).msgHereIsInvoice(mOrder.price, mOrder.deliveryMan);
+		marketOrders.remove(mOrder);
+	}
 	
 	private void tellWaiter(WaiterOrder o) {
 		Do("Out of " + o.choice);
@@ -309,19 +330,23 @@ public class GLCookRole extends Role implements Cook{
 	}
 
 	private void changeMarket() {
-		if(currentMarket.equals(markets.get(0))) {
+		if(currentMarket.equals(markets.get(5))) {
+			currentMarket = markets.get(0);			
+		} else if(currentMarket.equals(markets.get(0))) {
 			currentMarket = markets.get(1);			
 		} else if(currentMarket.equals(markets.get(1))) {
 			currentMarket = markets.get(2);			
 		} else if(currentMarket.equals(markets.get(2))) {
-			currentMarket = markets.get(3);			
-		} else if(currentMarket.equals(markets.get(3))) {
-			currentMarket = markets.get(4);			
+			currentMarket = markets.get(3);				
 		} else if(currentMarket.equals(markets.get(4))) {
 			currentMarket = markets.get(5);			
 		} else {
 			marketsAreStocked = false;
 		}
+	}
+	
+	private void placeOrder(MarketOrder mOrder) {
+		mOrder.deliveryMan.msgHereIsOrder(mOrder.Choices);
 	}
 
 	//utilities

@@ -19,6 +19,7 @@ import java.util.concurrent.Semaphore;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.roles.DeliveryManRole;
 import city.roles.Role;
 
 /**
@@ -27,7 +28,7 @@ import city.roles.Role;
 
 public class GLCashierRole extends Role implements Cashier {
 	
-	private double currentBalance = 70; // starting amount of money at restaurant
+	private double bank = 5000; // starting amount of money at restaurant
 	private final double STEAKPRICE = 15.99;
 	private final double CHICKENPRICE = 10.99;
 	private final double SALADPRICE = 5.99;
@@ -157,6 +158,8 @@ public class GLCashierRole extends Role implements Cashier {
 		if(state == State.leaving){
 			state = State.none;
 			cashierGui.DoLeaveRestaurant();
+			if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
+				DepositBusinessCash();
 			try {
 				waitingResponse.acquire();
 			} catch (InterruptedException e) {
@@ -185,6 +188,25 @@ public class GLCashierRole extends Role implements Cashier {
 			}
 		}
 		
+		Bill temp2 = null;
+		Bill temp3 = null;
+		synchronized(bills) {
+			for(Bill b: bills) {
+				if(b.state == BillState.requested && temp2 == null) {
+					for(Bill b2 : bills) {
+						if(b2.state == BillState.informed && b2.deliveryMan == b.deliveryMan) {
+							temp2 = b;
+							temp3 = b2;
+						}
+					}
+				}
+			}
+		}
+		if(temp2 != null) {
+			payBill(temp2, temp3);
+			return true;
+		}
+		
 //		synchronized(bills) {
 //			for (MarketBill b : bills) {
 //				if (BillState.pending == b.bs) {
@@ -211,7 +233,35 @@ public class GLCashierRole extends Role implements Cashier {
 	}
 
 	// Actions
+		
+	private void payBill(Bill billFromDman, Bill billFromCook) {
+		if(billFromDman.bill == billFromCook.bill){
+			bank = bank - billFromDman.bill;
+			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
+			print("YO I PAID DA BILL GABE");
+			bills.remove(billFromDman);
+			bills.remove(billFromCook);
+		}else{
+			print("We are never ordering from this Market again.");
+			bank = bank - billFromDman.bill;
+			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
+			//tell cook to put market on naughty list
+			restaurant.cook.msgNeverOrderFromMarketAgain(((DeliveryManRole)billFromDman.deliveryMan).Market);
+			bills.remove(billFromDman);
+			bills.remove(billFromCook);
+		}
+	}
 	
+	private void DepositBusinessCash() {
+		double cash = bank - 1500;
+		cash = (Math.round(100*cash) / ((double)100));
+		int balance = Double.compare(cash, 0);
+		if(1 == balance) {
+			bank -= cash;
+			myPerson.businessFunds += cash;
+			myPerson.msgDepositBusinessCash();
+		}
+	}
 	
 	private void produceCheck(Check c) {
 		//Do ("Producing check for " + c.c.getName());
@@ -237,41 +287,17 @@ public class GLCashierRole extends Role implements Cashier {
 		//Do (c.c.getName() + " paid " + c.paid);
 		if(c.paid < c.amount) {
 			c.amount -= c.paid;
-			currentBalance += c.paid;
+			bank += c.paid;
 			c.paid = 0;
 			c.cs = checkState.debt;
 			//print(c.c.getName() + " owes us " + c.amount);
 		} else {
 			c.cs = checkState.paid;
-			currentBalance += c.paid;
+			bank += c.paid;
 		}
 		GLCustomerRole customer = (GLCustomerRole) c.c;
 		customer.msgHereIsReceipt(c.paid);
 	}
-	
-//	private void payBill(MarketBill b) {
-//		if("steak".equals(b.choice)) {
-//			b.cost = STEAKCOST * b.amount;
-//		} else if("chicken".equals(b.choice)) {
-//			b.cost = CHICKENCOST * b.amount;
-//		} else if("salad".equals(b.choice)) {
-//			b.cost = SALADCOST * b.amount;
-//		} else if("pizza".equals(b.choice)) {
-//			b.cost = PIZZACOST * b.amount;
-//		}
-//		if(currentBalance < b.cost) {
-//			Do("We owe " + b.m.getName() + " $" + b.cost);
-//			b.bs = BillState.debt;
-//		} else {
-//			Do("Paying " + b.choice + " bill to " + b.m.getName());
-//			currentBalance -= b.cost;
-//			print("Current bal: " + currentBalance);
-//			//b.m.msgHereIsMoney(b.cost);
-//			//b.m.msgPayment(this, b.cost);
-//			b.bs = BillState.paid;
-//		}
-//	}
-	
 
 
 	//utilities
