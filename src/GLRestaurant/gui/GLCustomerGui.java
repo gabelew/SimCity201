@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 
 public class GLCustomerGui implements Gui{
 	
-	static final int xCashier = 70, yCashier = 186;
+	static final int xCashier = 68, yCashier = 185;
 	static final int xWAITING_AREA = 50;
 	static final int yWAITING_AREA = 70;
 	private int waitingSeatNumber = -1;
