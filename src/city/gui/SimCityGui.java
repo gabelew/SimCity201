@@ -33,6 +33,8 @@ import EBRestaurant.roles.EBCashierRole;
 import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
 import EBRestaurant.roles.EBHostRole;
+import EBRestaurant.roles.EBNormalWaiterRole;
+import EBRestaurant.roles.EBSharedWaiterRole;
 import EBRestaurant.roles.EBWaiterRole;
 import GCRestaurant.gui.GCAnimationPanel;
 import GCRestaurant.gui.GCCashierGui;
@@ -953,9 +955,12 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}else{
 				return new CMNormalWaiterRole(p, r);
 			}
-		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
-			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating EMWaiterRole");
-			return new EBWaiterRole(p,r);
+		}if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
+			if(p.getName().toLowerCase().contains("shared")){
+				return new EBSharedWaiterRole(p, r);
+			}else{
+				return new EBNormalWaiterRole(p, r);
+			}
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GCWaiterRole");
 			return new GCWaiterRole(p,r);

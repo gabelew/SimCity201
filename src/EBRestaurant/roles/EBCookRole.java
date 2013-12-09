@@ -11,6 +11,8 @@ import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
+import restaurant.RoleOrder;
 import restaurant.interfaces.*;
 
 /**
@@ -25,7 +27,7 @@ public class EBCookRole extends Role implements Cook {
 	PersonAgent replacementPerson = null;
 	private String name;
 	private EBCookGui cookgui=null;
-	List<Order>Orders=Collections.synchronizedList(new ArrayList<Order>());
+	public List<Order>Orders=Collections.synchronizedList(new ArrayList<Order>());
 	private Semaphore atDest = new Semaphore(0,true);
 	List<market>markets=new ArrayList<market>();
 	List<marketOrder>marketOrders=new ArrayList<marketOrder>();
@@ -55,25 +57,15 @@ public class EBCookRole extends Role implements Cook {
 		double amountOwed;
 	}
 	public enum states{waiting,ordering,ordered,payed,received};
-	private class Order{
-		Waiter w;
-		String choice;
-		int tableNumber;
-		state S;
-		public Order(Waiter waiter, String choice2, int tableNumber2,
-				state pending) {
-			w=waiter;
-			choice=choice2;
-			tableNumber=tableNumber2;
-			S=pending;
-		}
-	}
 
 	HashMap<String,Integer>Inventory=new HashMap<String,Integer>();
 	HashMap<String,Integer> hm=new HashMap<String,Integer>();
 	
 	public enum state{pending,cooking,done};
 	Timer timer= new Timer();
+	private EBRevolvingStandMonitor revolvingStand;
+	private boolean check=true;
+	static final int CHECK_STAND_TIME = 4000;
 	class MyTimerTask extends TimerTask{
 		
 		private Order O;
@@ -226,6 +218,9 @@ public class EBCookRole extends Role implements Cook {
 				}
 			}
 		}
+		if(check){
+			checkRevolving();
+		}
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
@@ -233,6 +228,21 @@ public class EBCookRole extends Role implements Cook {
 	}
 
 	// Actions
+	private void checkRevolving() {
+		while(!revolvingStand.isEmpty()) {
+			Order order = revolvingStand.remove();
+			if(order != null) {
+				Orders.add(order);
+			}
+		}
+		check=false;
+		timer.schedule(new TimerTask() {
+			public void run() {
+				check = true;
+				stateChanged();
+			}
+		}, CHECK_STAND_TIME);
+	}
 	private void CookIt(Order O){
 		Do("Received order for table "+ O.tableNumber);
 		if (Inventory.get(O.choice)==0)
@@ -350,8 +360,7 @@ public class EBCookRole extends Role implements Cook {
 	}
 	
 	public void setRestaurant(Restaurant r) {
-		restaurant = r;
-		
+		restaurant = r;	
 	}
 
 	public void setGui(Gui g) {
@@ -365,6 +374,14 @@ public class EBCookRole extends Role implements Cook {
 	public void msgLeft() {
 		atDest.release();
 		stateChanged();
+	}
+	
+	public void setRevolvingStand(EBRevolvingStandMonitor r) {
+		this.revolvingStand = r;
+	}
+	
+	public EBRevolvingStandMonitor getRevolvingStand(){
+		return revolvingStand;
 	}
 
 }

@@ -327,6 +327,12 @@ public class EBHostRole extends Role implements Host {
 		hostState=state.relieveDuty;
 		waitingResponse.release();
 	}
+
+	@Override
+	public void msgCloseRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	/*public void pauseIt(){
 		pause();

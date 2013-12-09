@@ -21,13 +21,16 @@ import restaurant.interfaces.*;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the WaiterAgent. A W is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class EBWaiterRole extends Role implements Waiter {
+public abstract class EBWaiterRole extends Role implements Waiter {
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
-	private Cashier Cashier;
 	public Restaurant restaurant;
-	private EBWaiterGui waiterGui;
+	protected EBRevolvingStandMonitor revolvingStand;
+	public boolean checked=false;
+	public boolean testingMonitor=false;
+	Timer timer=new Timer();
+	protected EBWaiterGui waiterGui;
 	List<MyCustomer>Customers=new ArrayList<MyCustomer>();
 	public class MyCustomer{
 		Customer C;
@@ -70,10 +73,6 @@ public class EBWaiterRole extends Role implements Waiter {
 	
 	public void setHost(Host host){
 		this.host=host;
-	}
-	
-	public void setCashier(Cashier cashier){
-		this.Cashier=cashier;
 	}
 
 
@@ -238,14 +237,24 @@ public class EBWaiterRole extends Role implements Waiter {
 					return true;
 				}
 			}
-			for (MyCustomer cust : Customers)
+			if(revolvingStand == null || checked){
+				for (MyCustomer cust : Customers)
+				{
+					if(cust.S == customerState.ordered)
+					{
+						giveOrderToCook(cust);
+						return true;
+					}
+				}
+			}
+			/*for (MyCustomer cust : Customers)
 			{
 				if (cust.S==customerState.ordered)
 				{
 					giveOrderToCook(cust);
 					return true;
 				}
-			}
+			}*/
 			for (MyCustomer cust : Customers)
 			{
 				if (cust.S==customerState.wantBill&&cust.billReady&&atStart)
@@ -369,11 +378,13 @@ public class EBWaiterRole extends Role implements Waiter {
 		}
 	}
 	
-	private void giveOrderToCook(MyCustomer mc){
+	/*private void giveOrderToCook(MyCustomer mc){
 		mc.S=customerState.waitForFood;
 		((EBCookRole) restaurant.cook).msgHereIsOrder(mc.choice, mc.tableNumber,this);
 		waiterGui.DoLeaveCustomer();
-	}
+	}*/
+	
+	protected abstract void giveOrderToCook(MyCustomer c);
 	
 	private void giveBillToCustomer(MyCustomer mc){
 		mc.S=customerState.gaveBill;
