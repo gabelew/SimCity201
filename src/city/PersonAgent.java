@@ -1190,7 +1190,7 @@ public class PersonAgent extends Agent implements Person
 	    		restaurantNumber = randInt(0,1);
 	    	}
 	    }else{
-	    	restaurantNumber = randInt(0,restaurants.size() - 1);
+	    	restaurantNumber = randInt(0,openRestaurants.size() - 1);
 	    }
     	mr = openRestaurants.get(restaurantNumber);
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant 0"+restaurantNumber);
