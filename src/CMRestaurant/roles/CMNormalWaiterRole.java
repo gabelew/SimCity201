@@ -1,6 +1,7 @@
 package CMRestaurant.roles;
 
 import restaurant.Restaurant;
+import restaurant.test.mock.LoggedEvent;
 import city.PersonAgent;
 import city.gui.Gui;
 
@@ -11,10 +12,15 @@ public class CMNormalWaiterRole extends CMWaiterRole {
 	}
 	
 	protected void putInOrder(MyCustomer c) {
-		doGoToKitchen(c);
+		log.add(new LoggedEvent("Gave cook order directly"));
+		if(waiterGui != null){
+			doGoToKitchen(c);
+		}
 		c.s = CustomerState.orderPlaced;
 		((CMCookRole) restaurant.cook).msgHereIsOrder(this, c.choice, c.table);
-		waiterGui.placedOrder();
+		if(waiterGui != null){
+			waiterGui.placedOrder();
+		}
 	}
 
 	

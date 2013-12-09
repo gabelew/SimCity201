@@ -4,6 +4,7 @@ import java.util.TimerTask;
 
 import restaurant.Restaurant;
 import restaurant.RoleOrder;
+import restaurant.test.mock.LoggedEvent;
 import city.PersonAgent;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
@@ -24,6 +25,7 @@ public class CMSharedWaiterRole extends CMWaiterRole{
 			doGoToKitchen(c);
 		}
 		if(!revolvingStand.isFull()) {
+			log.add(new LoggedEvent("Check revoliving stand and put in order"));
 			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
 			c.s = CustomerState.orderPlaced;
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Inserting order into revolving stand");
@@ -31,6 +33,7 @@ public class CMSharedWaiterRole extends CMWaiterRole{
 				waiterGui.placedOrder();
 			}
 		} else {
+			log.add(new LoggedEvent("Check revoliving stand and satand was full"));
 			haveNotRecentlyCheckedStand = false;
 			if(waiterGui!=null){
 				waiterGui.placeOrderInPocket();

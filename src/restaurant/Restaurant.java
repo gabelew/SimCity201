@@ -20,6 +20,7 @@ public class Restaurant {
 	public InsideAnimationPanel insideAnimationPanel;
 	public String waiterRole;
 	public BankAccount restaurantAccount;
+	public boolean isOpen = true;
 	
 	public Restaurant(Host h, Cashier c, Cook co, Menu m, String cr, String t, InsideAnimationPanel iap, Point p, String wr){
 		this.host = h;
@@ -38,5 +39,17 @@ public class Restaurant {
 	
 	public BankAccount getRestaurantAccount() {
 		return this.restaurantAccount;
+	}
+
+	public boolean isOpen() {
+		return isOpen;
+	}
+	public void closeRestaurant(){
+		isOpen = false;
+		//TODO:notify host
+		
+	}
+	public void openRestaurant(){
+		isOpen = true;
 	}
 }

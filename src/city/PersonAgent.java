@@ -134,6 +134,7 @@ public class PersonAgent extends Agent implements Person
 	}
 
     private MarketAgent chooseClosestMarket() {
+    	
     	MarketAgent closestMa = markets.get(0);
 	    if(this.name.toLowerCase().contains("bus")){
 	    	closestMa = markets.get(5);
@@ -920,8 +921,8 @@ public class PersonAgent extends Agent implements Person
 	private boolean workIsClosed() {
 		for(Restaurant r: simCityGui.getRestaurants()){
 			if(job.location.equals(r.location)){
-				//TODO: if(r.isOpen()==false)
-				//return true;
+				if(r.isOpen()==false)
+				 return true;
 			}
 		}
 		for(MarketAgent m: simCityGui.getMarkets()){
@@ -1153,6 +1154,27 @@ public class PersonAgent extends Agent implements Person
 	private void goToRestaurant() {
     	//print("I'm going to restaurant");
     	// DoGoToRestaurant animation
+		
+
+    	List<Restaurant> openRestaurants = new ArrayList<Restaurant>(); 
+    	
+    	for(Restaurant oR: restaurants){
+    		if(oR.isOpen()){
+    			openRestaurants.add(oR);
+    		}
+    	}
+    	
+    	if(openRestaurants.isEmpty()){
+			state = State.goingHomeToEat;
+			
+			if(mustEatAtHomeFirst==true){
+				mustEatAtHomeFirst = false;
+			}
+			
+			destination = myHome.location;
+			goToHouseToEat();
+    	}
+    	
 		if(mustEatOutBeforeMarketAndBank == true){
 			mustEatOutBeforeMarketAndBank = false;
 		}
@@ -1163,7 +1185,9 @@ public class PersonAgent extends Agent implements Person
     	Restaurant mr = null;
     	int restaurantNumber = 0;
 	    if(this.name.toLowerCase().contains("visiter") && this.name.toLowerCase().contains("car")==false){
-	    	restaurantNumber = randInt(0,1);
+	    	if(openRestaurants.size() > 1){
+	    		restaurantNumber = randInt(0,1);
+	    	}
 	    }else{
 	    	restaurantNumber = randInt(0,restaurants.size() - 1);
 	    }

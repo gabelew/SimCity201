@@ -3,6 +3,7 @@ package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
 import CMRestaurant.gui.CMWaiterGui;
 import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;
@@ -14,6 +15,7 @@ import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.EventLog;
 
 public abstract class CMWaiterRole extends Role implements Waiter{
 	CMWaiterGui waiterGui;
@@ -29,6 +31,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	protected RevolvingStandMonitor revolvingStand;
 	public boolean haveNotRecentlyCheckedStand = false;
 	public boolean testingRevolvingMonitor = false;
+	public EventLog log = new EventLog();
 	
 	public class MyCustomer{
 		private Customer c;

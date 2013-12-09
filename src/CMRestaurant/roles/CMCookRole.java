@@ -2,6 +2,7 @@ package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
 import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
@@ -13,6 +14,8 @@ import restaurant.RevolvingStandMonitor;
 import restaurant.RoleOrder;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.EventLog;
+import restaurant.test.mock.LoggedEvent;
 
 public class CMCookRole extends Role implements Cook {
 	
@@ -28,6 +31,7 @@ public class CMCookRole extends Role implements Cook {
 	private RevolvingStandMonitor revolvingStand;
 	public boolean checkStand;
 	public CMCookGui cookGui = null;
+	public EventLog log = new EventLog();
 
 	static final int CHECK_STAND_TIME = 4000;
     static final int SALAD_COOKTIME = 7000;
@@ -178,6 +182,7 @@ public class CMCookRole extends Role implements Cook {
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
+		log.add(new LoggedEvent("Recieved msgHereIsOrder"));
 		orders.add(new RoleOrder(w, choice, table));
 		stateChanged();
 	}
@@ -474,6 +479,7 @@ public class CMCookRole extends Role implements Cook {
 		
 		if(checkStand) {
 			checkRevolvingStand();
+			return true;
 		}
 		
 		goToRestPost();
@@ -486,12 +492,17 @@ public class CMCookRole extends Role implements Cook {
 //Actions
 	
 	public void checkRevolvingStand() {
-		if(!revolvingStand.isEmpty()) {
+		if(!revolvingStand.isEmpty()){
+			log.add(new LoggedEvent("Checked Revolving Stand and it had orders in it."));
+		}else{
+			log.add(new LoggedEvent("Checked Revolving Stand and it was empty."));
+		}
+		while(!revolvingStand.isEmpty()) {
 			RoleOrder order = revolvingStand.remove();
 			if(order != null) {
 				orders.add(order);
 			}
-		}else{
+		}
 			checkStand = false;
 			timer.schedule(new TimerTask() {
 				public void run() {
@@ -499,11 +510,12 @@ public class CMCookRole extends Role implements Cook {
 					stateChanged();
 				}
 			}, CHECK_STAND_TIME);
-		}
+		
 	}
 	
 	private void plateIt(RoleOrder o) {
 		DoPlating(o);
+		log.add(new LoggedEvent("Plating order."));
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
@@ -517,6 +529,7 @@ public class CMCookRole extends Role implements Cook {
 
 	private void cookIt(RoleOrder o)
 	{
+		log.add(new LoggedEvent("Cooking order."));
 		DoGoToFidge();
 		try {
 			waitingResponse.acquire();
@@ -597,6 +610,7 @@ public class CMCookRole extends Role implements Cook {
 	}
 
 	private void orderFoodFromMarket(){
+		log.add(new LoggedEvent("Preformed orderFoodFromMarket"));
 		synchronized(markets){
 			for(MyMarket m: markets){
 				boolean placeOrder = false;
