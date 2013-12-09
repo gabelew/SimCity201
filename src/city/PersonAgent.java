@@ -1218,16 +1218,22 @@ public class PersonAgent extends Agent implements Person
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-    	state = State.eating;
-    	
+
     	Restaurant r = findRestaurant(destination);
-    	Role role = (Role) SimCityGui.customerFactory(this, r);
-    	role.setGui(SimCityGui.customerGuiFactory(r,role));
-    	roles.add(role);
-    	role.active = true;
-    	r.insideAnimationPanel.addGui(role.getGui());
-    	role.getGui().setPresent(true);
-    	((Customer) role).gotHungry();
+    	if(r.isOpen){
+	    	state = State.eating;
+	    	
+	    	Role role = (Role) SimCityGui.customerFactory(this, r);
+	    	role.setGui(SimCityGui.customerGuiFactory(r,role));
+	    	roles.add(role);
+	    	role.active = true;
+	    	r.insideAnimationPanel.addGui(role.getGui());
+	    	role.getGui().setPresent(true);
+	    	((Customer) role).gotHungry();
+    	}else{
+    		state = State.doingNothing;
+    		location = Location.InCity;
+    	}
     }
     
     private void goToBank() {

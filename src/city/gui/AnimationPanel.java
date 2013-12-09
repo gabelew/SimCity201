@@ -16,8 +16,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 public class AnimationPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
@@ -94,20 +97,41 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     public BusAgent busLeft = new BusAgent('B');
     public BusAgent busRight = new BusAgent('F');
     public boolean paused = false;
+    public 	Map<Point, GridSpot> gridMap = new HashMap<Point, GridSpot>();
+	
+	public enum GridDirection {RIGHT,DOWN,UP};
+    public class GridSpot{
+    	public Semaphore spot = new Semaphore(1,true);
+    	public boolean stopSign = false;
+    	GridDirection gridDriction;
+    	GridSpot(GridDirection gd){
+    		
+    	}
+    	GridSpot(GridDirection gd, boolean ss){
+    		stopSign = ss;
+    	}
+    }
     
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
 
-		try {
+    	for(int i = 0;i< 44;i++){
+    		for(int j =0; j<4;j++){
+    			gridMap.put(new Point(i*20, 115+j*80), new GridSpot(GridDirection.RIGHT));
+    			if(i%2==0 && i<33){
+        			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot(GridDirection.DOWN));
+    			}
+    			if(i%2+1==0 && i<34){
+    			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot(GridDirection.UP));
+    			}
+    		}
+    	}
+    			
+		/*try {
 			StringBuilder path = new StringBuilder("imgs/");
-			ImageIO.read(new File(path.toString() + "bus_front.png"));
-		    ImageIO.read(new File(path.toString() + "bus_back.png"));
-		    ImageIO.read(new File(path.toString() + "carFront.png"));
-		    ImageIO.read(new File(path.toString() + "carBack.png"));
-		    ImageIO.read(new File(path.toString() + "carRight.png"));
-		    ImageIO.read(new File(path.toString() + "carLeft.png"));
+			bridgeImg = ImageIO.read(new File(path.toString() + "bridge.png"));
 		} catch (IOException e) {
-		}
+		}*/
 		
 
 	    BusGui bg1 = new BusGui(busLeft, simCityGui, 'B');
@@ -188,8 +212,30 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        	g2.fillRect(802+30+20, 25+80*(i)+30, 20, SIDEWALK_WIDTH);
 	        }
 
-	        
 
+	    	
+	    	for(int i = 0;i< 44;i++){
+	    		for(int j =0; j<4;j++){
+	    			/*g2.setColor(Color.CYAN);
+	    			g.fillRect(i*20 - 3, 115+j*80, 20, 20);
+	    			g2.setColor(Color.RED);
+	    			g.drawRect(i*20 - 3, 115+j*80, 20, 20);*/
+	    			if(i%2==0 && i<33){
+		    			/*g2.setColor(Color.CYAN);
+		    			g.fillRect(i*20 +97, 95+j*80, 20, 20);
+		    			g2.setColor(Color.RED);
+		    			g.drawRect(i*20 +97, 95+j*80, 20, 20);*/
+	    			}
+	    			if(i%2+1==2 && i<34){
+		    			/*g2.setColor(Color.CYAN);
+		    			g.fillRect(i*20 +97, 95+j*80, 20, 20);
+		    			g2.setColor(Color.RED);
+		    			g.drawRect(i*20 +97, 95+j*80, 20, 20);*/
+	    			}
+	    		}
+	    		
+	    	}
+	    	
 		synchronized(guis){
 		for(Gui gui : guis) {
 			//if (gui.isPresent()) {
@@ -227,7 +273,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         for(int i = ZERO; i<buildings.size(); i++){
         	g.drawImage(getBuildingImg(i), getBuildingXCoord(i), getBuildingYCoord(i), null);
         }
-    	
+
     }
     
 	public void addGui(PersonGui gui) {
