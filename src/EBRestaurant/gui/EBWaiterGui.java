@@ -22,7 +22,7 @@ public class EBWaiterGui implements Gui {
     private final int xChange = 20;
     private final int yChange = -20;
     private int xWaitingPosition=100;
-    private final int yWaitingPosition=50;
+    private int yWaitingPosition=50;
     private final int xTable = 100;
     private final int yTable1 = 100;
     private final int yTable2 = 200;
@@ -34,7 +34,9 @@ public class EBWaiterGui implements Gui {
     private int Choice1Y;
     private int Choice2Y;
     private int Choice3Y;
-    private boolean onBreak;
+    
+    private enum command {none,onBreak,goToStart,goToCook};
+    command commands;
 
     public EBWaiterGui(EBWaiterRole w){
     	try {
@@ -53,7 +55,7 @@ public class EBWaiterGui implements Gui {
 		choice1="";
 		choice2="";
 		choice3="";
-		onBreak=false;
+		commands=command.none;
     }
 
     public void updatePosition() {
@@ -71,11 +73,11 @@ public class EBWaiterGui implements Gui {
         		& (xDestination == xTable + xChange) & ((yDestination == yTable1 + yChange)||(yDestination == yTable2 + yChange)||(yDestination == yTable3 + yChange))) {
            agent.msgAtTable();
         }
-        else if (xPos==xWaitingPosition && yPos==yWaitingPosition)
+        else if (xPos==xWaitingPosition && yPos==yWaitingPosition&&commands==command.goToStart)
         {
         	agent.msgAtStart();
         }
-        else if (xPos==290 && yPos==220)
+        else if (xPos==290 && yPos==220&&commands==command.goToCook)
         {
         	agent.msgAtCook();
         }
@@ -120,11 +122,13 @@ public class EBWaiterGui implements Gui {
     public void DoLeaveCustomer() {
         xDestination = xWaitingPosition;
         yDestination = yWaitingPosition;
+        commands=command.goToStart;
     }
     
     public void DoGoToCook(){
     	xDestination = 290;
     	yDestination = 220;
+    	commands=command.goToCook;
     }
 
     public int getXPos() {
@@ -153,28 +157,33 @@ public class EBWaiterGui implements Gui {
     	}
     }
     
-    public void setWaitingPosition(int x){
+    public void setWaitingPosition(int x,int y){
     	 xWaitingPosition=xWaitingPosition+x;
     	 xDestination=xWaitingPosition;
+    	 yWaitingPosition=yWaitingPosition+y;
+    	 yDestination=yWaitingPosition;
     }
     
     
 	public void setBreak() {
-		onBreak=true;
+		commands=command.onBreak;
 		agent.msgAskForBreak();
 	}
 	
 	public void unsetBreak(){
-		onBreak=false;
+		commands=command.none;
 		agent.backFromBreak();
 	}
 	
 	public void breakDenied(){
-		onBreak=false;
+		commands=command.none;
 	}
     
 	public boolean onBreak() {
-		return onBreak;
+		if(commands==command.onBreak)
+			return true;
+		else
+			return false;
 	}
 
 	public void DoLeaveRestaurant() {

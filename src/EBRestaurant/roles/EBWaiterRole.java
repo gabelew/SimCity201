@@ -1,6 +1,5 @@
 package EBRestaurant.roles;
 
-import CMRestaurant.gui.CMCustomerGui;
 import EBRestaurant.gui.EBHostGui;
 import EBRestaurant.gui.EBWaiterGui;
 
@@ -45,9 +44,9 @@ public class EBWaiterRole extends Role implements Waiter {
 			S=waiting;
 		}
 	}
-	public enum customerState{waiting,seated,readyToOrder,asked,ordered,reOrder,waitForFood,foodReady,eating,wantBill,gaveBill,done};
-	public enum state{none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty};
-	state waiterState;
+	public enum customerState{waiting,seated,readyToOrder,asked,ordered,reOrder,waitForFood,foodReady,giveFood,eating,wantBill,gaveBill,done};
+	public enum wState{none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak,leaving, relieveFromDuty};
+	wState waiterState;
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 	private String outOf;
@@ -81,8 +80,8 @@ public class EBWaiterRole extends Role implements Waiter {
 	// Messages
 
 	public void msgSeatCustomer(Customer Customer, int tableNumber){
-	Customers.add(new MyCustomer(Customer, tableNumber,customerState.waiting));
-	stateChanged();
+		Customers.add(new MyCustomer(Customer, tableNumber,customerState.waiting));
+		stateChanged();
 	}
 	
 	public void msgReadyToOrder(Customer cust) {
@@ -186,8 +185,8 @@ public class EBWaiterRole extends Role implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-			if(waiterState == state.relieveFromDuty){
-				waiterState = state.none;
+			if(waiterState == wState.relieveFromDuty&&Customers.size() == 0){
+				waiterState = wState.none;
 				myPerson.releavedFromDuty(this);
 				restaurant.insideAnimationPanel.removeGui(waiterGui);
 				return true;
@@ -196,19 +195,20 @@ public class EBWaiterRole extends Role implements Waiter {
 			if(Customers.size() == 0 && (
 					(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
 					(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
+				waiterState = wState.leaving;
 				leaveWork();
 				return true;
 			}
-			if(waiterState == state.gotToWork)
+			if(waiterState == wState.gotToWork)
 			{
-				waiterState = state.none;
+				waiterState = wState.none;
 				tellHost();
 				return true;
 			}
 			try{
 			for (MyCustomer cust : Customers)
 			{
-				if (cust.S==customerState.foodReady)
+				if (cust.S==customerState.giveFood)
 				{
 					giveOrderToCustomer(cust);
 					return true;
@@ -216,9 +216,9 @@ public class EBWaiterRole extends Role implements Waiter {
 			}
 			for (MyCustomer cust : Customers)
 			{
-				if (cust.S==customerState.foodReady&&atStart)
+				if (cust.S==customerState.foodReady)
 				{
-					goPickUpFood();
+					goPickUpFood(cust);
 					return true;
 				}
 			}
@@ -263,7 +263,7 @@ public class EBWaiterRole extends Role implements Waiter {
 			}
 			for (MyCustomer cust : Customers)
 			{
-				if (cust.S==customerState.waiting&&atStart)
+				if (cust.S==customerState.waiting)
 				{
 					seatCustomer(cust);//the action
 					return true;//return true to the abstract agent to reinvoke the scheduler.
@@ -297,20 +297,19 @@ public class EBWaiterRole extends Role implements Waiter {
 		((EBHostRole) host).msgCanIBreak(this);
 	}
 	
-	private void goPickUpFood(){
+	private void goPickUpFood(MyCustomer c){
 		waiterGui.DoGoToCook();
 		try {
 			atCook.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		c.S=customerState.giveFood;
 	}
 	
 	private void leaveWork() {
-		waiterState = state.none;
-		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
-		myPerson.msgDoneEatingAtRestaurant();
+		waiterGui.DoLeaveRestaurant();
 	}
 
 	private void tellHost() {
@@ -406,7 +405,6 @@ public class EBWaiterRole extends Role implements Waiter {
 	}
 	
 	private void tellHostCustomerLeft(MyCustomer mc){
-		Do("Done Eating and Leaving");
 		((EBHostRole) restaurant.host).msgTableEmpty(mc.tableNumber);
 		waiterGui.setChoice("", mc.tableNumber);
 		waiterGui.DoLeaveCustomer();
@@ -437,7 +435,8 @@ public class EBWaiterRole extends Role implements Waiter {
 
 
 	public void msgLeftTheRestaurant() {
-		waiterState = state.relieveFromDuty;
+		waiterState = wState.relieveFromDuty;
+		stateChanged();
 	}
 
 	public Restaurant getRestaurant() {
@@ -445,7 +444,7 @@ public class EBWaiterRole extends Role implements Waiter {
 	}
 
 	public void goesToWork() {
-		waiterState = state.gotToWork;
+		waiterState = wState.gotToWork;
 		stateChanged();
 	}
 
@@ -455,8 +454,16 @@ public class EBWaiterRole extends Role implements Waiter {
 
 	public void setGui(Gui g) {
 		waiterGui = (EBWaiterGui) g;
-		if(getName().toLowerCase().contains("car"))
-			waiterGui.setWaitingPosition(50);
+		if(getName().toLowerCase().contains("car")){
+			if(getName().toLowerCase().contains("night"))
+				waiterGui.setWaitingPosition(50,-30);
+			else
+				waiterGui.setWaitingPosition(50,0);
+		}
+		else{
+			if(getName().toLowerCase().contains("night"))
+				waiterGui.setWaitingPosition(0,-30);
+		}
 	}
 }
 

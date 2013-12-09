@@ -38,6 +38,7 @@ public class EBCookGui implements Gui {
     private String wait1="";
     private String wait2="";
     private String wait3="";
+    boolean leaving=false;
     HashMap<String,String>shortChoice=new HashMap<String,String>();
 
     public EBCookGui(EBCookRole role) {
@@ -64,6 +65,11 @@ public class EBCookGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
+        
+        if(xPos==xDestination&&yPos==yDestination&&leaving){
+        	leaving=false;
+        	role.msgLeft();
+        }
 
     }
 
@@ -127,6 +133,7 @@ public class EBCookGui implements Gui {
 	public void DoLeaveRestaurant() {
 		xDestination=-20;
 		yDestination=-20;
+		leaving=true;
 	}
 
 	@Override

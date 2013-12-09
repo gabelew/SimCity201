@@ -3,6 +3,7 @@ package EBRestaurant.roles;
 import EBRestaurant.gui.EBCookGui;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
@@ -25,6 +26,7 @@ public class EBCookRole extends Role implements Cook {
 	private String name;
 	private EBCookGui cookgui=null;
 	List<Order>Orders=Collections.synchronizedList(new ArrayList<Order>());
+	private Semaphore atDest = new Semaphore(0,true);
 	List<market>markets=new ArrayList<market>();
 	List<marketOrder>marketOrders=new ArrayList<marketOrder>();
 	private boolean putOrder=false;
@@ -157,7 +159,6 @@ public class EBCookRole extends Role implements Cook {
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
 			}
-			reactivatePerson();
 			return true;
 		}
 		
@@ -171,11 +172,11 @@ public class EBCookRole extends Role implements Cook {
 		if(cookState == CState.leaving){
 			cookState = CState.none;
 			cookgui.DoLeaveRestaurant();
-			/*try {
-				waitingResponse.acquire();
+			try {
+				atDest.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}*/
+			}
 			cookState = CState.relieveFromDuty;
 			return true;
 		}
@@ -275,10 +276,6 @@ public class EBCookRole extends Role implements Cook {
 		Orders.remove(O);
 	}
 
-	private void reactivatePerson(){
-		myPerson.msgDoneEatingAtRestaurant();
-		restaurant.insideAnimationPanel.removeGui(cookgui);
-	}
 	
 	/*public void pauseIt(){
 		pause();
@@ -363,6 +360,11 @@ public class EBCookRole extends Role implements Cook {
 
 	public Gui getGui() {
 		return cookgui;
+	}
+
+	public void msgLeft() {
+		atDest.release();
+		stateChanged();
 	}
 
 }

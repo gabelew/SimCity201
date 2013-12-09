@@ -123,6 +123,10 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
     public void addWaiterToList(String name){
 		((EBRestaurantPanel) insideBuildingPanel.guiInteractionPanel).addWaiterToList(name);
 	}
+    
+    public void removeWaiterFromList(String name){
+		((EBRestaurantPanel) insideBuildingPanel.guiInteractionPanel).removeWaiterFromList(name);
+	}
 
     public void addGui(EBCustomerGui gui) {
         guis.add(gui);

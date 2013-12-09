@@ -154,12 +154,10 @@ public class EBCashierRole extends Role implements Cashier {
 				if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
 					DepositBusinessCash();
 				cashierGui.DoLeaveRestaurant();
-				reactivatePerson();
 				return true;
 			}
 			for (payment p:Payments){
 				if(p.pState==payState.receivedBill&&receivedInvoice&&bank>0){
-					print("xxxx");
 					payMarket(p);
 					return true;
 				}
@@ -246,10 +244,6 @@ public class EBCashierRole extends Role implements Cashier {
 		}
 	}
 	
-	private void reactivatePerson(){
-		myPerson.msgDoneEatingAtRestaurant();
-		restaurant.insideAnimationPanel.removeGui(cashierGui);
-	}
 	
 	/*public void pauseIt(){
 		pause();
@@ -306,6 +300,10 @@ public class EBCashierRole extends Role implements Cashier {
 
 	public void setGui(Gui g) {
 		cashierGui = (EBCashierGui) g;
+	}
+
+	public void msgLeft() {
+		cashierState = CashState.releaveFromDuty;
 	}
 }
 

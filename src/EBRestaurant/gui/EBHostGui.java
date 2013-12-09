@@ -21,7 +21,7 @@ public class EBHostGui implements Gui {
     private int xDestination = -20, yDestination = -20;//default host position
     private final int xChange = 20;
     private final int yChange = -20;
-
+    private boolean leaving=false;
     public int xTable = 100;
     public int yTable = 100;
 
@@ -51,6 +51,10 @@ public class EBHostGui implements Gui {
         if (xPos==yChange && yPos==yChange)
         {
         	agent.msgAtStart();
+        }
+        if(xPos==xDestination&&yPos==yDestination&&leaving){
+        	leaving=false;
+        	agent.msgLeft();
         }
     }
 
@@ -104,5 +108,11 @@ public class EBHostGui implements Gui {
 	@Override
 	public void setPresent(boolean b) {
 		isPresent=b;
+	}
+
+	public void DoLeaveRestaurant() {
+		xDestination=-30;
+		yDestination=-30;
+		leaving=true;
 	}
 }

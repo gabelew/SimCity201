@@ -218,7 +218,6 @@ public class EBCustomerRole extends Role implements Customer {
 	private void goToRestaurant() {
 		state = AgentState.WaitingInRestaurant;
 		restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
-		print("12345");
 	}
 	
 	private void readyToOrder(){
@@ -396,6 +395,7 @@ public class EBCustomerRole extends Role implements Customer {
 	
 	private void Done(){
 		state = AgentState.DoingNothing;
+		myPerson.hungerLevel = 0;
 		myPerson.msgDoneEatingAtRestaurant();
 		restaurant.insideAnimationPanel.removeGui(ebcustomerGui);
 	}

@@ -22,6 +22,8 @@ public class EBCashierGui implements Gui {
     public String choice1="";
     public String choice2="";
     public String choice3="";
+    private enum guiState{none,entering,leaving};
+    guiState command;
 
     public EBCashierGui(EBCashierRole agent) {
         this.agent = agent;
@@ -41,7 +43,11 @@ public class EBCashierGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
-
+        if (xPos == xDestination&&yPos==yDestination&&command==guiState.leaving){
+        	command=guiState.none;
+        	agent.msgLeft();
+        }
+        
     }
 
     public void draw(Graphics2D g) {
@@ -65,11 +71,13 @@ public class EBCashierGui implements Gui {
 	public void DoEnterRestaurant() {
 		xDestination=40;
 		yDestination=400;
+		command=guiState.entering;
 	}
 
 	public void DoLeaveRestaurant() {
 		xDestination=-40;
 		yDestination=-40;
+		command=guiState.leaving;
 	}
 
 	public void setPresent(boolean b) {

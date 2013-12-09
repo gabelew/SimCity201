@@ -4,8 +4,11 @@ import CMRestaurant.gui.CMCustomerGui;
 import CMRestaurant.roles.CMWaiterRole;
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBHostGui;
+import EBRestaurant.roles.EBCookRole.CState;
+import EBRestaurant.roles.EBWaiterRole.wState;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;
@@ -23,6 +26,8 @@ import restaurant.interfaces.*;
 //is proceeded as he wishes.
 public class EBHostRole extends Role implements Host {
 	public Restaurant restaurant;
+	private Semaphore atDest = new Semaphore(0,true);
+	private Semaphore waitingResponse = new Semaphore(0,true);
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -39,7 +44,7 @@ public class EBHostRole extends Role implements Host {
 		}
 	}
 	public enum custState {staying,goToArea,assigned,waiting};
-	public enum state {goToWork,atWork,leaveWork,done};
+	public enum state {none,goToWork,atWork,leaveWork,relieveDuty,done};
 	state hostState;
 	public List<MyWaiters> waiters
 	= new ArrayList<MyWaiters>();
@@ -159,13 +164,23 @@ public class EBHostRole extends Role implements Host {
             If so seat him at the table.
 		 */
 		try{
-			if(hostState==state.leaveWork){
-				hostState=state.done;
+			if(hostState==state.relieveDuty){
+				hostState=state.none;
 				myPerson.releavedFromDuty(this);
 				if(replacementPerson != null){
 					replacementPerson.waitingResponse.release();
 				}
-				reactivatePerson();
+				return true;
+			}
+			if(hostState==state.leaveWork){
+				hostState = state.none;
+				hostGui.DoLeaveRestaurant();
+				try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return true;
 			}
 			if(hostState == state.goToWork){
 				hostState = state.atWork;
@@ -211,7 +226,7 @@ public class EBHostRole extends Role implements Host {
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
 		}
-		catch(Exception e){
+		catch(ConcurrentModificationException e){
 			return false;
 		}
 }
@@ -225,7 +240,6 @@ public class EBHostRole extends Role implements Host {
 		}
 	}
 	private void askToWait(Customer cust){
-		Do("Do you want to wait?");
 		((EBCustomerRole) cust).msgFull();
 	}
 	private Waiter pickWaiter(){
@@ -234,8 +248,7 @@ public class EBHostRole extends Role implements Host {
 			{
 				numWaiter=0;
 			}
-				return waiters.get(numWaiter).w;
-
+			return waiters.get(numWaiter).w;
 
 	}
 	
@@ -243,20 +256,15 @@ public class EBHostRole extends Role implements Host {
 				((EBWaiterRole) waiter).msgSeatCustomer(c.cust, table.tableNumber);
 				table.setOccupant(c.cust);
 				waitingCustomers.remove(c);
-
 	}
 
-	private void reactivatePerson(){
-		myPerson.msgDoneEatingAtRestaurant();
-		restaurant.insideAnimationPanel.removeGui(hostGui);
-	}
 	
 	//utilities
 
 	public void msgReadyToWork(Waiter w){
 		waiters.add(new MyWaiters(w,false));
 		((EBAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((EBWaiterRole) w).getName());
-		stateChanged();
+		this.stateChanged();
 	}
 	
 	public void setGui(EBHostGui gui) {
@@ -300,12 +308,14 @@ public class EBHostRole extends Role implements Host {
 		this.stateChanged();
 	}
 
-	public void msgDoneWorking(Waiter w) {
+	public void msgDoneWorking(Waiter wait) {
 		for (MyWaiters waiter:waiters){
-			if (waiter==w){
-				waiters.remove(w);
+			if (waiter.w==wait){
+				((EBAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((EBWaiterRole) wait).getName());
+				waiters.remove(waiter);
 			}
 		}
+		stateChanged();
 	}
 
 	public void setRestaurant(Restaurant r) {
@@ -315,6 +325,11 @@ public class EBHostRole extends Role implements Host {
 	@Override
 	public void setGui(Gui g) {
 		hostGui = (EBHostGui) g;
+	}
+
+	public void msgLeft() {
+		hostState=state.relieveDuty;
+		waitingResponse.release();
 	}
 	
 	/*public void pauseIt(){
