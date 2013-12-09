@@ -343,14 +343,12 @@ public class EBCustomerRole extends Role implements Customer {
 		leaving=generator.nextInt(2);
 		if(leaving==1)
 		{
-			state=AgentState.staying;
-			Do("Leaving because restaurant is full");
-			restaurant.host.msgLeavingRestaurant(this);
+			state=AgentState.payed;
+			((EBHostRole)restaurant.host).msgLeavingRestaurant(this);
 			stateChanged();
 		}
 		else{
 			((EBHostRole) restaurant.host).msgStaying(this);
-			Do("Staying and waiting");
 			state=AgentState.WaitingInArea;
 			stateChanged();
 		}
@@ -390,6 +388,7 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 	
 	private void leave(){
+		print("leaving now");
 		ebcustomerGui.DoExitRestaurant();
 	}
 	

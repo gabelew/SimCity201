@@ -195,4 +195,8 @@ public class EBWaiterGui implements Gui {
 	public void setPresent(boolean b) {
 		isPresent=b;
 	}
+
+	public void askBreak() {
+		agent.msgAskForBreak();
+	}
 }

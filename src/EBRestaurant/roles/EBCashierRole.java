@@ -209,16 +209,6 @@ public class EBCashierRole extends Role implements Cashier {
 			bank=bank-p.amount;
 			Payments.remove(p);
 		}
-		/*else
-		{
-			//p.market.msgHereIsPayment(money,money-p.amount,p.payNum);
-			p.amount=p.amount-money;
-			p.amount=Math.round((p.amount*100));
-			p.amount=p.amount/100;
-			money=0;
-			p.pState=payState.owes;
-			Do("Payment "+ p.payNum+" partially payed.");
-		}*/
 	}
 	private void createCheck(String choice,int tableNumber,Waiter waiter){
 		Do("Here is check for table "+tableNumber);

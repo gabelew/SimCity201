@@ -1,17 +1,13 @@
 package EBRestaurant.roles;
 
-import CMRestaurant.gui.CMCustomerGui;
-import CMRestaurant.roles.CMWaiterRole;
+
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBHostGui;
-import EBRestaurant.roles.EBCookRole.CState;
-import EBRestaurant.roles.EBWaiterRole.wState;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
-import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -26,7 +22,6 @@ import restaurant.interfaces.*;
 //is proceeded as he wishes.
 public class EBHostRole extends Role implements Host {
 	public Restaurant restaurant;
-	private Semaphore atDest = new Semaphore(0,true);
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	static final int NTABLES = 3;//a global for the number of tables.
 	//Notice that we implement waitingCustomers using ArrayList, but type it
@@ -49,7 +44,7 @@ public class EBHostRole extends Role implements Host {
 	public List<MyWaiters> waiters
 	= new ArrayList<MyWaiters>();
 	public class MyWaiters{
-		Waiter w;
+		public Waiter w;
 		Boolean onBreak;
 		int numCustomers;
 		public MyWaiters(Waiter w2, boolean b) {
@@ -93,7 +88,7 @@ public class EBHostRole extends Role implements Host {
 	}
 	
 	public void msgIWantToEat(Customer cust) {
-		waitingCustomers.add(new Customers(cust,custState.assigned));
+		waitingCustomers.add(new Customers(cust,custState.staying));
 		stateChanged();
 	}
 	
@@ -104,6 +99,7 @@ public class EBHostRole extends Role implements Host {
 			{
 				waitingCustomers.remove(c);
 				stateChanged();
+				break;
 			}
 		}
 	}

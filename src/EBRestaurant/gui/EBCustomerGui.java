@@ -58,11 +58,16 @@ public class EBCustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) 
+			if (command==Command.GoToSeat){ 
+				command=Command.noCommand;
 				agent.msgAnimationFinishedGoToSeat();
-			else if(command==Command.GoPay)
+			}
+			else if(command==Command.GoPay){
+				command=Command.noCommand;
 				agent.msgAnimationFinishedGoToCashier();
+			}
 			else if (command==Command.LeaveRestaurant) {
+				command=Command.noCommand;
 				agent.msgAnimationFinishedLeaveRestaurant();
 				isHungry = false;
 			}
