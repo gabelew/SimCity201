@@ -1003,6 +1003,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public void setOpen(String name, int buildingNumber) {
 		if(name.toLowerCase().contains("restaurant")){
 			Restaurant r = restaurants.get(buildingNumber);
+			r.openRestaurant();
 		}else if(name.toLowerCase().contains("market")){
 			MarketAgent m = markets.get(buildingNumber);
 		}else if(name.toLowerCase().contains("bank")){
@@ -1014,6 +1015,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public void setClosed(String name, int buildingNumber) {
 		if(name.toLowerCase().contains("restaurant")){
 			Restaurant r = restaurants.get(buildingNumber);
+			r.closeRestaurant();
 		}else if(name.toLowerCase().contains("market")){
 			MarketAgent m = markets.get(buildingNumber);
 		}else if(name.toLowerCase().contains("bank")){
