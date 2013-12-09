@@ -79,6 +79,11 @@ public class CMCustomerRole extends Role implements Customer {
 		stateChanged();
 	}
 
+	public void msgRestaurantIsClosed() {
+		state = AgentState.WaitigForTable;
+		event = AgentEvent.leavingEarly;
+	}
+	
 	public void msgWaitForOpenTable() {
 		event = AgentEvent.noTables;
 		stateChanged();
@@ -286,7 +291,7 @@ public class CMCustomerRole extends Role implements Customer {
 					}
 				}
 			}, 
-			myPerson.randInt(QUICKEST_CHOICE_TIME, SLOWEST_CHOICE_TIME)
+			PersonAgent.randInt(QUICKEST_CHOICE_TIME, SLOWEST_CHOICE_TIME)
 		);			
 	}
 	
@@ -464,6 +469,7 @@ public class CMCustomerRole extends Role implements Customer {
 		customerGui = (CMCustomerGui) g;
 		
 	}
+
 
 
 }

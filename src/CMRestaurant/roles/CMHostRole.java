@@ -47,6 +47,7 @@ public class CMHostRole extends Role implements Host {
 	public enum wState {idle, working, askedForBreak}; 
 	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
+	public boolean closeRestaurant = false;
 	
 	static final int ZERO = 0;
 	
@@ -180,11 +181,11 @@ public class CMHostRole extends Role implements Host {
 				}
 				customers.remove(c); //c.state = cState.done;
 
-				table.setUnoccupied();
 
 				((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setTableUnoccupied(table.getTableNumber());
 			    	
-			   
+				table.setUnoccupied();
+				
 				this.stateChanged();
 			}
 		}		
@@ -252,6 +253,25 @@ public class CMHostRole extends Role implements Host {
 			}
 			return true;
 		}
+
+		MyCustomer tempCust = null;
+		
+		if (!customers.isEmpty() && closeRestaurant) {
+			synchronized(customers){
+				for(MyCustomer c: customers)
+				{
+					if(c.getState() == cState.waiting && tempCust == null)
+					{
+						tempCust = c;
+					}
+				}
+			}
+		}
+		
+		if(tempCust != null){
+			tellCustClosed(tempCust);	
+			return true;
+		}
 		MyWaiter tempWaiter = null;
 		
 		synchronized(waiters){
@@ -270,7 +290,7 @@ public class CMHostRole extends Role implements Host {
 		}
 		
 		Table tempTable = null;
-		MyCustomer tempCust = null;
+		tempCust = null;
 		synchronized(tables){
 			for (Table table : tables) {
 				if (!table.isOccupied() && tempTable == null) {
@@ -312,16 +332,46 @@ public class CMHostRole extends Role implements Host {
 		
 		if(tempCust != null){
 			tellCustNoTables(tempCust);	
+			return true;
 		}
 		
+		boolean tablesAreEmpty = true;
+		synchronized(tables){		
+			for (Table table : tables) {
+				if(table.isOccupied()){
+					tablesAreEmpty=false;
+				}
+			}
+		}
+		if(tablesAreEmpty && customers.isEmpty() && closeRestaurant){
+			nofityEmployeesToLeaveWork();
+			return true;
+		}
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
 	}
 
-	
+
 	// Actions
+	
+	private void nofityEmployeesToLeaveWork() {
+		((CMCookRole) restaurant.cook).msgLeaveWorkEarly();
+		((CMCashierRole) restaurant.cashier).msgLeaveWorkEarly();
+		for(MyWaiter w: waiters){
+			((CMWaiterRole) w.w).msgLeaveWorkEarly();
+			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) w.w).getName());
+		}
+		waiters.removeAll(waiters);
+		state = State.leaving;
+	}
+
+	private void tellCustClosed(MyCustomer c) {
+		((CMCustomerRole) c.c).msgRestaurantIsClosed();
+		customers.remove(c);
+	}
+	
 	private void tellCustNoTables(MyCustomer c) {
 		c.state = cState.waitingAndTold;
 		((CMCustomerRole) c.c).msgWaitForOpenTable();
@@ -443,9 +493,11 @@ public class CMHostRole extends Role implements Host {
 	@Override
 	public void msgDoneWorking(Waiter waiter) {
 		MyWaiter removeW = null;
-		for(MyWaiter w: waiters){
-			if(w.w.equals(waiter)){
-				removeW = w;
+		synchronized(waiters){
+			for(MyWaiter w: waiters){
+				if(w.w.equals(waiter)){
+					removeW = w;
+				}
 			}
 		}
 		if(removeW !=null){
@@ -456,10 +508,14 @@ public class CMHostRole extends Role implements Host {
 		
 	}
 
-
 	@Override
 	public void setGui(Gui g) {
 		hostGui = (CMHostGui) g;
+	}
+
+	public void msgCloseRestaurant() {
+		closeRestaurant = true;
+		stateChanged();
 	}
 
 

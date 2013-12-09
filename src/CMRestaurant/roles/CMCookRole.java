@@ -734,6 +734,11 @@ public class CMCookRole extends Role implements Cook {
 		cookGui = (CMCookGui) g;
 	}
 
+	public void msgLeaveWorkEarly() {
+		state = State.leaving;
+		stateChanged();
+	}
+
 
 
 

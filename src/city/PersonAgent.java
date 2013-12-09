@@ -391,8 +391,13 @@ public class PersonAgent extends Agent implements Person
 					if(t == Task.goToWork)
 						inList = true;
 				}
-				if(!inList){
-					taskList.add(Task.goToWork);
+				if(!inList){    	
+					if(workIsClosed()){
+						AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Work is closed. I'll check back later.");
+		    	
+					}else{
+						taskList.add(Task.goToWork);
+					}
 				}
 			}
 			
@@ -896,10 +901,7 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToWork(){
-    	if(workIsClosed()){
-        	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Work is closed. I'll check back later.");
-    		return;
-    	}
+
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to work.");
     	
     	state = State.goingToWork;

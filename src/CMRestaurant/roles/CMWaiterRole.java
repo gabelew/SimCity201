@@ -24,7 +24,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	public Restaurant restaurant;
 	public enum CustomerState {waiting, seated, askedToOrder, asked, ordered, orderPlaced, 
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
-	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty};
+	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty, leaveWorkEarly};
 	AgentEvent event = AgentEvent.none;
 	Timer timer = new Timer();
 	private final int THIRTY_SECONDS = 30000;
@@ -58,7 +58,15 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		event = AgentEvent.gotToWork;
 		stateChanged();
 	}
-
+	public void msgLeftTheRestaurant() {
+		waitingResponse.release();
+		event = AgentEvent.relieveFromDuty;
+		stateChanged();
+	}
+	public void msgLeaveWorkEarly() {
+		event = AgentEvent.leaveWorkEarly;
+		stateChanged();
+	}
 	public void msgSitAtTable(Customer c, int table){
 		customers.add(new MyCustomer(c, table, CustomerState.waiting, null));
 		stateChanged();
@@ -176,7 +184,11 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 			restaurant.insideAnimationPanel.removeGui(waiterGui);
 			return true;
 		}
-		
+		if(event == AgentEvent.leaveWorkEarly){
+			event = AgentEvent.none;
+			leaveWorkEarly();
+			return true;
+		}
 		if(customers.size() == 0 && (
 				(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
 				(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
@@ -301,6 +313,16 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			
+		}
+	}
+	
+	private void leaveWorkEarly() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+		waiterGui.DoLeaveRestaurant();
 		try {
 			waitingResponse.acquire();
 		} catch (InterruptedException e) {
@@ -440,11 +462,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		}
 	}
 
-	public void msgLeftTheRestaurant() {
-		waitingResponse.release();
-		event = AgentEvent.relieveFromDuty;
-	}
-
+	
 	@Override
 	public Restaurant getRestaurant() {
 		return restaurant;
@@ -453,4 +471,6 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	public void setGui(Gui g) {
 		waiterGui = (CMWaiterGui) g;
 	}
+
+
 }

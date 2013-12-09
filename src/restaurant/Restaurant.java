@@ -47,7 +47,7 @@ public class Restaurant {
 	public void closeRestaurant(){
 		isOpen = false;
 		//TODO:notify host
-		//this.host.msgCloseRestaurant();
+		this.host.msgCloseRestaurant();
 		
 	}
 	public void openRestaurant(){

@@ -31,5 +31,6 @@ public interface Host{
 	public abstract void msgDoneWorking(Waiter w);
 	
 	public abstract void goesToWork();
+	public abstract void msgCloseRestaurant();
 	
 }

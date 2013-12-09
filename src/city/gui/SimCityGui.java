@@ -21,6 +21,7 @@ import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
+import CMRestaurant.roles.CMSharedWaiterRole;
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBCashierGui;
 import EBRestaurant.gui.EBCookGui;
@@ -944,7 +945,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 	public static Role waiterFactory(PersonAgent p, Restaurant r){
 		AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", r.waiterRole);
 		if(r.waiterRole.equalsIgnoreCase("RestaurantCMWaiterRole")){
-			return new CMNormalWaiterRole(p, r);
+			if(p.getName().toLowerCase().contains("shared")){
+				return new CMSharedWaiterRole(p, r);
+			}else{
+				return new CMNormalWaiterRole(p, r);
+			}
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating EMWaiterRole");
 			return new EBWaiterRole(p,r);

@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import CMRestaurant.gui.CMCashierGui;
+import CMRestaurant.roles.CMCookRole.State;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
@@ -27,7 +28,7 @@ public class CMCashierRole extends Role implements Cashier {
 	public CMCashierGui cashierGui = null;
 	Map<String, Double> pricingMap = new HashMap<String, Double>(); 
 	public double bank = 5000; 
-	enum State {none, goToWork, working, leaving, releaveFromDuty};
+	enum State {none, goToWork, working, leaving, releaveFromDuty, leavingEarly};
 	State state = State.none;
 
 	private Semaphore waitingResponse = new Semaphore(0,true);
@@ -176,6 +177,19 @@ public class CMCashierRole extends Role implements Cashier {
 			cashierGui.DoEnterRestaurant();
 			return true;
 		}
+		if(state == State.leavingEarly && orders.size()==0){
+			state = State.none;
+			if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
+				DepositBusinessCash();
+			cashierGui.DoLeaveRestaurant();
+			try {
+				waitingResponse.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		
 		if(state == State.leaving){
 			state = State.none;
 			if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
@@ -362,6 +376,11 @@ public class CMCashierRole extends Role implements Cashier {
 	@Override
 	public void setGui(Gui g) {
 		cashierGui = (CMCashierGui) g;
+	}
+
+	public void msgLeaveWorkEarly() {
+		state = State.leavingEarly;
+		stateChanged();
 	}
 
 }
