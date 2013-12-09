@@ -369,6 +369,12 @@ public class GCHostRole extends Role implements Host
 		waitingResponse.release();
 	}
 
+	@Override
+	public void msgCloseRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }
 
