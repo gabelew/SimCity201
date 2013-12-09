@@ -19,7 +19,6 @@ import restaurant.interfaces.Customer;
 import restaurant.interfaces.Market;
 import restaurant.interfaces.Waiter;
 import GCRestaurant.gui.GCCashierGui;
-import agent.Agent;
 
 /**
  * Restaurant Cook Agent
@@ -34,7 +33,7 @@ public class GCCashierRole extends Role implements Cashier
 	public List<MarketBill> orders = Collections.synchronizedList(new ArrayList<MarketBill>());
 	private enum MarketBillState{none, unpaid, paid};
 	private enum CheckState{none, calculated, ReceivedPayment };
-	public double cash = 10;
+	public double cash = 2000;
 	private DecimalFormat df = new DecimalFormat("#.##"); //formats all numbers to 2 decimal place
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	
@@ -228,7 +227,14 @@ public class GCCashierRole extends Role implements Cashier
 	}
 	
 	private void DepositBusinessCash() {
-		// TODO Auto-generated method stub
+		double deposit = cash - 1500;
+		deposit = (Math.round(100*deposit) / ((double)100));
+		int balance = Double.compare(deposit, 0);
+		if(1 == balance) {
+			cash -= deposit;
+			myPerson.businessFunds += deposit;
+			myPerson.msgDepositBusinessCash();
+		}
 		
 	}
 
@@ -303,8 +309,8 @@ public class GCCashierRole extends Role implements Cashier
 	}
 
 	public void msgAnimationHasLeftRestaurant() {
-		// TODO Auto-generated method stub
-		
+		waitingResponse.release();
+		state = State.releaveFromDuty;
 	}
 
 }

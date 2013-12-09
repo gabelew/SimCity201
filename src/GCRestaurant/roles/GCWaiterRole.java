@@ -16,6 +16,8 @@ import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 
 /**
@@ -318,6 +320,15 @@ public class GCWaiterRole extends Role implements Waiter{
 			waiterGui.enterRestaurant();
 			restaurant.host.msgReadyToWork(this);
 		}
+		
+		private void shiftOver() 
+		{
+			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+			waiterGui.DoLeaveRestaurant();
+			restaurant.host.msgDoneWorking(this);
+			try {busy.acquire();} 
+			catch (InterruptedException e) {}
+		}
 /*********************************************
  * Animation Functions
 ******************************************* */
@@ -329,6 +340,10 @@ public class GCWaiterRole extends Role implements Waiter{
 		{
 			//print("GOING TO TABLE");
 			waiterGui.goToTable(tableNumber);
+		}
+		public void msgDoneWorkingLeave() {
+			busy.release();
+			event = WaiterEvent.relieveFromDuty;
 		}
 /*********************************************
  * Scheduler.  Determine what action is called for, and do it.
@@ -345,6 +360,13 @@ public class GCWaiterRole extends Role implements Waiter{
 				return true;
 			}
 			
+			if(customers.size() == 0 && (
+					((myPerson.getName()).toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
+					((myPerson.getName()).toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
+				shiftOver();
+				return true;
+			}
+			
 			if(event == WaiterEvent.gotToWork)
 			{
 				event = WaiterEvent.none;
@@ -358,6 +380,20 @@ public class GCWaiterRole extends Role implements Waiter{
 				onBreakAction();
 				return true; 
 			}
+			
+			// (4) Gives Order to Customer
+			for (MyCustomer customer : customers)
+			{
+				//if there exists a customer whose state is ordered
+				//give the order to the cook
+				if( customer.state == CustomerState.FoodDoneCooking)
+				{
+					HereIsFoodAction(customer);
+					customer.state = CustomerState.Served;
+					return true;
+				}
+			}
+			
 			// (1) Seats Waiting Customers
 			for (MyCustomer customer : customers) 
 			{
@@ -410,18 +446,7 @@ public class GCWaiterRole extends Role implements Waiter{
 				}
 			}
 			
-			// (4) Gives Order to Customer
-				for (MyCustomer customer : customers)
-				{
-					//if there exists a customer whose state is ordered
-					//give the order to the cook
-					if( customer.state == CustomerState.FoodDoneCooking)
-					{
-						HereIsFoodAction(customer);
-						customer.state = CustomerState.Served;
-						return true;
-					}
-				}
+			
 			// (6) Handles the check
 				for (MyCustomer customer : customers)
 				{
@@ -484,6 +509,9 @@ public class GCWaiterRole extends Role implements Waiter{
 		return restaurant;
 	}
 
+	/*
+	 * Animation functions to go to work
+	 */
 	public void goesToWork() {
 		event = WaiterEvent.gotToWork;
 		stateChanged();

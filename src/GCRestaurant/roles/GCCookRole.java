@@ -2,6 +2,7 @@ package GCRestaurant.roles;
 
 import restaurant.Restaurant;
 import GCRestaurant.gui.GCCookGui;
+import GCRestaurant.roles.GCCashierRole.State;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
@@ -225,7 +226,7 @@ public class GCCookRole extends Role implements Cook
 	{
 		try
 		{
-			
+			/*
 			if(state == CookState.wantsOffWork){
 				boolean canGetOffWork = true;
 				for (Order o : orders)
@@ -239,7 +240,7 @@ public class GCCookRole extends Role implements Cook
 				if(canGetOffWork){
 					state = CookState.leaving;
 				}
-			}
+			}*/
 			
 			if(state == CookState.relieveFromDuty){
 				state = CookState.none;
@@ -253,6 +254,15 @@ public class GCCookRole extends Role implements Cook
 			if(state == CookState.goToWork){
 				state = CookState.free;
 				cookGui.DoEnterRestaurant();
+				return true;
+			}
+			
+			if(state == CookState.leaving){
+				state = CookState.none;
+				cookGui.DoLeaveRestaurant();
+				try {busy.acquire();}
+				catch (InterruptedException e) 
+				{e.printStackTrace();}
 				return true;
 			}
 			
@@ -293,6 +303,13 @@ public class GCCookRole extends Role implements Cook
 		busy.release();// = true;
 		//stateChanged();
 	}
+	//release semaphore for shift change
+	public void doneWithShift()
+	{
+		busy.release();
+		state = CookState.relieveFromDuty;
+	}
+	
 	//Utility classes
 	public class Food
 	{
@@ -353,9 +370,11 @@ public class GCCookRole extends Role implements Cook
 	}
 
 	@Override
-	public void msgRelieveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
+	public void msgRelieveFromDuty(PersonAgent p) 
+	{
+		replacementPerson = p;
+		state = CookState.leaving;
+		this.stateChanged();
 	}
 
 	public void goesToWork() {

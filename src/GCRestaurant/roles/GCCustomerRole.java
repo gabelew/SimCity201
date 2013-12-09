@@ -311,6 +311,11 @@ public class GCCustomerRole extends Role implements Customer{
 			print("the wait is too long, i'm leaving");
 			state = AgentState.Leaving;
 			((GCHostRole)host).msgLeavingRestaurant(this);
+			customerGui.DoExitRestaurant();
+			try {busy.acquire();} 
+			catch (InterruptedException e) { e.printStackTrace();}
+			state = AgentState.Leaving;
+			event = AgentEvent.doneLeaving;
 			return;
 		}
 		int decidedToLeave = 2;
@@ -320,6 +325,11 @@ public class GCCustomerRole extends Role implements Customer{
 			print("the wait is too long, i'm leaving");
 			state = AgentState.Leaving;
 			((GCHostRole)host).msgLeavingRestaurant(this);
+			customerGui.DoExitRestaurant();
+			try {busy.acquire();} 
+			catch (InterruptedException e) { e.printStackTrace();}
+			state = AgentState.Leaving;
+			event = AgentEvent.doneLeaving;
 		}
 		stateChanged();
 	}
@@ -337,7 +347,6 @@ public class GCCustomerRole extends Role implements Customer{
 	{
 		myPerson.msgDoneEatingAtRestaurant();
 		restaurant.insideAnimationPanel.removeGui(customerGui);
-		print("##############");
 	}
 /*******************************
  * Scheduler.  Determine what action is called for, and do it.

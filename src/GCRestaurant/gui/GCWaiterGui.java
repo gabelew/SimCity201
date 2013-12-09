@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
 import restaurant.interfaces.Customer;
 import city.gui.Gui;
+import GCRestaurant.gui.GCCashierGui.Command;
 import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCWaiterRole;
 
@@ -25,7 +27,7 @@ public class GCWaiterGui implements Gui {
 
     private int startPos = -20;
     private int DEFAULT_POSY = 110;
-    private int DEFAULT_POSX = 0;
+    private int DEFAULT_POSX = 20;
     private int xPos = DEFAULT_POSX, yPos = DEFAULT_POSY;//default waiter position
     private int xDestination = DEFAULT_POSX, yDestination = DEFAULT_POSY;//default start position
     private int personSize = 20;
@@ -38,6 +40,9 @@ public class GCWaiterGui implements Gui {
     private boolean carryFood = false;
     private List<String> foods = Collections.synchronizedList(new ArrayList<String>());
     private BufferedImage waiterImg;
+    
+    enum Command {none,enterRestaurant, leaveRestaurant, goToCashier, goToCook, GoSeatCustomer };
+    Command command = Command.none;
 
     public GCWaiterGui(GCWaiterRole r) {
         this.role = r;
@@ -50,12 +55,11 @@ public class GCWaiterGui implements Gui {
         xDestination = startPos;
         yDestination = startPos;
         
+        //random position in restaurant for home
+        int homePos = (new Random()).nextInt(3);
+        this.DEFAULT_POSY += homePos*personSize;
     }
     
-    public void setWaiterPosition(int homePos)
-    {
-    	this.DEFAULT_POSY += homePos*personSize;
-    }
     
     public void updatePosition() {
     	
@@ -70,31 +74,32 @@ public class GCWaiterGui implements Gui {
         
         if (xPos == xDestination && yPos == yDestination
        		& (xDestination == xTable + personSize) & (yDestination == yTable - personSize)) {
-           
+        	command = Command.none;
         	role.msgAtTable();
         }
         
-        if (xPos == xDestination && yPos == yDestination
-           		& (xDestination == cookPosX) & (yDestination == cookPosY)) {
-             //xPos = DEFAULT_POSX;
-             //yPos = DEFAULT_POSY;
+        if (xPos == xDestination && yPos == yDestination && command == Command.goToCook) {
              xDestination = DEFAULT_POSX;
              yDestination = DEFAULT_POSY;
-        	role.msgAtTable();
+             command = Command.none;
+        	 role.msgAtTable();
             }
-        if (xPos == xDestination && yPos == yDestination
-           		& (xDestination == cashierPosX) & (yDestination == cashierPosY)) {
-             //xPos = DEFAULT_POSX;
-             //yPos = DEFAULT_POSY;
+        if (xPos == xDestination && yPos == yDestination && command == Command.goToCashier){
              xDestination = DEFAULT_POSX;
              yDestination = DEFAULT_POSY;
-        	role.msgAtTable();
+             command = Command.none;
+        	 role.msgAtTable();
             }
-       if (xPos == xDestination && yPos == yDestination
-           		& (xDestination == customerPos) & (yDestination == customerPos)) 
+       if (xPos == xDestination && yPos == yDestination && command == Command.GoSeatCustomer) 
         {
+    	   command = Command.none;
     	   role.msgAtTable();
         }
+       if(xPos == xDestination && yPos == yDestination && command == Command.leaveRestaurant)
+       {
+    	   command = Command.none;
+    	   role.msgDoneWorkingLeave();
+       }
         
         if(xPos == DEFAULT_POSX && yPos == DEFAULT_POSY){atStart = true;}
         else{atStart = false;}
@@ -107,7 +112,7 @@ public class GCWaiterGui implements Gui {
 	        if(carryFood)
 	        {
 	        	g.setColor(Color.BLACK);
-				g.setFont(new Font("Arial", Font.BOLD, 18));
+				g.setFont(new Font("Arial", Font.BOLD, 14));
 				if(!foods.isEmpty())
 				{
 					for(int i = 0; i <foods.size(); i++)
@@ -146,6 +151,7 @@ public class GCWaiterGui implements Gui {
     {
     	xDestination = customerPos;
     	yDestination = customerPos;
+    	command = Command.GoSeatCustomer;
     }
     public void DoBringToTable(Customer c, int tableNumber) {
     	xTable = tableNumber*TABLE_SPACING;
@@ -154,10 +160,6 @@ public class GCWaiterGui implements Gui {
         yDestination = yTable - personSize;
     }
     
-    public void getFood()
-    {
-    	
-    }
     public void goToTable(int tableNumber) {
     	xTable = tableNumber*TABLE_SPACING;
     	
@@ -170,12 +172,14 @@ public class GCWaiterGui implements Gui {
     {
     	xDestination = cookPosX;
     	yDestination = cookPosY;
+    	command = Command.goToCook;
     }
     
     public void goToCashier()
     {
     	xDestination = cashierPosX;
     	yDestination = cashierPosY;
+    	command = Command.goToCashier;
     }
     
     public void DoLeaveCustomer() {
@@ -204,6 +208,13 @@ public class GCWaiterGui implements Gui {
 	public void enterRestaurant() {
 		xDestination = DEFAULT_POSX;
 		yDestination = DEFAULT_POSY;
-		
+		command = Command.enterRestaurant;
+	}
+
+	public void DoLeaveRestaurant() 
+	{
+		xDestination = startPos;
+		yDestination = startPos;
+		command = Command.leaveRestaurant;
 	}
 }

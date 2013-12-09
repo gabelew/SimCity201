@@ -122,6 +122,27 @@ public class GCHostRole extends Role implements Host
 		if(addWaiter){waiters.add(newWaiter);}
 	}
 	
+	public void msgReleaveFromDuty(PersonAgent p) 
+	{
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();
+	}
+	//needed for interface, not needed for GCRestaurant
+	public void msgCanIBreak(Waiter w) {}
+
+	@Override
+	public void msgDoneWorking(Waiter waiter) 
+	{
+		for(myWaiter w: waiters){
+			if(w.w.equals(waiter))
+			{
+				waiters.remove(w);
+			}
+		}
+		//((GCRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) waiter).getName());
+	}
+	
 	/****************************************************
 	 * Actions
 	 ***************************************************/
@@ -228,6 +249,7 @@ public class GCHostRole extends Role implements Host
 				if(wait.state == WaiterState.askedForBreak)
 				{
 					grantBreakAction(wait);
+					return true;
 				}
 			}
 			if(!waitingCustomers.isEmpty())
@@ -237,6 +259,7 @@ public class GCHostRole extends Role implements Host
 					if(checkTablesFull())
 					{
 						((GCCustomerRole)c).restaurantFullMsg();
+						return true;
 					}
 				}
 			}
@@ -327,31 +350,9 @@ public class GCHostRole extends Role implements Host
 			return "table " + tableNumber;
 		}
 	}
-
-	@Override
-	public void msgReleaveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-
-	
-
-	
-	
-	//needed for interface, not needed for GCRestaurant
-	public void msgCanIBreak(Waiter w) {}
-
-	@Override
-	public void msgDoneWorking(Waiter w) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 	/**
-	 * Animation Metods
+	 * Animation Methods
 	 */
 	public void goesToWork() {
 		state = State.goToWork;

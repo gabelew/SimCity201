@@ -118,6 +118,12 @@ public class GCCookGui implements Gui{
 			yDestination = DEFAULT_POSY;
 		}
 		
+		if(xPos == xDestination && yPos == yDestination && command == Command.leaveRestaurant)
+		{
+			command = Command.none;
+			role.doneWithShift();
+		}
+		
 	}
 
 	public void doGoHome()
@@ -198,11 +204,15 @@ public class GCCookGui implements Gui{
 				f.xLoc = xPos;
 				f.yLoc = yPos-10;
 				String abrFood = f.choice.charAt(0) + "" + f.choice.charAt(1);
+				g.setColor(Color.BLACK);
+				g.setFont(new Font("Arial", Font.BOLD, 14));
 				g.drawString( abrFood, f.xLoc, f.yLoc);
 			}
 			if(f.state == foodstate.cooking || f.state == foodstate.readyToPickUp)
 			{
 				String abrFood = f.choice.charAt(0) + "" + f.choice.charAt(1);
+				g.setColor(Color.BLACK);
+				g.setFont(new Font("Arial", Font.BOLD, 14));
 				g.drawString( abrFood, f.xLoc, f.yLoc);
 			}
 		}
@@ -232,6 +242,13 @@ public class GCCookGui implements Gui{
 	public void DoEnterRestaurant() {
 		xDestination = DEFAULT_POSX;
 		yDestination = DEFAULT_POSY;
+		
+	}
+
+	public void DoLeaveRestaurant() {
+		command = Command.leaveRestaurant;
+		xDestination = startPos;
+		yDestination = startPos;
 		
 	}
 }

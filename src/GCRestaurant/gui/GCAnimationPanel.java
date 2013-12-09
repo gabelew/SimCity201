@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -99,18 +100,21 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         {
         	g2.drawImage(tableImg, TABLEX_START+ (i*TABLE_SPACING), TABLEY_START, null);
         }
-
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
+        try
+        {
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	                gui.updatePosition();
+	            }
+	        }
+	
+	        for(Gui gui : guis) {
+	            if (gui.isPresent()) {
+	                gui.draw(g2);
+	            }
+	        }
         }
-
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
-        }
+        catch(ConcurrentModificationException e){ } 
     }
 
     public void addGui(Gui g)

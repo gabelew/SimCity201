@@ -183,15 +183,22 @@ public class AtHomeGui implements Gui{
 					yPos--;
 			}
 		}
+		
 		if (xPos == xDestination && yPos == yDestination) 
 		{
-			if(command == Command.GoHome || command == Command.GoToFridge)
+			if(command == Command.GoHome)
+			{
+				command = Command.noCommand;
+				role.msgAnimationFinshed();
+			}
+			if(command == Command.GoToFridge)
 			{
 				command = Command.noCommand;
 				role.msgAnimationFinshed();
 				xDestination = xHomePosition;
 				yDestination = yHomePosition;
 			}
+			
 			else if(command == Command.GoToGrill || command == Command.GoToCounter)
 			{	
 				command = Command.noCommand;
@@ -243,8 +250,8 @@ public class AtHomeGui implements Gui{
 	public void doEnterHome()
 	{
 		command = Command.GoHome;
-	    xDestination = xHomePosition;
-	    yDestination = yHomePosition; 
+	    xDestination = xTABLE_POS;
+	    yDestination = yTABLE_POS; 
 	}
 	@Override
 	public boolean isPresent() {
