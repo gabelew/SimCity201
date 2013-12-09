@@ -69,6 +69,7 @@ import GLRestaurant.roles.GLCookRole;
 import GLRestaurant.roles.GLCustomerRole;
 import GLRestaurant.roles.GLHostRole;
 import GLRestaurant.roles.GLNormalWaiterRole;
+import GLRestaurant.roles.GLRevolvingStandMonitor;
 import GLRestaurant.roles.GLSharedWaiterRole;
 import GLRestaurant.roles.GLWaiterRole;
 import atHome.city.Apartment;
@@ -321,9 +322,9 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("waiter02daycar");
     	infoPanel.getPersonPanel().addPerson("waiter02nightpoor");
     	infoPanel.getPersonPanel().addPerson("waiter02nightcar");
-    	infoPanel.getPersonPanel().addPerson("waiter03day");
+    	infoPanel.getPersonPanel().addPerson("sharedwaiter03day");
     	infoPanel.getPersonPanel().addPerson("waiter03daycar");
-    	infoPanel.getPersonPanel().addPerson("waiter03nightpoor");
+    	infoPanel.getPersonPanel().addPerson("sharedwaiter03nightpoor");
     	infoPanel.getPersonPanel().addPerson("waiter03nightcar");
     	infoPanel.getPersonPanel().addPerson("waiter04day");
     	infoPanel.getPersonPanel().addPerson("waiter04daycar");
@@ -556,8 +557,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((GLCookRole)r.cook).setRestaurant(r);
 	        	GLCookGui ccg = new GLCookGui(((GLCookRole)r.cook));
 	        	((GLCookRole)r.cook).setGui(ccg);
-	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
-	        	//((GLCookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	GLRevolvingStandMonitor revolvingStand = new GLRevolvingStandMonitor();
+	        	((GLCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
         	}else if(b.type.equals("restaurant") && i==27){

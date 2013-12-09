@@ -126,19 +126,19 @@ public class GLWaiterGui implements Gui {
 //        	if (((TableOne.x + 20 == xDestination) || (TableTwo.x + 20 == xDestination) || (TableThree.x + 20 == xDestination)) 
 //        	&& ((TableOne.y - 20 == yDestination) || (TableTwo.y - 20 == yDestination) || (TableThree.y - 20 == yDestination))) {        		
         	if(Command.IfAtTable == command){
-        		role.msgAtTable();
+        		((GLWaiterRole)role).msgAtTable();
         	} else if (Command.onBreak == command) {
         		//gui.setWaiterOnBreak(agent);
         	} else if (Command.ReturnFromBreak == command) {
         		//gui.setWaiterEnabled(agent);
         	} else if (Command.LeaveRestaurant == command) {
-        		role.msgLeftTheRestaurant();
+        		((GLWaiterRole)role).msgLeftTheRestaurant();
         	} else if (Command.IfAtCustomer == command && customerx == xDestination && customery == yDestination) {
-        		role.msgAtCustomer();
+        		((GLWaiterRole)role).msgAtCustomer();
         	} else if (Command.IfAtPlate == command && platex == xDestination && platey == yDestination) {
-        		role.msgAtPlate();
+        		((GLWaiterRole)role).msgAtPlate();
         	} else if (Command.IfAtStand == command) {
-        		role.msgAtStand();
+        		((GLWaiterRole)role).msgAtStand();
         	}
         	command = Command.noCommand;
         	findASpotToRest();
@@ -235,7 +235,7 @@ public class GLWaiterGui implements Gui {
     
     public void wantGoOnBreak() {
     	goOnBreak = true;
-    	role.msgWantToGoOnBreak();
+    	((GLWaiterRole)role).msgWantToGoOnBreak();
     }
     
     public void goOnBreak() {
@@ -251,7 +251,7 @@ public class GLWaiterGui implements Gui {
     public void breakDone() {
     	goOnBreak = false;
     	command = Command.ReturnFromBreak;
-    	role.msgReturnedFromBreak();
+    	((GLWaiterRole)role).msgReturnedFromBreak();
     }
     
     public void noBreak() {
