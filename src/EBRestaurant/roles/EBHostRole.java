@@ -40,7 +40,7 @@ public class EBHostRole extends Role implements Host {
 		}
 	}
 	public enum custState {staying,goToArea,assigned,waiting};
-	public enum state {none,goToWork,atWork,leaveWork,relieveDuty,done};
+	public enum state {none,closed,goToWork,atWork,leaveWork,relieveDuty,done};
 	state hostState;
 	public List<MyWaiters> waiters
 	= new ArrayList<MyWaiters>();
@@ -124,6 +124,7 @@ public class EBHostRole extends Role implements Host {
 		for (Customers cust: waitingCustomers){
 			if (cust.cust==c){
 				cust.state=custState.assigned;
+				stateChanged();
 			}
 		}
 	}
@@ -134,7 +135,7 @@ public class EBHostRole extends Role implements Host {
 				if(waiter.w==w){
 					waiters.remove(waiter);
 					((EBWaiterRole) w).msgGoOnBreak();
-					Do("Break approved");
+					stateChanged();
 					break;
 				}
 			
@@ -161,15 +162,25 @@ public class EBHostRole extends Role implements Host {
             If so seat him at the table.
 		 */
 		try{
-			if(waitingCustomers.size()==0&&restaurantClosed){
-				tellStaff();
-				return true;
+			if(waitingCustomers.size()==0&&restaurantClosed&&hostState==state.closed){
+				int tableNum=0;
+				hostState=state.none;
+				for (Table table : tables) {
+					if (!table.isOccupied()) {
+						tableNum++;
+					}
+				}
+				if(tableNum==tables.size()){
+					print("go home");
+					tellStaff();
+					return true;
+				}
 			}
 			if(waitingCustomers.size()!=0&&restaurantClosed){
 				for(Customers cust:waitingCustomers){
-					tellClosed(cust);	
+					tellClosed(cust);
+					return true;
 				}
-				return true;
 			}
 			if(hostState==state.relieveDuty){
 				hostState=state.none;
@@ -239,10 +250,8 @@ public class EBHostRole extends Role implements Host {
 }
 
 	private void tellClosed(Customers cust) {
-		// TODO Auto-generated method stub
 		((EBCustomerRole) cust.cust).msgRestaurantClosed();
 		waitingCustomers.remove(cust);
-		stateChanged();
 	}
 
 	// Actions
@@ -273,7 +282,11 @@ public class EBHostRole extends Role implements Host {
 	}
 	
 	private void tellStaff(){
-		
+		((EBCookRole) restaurant.cook).msgClosed();
+		((EBCashierRole)restaurant.cashier).msgClosed();
+		for (MyWaiters w:waiters){
+			((EBWaiterRole)w.w).msgClosed();
+		}
 	}
 	
 	//utilities
@@ -351,6 +364,8 @@ public class EBHostRole extends Role implements Host {
 
 	@Override
 	public void msgCloseRestaurant() {
+		print("closing EB");
+		hostState=state.closed;
 		restaurantClosed=true;
 		stateChanged();
 	}

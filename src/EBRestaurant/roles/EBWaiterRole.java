@@ -476,5 +476,11 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 				waiterGui.setWaitingPosition(0,-30);
 		}
 	}
+
+
+	public void msgClosed() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

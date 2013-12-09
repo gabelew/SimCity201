@@ -25,6 +25,7 @@ import restaurant.interfaces.*;
 public class EBCookRole extends Role implements Cook {
 	public Restaurant restaurant;
 	PersonAgent replacementPerson = null;
+	private boolean restaurantClosed=false;
 	private String name;
 	private EBCookGui cookgui=null;
 	public List<Order>Orders=Collections.synchronizedList(new ArrayList<Order>());
@@ -145,9 +146,14 @@ public class EBCookRole extends Role implements Cook {
 			}
 		}
 		
+		if(restaurantClosed&&Orders.size()==0){
+			cookState = CState.leaving;
+		}
+		
 		if(cookState == CState.relieveFromDuty){
 			cookState = CState.none;
 			myPerson.releavedFromDuty(this);
+			print("leaving early");
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
 			}
@@ -155,6 +161,7 @@ public class EBCookRole extends Role implements Cook {
 		}
 		
 		if(cookState == CState.goToWork){
+			restaurantClosed=false;
 			cookState = CState.working;
 			cookgui.DoEnterRestaurant();
 			return true;
@@ -162,14 +169,17 @@ public class EBCookRole extends Role implements Cook {
 		
 		
 		if(cookState == CState.leaving){
-			cookState = CState.none;
+			//cookState = CState.none;
+			cookState = CState.relieveFromDuty;
 			cookgui.DoLeaveRestaurant();
 			try {
 				atDest.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			print("aaa");
 			cookState = CState.relieveFromDuty;
+			print("bbb");
 			return true;
 		}
 		for (Order O: Orders){
@@ -382,6 +392,10 @@ public class EBCookRole extends Role implements Cook {
 	
 	public EBRevolvingStandMonitor getRevolvingStand(){
 		return revolvingStand;
+	}
+
+	public void msgClosed() {
+		restaurantClosed=true;
 	}
 
 }

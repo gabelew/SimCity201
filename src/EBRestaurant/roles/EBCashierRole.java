@@ -295,5 +295,10 @@ public class EBCashierRole extends Role implements Cashier {
 	public void msgLeft() {
 		cashierState = CashState.releaveFromDuty;
 	}
+
+	public void msgClosed() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

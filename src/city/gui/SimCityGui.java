@@ -34,6 +34,7 @@ import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
 import EBRestaurant.roles.EBHostRole;
 import EBRestaurant.roles.EBNormalWaiterRole;
+import EBRestaurant.roles.EBRevolvingStandMonitor;
 import EBRestaurant.roles.EBSharedWaiterRole;
 import EBRestaurant.roles.EBWaiterRole;
 import GCRestaurant.gui.GCAnimationPanel;
@@ -511,8 +512,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((EBCookRole)r.cook).setRestaurant(r);
 	        	EBCookGui ccg = new EBCookGui(((EBCookRole)r.cook));
 	        	((EBCookRole)r.cook).setGui(ccg);
-	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
-	        	//((EBCookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	EBRevolvingStandMonitor revolvingStand = new EBRevolvingStandMonitor();
+	        	((EBCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
         	}else if(b.type.equals("restaurant") && i==23){
