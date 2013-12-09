@@ -236,4 +236,10 @@ public class GHHostRole extends Role implements Host{
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;
 	}
+
+	@Override
+	public void msgCloseRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
 }
