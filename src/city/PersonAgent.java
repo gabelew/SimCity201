@@ -927,7 +927,7 @@ public class PersonAgent extends Agent implements Person
 		}
 		for(MarketAgent m: simCityGui.getMarkets()){
 			if(job.location.equals(m.location)){
-				TODO: if(m.isOpen()==false)
+				if(m.isOpen()==false)
 					return true;
 			}
 		}
@@ -1173,6 +1173,7 @@ public class PersonAgent extends Agent implements Person
 			
 			destination = myHome.location;
 			goToHouseToEat();
+			return;
     	}
     	
 		if(mustEatOutBeforeMarketAndBank == true){
@@ -1191,9 +1192,9 @@ public class PersonAgent extends Agent implements Person
 	    }else{
 	    	restaurantNumber = randInt(0,restaurants.size() - 1);
 	    }
-    	mr = restaurants.get(restaurantNumber);
+    	mr = openRestaurants.get(restaurantNumber);
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant 0"+restaurantNumber);
-    	//Restaurant mr = restaurants.get(randInt(0,0));
+    	
     	destination = mr.location;
     	if(car == true || destination.y == personGui.yPos){
     		personGui.DoWalkTo(destination);
