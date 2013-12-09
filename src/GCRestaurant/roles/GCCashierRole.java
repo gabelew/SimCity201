@@ -16,7 +16,6 @@ import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
 import restaurant.interfaces.Waiter;
 import GCRestaurant.gui.GCCashierGui;
 
@@ -117,12 +116,6 @@ public class GCCashierRole extends Role implements Cashier
 		stateChanged();
 	}
 	
-	public void receivedMarketBill(Market m, double cost)
-	{
-		
-	}
-
-	
 	public void msgReleaveFromDuty(PersonAgent p) 
 	{
 		replacementPerson = p;
@@ -156,6 +149,7 @@ public class GCCashierRole extends Role implements Cashier
 	{
 		m.state = MarketBillState.paid;
 		this.cash -= m.amountDue;
+		m.deliveryMan.msgHereIsPayment(m.amountDue, (Cashier)this);
 		print("Paid Bill to Market, cash left: " + df.format(cash));
 		orders.remove(m);
 	}

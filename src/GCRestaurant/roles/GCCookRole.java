@@ -2,13 +2,13 @@ package GCRestaurant.roles;
 
 import restaurant.Restaurant;
 import GCRestaurant.gui.GCCookGui;
-import GCRestaurant.roles.GCCashierRole.State;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
@@ -29,15 +29,16 @@ public class GCCookRole extends Role implements Cook
 	final int TIMERCONST = 1000;
 	private Map<String, Food> foods= new HashMap<String, Food>();
 	
-	private String name;
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private List<Food> foodList = new ArrayList<Food>();
 	private List<MarketAgent> markets = new ArrayList<MarketAgent>();
+	private List<MarketOrder> marketOrders = new ArrayList<MarketOrder>();
+	public enum MarketState {hasItems, ordering, noItems, paying, made, paid, ordered};
 	
 	private CookState state = CookState.makingMarketOrder;
 	private enum OrderState{pending, cooking, done, served}
 	private enum CookState {free, cooking, makingMarketOrder, wantsOffWork, leaving, relieveFromDuty, none, goToWork}
-	private final int THRESHOLD = 52;
+	private final int THRESHOLD = 56;
 	private final int MAXSUPPLY = 70;
 	private int marketCounter = 0;
 	public PersonAgent replacementPerson = null;
@@ -58,19 +59,9 @@ public class GCCookRole extends Role implements Cook
 		foods.put("Salad",foodList.get(3));
 	}
 	
-	public void setMarket(MarketAgent m)
-	{
+	public void addMarket(MarketAgent m) {
 		markets.add(m);
 	}
-	
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	
 	/**************************************************
 	* Messages
@@ -83,6 +74,24 @@ public class GCCookRole extends Role implements Cook
 		orders.add(new Order(w,c,t,choice));
 		stateChanged();
 	}
+	
+	//Market scams you, don't order from this market
+	public void msgNeverOrderFromMarketAgain(MarketAgent market) 
+	{
+		for(MarketAgent m : markets)
+		{
+			if(m.equals(market))
+			{
+				markets.remove(m);
+				break;
+			}
+		}
+		if(markets.size() == 0)
+		{
+			markets.add(market);
+		}
+	}
+	
 	public void cannotFufillOrderMsg()
 	{
 		print("Market: " + markets.get(marketCounter).getName() + " Cannot fufill order");
@@ -91,33 +100,87 @@ public class GCCookRole extends Role implements Cook
 		stateChanged();
 	}
 	
+	/**
+	 * deliveryman arrives at restaurant
+	 */
+	public void msgCanIHelpYou(DeliveryMan deliveryMan_, MarketAgent markt) {
+		for (MarketOrder order: marketOrders)
+		{
+			if(order.market == markt){
+				print("BEING HELPED BY DELIVERYMAN @@@@@@");
+				order.deliveryMan = deliveryMan_;
+				order.marketState = MarketState.ordering;
+			}
+		}
+	}
+
 	/*
-	public void marketDeliveryMsg(MarketOrder m)
+	 * receives order from delivery man, resttocks
+	 */
+	public void msgHereIsOrderFromMarket(DeliveryMan deliveryMan_, Map<String, Integer> stockOrdered, double amount) 
 	{
-		//adds the purchased market inventory to inventory
-		for(Entry<String, Integer> item : m.delivery.entrySet())
+		print("GOT FOOD FROM DELIVERYMAN &&&&&&&&&&&");
+		for (MarketOrder order: marketOrders)
+		{
+			if(order.deliveryMan == deliveryMan_)
+			{
+				order.price = amount;
+				order.marketState = MarketState.paying;
+			}
+		}
+		for(Entry<String, Integer> item : stockOrdered.entrySet())
 		{
 			for(Food f: foodList)
 			{
-				if(item.getKey().equals( f.choice) )
+				if(item.getKey().equals( f.choice.toLowerCase()) )
 				{
 					f.amount += item.getValue().intValue();
 					print("Replenished " + item.getKey() + ", Stock now: " + f.amount);
 				}
 			}
 		}
-		if(m.state == m.state.deliverIncomplete)
+		
+	}
+
+	@Override
+	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) 
+	{
+		print("delivery order not fully satisfied");
+		state = CookState.makingMarketOrder;
+		/*
+		//makes a new order
+		Map<String, Integer> order = new HashMap<String, Integer>();
+		for(Food restFood: foodList)
 		{
-			print("delivery order not fully satisfied");
-			state = CookState.makingMarketOrder;
-		}
-		stateChanged();
-	}*/
+			for(String needFood : outOf)
+			{
+				if(needFood.equalsIgnoreCase(restFood.choice))
+				{
+					if(restFood.amount <= THRESHOLD)
+					{
+						order.put(needFood, new Integer(MAXSUPPLY-restFood.amount));
+					}
+				}
+			}
+		}*/
+		
+	}
 
 	public void gotFoodMsg(Order o) 
 	{
 		print("Waiter received order");
 		cookGui.pickedUpFood(o);
+	}
+	public void msgRelieveFromDuty(PersonAgent p) 
+	{
+		replacementPerson = p;
+		state = CookState.leaving;
+		this.stateChanged();
+	}
+
+	public void goesToWork() {
+		state = CookState.goToWork;
+		stateChanged();
 	}
 	/****************************************************
 	 * Actions
@@ -129,6 +192,10 @@ public class GCCookRole extends Role implements Cook
 		//print(o.choice  + " " + o.food.amount);
 		if(state == CookState.free)
 		{
+			if(o.food.amount <= THRESHOLD)
+			{
+				checkInventory();
+			}
 			if(o.food.amount > 0)
 			{
 				state = CookState.cooking;
@@ -203,22 +270,36 @@ public class GCCookRole extends Role implements Cook
 		{
 			if(f.amount <= THRESHOLD)
 			{
-				order.put(f.choice, new Integer(MAXSUPPLY-f.amount));
+				order.put(f.choice.toLowerCase(), new Integer(MAXSUPPLY-f.amount));
 			}
 		}
 		if(order.size() != 0)
 		{
 			print("ORDERING FROM " + markets.get(marketCounter).getName());
-			/*for(Entry<String, Integer> item : order.entrySet())
+			for(Entry<String, Integer> item : order.entrySet())
 			{
 				print("WANT TO ORDER ~~~~~~~~~" + item.getKey() + " " + item.getValue());
-			}*/
-			//markets.get(marketCounter).receivedOrderFromCook(order, this);
+			}
+			marketOrders.add(new MarketOrder(order, markets.get(marketCounter)));
+			markets.get(marketCounter).msgPlaceDeliveryOrder((Cook)this);
 			marketCounter++;
 		}
 		stateChanged();
 	}
 	
+	//(5) places the market order
+	private void placeMarketOrder(MarketOrder mkOrder)
+	{
+		print("DELIVERY MAN GIVE ME FOOD #######################");
+		mkOrder.deliveryMan.msgHereIsOrder(mkOrder.choices);
+	}
+	
+	//(6) pays for the market order
+	private void payForMarketOrder(MarketOrder mkOrder)
+	{
+		((GCCashierRole)restaurant.cashier).msgHereIsBill(mkOrder.deliveryMan,mkOrder.price);
+		marketOrders.remove(mkOrder);
+	}
 	/****************************************************
 	 * Scheduler.  Determine what action is called for, and do it.
 	 ***************************************************/
@@ -226,22 +307,6 @@ public class GCCookRole extends Role implements Cook
 	{
 		try
 		{
-			/*
-			if(state == CookState.wantsOffWork){
-				boolean canGetOffWork = true;
-				for (Order o : orders)
-				{
-					if(o.state != OrderState.pending)
-					{
-						canGetOffWork = false;
-						break;
-					}
-				}
-				if(canGetOffWork){
-					state = CookState.leaving;
-				}
-			}*/
-			
 			if(state == CookState.relieveFromDuty){
 				state = CookState.none;
 				myPerson.releavedFromDuty(this);
@@ -273,6 +338,22 @@ public class GCCookRole extends Role implements Cook
 				return true;
 			}
 			
+			for(MarketOrder m : marketOrders)
+			{
+				if(m.marketState == MarketState.ordering)
+				{
+					placeMarketOrder(m);
+					m.marketState = MarketState.ordered;
+				}
+			}
+			for(MarketOrder m : marketOrders)
+			{
+				if(m.marketState == MarketState.paying)
+				{
+					payForMarketOrder(m);
+					m.marketState = MarketState.paid;
+				}
+			}
 			for(Order o: orders)
 			{
 				//if order is done put it on a plate and serve it
@@ -298,10 +379,8 @@ public class GCCookRole extends Role implements Cook
 	}
 	
 	//release semaphore when action is done
-	public void msgActionDone() {//from animation
-		//print("msgAtTable() called");
-		busy.release();// = true;
-		//stateChanged();
+	public void msgActionDone() {
+		busy.release();
 	}
 	//release semaphore for shift change
 	public void doneWithShift()
@@ -344,49 +423,20 @@ public class GCCookRole extends Role implements Cook
 		}
 	}
 
-	@Override
-	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgHereIsOrderFromMarket(DeliveryMan Dm,
-			Map<String, Integer> choices, double amount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgRelieveFromDuty(PersonAgent p) 
+	public class MarketOrder
 	{
-		replacementPerson = p;
-		state = CookState.leaving;
-		this.stateChanged();
+		public Map<String,Integer> choices;
+		public MarketState marketState = MarketState.made;
+		public DeliveryMan deliveryMan;
+		public MarketAgent market;
+		public double price;
+		public MarketOrder(Map<String, Integer> foodsToOrder, MarketAgent mrket) 
+		{
+			this.choices = foodsToOrder;
+			this.market = mrket;
+		}
 	}
-
-	public void goesToWork() {
-		state = CookState.goToWork;
-		stateChanged();
-	}
-
-	@Override
-	public void addMarket(MarketAgent m) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 /**
  * Utility functions
