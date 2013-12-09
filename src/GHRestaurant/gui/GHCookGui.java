@@ -18,7 +18,7 @@ public class GHCookGui implements Gui {
     private GHCookRole role = null;
 
     private int xPos = -20, yPos = -20;//default cook position
-    private int xDestination = 382, yDestination = 260;//default start position
+    private int xDestination = 382, yDestination = 250;//default start position
     private int tableNumber;
     private boolean isPresent = false;
 
@@ -60,20 +60,20 @@ public class GHCookGui implements Gui {
     }
 
     public void DoCookIt() {
-        xDestination = 400;
-        yDestination = 180;
+        xDestination = 450;
+        yDestination = 160;
 
     }
     
     public void DoGoHome(){
-    	xDestination = 365;
-    	yDestination = 230;
+    	xDestination = 382;
+    	yDestination = 250;
     	
     }
     
     public void DoPlateIt(){
-    	xDestination = 365;
-    	yDestination = 230;
+    	xDestination = 382;
+    	yDestination = 250;
     }
 
     public int getXPos() {

@@ -30,6 +30,8 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
 	private BufferedImage tableImg = null;
 	private BufferedImage grillRightImg = null;
 	private BufferedImage platingTableImg = null;
+    private BufferedImage hostStandImg = null;
+    private BufferedImage registerImg = null;
 
     public GHAnimationPanel(SimCityGui gui) {
     	this.simCityGui = gui;
@@ -40,6 +42,8 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
 		    ImageIO.read(new File(path.toString() + "grill.png"));
 		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
 		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
+		    hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
+		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
 		} catch (IOException e) {
 		}
     	
@@ -75,6 +79,10 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         g2.setColor(getBackground());
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
 
+        g2.drawImage(hostStandImg,40,30,null);
+        g2.drawImage(registerImg,85,35,null);
+
+        
         //Here are the tables
         g2.drawImage(tableImg,TABLE1XLOCATION,TABLE1YLOCATION,null);
         g2.drawImage(tableImg,TABLE2XLOCATION,TABLE2YLOCATION,null);

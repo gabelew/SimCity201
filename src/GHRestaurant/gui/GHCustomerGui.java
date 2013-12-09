@@ -24,7 +24,7 @@ public class GHCustomerGui implements Gui{
 	//SimCityGui gui;
 
 	private int xPos = -20, yPos = -20;
-	private int Cashierx = 50, Cashiery = 50;
+	private int Cashierx = 100, Cashiery = 50;
 	private int xDestination, yDestination;
 	private enum Command {noCommand, GoToSeat, GoToCashier, LeaveRestaurant};
 	private Command command=Command.noCommand;

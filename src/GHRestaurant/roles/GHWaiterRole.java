@@ -483,7 +483,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	@Override
 	public Restaurant getRestaurant() {
 		// TODO Auto-generated method stub
-		return null;
+		return restaurant;
 	}
 
 
