@@ -357,6 +357,7 @@ public class CMRestaurantListPanel extends JPanel implements ActionListener {
     			
     			invalidate();
     			validate();	
+    			repaint();
     }
 	public void setCustomerEnabled(String name) {
 		for(ListItem temp:listItems)

@@ -89,7 +89,9 @@ public class CMCashierRole extends Role implements Cashier {
 	}
 
 	public void goesToWork() {
-		state = State.goToWork;
+		if(state != State.leavingEarly){
+			state = State.goToWork;
+		}
 		stateChanged();
 	}
 
@@ -173,7 +175,9 @@ public class CMCashierRole extends Role implements Cashier {
 			}
 		}
 		if(state == State.goToWork){
-			state = State.working;
+			if(state != State.leavingEarly){
+				state = State.working;
+			}
 			cashierGui.DoEnterRestaurant();
 			return true;
 		}

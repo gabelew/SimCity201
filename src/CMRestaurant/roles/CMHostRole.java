@@ -360,8 +360,10 @@ public class CMHostRole extends Role implements Host {
 		((CMCookRole) restaurant.cook).msgLeaveWorkEarly();
 		((CMCashierRole) restaurant.cashier).msgLeaveWorkEarly();
 		for(MyWaiter w: waiters){
-			((CMWaiterRole) w.w).msgLeaveWorkEarly();
 			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) w.w).getName());
+		}
+		for(MyWaiter w: waiters){
+			((CMWaiterRole) w.w).msgLeaveWorkEarly();
 		}
 		waiters.removeAll(waiters);
 		state = State.leaving;

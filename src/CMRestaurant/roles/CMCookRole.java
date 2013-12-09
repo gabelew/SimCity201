@@ -167,7 +167,9 @@ public class CMCookRole extends Role implements Cook {
 	}
 
 	public void goesToWork() {
-		state = State.goToWork;
+		if(state != State.leaving){
+			state = State.goToWork;
+		}
 		stateChanged();
 	}
 	public void msgRelieveFromDuty(PersonAgent p) {
@@ -400,7 +402,9 @@ public class CMCookRole extends Role implements Cook {
 		}
 		
 		if(state == State.goToWork){
-			state = State.working;
+			if(state != State.leaving){
+				state = State.working;
+			}
 			cookGui.DoEnterRestaurant();
 			return true;
 		}
