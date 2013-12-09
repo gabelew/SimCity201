@@ -949,6 +949,8 @@ public class PersonAgent extends Agent implements Person
 				e.printStackTrace();
 			}	
 		}
+		
+
 		location = Location.AtWork;
     	state = State.working;
 
@@ -960,63 +962,69 @@ public class PersonAgent extends Agent implements Person
     	else if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
-    		if(job.type.equalsIgnoreCase("waiter")){
-    			Role role = (Role) SimCityGui.waiterFactory(this, r);
-            	role.setGui(SimCityGui.waiterGuiFactory(r, (Role) role));
-            	roles.add((Role) role);
-            	role.active = true;
-            	r.insideAnimationPanel.addGui(role.getGui());
-            	role.getGui().setPresent(true);
-            	((Waiter) role).goesToWork();	
-    		}else if(job.type.equalsIgnoreCase("host")){
-    			Role role = (Role)r.host;
-    			if(role.getPerson() != null){
-    				((Host) role).msgReleaveFromDuty(this);
-    				try {
-    					waitingResponse.acquire();
-    				} catch (InterruptedException e) {
-    					e.printStackTrace();
-    				}
-    			}
-    			roles.add(role);
-    			role.setPerson(this);
-            	role.active = true;
-            	role.getGui().setPresent(true);
-            	((Host) role).goesToWork();
-    		}else if(job.type.equalsIgnoreCase("cook")){
-    			Role role = (Role)(r.cook);
-    			if(role.getPerson() != null){
-    				((Cook) role).msgRelieveFromDuty(this);
-    				try {
-    					waitingResponse.acquire();
-    				} catch (InterruptedException e) {
-    					e.printStackTrace();
-    				}
-    			}
-    			roles.add(role);
-    			role.setPerson(this);
-            	role.active = true;
-            	role.getGui().setPresent(true);
-            	((Cook) role).goesToWork();
-    		}else if(job.type.equalsIgnoreCase("cashier")){
-    			Role role = (Role)(r.cashier);
-    			if(role.getPerson() != null){
-    				((Cashier) role).msgReleaveFromDuty(this);
-    				try {
-    					waitingResponse.acquire();
-    				} catch (InterruptedException e) {
-    					e.printStackTrace();
-    				}
-    			}
-    			roles.add(role);
-    			role.setPerson(this);
-            	role.active = true;
-            	role.getGui().setPresent(true);
-            	((Cashier) role).goesToWork();
-            	role.active = true;
-    		}
+	    		if(r.isOpen){
+	    		if(job.type.equalsIgnoreCase("waiter")){
+	    			Role role = (Role) SimCityGui.waiterFactory(this, r);
+	            	role.setGui(SimCityGui.waiterGuiFactory(r, (Role) role));
+	            	roles.add((Role) role);
+	            	role.active = true;
+	            	r.insideAnimationPanel.addGui(role.getGui());
+	            	role.getGui().setPresent(true);
+	            	((Waiter) role).goesToWork();	
+	    		}else if(job.type.equalsIgnoreCase("host")){
+	    			Role role = (Role)r.host;
+	    			if(role.getPerson() != null){
+	    				((Host) role).msgReleaveFromDuty(this);
+	    				try {
+	    					waitingResponse.acquire();
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
+	    			}
+	    			roles.add(role);
+	    			role.setPerson(this);
+	            	role.active = true;
+	            	role.getGui().setPresent(true);
+	            	((Host) role).goesToWork();
+	    		}else if(job.type.equalsIgnoreCase("cook")){
+	    			Role role = (Role)(r.cook);
+	    			if(role.getPerson() != null){
+	    				((Cook) role).msgRelieveFromDuty(this);
+	    				try {
+	    					waitingResponse.acquire();
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
+	    			}
+	    			roles.add(role);
+	    			role.setPerson(this);
+	            	role.active = true;
+	            	role.getGui().setPresent(true);
+	            	((Cook) role).goesToWork();
+	    		}else if(job.type.equalsIgnoreCase("cashier")){
+	    			Role role = (Role)(r.cashier);
+	    			if(role.getPerson() != null){
+	    				((Cashier) role).msgReleaveFromDuty(this);
+	    				try {
+	    					waitingResponse.acquire();
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
+	    			}
+	    			roles.add(role);
+	    			role.setPerson(this);
+	            	role.active = true;
+	            	role.getGui().setPresent(true);
+	            	((Cashier) role).goesToWork();
+	            	role.active = true;
+	    		}
+	    	}else{
+	    		state = State.doingNothing;
+	    		location = Location.InCity;
+	    	}
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
     		MarketAgent ma = findMarket(destination);
+    		if(ma.isOpen){
     		if(job.type.equalsIgnoreCase("clerk")){
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
@@ -1036,6 +1044,10 @@ public class PersonAgent extends Agent implements Person
 		            role.getGui().setPresent(true);
 		            role.goesToWork();		
 			}
+    		}else{
+	    		state = State.doingNothing;
+	    		location = Location.InCity;
+    		}
     	}
     }
 
