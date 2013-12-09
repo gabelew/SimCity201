@@ -1,6 +1,7 @@
 package GLRestaurant.roles;
 
 import agent.Agent;
+import CMRestaurant.roles.CMCookRole.OrderState;
 import CMRestaurant.roles.CMCookRole.marketOrderState;
 import GLRestaurant.gui.GLCookGui;
 import GLRestaurant.roles.GLHostRole.State;
@@ -30,12 +31,13 @@ public class GLCookRole extends Role implements Cook{
 	private final int CHICKENTIME = 6000;
 	private final int SALADTIME = 4000;
 	private final int COOKIETIME = 7000;
+	private final int STARTAMOUNT = 50;
 	private int orderNumber = 1;
 	boolean firstRestock = false;
 	int restockCount = 0;
 	PersonAgent replacementPerson = null;
 	private Semaphore waitingResponse = new Semaphore(0,true);
-
+	boolean marketsAreStocked = true;
 	
 	public Restaurant restaurant;
 	Timer timer = new Timer();
@@ -49,9 +51,8 @@ public class GLCookRole extends Role implements Cook{
 		String type; 
 		int cookingTime;
 		int amount;
-		final int threshhold = 3; // when it is low
-		final int capacity = 8;
-		MarketAgent currentMarket;
+		final int threshhold = 5; // when it is low
+		final int capacity = 50;
 		restockState rs = restockState.none;
 		int unfulfilled;
 		Food(String t, int c, int a) {
@@ -87,17 +88,21 @@ public class GLCookRole extends Role implements Cook{
 		MarketAgent Market;
 		double price;
 	}
+	
+	List<MarketOrder> marketOrders = new CopyOnWriteArrayList<MarketOrder>();
+	
 	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	
 	public enum orderState {outOfFood, pending, preparing, cooked, finished};
 	public enum restockState {none, outOfStock, pending, finished};
-	enum State {none, goToWork, working, leaving, relieveFromDuty};
+	enum State {none, goToWork, working, leaving, relieveFromDuty, wantsOffWork};
 	State state = State.none;
 	
 	List<WaiterOrder> orders = Collections.synchronizedList(new ArrayList<WaiterOrder>());
 	
 	// agent correspondents
 	private List<MyMarket> markets = new CopyOnWriteArrayList<MyMarket>(); 
+	private MyMarket currentMarket;
 	
 	Map<String, Food> foods = new ConcurrentHashMap<String, Food>();
 	
@@ -105,13 +110,11 @@ public class GLCookRole extends Role implements Cook{
 
 	public GLCookRole(int amount) {
 		super();
-		foods.put("steak", new Food("steak", STEAKTIME, 3));
-		foods.put("chicken", new Food("chicken", CHICKENTIME, 3));
-		foods.put("salad", new Food("salad", SALADTIME, 3));
+		foods.put("steak", new Food("steak", STEAKTIME, STARTAMOUNT));
+		foods.put("chicken", new Food("chicken", CHICKENTIME, STARTAMOUNT));
+		foods.put("salad", new Food("salad", SALADTIME, STARTAMOUNT));
 		foods.put("cookie", new Food("cookie", COOKIETIME, amount));
 	}
-
-
 	
 	// Messages
 	
@@ -121,7 +124,7 @@ public class GLCookRole extends Role implements Cook{
 	}
 	public void msgRelieveFromDuty(PersonAgent p) {
 		replacementPerson = p;
-		state = State.leaving;
+		state = State.wantsOffWork;
 		this.stateChanged();
 	}
 	public void msgAnimationHasLeftRestaurant() {
@@ -141,17 +144,6 @@ public class GLCookRole extends Role implements Cook{
 		}
 		stateChanged();
 	}
-	
-	public void msgOpeningRestock() {
-		// initializes currentMarket for every food type
-		Iterator<String> it1 = foods.keySet().iterator();
-		while(it1.hasNext()) { 
-			String key = it1.next();
-			Food f = foods.get(key);
-			f.currentMarket = markets.get(0).m; // default market is marketOne from RestaurantPanel
-		}
-		stateChanged();
-	}
 
 	public void msgHereIsOrder(GLWaiterRole w, String choice, GLCustomerRole c) {
 		if(foods.get(choice).amount > 0) {
@@ -160,29 +152,6 @@ public class GLCookRole extends Role implements Cook{
 		} else {
 			orders.add(new WaiterOrder(w, choice, c, orderState.outOfFood));
 		}
-		stateChanged();
-	}
-	
-	public void msgNoStock(MarketAgent m, String choice, int unfulfilled) {
-		Food f = findFood(choice);
-		f.rs = restockState.outOfStock;
-		f.unfulfilled = unfulfilled;
-		stateChanged();
-	}
-	
-	public void msgRestockDone(MarketAgent m, String choice, int amount) {
-		if(!firstRestock) {
-			restockCount++;
-			if(4 == restockCount) {
-				((GLHostRole)restaurant.host).msgCookHasRestocked();
-				firstRestock = true;
-			}
-		}
-		Food f = findFood(choice);
-		if(0 == f.unfulfilled) {
-			f.rs = restockState.none;
-		}
-		f.amount += amount;
 		stateChanged();
 	}
 	
@@ -206,6 +175,27 @@ public class GLCookRole extends Role implements Cook{
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		
+		if(!firstRestock) {
+			firstRestock = true;
+			currentMarket = markets.get(0);
+		}
+		
+		if(state == State.wantsOffWork){
+			boolean canGetOffWork = true;
+			for (WaiterOrder o : orders)
+			{
+				if(o.s != orderState.pending)
+				{
+					canGetOffWork = false;
+					break;
+				}
+			}
+			if(canGetOffWork){
+				state = State.leaving;
+			}
+		}
+		
 		if(state == State.relieveFromDuty){
 			state = State.none;
 			myPerson.releavedFromDuty(this);
@@ -260,7 +250,7 @@ public class GLCookRole extends Role implements Cook{
 		}
 
 		// Order food from market if nothing else on scheduler to be done
-		//orderFoodFromMarket();
+		orderFoodFromMarket();
 
 		return false;
 		//we have tried all our rules and found
@@ -274,7 +264,7 @@ public class GLCookRole extends Role implements Cook{
 		Do("Out of " + o.choice);
 		o.s = orderState.finished;
 		o.w.msgOutOfFood(o.c, o.choice);
-		//orderFoodFromMarket();
+		orderFoodFromMarket();
 	}
 	
 	private void cookIt(final WaiterOrder o) {
@@ -296,46 +286,43 @@ public class GLCookRole extends Role implements Cook{
 		o.w.msgOrderDone(o.c, o.choice, cookGui.getPlateX(o.orderNum), cookGui.getPlateY(o.orderNum));
 	}
 	
-//	private void orderFoodFromMarket() {
-//		Iterator<String> it1 = foods.keySet().iterator();
-//		while(it1.hasNext()) { //iterate through foods map, send a message for each item
-//			String key = it1.next();
-//			Food f = foods.get(key);
-//			if(restockState.outOfStock == f.rs) {
-//				changeMarket(f.type);
-//				if(restockState.finished != f.rs) {
-//					Do("Reordering " + f.unfulfilled + " of " + f.type + " from " + f.currentMarket.getName());
-//					f.currentMarket.msgHereIsRestockOrder(f.type, this, f.unfulfilled);
-//					f.unfulfilled = 0;	
-//					f.rs = restockState.pending;
-//				}
-//			} else if (restockState.none == f.rs && f.amount <= f.threshhold) {
-//				int amountNeeded = f.capacity - f.amount;
-//				Do("Ordering " + amountNeeded + " of " + f.type + " from " + f.currentMarket.getName());
-//				f.currentMarket.msgHereIsRestockOrder(f.type, this, amountNeeded);
-//				f.rs = restockState.pending;
-//			}
-//		}
-//	}
+	private void orderFoodFromMarket() {
+		if(marketsAreStocked) {
+			boolean orderNeeded = false;
+			Map<String,Integer>foodsToOrder=new HashMap<String,Integer>();
+			Iterator<String> it1 = foods.keySet().iterator();
+			while(it1.hasNext()) { //iterate through foods map, send a message for each item
+				String key = it1.next();
+				Food f = foods.get(key);
+				if (restockState.none == f.rs && f.amount <= f.threshhold) {
+					int amountNeeded = f.capacity - f.amount;
+					foodsToOrder.put(f.type, amountNeeded);
+					f.rs = restockState.pending;
+					orderNeeded = true;
+				}
+			}
+			if(orderNeeded) {
+				marketOrders.add(new MarketOrder(foodsToOrder, currentMarket.m, marketOrderState.waiting));
+				currentMarket.m.msgPlaceDeliveryOrder((Cook) this);
+			}
+		}
+	}
 
-//	private void changeMarket(String food) {
-//		Iterator<String> it1 = foods.keySet().iterator();
-//		while(it1.hasNext()) { 
-//			String key = it1.next();
-//			Food f = foods.get(key);
-//			if (food == f.type) {
-//				if(markets.get(0).m == f.currentMarket)	
-//					f.currentMarket = markets.get(1).m; //change market to ButcherK
-//				else if(markets.get(1).m == f.currentMarket)
-//					f.currentMarket = markets.get(2).m; // change market to Pagodas
-//				else {
-//					f.currentMarket = null; // no more markets available
-//					f.rs = restockState.finished;
-//					print("All markets are out of stock of " + food);
-//				}
-//			}
-//		}
-//	}
+	private void changeMarket() {
+		if(currentMarket.equals(markets.get(0))) {
+			currentMarket = markets.get(1);			
+		} else if(currentMarket.equals(markets.get(1))) {
+			currentMarket = markets.get(2);			
+		} else if(currentMarket.equals(markets.get(2))) {
+			currentMarket = markets.get(3);			
+		} else if(currentMarket.equals(markets.get(3))) {
+			currentMarket = markets.get(4);			
+		} else if(currentMarket.equals(markets.get(4))) {
+			currentMarket = markets.get(5);			
+		} else {
+			marketsAreStocked = false;
+		}
+	}
 
 	//utilities
 	
@@ -364,28 +351,45 @@ public class GLCookRole extends Role implements Cook{
 	}
 
 	@Override
-	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
-		// TODO Auto-generated method stub
-		
+	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent m) {
+		for(MarketOrder order: marketOrders) {
+			if(order.Market == m) {
+				order.deliveryMan = DM;
+				order.marketState = marketOrderState.ordering;
+			}
+		}
 	}
 
 	@Override
 	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
-		// TODO Auto-generated method stub
-		
+		if(markets.size() > 0) {
+			markets.remove(market);
+		} else {
+			for(MarketAgent ma: restaurant.insideAnimationPanel.simCityGui.getMarkets()) {
+				this.addMarket(ma);
+			}
+		}
 	}
 
 	@Override
 	public void msgHereIsOrderFromMarket(DeliveryMan Dm,
 			Map<String, Integer> choices, double amount) {
-		// TODO Auto-generated method stub
+		for(MarketOrder order: marketOrders) {
+			if(order.deliveryMan == Dm) {
+				order.price = amount;
+				order.marketState = marketOrderState.paying;
+			}
+		}
+		for(String key:choices.keySet()) {
+			Food food = findFood(key);
+			food.amount = food.amount + choices.get(key);
+		}
 		
 	}
 
 	@Override
 	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
-		// TODO Auto-generated method stub
-		
+		changeMarket();
 	}
 
 	@Override
