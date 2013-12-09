@@ -413,4 +413,10 @@ public class GLHostRole extends Role implements Host{
 		this.hostGui = (GLHostGui)waiterGuiFactory;
 	}
 
+	@Override
+	public void msgCloseRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

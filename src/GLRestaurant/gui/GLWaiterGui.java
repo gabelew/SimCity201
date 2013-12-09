@@ -90,6 +90,10 @@ public class GLWaiterGui implements Gui {
     	xDestination = 460;
     	yDestination = 180;
     	command = Command.IfAtStand;
+    	if(waitingSpotNumber >= 0){
+			((GLRestaurantAnimationPanel)role.getRestaurant().insideAnimationPanel).waitingSeatsWaiter.get(waitingSpotNumber).release();
+			waitingSpotNumber = -1;
+		}
     }
     
     private void findASpotToRest() {	
