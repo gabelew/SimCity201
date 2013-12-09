@@ -24,9 +24,6 @@ public class GHRestaurantPanel extends JPanel {
     private GHHostGui hostGui = new GHHostGui(host);
     private GHCookRole cook = new GHCookRole(1);
     private GHCookGui cookGui = new GHCookGui(cook);
-    private GHMarketRole market = new GHMarketRole("Market1",200,360,250,250);
-    private GHMarketRole market2 = new GHMarketRole("Market2",350,150,450,100);
-    private GHMarketRole market3 = new GHMarketRole("market3",450,550,250,50);
     private GHCashierRole cashier = new GHCashierRole();
 
     private Vector<Customer> customers = new Vector<Customer>();

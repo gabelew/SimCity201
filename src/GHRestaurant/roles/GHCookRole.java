@@ -29,8 +29,8 @@ public class GHCookRole extends Role implements Cook {
 	//public String name;
 	private GHCookGui cookgui = null;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
-	public List<Market> markets
-	= new ArrayList<Market>();
+	public List<MarketAgent> markets
+	= new ArrayList<MarketAgent>();
 	private Semaphore atDestination = new Semaphore(0,true);
 	private Restaurant restaurant;
 
@@ -61,7 +61,7 @@ public class GHCookRole extends Role implements Cook {
 		return orders;
 	}
 	
-	public void setMarket(Market ma){
+	public void setMarket(MarketAgent ma){
 		markets.add(ma);
 	}
 	
@@ -93,7 +93,12 @@ public class GHCookRole extends Role implements Cook {
 		print("Recieved msgOutOfOrder");
 		stateChanged();
 	}
-	 
+	
+	@Override
+	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -149,7 +154,7 @@ public class GHCookRole extends Role implements Cook {
 			
 		//if food is "low" then the cook orders from different market.
 		if(Inventory.get(o.choice).getAmount() <= Inventory.get(o.choice).getThreshold()){
-			((GHMarketRole) markets.get(nextmarket)).msgHereIsTheOrder(this, Inventory.get(o.choice).getFoodType(), ORDERAMOUNT);
+			markets.get(nextmarket).msgPlaceDeliveryOrder(this);
 			nextmarket = (nextmarket+1)%markets.size();
 		}
 			
@@ -260,12 +265,6 @@ public class GHCookRole extends Role implements Cook {
 		public String getFoodType(){
 			return foodtype;
 		}
-	}
-
-	@Override
-	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

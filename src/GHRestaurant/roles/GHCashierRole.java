@@ -75,6 +75,12 @@ public class GHCashierRole extends Role implements Cashier{
 		checks.add(new Check(m,cost,CheckState.MARKET));
 	}
 	
+	@Override
+	public void msgHereIsBill(DeliveryMan DMR, double bill) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -181,7 +187,7 @@ public class GHCashierRole extends Role implements Cashier{
 	private void PayMarket(Check c){
 		print("Paying " + c.market.getName() + " for order");
 		RestaurantMoney -= c.cost;
-		((GHMarketRole) c.market).msgHereIsPayment(c.cost);
+		//c.market.msgHereIsPayment(c.cost,this);
 		checks.remove(c);
 	}
 	
@@ -224,12 +230,6 @@ public class GHCashierRole extends Role implements Cashier{
 		public double getCost(){
 			return cost;
 		}
-	}
-
-	@Override
-	public void msgHereIsBill(DeliveryMan DMR, double bill) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
