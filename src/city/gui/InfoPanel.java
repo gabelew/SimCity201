@@ -11,6 +11,7 @@ import atHome.city.Residence;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
+import city.roles.BankRobberRole;
 import city.roles.Role;
 
 import java.awt.*;
@@ -186,6 +187,14 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     			gui.bankAgent.msgOpenAccount(bcr, 800, "personal");
     		}
     		
+    		if(name.toLowerCase().contains("crook")) {
+    			p.isEvil = true;
+    			p.hungerLevel = 0;
+    			BankRobberRole br = new BankRobberRole(p);
+    			p.roles.add(br);
+    			br.active = false;
+    			
+    		}
     		
     		if(residence instanceof Apartment){
     			((Apartment)residence).addRenter(p);

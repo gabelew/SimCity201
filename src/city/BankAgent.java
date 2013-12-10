@@ -1,9 +1,11 @@
 package city;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import city.roles.BankCustomerRole;
+import city.roles.BankRobberRole;
 import agent.Agent;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
@@ -35,6 +37,18 @@ public class BankAgent extends Agent implements Bank{
 			}
 		}
 	}
+	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 5;
+	
+	public class HackAttack {
+		public BankRobberRole hacker;
+		int hackAlgorithm = -1;
+		int defenseAlgorithm = -1;
+		public HackAttack(BankRobberRole h, int hack) {
+			this.hacker = h;
+			this.hackAlgorithm = hack;
+		}
+	}
+	public List<HackAttack>hackAttacks = new CopyOnWriteArrayList<HackAttack>();
 	
 	public class Transaction {
 		public BankCustomer bc;
@@ -89,6 +103,10 @@ public class BankAgent extends Agent implements Bank{
 		}
 		if(0 == getStateChangePermits())
 			stateChanged();
+	}
+	
+	public void msgThisIsAHackAttack(BankRobberRole brr, int hackAlgorithm){
+		
 	}
 	
 	/**
@@ -343,6 +361,10 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	// Utilities
+	public static int randInt(int min, int max) {
+	    Random i = new Random();
+	    return i.nextInt((max - min) + 1) + min;
+	}
 	
 	private BankAccount findAccount(BankAccount b) {
 		BankAccount ba = null;
