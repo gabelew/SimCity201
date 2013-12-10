@@ -131,6 +131,14 @@ public class GHCookRole extends Role implements Cook {
 		}
 		}
 		}
+		
+		for (MarketOrder mOrder : marketOrders) {
+			if(mOrder.marketState == marketOrderState.ordering) {
+				mOrder.marketState = marketOrderState.ordered;
+				GiveOrderToDeliverMan(mOrder);
+				return true;
+			}
+		}
 			
 		//cookgui.DoGoHome();
 		
@@ -139,6 +147,7 @@ public class GHCookRole extends Role implements Cook {
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
 	}
+
 
 	// Actions
 
@@ -180,8 +189,8 @@ public class GHCookRole extends Role implements Cook {
 		}
 	}
 	
-	private void OrderFromMarket() {
-
+	private void GiveOrderToDeliverMan(MarketOrder mo) {
+		mo.deliveryMan.msgHereIsOrder(mo.order);
 	}
 
 	private void DoCookIt(Order o){
