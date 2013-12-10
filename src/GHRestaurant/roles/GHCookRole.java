@@ -3,6 +3,8 @@ package GHRestaurant.roles;
 import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
+import CMRestaurant.roles.CMCookRole.MarketOrder;
+import CMRestaurant.roles.CMCookRole.marketOrderState;
 import GHRestaurant.gui.*;
 
 import java.util.*;
@@ -22,10 +24,13 @@ public class GHCookRole extends Role implements Cook {
 	
 	public List<Order> orders
 	= Collections.synchronizedList(new ArrayList<Order>());
+	public List<MarketOrder> marketOrders
+	= Collections.synchronizedList(new ArrayList<MarketOrder>());
 	static final int ORDERAMOUNT = 30;
 	int nextmarket;
 	private Timer timer = new Timer();
 	public enum OrderState {PENDING,COOKING,DONECOOKING}
+	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	//public String name;
 	private GHCookGui cookgui = null;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
@@ -96,23 +101,19 @@ public class GHCookRole extends Role implements Cook {
 	
 	@Override
 	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
-		// TODO Auto-generated method stub
-		
+		for (MarketOrder order: marketOrders){
+			if(order.Market==M){
+				order.deliveryMan=DM;
+				order.marketState=marketOrderState.ordering;
+			}
+		}		
 	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-
 		
-		/*for(Map.Entry<String, Food> entry : Inventory.entrySet()){
-		if(entry.getValue().getAmount() <= entry.getValue().getThreshold()){
-				markets.get(nextmarket).msgHereIsTheOrder(this, entry.getKey(), ORDERAMOUNT);
-				nextmarket = (nextmarket+1)%markets.size();
-				return true;
-		}
-		}*/
 		synchronized(orders){
 		for (Order o : orders) {
 		if (o.getState() == OrderState.PENDING) {
@@ -154,15 +155,17 @@ public class GHCookRole extends Role implements Cook {
 			
 		//if food is "low" then the cook orders from different market.
 		if(Inventory.get(o.choice).getAmount() <= Inventory.get(o.choice).getThreshold()){
+			Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
+			foodToOrder.put(o.choice, 20);
+			marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
 			markets.get(nextmarket).msgPlaceDeliveryOrder(this);
 			nextmarket = (nextmarket+1)%markets.size();
-		}
+			}
 			
 		DoCookIt(o);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		o.os = OrderState.COOKING;
@@ -177,6 +180,10 @@ public class GHCookRole extends Role implements Cook {
 		}
 	}
 	
+	private void OrderFromMarket() {
+
+	}
+
 	private void DoCookIt(Order o){
 		print("cooking " + o.choice);
 		cookgui.DoCookIt();
@@ -187,7 +194,6 @@ public class GHCookRole extends Role implements Cook {
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		((GHWaiterRole) o.waiter).msgOrderIsReady(o.choice, o.tablenumber);
@@ -267,6 +273,19 @@ public class GHCookRole extends Role implements Cook {
 		}
 	}
 
+	private class MarketOrder{
+		public MarketOrder(Map<String, Integer> food,MarketAgent m, marketOrderState mos) {
+			order=food;
+			Market=m;
+			marketState=mos;
+		}
+		Map<String,Integer> order;
+		marketOrderState marketState;
+		DeliveryMan deliveryMan;
+		MarketAgent Market;
+		double cost;
+	}
+	
 	@Override
 	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
 		// TODO Auto-generated method stub
@@ -274,8 +293,7 @@ public class GHCookRole extends Role implements Cook {
 	}
 
 	@Override
-	public void msgHereIsOrderFromMarket(DeliveryMan Dm,
-			Map<String, Integer> choices, double amount) {
+	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String, Integer> choices, double amount) {
 		// TODO Auto-generated method stub
 		
 	}
