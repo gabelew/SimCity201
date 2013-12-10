@@ -23,6 +23,9 @@ public class GHHostGui implements Gui {
     public static final int xTable = 200;
     public static final int yTable = 250;
 	private BufferedImage hostImg = null;
+	
+	public enum Command {Enter, Leaving, none}
+	public Command command;
 
 
     public GHHostGui(GHHostRole role) {
@@ -44,9 +47,13 @@ public class GHHostGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
 
-        if (xPos == xDestination && yPos == yDestination
-        		&& (xDestination == xTable + 20) & (yDestination == yTable + (80-(tableNumber*100)))) {
-           ((GHHostRole) role).msgAtTable();
+        if(xPos == xDestination && yPos == yDestination){
+        	if(command == Command.Leaving){
+        		role.msgAnimationHasLeftRestaurant();
+        		command = Command.none;
+        	}else if(command == Command.Enter){
+        		command = Command.none;
+        	}		
         }
     }
 
@@ -57,7 +64,6 @@ public class GHHostGui implements Gui {
     public boolean isPresent() {
         return isPresent;
     }
-
 
     public void DoLeaveCustomer() {
         xDestination = -20;
@@ -76,5 +82,17 @@ public class GHHostGui implements Gui {
 	@Override
 	public void setPresent(boolean b) {
 		isPresent = b;
+	}
+
+	public void DoEnterRestaurant() {
+        xDestination = 60;
+        yDestination = 30;	
+        command = Command.Enter;
+	}
+
+	public void DoLeaveRestaurant() {
+        xDestination = -20;
+        yDestination = -20;	
+        command = Command.Leaving;		
 	}
 }

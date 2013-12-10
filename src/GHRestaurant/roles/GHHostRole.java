@@ -37,6 +37,10 @@ public class GHHostRole extends Role implements Host{
 	private Semaphore atDestination = new Semaphore(0,true);
 
 	public GHHostGui hostGui = null;
+	private PersonAgent replacementPerson = null;
+	
+	private enum State {goToWork, leaving, releaveFromDuty, none, working}
+	private State state;
 
 	public GHHostRole() {
 		super();
@@ -83,6 +87,7 @@ public class GHHostRole extends Role implements Host{
 			if (table.getOccupant() == cust) {
 				print("customer leaving " + table);
 				table.setUnoccupied();
+				//waitingCustomers.remove(cust);
 				stateChanged();
 			}
 		}
@@ -121,6 +126,29 @@ public class GHHostRole extends Role implements Host{
             If so seat him at the table.
 		 */
 
+		if(state == State.releaveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
+		if(state == State.goToWork){
+			state = State.working;
+			hostGui.DoEnterRestaurant();
+			return true;
+		}
+		if(state == State.leaving){
+			state = State.none;
+			hostGui.DoLeaveRestaurant();
+			try {
+				atDestination.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		
 		
 		if(!waiters.isEmpty() && !waitingCustomers.isEmpty()){
 			for(Table table: tables){
@@ -189,32 +217,29 @@ public class GHHostRole extends Role implements Host{
 
 	@Override
 	public void msgReleaveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();		
 	}
 
 	@Override
 	public void msgReadyToWork(Waiter w) {
-		// TODO Auto-generated method stub
-		
+		msgSetWaiter(w);		
 	}
 
 	@Override
 	public void msgIWantToEat(Customer c) {
-		// TODO Auto-generated method stub
-		
+		msgIWantFood(c);
 	}
 
 	@Override
 	public void msgLeavingRestaurant(Customer c) {
-		// TODO Auto-generated method stub
-		
+		msgLeavingTable(c);		
 	}
 
 	@Override
 	public void msgCanIBreak(Waiter w) {
-		// TODO Auto-generated method stub
-		
+		 msgCanIGoOnBreak(w);		
 	}
 
 	@Override
@@ -225,8 +250,8 @@ public class GHHostRole extends Role implements Host{
 
 	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+		state = State.goToWork;
+		this.stateChanged();		
 	}
 
 	@Override
@@ -248,5 +273,10 @@ public class GHHostRole extends Role implements Host{
 	public void msgOpenRestaurant() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.releaveFromDuty;
+		atDestination.release();		
 	}
 }
