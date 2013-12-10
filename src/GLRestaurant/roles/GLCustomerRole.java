@@ -69,6 +69,11 @@ public class GLCustomerRole extends Role implements Customer{
 		stateChanged();
 	}
 	
+	public void msgRestaurantClosed() {
+		event = AgentEvent.tiredOfWaiting;
+		stateChanged();
+	}
+	
 	public void msgRestaurantFull() {
 		int randomChoice = generator.nextInt(2);
 		if(0 == randomChoice) {

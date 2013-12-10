@@ -34,7 +34,7 @@ public class GLCookRole extends Role implements Cook{
 	private final int COOKIETIME = 7000;
 	private final int CHECKSTANDTIME = 5000;
 	private final int STARTAMOUNT = 50;
-	
+	private boolean restaurantClosed = false;
 	boolean firstRestock = false;
 	int restockCount = 0;
 	PersonAgent replacementPerson = null;
@@ -108,6 +108,11 @@ public class GLCookRole extends Role implements Cook{
 	}
 	
 	// Messages
+	
+	public void msgRestaurantClosed() {
+		restaurantClosed = true;
+		stateChanged();
+	}
 	
 	public void goesToWork() {
 		state = State.goToWork;
@@ -262,6 +267,11 @@ public class GLCookRole extends Role implements Cook{
 		if(checkStand) {
 			checkRevolvingStand();
 			return true;
+		}
+		
+		if(restaurantClosed) {
+			restaurantClosed = false;
+			state = State.wantsOffWork;
 		}
 		
 		return false;

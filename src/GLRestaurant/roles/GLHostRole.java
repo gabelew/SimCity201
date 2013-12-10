@@ -56,7 +56,7 @@ public class GLHostRole extends Role implements Host{
 	enum State {none, goToWork, working, leaving, relieveFromDuty};
 	State state = State.none;
 	boolean firstRestock = false;
-
+	private boolean closeRestaurant = false;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 
 	PersonAgent replacementPerson = null;
@@ -137,6 +137,7 @@ public class GLHostRole extends Role implements Host{
 		mw.customers--;
 		mc.t = null;
 		table.setUnoccupied();
+		customers.remove(mc);
 		stateChanged();
 	}
 	
@@ -237,6 +238,22 @@ public class GLHostRole extends Role implements Host{
 			return true;
 		}
 		
+		if(closeRestaurant && customers.size() > 0) {
+			synchronized(customers) {
+				for(MyCustomer mc : customers) {
+					if (mc.cs == customerState.waiting) {
+						askCustomerToLeave(mc);
+						return true;
+					}
+				}
+			}
+		} 
+		
+		if(closeRestaurant && customers.isEmpty()) {
+			askEmployeesToLeave();
+		}
+		
+		
 		synchronized(customers) {
 			for(MyCustomer mc : customers) {
 				if (mc.cs == customerState.waiting) {
@@ -262,6 +279,24 @@ public class GLHostRole extends Role implements Host{
 	}
 
 	// Actions
+	
+	private void askCustomerToLeave(MyCustomer mc) {
+		mc.c.msgRestaurantClosed();
+		customers.remove(mc);
+	}
+	
+	private void askEmployeesToLeave() {
+		synchronized(waiters) {
+			for(MyWaiter mw : waiters) {
+				mw.w.msgRestaurantClosed();
+			}
+		}
+		waiters.removeAll(waiters);
+		((GLCashierRole) restaurant.cashier).msgRestaurantClosed();
+		state = State.leaving;
+		closeRestaurant = false;
+	}
+	
 
 	/** 
 	 * Find an empty table and tell waiter to seat a waiting customer
@@ -276,7 +311,7 @@ public class GLHostRole extends Role implements Host{
 					mw.ws = waiterState.serving;
 					mw.customers++;
 					mc.t = t;
-					t.occupiedBy = mc.c;
+					t.setOccupant(mc.c);
 					mc.cs = customerState.seated;
 				}
 			}
@@ -415,8 +450,8 @@ public class GLHostRole extends Role implements Host{
 
 	@Override
 	public void msgCloseRestaurant() {
-		// TODO Auto-generated method stub
-		
+		closeRestaurant = true;
+		stateChanged();
 	}
 
 }
