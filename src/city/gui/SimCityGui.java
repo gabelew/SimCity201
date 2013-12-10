@@ -78,6 +78,7 @@ import GLRestaurant.roles.GLRevolvingStandMonitor;
 import GLRestaurant.roles.GLSharedWaiterRole;
 import GLRestaurant.roles.GLWaiterRole;
 import atHome.city.Apartment;
+import atHome.city.AtHomePanel;
 import atHome.city.Home;
 import city.BankAgent;
 import city.MarketAgent;
@@ -776,17 +777,17 @@ public class SimCityGui extends JFrame implements ActionListener {
 				banks.add(new BankBuilding(bankAnimationPanel, new Point(b.getX(),b.getY())));
 			}else if(b.type.equals("house")){
 		        
-		    	JPanel APanel = new JPanel();
-		    	BankPanel bankPanel = new BankPanel();
+		    	//JPanel APanel = new JPanel();
+		    	AtHomePanel atHomePanel = new AtHomePanel(this, "Home");
 		        InsideAnimationPanel houseAnimationPanel = new HouseAnimationPanel(this);
 		    	
 		        Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
-		        bankPanel.setPreferredSize(restDim);
-		        bankPanel.setMinimumSize(restDim);
-		        bankPanel.setMaximumSize(restDim);
-		        APanel.add(bankPanel);
+		        atHomePanel.setPreferredSize(restDim);
+		        atHomePanel.setMinimumSize(restDim);
+		        atHomePanel.setMaximumSize(restDim);
+		       // APanel.add(bankPanel);
 		        
-		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, bankPanel);
+		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, atHomePanel);
             	houseAnimationPanel.setInsideBuildingPanel(bp);
 		    	b.setInsideBuildingPanel(bp);
 		    	houseAnimationPanel.setInsideBuildingPanel(bp);
@@ -795,7 +796,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 		    	homes.add(new Home( houseAnimationPanel, new Point(b.getX(),b.getY())));
 			}else if(b.type.equals("apartment")){
 			    
-				BankPanel aptPanel = new BankPanel();
+				AtHomePanel aptPanel = new AtHomePanel(this, "Apartment");
 			    InsideAnimationPanel apartmentAnimationPanel = new ApartmentAnimationPanel(this);
 				
 			    Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
