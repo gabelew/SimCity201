@@ -134,15 +134,17 @@ public void msgDeliveryDone(DeliveryMan D){
 		if(de.deliveryMan==D){
 			if(de.deliveryState==state.wantOffWork)
 				de.deliveryState=state.offWork;
-			else
+			else{
 				de.deliveryState=state.free;
+				print("Back at the market");
+			}
 		}
 	}
 	if(getStateChangePermits()==0){
 			stateChanged();	
 	}
 	if(notTesting)
-	update=true;
+		update=true;
 	log.add(new LoggedEvent("Received msgDeliveryDone from deliveryMan."));
 }
 
@@ -169,9 +171,10 @@ public boolean pickAndExecuteAnAction() {
 				for (Order o:failedOrders){
 					for(Restaurant r:insideAnimationPanel.simCityGui.getRestaurants()){
 						if(r.cook==o.cook){
+							print("ccc");
 							if(r.isOpen){
-							giveToDelivery(d,o);
-							return true;
+								giveToDelivery(d,o);
+								return true;
 							}
 						}
 					}
@@ -220,6 +223,7 @@ private void giveToDelivery(delivery d,MyCook MC){
 
 private void giveToDelivery(delivery d,Order o){
 	d.deliveryState=state.busy;
+	print("redeliver");
 	d.deliveryMan.msgTryAgain(o,this);
 	failedOrders.remove(o);
 }

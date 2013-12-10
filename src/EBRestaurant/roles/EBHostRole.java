@@ -27,7 +27,7 @@ public class EBHostRole extends Role implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<Customers> waitingCustomers
-	= new ArrayList<Customers>();
+	= Collections.synchronizedList(new ArrayList<Customers>());
 	PersonAgent replacementPerson = null;
 	public class Customers{
 		Customer cust;
@@ -217,6 +217,7 @@ public class EBHostRole extends Role implements Host {
 		
 			}
 			if(!waitingCustomers.isEmpty()){
+				synchronized(waitingCustomers){
 				for(Customers c:waitingCustomers)
 				{
 					if(c.state==custState.staying)
@@ -226,8 +227,10 @@ public class EBHostRole extends Role implements Host {
 						return true;
 					}
 				}
+				}
 			}
 			if(!waitingCustomers.isEmpty()){
+				synchronized(waitingCustomers){
 				for(Customers c:waitingCustomers)
 				{
 					if(c.state==custState.assigned)
@@ -236,6 +239,7 @@ public class EBHostRole extends Role implements Host {
 						assignWaitingSpace(c);
 						return true;
 					}
+				}
 				}
 			}
 			return false;
