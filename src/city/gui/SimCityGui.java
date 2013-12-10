@@ -787,7 +787,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 		        atHomePanel.setMaximumSize(restDim);
 		       // APanel.add(bankPanel);
 		        
-		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,houseAnimationPanel, atHomePanel);
+		    	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this, houseAnimationPanel, atHomePanel);
             	houseAnimationPanel.setInsideBuildingPanel(bp);
 		    	b.setInsideBuildingPanel(bp);
 		    	houseAnimationPanel.setInsideBuildingPanel(bp);

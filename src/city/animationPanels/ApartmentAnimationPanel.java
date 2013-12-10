@@ -12,6 +12,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
+import atHome.city.AtHomePanel;
+import GCRestaurant.gui.GCRestaurantPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 
@@ -135,5 +137,12 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 		            }
 		        }
 			}
+	}
+	
+	/*
+     * For ListView
+     */
+    public void addPersonToList(String name){
+		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addAptPersonToList(name);
 	}
 }

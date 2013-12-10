@@ -9,6 +9,8 @@ import atHome.city.Apartment;
 import atHome.city.Home;
 import atHome.city.Residence;
 import city.MarketAgent;
+import city.animationPanels.ApartmentAnimationPanel;
+import city.animationPanels.HouseAnimationPanel;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
 import city.roles.BankRobberRole;
@@ -144,6 +146,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     	if (type.equals("Persons")) {
     		PersonAgent p = null;
     		Residence residence = findOpenHome(name);
+    		
     		if(stringIsDouble(name)){
     			p = new PersonAgent(name, Double.valueOf(name),gui, residence);
     			BankCustomerRole bcr = null;
@@ -196,10 +199,15 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     			
     		}
     		
-    		if(residence instanceof Apartment){
+    		if(residence instanceof Apartment)
+    		{
     			((Apartment)residence).addRenter(p);
+    			((ApartmentAnimationPanel)residence.insideAnimationPanel).addPersonToList(name);
     			p.isRenter = true;
-    		}else{
+    		}
+    		else
+    		{
+    			((HouseAnimationPanel)residence.insideAnimationPanel).addPersonToList(name);
     			((Home)residence).owner = p;
     		}
     		

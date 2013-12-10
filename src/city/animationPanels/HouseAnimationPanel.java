@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import atHome.city.AtHomePanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 
@@ -134,5 +135,12 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 		            }
 		        }
 			}
+	}
+	
+	/*
+     * For ListView
+     */
+    public void addPersonToList(String name){
+		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addHomePersonToList(name);
 	}
 }

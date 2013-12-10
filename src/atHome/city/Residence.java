@@ -6,6 +6,7 @@ import city.animationPanels.InsideAnimationPanel;
 public class Residence 
 {
 	public Point location;
+	public AtHomePanel panel;
 	public InsideAnimationPanel insideAnimationPanel;
 	
 	public Residence( InsideAnimationPanel iap, Point loc)
