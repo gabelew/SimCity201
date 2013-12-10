@@ -146,14 +146,10 @@ public class EBCookRole extends Role implements Cook {
 			}
 		}
 		
-		if(restaurantClosed&&Orders.size()==0){
-			cookState = CState.leaving;
-		}
 		
 		if(cookState == CState.relieveFromDuty){
 			cookState = CState.none;
 			myPerson.releavedFromDuty(this);
-			print("leaving early");
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
 			}
@@ -177,10 +173,10 @@ public class EBCookRole extends Role implements Cook {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			print("aaa");
-			cookState = CState.relieveFromDuty;
-			print("bbb");
 			return true;
+		}
+		if(restaurantClosed&&Orders.size()==0){
+			cookState = CState.leaving;
 		}
 		for (Order O: Orders){
 			if (O.S==state.done){

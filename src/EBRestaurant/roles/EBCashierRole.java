@@ -25,6 +25,7 @@ import restaurant.test.mock.EventLog;
 public class EBCashierRole extends Role implements Cashier {
 	//public EventLog log;
 	public double bank = 5000;
+	private boolean restaurantClosed=false;
 	public Restaurant restaurant;
 	PersonAgent replacementPerson = null;
 	private String name;
@@ -139,6 +140,7 @@ public class EBCashierRole extends Role implements Cashier {
 		try{
 			if(cashierState == CashState.releaveFromDuty){
 				cashierState = CashState.none;
+				print("cashier left");
 				myPerson.releavedFromDuty(this);
 				if(replacementPerson != null){
 					replacementPerson.waitingResponse.release();
@@ -294,11 +296,12 @@ public class EBCashierRole extends Role implements Cashier {
 
 	public void msgLeft() {
 		cashierState = CashState.releaveFromDuty;
+		stateChanged();
 	}
 
 	public void msgClosed() {
-		// TODO Auto-generated method stub
-		
+		cashierState = CashState.leaving;
+		stateChanged();
 	}
 }
 
