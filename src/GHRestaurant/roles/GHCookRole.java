@@ -1,10 +1,7 @@
 package GHRestaurant.roles;
 
-import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
-import CMRestaurant.roles.CMCookRole.MarketOrder;
-import CMRestaurant.roles.CMCookRole.marketOrderState;
 import GHRestaurant.gui.*;
 
 import java.util.*;
@@ -107,7 +104,8 @@ public class GHCookRole extends Role implements Cook {
 				order.deliveryMan=DM;
 				order.marketState=marketOrderState.ordering;
 			}
-		}		
+		}	
+		stateChanged();
 	}
 
 	/**
@@ -134,6 +132,13 @@ public class GHCookRole extends Role implements Cook {
 		}
 		
 		for (MarketOrder mOrder : marketOrders) {
+			if(mOrder.marketState == marketOrderState.paying) {
+				SendInvoiceToCashier(mOrder);
+				return true;
+			}
+		}
+		
+		for (MarketOrder mOrder : marketOrders) {
 			if(mOrder.marketState == marketOrderState.ordering) {
 				mOrder.marketState = marketOrderState.ordered;
 				GiveOrderToDeliverMan(mOrder);
@@ -148,7 +153,6 @@ public class GHCookRole extends Role implements Cook {
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
 	}
-
 
 	// Actions
 
@@ -215,6 +219,11 @@ public class GHCookRole extends Role implements Cook {
 		print(o.choice + " is ready!");
 		cookgui.DoPlateIt();
 
+	}
+	
+	
+	private void SendInvoiceToCashier(MarketOrder mo) {
+		((GHCashierRole) restaurant.cashier).msgHereIsInvoice(mo.deliveryMan, mo.cost);
 	}
 	
 	//utilities
@@ -298,8 +307,19 @@ public class GHCookRole extends Role implements Cook {
 	
 	@Override
 	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
-		// TODO Auto-generated method stub
+		if(markets.size()==0){
+			for(MarketAgent ma: restaurant.insideAnimationPanel.simCityGui.getMarkets()){
+				this.addMarket(ma);
+			}
+		}
 		
+		else {
+			for(MarketAgent ma : markets){
+			if(ma.equals(market)){
+				markets.remove(ma);
+			}
+		}
+		}
 	}
 
 	@Override
@@ -315,9 +335,7 @@ public class GHCookRole extends Role implements Cook {
 			Food food = findFood(s);
 			food.addFoodAmount(choices.get(s));
 		}
-
 		
-		choices.keySet();
 	}
 
 	private Food findFood(String s) {
