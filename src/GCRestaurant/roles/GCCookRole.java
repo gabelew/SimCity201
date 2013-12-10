@@ -73,7 +73,7 @@ public class GCCookRole extends Role implements Cook
 	//Order Received from Waiter
 	public void HereIsOrderMsg(Waiter w, Customer c, Table t, String choice)
 	{
-		print("Received order from " + ((GCWaiterRole)w).getName());
+		print("Received order from " + ((GCWaiterRole)w).myPerson.getName());
 		orders.add(new GCOrder(w,c,t,choice));
 		stateChanged();
 	}
@@ -393,6 +393,7 @@ public class GCCookRole extends Role implements Cook
 				{
 					placeMarketOrder(m);
 					m.marketState = MarketState.ordered;
+					return true;
 				}
 			}
 			for(MarketOrder m : marketOrders)
@@ -401,6 +402,7 @@ public class GCCookRole extends Role implements Cook
 				{
 					payForMarketOrder(m);
 					m.marketState = MarketState.paid;
+					return true;
 				}
 			}
 			
@@ -424,6 +426,7 @@ public class GCCookRole extends Role implements Cook
 			if(checkOrderStand)
 			{
 				checkOrderStandAction();
+				return true;
 			}
 			return false;
 		}

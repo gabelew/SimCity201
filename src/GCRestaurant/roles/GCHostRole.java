@@ -85,6 +85,7 @@ public class GCHostRole extends Role implements Host
 		for (Table table : tableList) {
 			if (table.getOccupant() == c) {
 				print(c + " leaving " + table);
+				((GCAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(((GCCustomerRole) c).myPerson.getName());
 				table.setUnoccupied();
 				table.waiter.customers--;
 				stateChanged();
@@ -110,7 +111,8 @@ public class GCHostRole extends Role implements Host
 			print("Customer: " + ((GCCustomerRole)cust).getName() + ", decided to leave");
 			for (Customer c: waitingCustomers) 
 			{
-				if(c == cust){
+				if(c == cust)
+				{
 					((GCAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(((GCCustomerRole) c).myPerson.getName());
 					waitingCustomers.remove(c);
 					break;
@@ -368,7 +370,7 @@ public class GCHostRole extends Role implements Host
 							}
 						}
 					}
-					if(w!=null && !table.isOccupied())
+					if(w!=null && !table.isOccupied() && waitingCustomers.size() != 0)
 					{
 						((GCCustomerRole)waitingCustomers.get(0)).setTableNumber(table.tableNumber);
 						print("Seat customer at table: " + table.tableNumber);

@@ -140,7 +140,7 @@ public class GCRestaurantListPanel extends JPanel implements ActionListener
             }
             else
             {
-            	newstateCB.setEnabled(false);
+            	newstateCB.setVisible(false);
             }
             newstateCB.setSelected(false);
             
