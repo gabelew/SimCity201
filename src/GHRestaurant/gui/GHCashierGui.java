@@ -45,10 +45,6 @@ public class GHCashierGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
 
-        if (xPos == xDestination && yPos == yDestination
-        		&& (xDestination == xTable + 20) & (yDestination == yTable + (80-(tableNumber*100)))) {
-           role.msgAtTable();
-        }
     }
 
     public void draw(Graphics2D g) {

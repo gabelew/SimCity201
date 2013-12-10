@@ -258,9 +258,5 @@ public class GHCashierRole extends Role implements Cashier{
 		restaurant = r;
 	}
 
-	public void msgAtTable() {
-		// TODO Auto-generated method stub
-		
-	}
 }
 

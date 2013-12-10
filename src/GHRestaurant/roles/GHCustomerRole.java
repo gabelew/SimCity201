@@ -101,16 +101,16 @@ public class GHCustomerRole extends Role implements Customer{
 		int c = generator.nextInt(4);
 		
 		switch(c){
-		case 0: choice = "Steak";
+		case 0: choice = "steak";
 		break;
 		
-		case 1: choice = "Chicken";
+		case 1: choice = "chicken";
 		break;
 		
-		case 2: choice = "Salad";
+		case 2: choice = "salad";
 		break;
 		
-		case 3: choice = "Pizza";
+		case 3: choice = "pizza";
 		break;
 		}
 				
@@ -127,16 +127,16 @@ public class GHCustomerRole extends Role implements Customer{
 			int c = generator.nextInt(4);
 			
 			switch(c){
-			case 0: choice = "Steak";
+			case 0: choice = "steak";
 			break;
 			
-			case 1: choice = "Chicken";
+			case 1: choice = "chicken";
 			break;
 			
-			case 2: choice = "Salad";
+			case 2: choice = "salad";
 			break;
 			
-			case 3: choice = "Pizza";
+			case 3: choice = "pizza";
 			break;
 			}
 			
