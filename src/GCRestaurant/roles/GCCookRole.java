@@ -44,6 +44,7 @@ public class GCCookRole extends Role implements Cook
 	public PersonAgent replacementPerson = null;
 	boolean restaurantClosed = false;
 	Restaurant restaurant;
+	public GCRevolvingStandMonitor orderStand;
 
 	public GCCookRole() {
 		super();
@@ -452,6 +453,10 @@ public class GCCookRole extends Role implements Cook
 	public void msgMarketClosed(MarketAgent market) {
 		markets.remove(market);
 		
+	}
+
+	public void setRevolvingStand(GCRevolvingStandMonitor r) {
+		this.orderStand = r;
 	}
 
 }

@@ -48,6 +48,7 @@ import GCRestaurant.roles.GCCookRole;
 import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCHostRole;
 import GCRestaurant.roles.GCNormalWaiterRole;
+import GCRestaurant.roles.GCRevolvingStandMonitor;
 import GCRestaurant.roles.GCWaiterRole;
 import GHRestaurant.gui.GHAnimationPanel;
 import GHRestaurant.gui.GHCashierGui;
@@ -656,8 +657,8 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((GCCookRole)r.cook).setRestaurant(r);
 	        	GCCookGui ccg = new GCCookGui(((GCCookRole)r.cook));
 	        	((GCCookRole)r.cook).setGui(ccg);
-	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
-	        	//((GCCookRole)r.cook).setRevolvingStand(revolvingStand);
+	        	GCRevolvingStandMonitor revolvingStand = new GCRevolvingStandMonitor();
+	        	((GCCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
         	}else if(b.type.equals("restaurant")){
