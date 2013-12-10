@@ -18,8 +18,8 @@ public class BankRobberRole extends Role{
 	public GuiState state = GuiState.None;
 	private BankRobberGui robberGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
-	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 5;
-	static final int AT_ATM_TIME = 3200;
+	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 4;
+	static final int AT_ATM_TIME = 1200;
 	Timer timer = new Timer();
 
 	
@@ -48,14 +48,15 @@ public class BankRobberRole extends Role{
 	
 	// msgs from animation
 	public void msgAtATM() {
-		print("msgAtAtm received");
 		waitingResponse.release();
 		state = GuiState.AtAtm;
 		stateChanged();
 	}
 	
 	public void msgNoMoreATMS() {
-		state = GuiState.DoneRobbing;
+		print("No more atms to rob!");
+		waitingResponse.release();
+		state = GuiState.LeavingBank;
 		stateChanged();
 	}
 	
@@ -121,25 +122,25 @@ public class BankRobberRole extends Role{
 	}
 	
 	private void RobBank() {
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Attempting robbery");
-		int hackAlgorithm = randInt(ALGORITHM_MIN,ALGORITHM_MAX);
-		myPerson.bankTeller.msgThisIsAHackAttack(this, hackAlgorithm);
-	}
-	
-	private void LeaveBank() {	
+		final BankRobberRole r = this;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				Do("Leaving bank");
-				robberGui.DoLeaveBank();
-				try {
-					waitingResponse.acquire();
-				} catch(InterruptedException e) {
-					e.printStackTrace();
-				}
-				myPerson.msgDoneAtBank();
+		    	AlertLog.getInstance().logMessage(AlertTag.PERSON, r.getName(), "Attempting robbery");
+				int hackAlgorithm = randInt(ALGORITHM_MIN,ALGORITHM_MAX);
+				myPerson.bankTeller.msgThisIsAHackAttack(r, hackAlgorithm);
 			}
 		}, AT_ATM_TIME);
-		
+	}
+	
+	private void LeaveBank() {		
+		Do("Leaving bank");
+		robberGui.DoLeaveBank();
+		try {
+			waitingResponse.acquire();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		myPerson.msgDoneAtBank();
 	}
 	
 	@Override

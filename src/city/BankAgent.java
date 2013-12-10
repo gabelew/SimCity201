@@ -37,7 +37,7 @@ public class BankAgent extends Agent implements Bank{
 			}
 		}
 	}
-	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 5;
+	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 4;
 	
 	
 	enum HackState {pending,attemptToDefend };
@@ -108,7 +108,6 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	public void msgThisIsAHackAttack(BankRobberRole brr, int hackAlgorithm){
-		print("being hacked!!");
 		hackAttacks.add(new HackAttack(brr, hackAlgorithm));
 		if(0 == getStateChangePermits())
 			stateChanged();
@@ -277,7 +276,6 @@ public class BankAgent extends Agent implements Bank{
 	// Actions
 	
 	private void defendHack(HackAttack h) {
-		print("try to defend hack!");
 		int defenseWeakness = randInt(ALGORITHM_MIN, ALGORITHM_MAX);
 		if(defenseWeakness == h.hackAlgorithm) {
 			double stolenAmount = h.hackAlgorithm * 500;
