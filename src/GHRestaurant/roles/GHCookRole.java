@@ -45,7 +45,7 @@ public class GHCookRole extends Role implements Cook {
 		
 		Inventory.put("steak", new Food("steak",5000));
 		Inventory.put("chicken", new Food("chicken",5000));
-		Inventory.put("salad", new Food("salad",amount));
+		Inventory.put("salad", new Food("salad",3000));
 		Inventory.put("pizza", new Food("pizza",7000));	
 		
 		Inventory.get("salad").setAmount(amount);
@@ -225,9 +225,11 @@ public class GHCookRole extends Role implements Cook {
 				foodToOrder.put(s, ORDERAMOUNT);
 			}
 		}
+		if(foodToOrder.size() != 0){
 		marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
 		markets.get(nextmarket).msgPlaceDeliveryOrder(this);
 		nextmarket = (nextmarket+1)%markets.size();
+		}
 	}
 	
 	//utilities

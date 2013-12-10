@@ -1,8 +1,6 @@
 package GHRestaurant.roles;
 
 import GHRestaurant.gui.GHCashierGui;
-import GLRestaurant.roles.GLCashierRole.Bill;
-import GLRestaurant.roles.GLCashierRole.BillState;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
