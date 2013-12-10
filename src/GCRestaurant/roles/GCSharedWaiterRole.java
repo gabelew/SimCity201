@@ -2,6 +2,7 @@ package GCRestaurant.roles;
 
 import java.util.TimerTask;
 
+import GCRestaurant.roles.GCWaiterRole.CustomerState;
 import restaurant.Restaurant;
 import city.PersonAgent;
 import city.gui.trace.AlertLog;
@@ -28,6 +29,7 @@ public class GCSharedWaiterRole extends GCWaiterRole
 		{
 			GCOrder order = new GCOrder(this, c.c, c.table, c.choice);
 			orderStand.insert(order);
+			c.state = CustomerState.FoodCooking;
 		}
 		else
 		{

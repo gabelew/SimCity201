@@ -442,6 +442,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 				}
 			}
 			
+			
 			// (3) Gives Order to Cook
 			for (MyCustomer customer : customers)
 			{
@@ -449,7 +450,6 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 				//give the order to the cook
 				if( customer.state == CustomerState.Ordered)
 				{
-					customer.state = CustomerState.FoodCooking;
 					HereIsOrderCookAction(customer);
 					return true;
 				}

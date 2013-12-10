@@ -53,7 +53,8 @@ public class GCCustomerGui implements Gui{
 		yDestination = DEFAULT_POS;
 	}
 
-	public void updatePosition() {
+	public void updatePosition() 
+	{
 		if(command == Command.LeaveRestaurant)
 		{
 			if(xPos != xDestination)

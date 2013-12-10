@@ -21,6 +21,7 @@ public class GCNormalWaiterRole extends GCWaiterRole {
 		
 		//sends msg to cook
 		((GCCookRole)cook).HereIsOrderMsg(this, c.c, c.table, c.choice);
+		c.state = CustomerState.FoodCooking;
 		stateChanged();
 	}
 	
