@@ -5,6 +5,7 @@ import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
@@ -27,7 +28,11 @@ public class GHCashierRole extends Role implements Cashier{
 	//private String name;
 	private double RestaurantMoney; 
 	private Restaurant restaurant;
+	private PersonAgent replacementPerson = null;
 	public GHCashierGui cashiergui = null;
+	private enum State {leavingEarly, goToWork, leaving, releaveFromDuty, none, working}
+	private State state;
+	private Semaphore atDestination = new Semaphore(0,true);
 
 
 	public GHCashierRole() {
@@ -94,6 +99,47 @@ public class GHCashierRole extends Role implements Cashier{
 	 */
 	public boolean pickAndExecuteAnAction() {
 
+		if(state == State.releaveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+		}
+		if(state == State.goToWork){
+			if(state != State.leavingEarly){
+				state = State.working;
+			}
+			cashiergui.DoEnterRestaurant();
+			return true;
+		}
+		
+		if(state == State.leavingEarly){
+			state = State.none;
+			/*if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
+				DepositBusinessCash();*/
+			cashiergui.DoLeaveRestaurant();
+			try {
+				atDestination.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		
+		if(state == State.leaving){
+			state = State.none;
+			/*if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
+				DepositBusinessCash();*/
+			cashiergui.DoLeaveRestaurant();
+			try {
+				atDestination.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		
 		
 		synchronized(checks){
 		for (Check c : checks) {
@@ -294,14 +340,17 @@ public class GHCashierRole extends Role implements Cashier{
 
 	@Override
 	public void msgReleaveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
+		replacementPerson = p;
+		state = State.leaving;
+		this.stateChanged();		
 	}
 
 	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+		if(state != State.leavingEarly){
+			state = State.goToWork;
+		}
+		stateChanged();		
 	}
 
 	@Override
@@ -320,6 +369,11 @@ public class GHCashierRole extends Role implements Cashier{
 
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;
+	}
+
+	public void msgAnimationHasLeftRestaurant() {
+		state = State.releaveFromDuty;
+		atDestination.release();		
 	}
 
 }

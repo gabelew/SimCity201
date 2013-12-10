@@ -1,5 +1,6 @@
 package GHRestaurant.gui;
 import CMRestaurant.roles.CMCashierRole;
+import GHRestaurant.gui.GHHostGui.Command;
 import GHRestaurant.roles.*;
 import restaurant.interfaces.*;
 
@@ -24,6 +25,9 @@ public class GHCashierGui implements Gui {
     public static final int xTable = 200;
     public static final int yTable = 250;
 	private BufferedImage cashierImg = null;
+	private enum Command {
+		Enter, Leave, none}
+	private Command command;
 
 
     public GHCashierGui(GHCashierRole role) {
@@ -44,6 +48,16 @@ public class GHCashierGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
+        
+        if(xPos == xDestination && yPos == yDestination){
+        	if(command == Command.Leave){
+        		role.msgAnimationHasLeftRestaurant();
+        		command = Command.none;
+        	}else if(command == Command.Enter){
+        		command = Command.none;
+        	}
+        		
+        }
 
     }
 
@@ -73,5 +87,17 @@ public class GHCashierGui implements Gui {
 	@Override
 	public void setPresent(boolean b) {
 		isPresent = b;
+	}
+
+	public void DoEnterRestaurant() {
+		xDestination = 100;
+		yDestination = 30;	
+		command = Command.Enter;
+	}
+
+	public void DoLeaveRestaurant() {
+		xDestination = -20;
+		yDestination = -20;		
+		command = Command.Leave;
 	}
 }

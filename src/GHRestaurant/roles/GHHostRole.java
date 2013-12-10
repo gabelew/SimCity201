@@ -150,7 +150,7 @@ public class GHHostRole extends Role implements Host{
 		}
 		
 		
-		if(!waiters.isEmpty() && !waitingCustomers.isEmpty()){
+		if(!waitingCustomers.isEmpty()  && !waiters.isEmpty()){// && ((GHCashierRole) restaurant.cashier).getgui().getYPos() <= 30){
 			for(Table table: tables){
 				if(!table.isOccupied()){
 					seatCustomer(waitingCustomers.get(0),table);
@@ -171,9 +171,8 @@ public class GHHostRole extends Role implements Host{
 	private void seatCustomer(Customer customer, Table table) {
 		((GHWaiterRole) waiters.get(nextwaiter)).msgSitAtTable(customer, table.tableNumber);
 		table.setOccupant(customer);
-		nextwaiter = (nextwaiter+1)%waiters.size();	
 		waitingCustomers.remove(customer);
-		//nextwaiter = (nextwaiter+1)%waiters.size();	
+		nextwaiter = (nextwaiter+1)%waiters.size();	
 	}
 
 	//utilities
@@ -224,7 +223,7 @@ public class GHHostRole extends Role implements Host{
 
 	@Override
 	public void msgReadyToWork(Waiter w) {
-		msgSetWaiter(w);		
+		//msgSetWaiter(w);		
 	}
 
 	@Override

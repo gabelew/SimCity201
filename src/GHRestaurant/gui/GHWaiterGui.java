@@ -55,11 +55,11 @@ public class GHWaiterGui implements Gui {
             yPos--;
 
         if (xPos == xDestination && yPos == yDestination
-        		&& (xDestination == xTable + 20) & (yDestination == yTable + (80-(tableNumber*100)))) {
+        		&& (xDestination == xTable + 20) && (yDestination == yTable + (80-(tableNumber*100)))) {
            ((GHWaiterRole) role).msgAtTable();
         }
            else if(xPos == xDestination && yPos == yDestination
-           		&& (xDestination == xCook) & (yDestination == yCook)) {
+           		&& (xDestination == xCook) && (yDestination == yCook)) {
                ((GHWaiterRole) role).msgAtTable();
         }
     }
