@@ -344,7 +344,7 @@ public class CMHostRole extends Role implements Host {
 			}
 		}
 		if(tablesAreEmpty && customers.isEmpty() && closeRestaurant){
-			nofityEmployeesToLeaveWork();
+			notifyEmployeesToLeaveWork();
 			return true;
 		}
 		return false;
@@ -356,7 +356,7 @@ public class CMHostRole extends Role implements Host {
 
 	// Actions
 	
-	private void nofityEmployeesToLeaveWork() {
+	private void notifyEmployeesToLeaveWork() {
 		((CMCookRole) restaurant.cook).msgLeaveWorkEarly();
 		((CMCashierRole) restaurant.cashier).msgLeaveWorkEarly();
 		for(MyWaiter w: waiters){
@@ -367,6 +367,7 @@ public class CMHostRole extends Role implements Host {
 		}
 		waiters.removeAll(waiters);
 		state = State.leaving;
+		closeRestaurant = false;
 	}
 
 	private void tellCustClosed(MyCustomer c) {
@@ -517,6 +518,9 @@ public class CMHostRole extends Role implements Host {
 
 	public void msgCloseRestaurant() {
 		closeRestaurant = true;
+		for(MyWaiter w:waiters){
+			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterUnbreakable(((CMWaiterRole) w.w).getName());
+		}
 		stateChanged();
 	}
 

@@ -383,25 +383,8 @@ public class PersonAgent extends Agent implements Person
 		this.dayOfWeek = dayOfWeek;
 		this.hungerLevel += 1;
 		
-		if(job!=null){
-			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 8)) ||
-					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 10 && currentHour < 21))){
-				boolean inList = false;
-				for(Task t: taskList){
-					if(t == Task.goToWork)
-						inList = true;
-				}
-				if(!inList){    	
-					if(workIsClosed()){
-						AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Work is closed. I'll check back later.");
-		    	
-					}else{
-						taskList.add(Task.goToWork);
-					}
-				}
-			}
-			
-		}
+		checkIfWorking();
+		
 		if(0 == (hour % 2) && isRenter){
 			boolean inList = false;
 			for(Task t: taskList){
@@ -451,9 +434,34 @@ public class PersonAgent extends Agent implements Person
 		} 
 		stateChanged();
 	}
+	
+	private void checkIfWorking() {
+		if(job!=null){
+			if((job.shift == Shift.day && location != Location.AtWork && (currentHour >= 22 || currentHour <= 8)) ||
+					(job.shift == Shift.night && location != Location.AtWork && (currentHour >= 10 && currentHour < 21))){
+				boolean inList = false;
+				for(Task t: taskList){
+					if(t == Task.goToWork)
+						inList = true;
+				}
+				if(!inList){    	
+					if(workIsClosed()){
+						AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Work is closed. I'll check back later.");
+		    	
+					}else if(state != State.goingToWork && state != State.working){
+						AlertLog.getInstance().logDebug(AlertTag.PERSON, this.getName(), "Added go to work to task list.");
+						taskList.add(Task.goToWork);
+					}
+				}
+			}
+			
+		}
+	}
 /***************************
  * TIME SENSITIVE MESSAGES END
  ***************************/
+
+
 
 /***************************
  * WORK RELATED MESSAGES START

@@ -271,8 +271,13 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 	private void goToRestaurant() {
 		DoGoToRestaurant();
-		restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
-		DoWaitForTable();
+		if(((CMHostRole)restaurant.host).myPerson != null){
+			restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
+			DoWaitForTable();
+		}else{
+			state = AgentState.WaitigForTable;
+			event = AgentEvent.leavingEarly;
+		}
 	}
 	
 	private void WaitForTable() {

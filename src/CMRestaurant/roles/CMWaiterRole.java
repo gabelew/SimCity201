@@ -55,7 +55,9 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	}
 
 	public void goesToWork(){ //from gui
-		event = AgentEvent.gotToWork;
+		if(event != AgentEvent.leaveWorkEarly){
+			event = AgentEvent.gotToWork;
+		}
 		stateChanged();
 	}
 	public void msgLeftTheRestaurant() {
