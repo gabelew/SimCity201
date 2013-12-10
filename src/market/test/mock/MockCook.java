@@ -3,14 +3,10 @@ package market.test.mock;
 import java.util.List;
 import java.util.Map;
 
-import CMRestaurant.gui.CMCustomerGui;
 import city.MarketAgent;
 import city.PersonAgent;
 import restaurant.RoleOrder;
-import restaurant.interfaces.Waiter.Menu;
-import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
-import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
@@ -23,10 +19,6 @@ import market.interfaces.*;
  */
 public class MockCook extends Mock implements Cook {
 
-	/**
-	 * Reference to the Cashier under test that can be set by the unit test.
-	 */
-	public Cashier cashier;
 	public boolean goToATM = false;
 	public EventLog log = new EventLog();
 	
@@ -85,27 +77,23 @@ public class MockCook extends Mock implements Cook {
 		log.add(new LoggedEvent("Recieved msgHereIsOrderFromMarket"));
 	}
 
-	@Override
 	public void msgRelieveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Recieved msgRelieveFromDuty"));
 	}
 
-	@Override
 	public void addMarket(MarketAgent m) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Recieved addMarket"));
 	}
 
-	@Override
 	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Recieved msgIncompleteOrder"));
 	}
 
-	@Override
 	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Recieved goesToWork"));
+	}
+
+	public void msgMarketClosed(MarketAgent market) {
+		log.add(new LoggedEvent("Recieved msgMarketClosed"));
 	}
 }
