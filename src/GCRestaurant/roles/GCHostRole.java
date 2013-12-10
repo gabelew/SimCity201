@@ -375,6 +375,12 @@ public class GCHostRole extends Role implements Host
 		
 	}
 
+	@Override
+	public void msgOpenRestaurant() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }
 
