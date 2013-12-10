@@ -1,6 +1,7 @@
 package EBRestaurant.roles;
 
 import EBRestaurant.gui.EBCustomerGui;
+import GLRestaurant.roles.GLHostRole;
 
 import java.text.NumberFormat;
 import java.util.Timer;
@@ -74,7 +75,6 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 
 	public void msgFollowMe(Waiter w, int Number){
-		print("Received msgSitAtTable");
 		waiter=w;
 		tableNumber=Number;
 		event = AgentEvent.followHost;
@@ -217,8 +217,14 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 
 	private void goToRestaurant() {
-		state = AgentState.WaitingInRestaurant;
-		restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
+		if(((EBHostRole)restaurant.host).myPerson != null){
+			state = AgentState.WaitingInRestaurant;
+			restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us	
+		}
+		else{
+			state = AgentState.payed;
+			stateChanged();
+		}
 	}
 	
 	private void readyToOrder(){

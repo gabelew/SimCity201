@@ -17,7 +17,6 @@ public class EBCustomerGui implements Gui{
 	private boolean isHungry = false;
 
 	private int xArea=10;
-	private int yArea;
 	private int xPos, yPos;
 	private final int startX=-40;
 	private final int startY=-40;
@@ -29,16 +28,13 @@ public class EBCustomerGui implements Gui{
     private final int yTable1 = 100;
     private final int yTable2 = 200;
     private final int yTable3 = 300;
-	private int Width=20;
-	private int Height=20;
 	
 	public EBCustomerGui(EBCustomerRole c){ 
 		agent = c;
 		xPos = -40;
 		yPos = -40;
 		xDestination = 40;
-		yDestination = 80;
-		yArea=60;
+		yDestination = 70;
 		try {
 			StringBuilder path = new StringBuilder("imgs/");
 		    customerImg = ImageIO.read(new File(path.toString() + "customer_v1.png"));

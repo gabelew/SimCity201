@@ -292,7 +292,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			if (requestBreak){
 				askForBreak();
 			}
-		
+		waiterGui.DoLeaveCustomer();
 		return false;
 		}
 		catch(ConcurrentModificationException e){
