@@ -3,7 +3,6 @@ package GHRestaurant.gui;
 
 import restaurant.interfaces.*;
 import GHRestaurant.roles.*;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,6 +20,8 @@ public class GHCookGui implements Gui {
     private int xDestination = 382, yDestination = 250;//default start position
     private int tableNumber;
     private boolean isPresent = false;
+    enum Command {none, leaveRestaurant};
+	Command command = Command.none;
 
     public static final int xTable = 200;
     public static final int yTable = 250;
@@ -47,7 +48,12 @@ public class GHCookGui implements Gui {
             yPos--;
 
         if (xPos == xDestination && yPos == yDestination) {
-          ((GHCookRole) role).msgAtTable();
+        	if(command == Command.leaveRestaurant){
+        		role.msgAnimationLeaving();
+        	}
+        	else{
+        		((GHCookRole) role).msgAtTable();
+        	}
         }
     }
 
@@ -69,6 +75,12 @@ public class GHCookGui implements Gui {
     	xDestination = 382;
     	yDestination = 250;
     	
+    }
+    
+    public void DoLeaveRestaurant(){
+    	xDestination = -20;
+    	yDestination = -20;
+    	command = Command.leaveRestaurant;
     }
     
     public void DoPlateIt(){

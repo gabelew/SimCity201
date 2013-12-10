@@ -29,6 +29,8 @@ public class GHCookRole extends Role implements Cook {
 	public enum OrderState {PENDING,COOKING,DONECOOKING}
 	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
 	public enum marketState {NONE, ORDERING}
+	public enum State {wantsOffWork, leaving, relieveFromDuty, none, goToWork, working}
+	public State state;
 	//public String name;
 	private GHCookGui cookgui = null;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
@@ -37,6 +39,7 @@ public class GHCookRole extends Role implements Cook {
 	private Semaphore atDestination = new Semaphore(0,true);
 	private Restaurant restaurant;
 	private boolean orderNeeded = false;
+	private PersonAgent replacementPerson = null;
 
 
 
@@ -151,7 +154,16 @@ public class GHCookRole extends Role implements Cook {
 
 	@Override
 	public void msgRelieveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
+		replacementPerson = p;
+		state = State.wantsOffWork;
+		stateChanged();
+	}
+	
+
+	public void msgAnimationLeaving() {
+		state = State.relieveFromDuty;
+		//atDestination.release();
+		stateChanged();
 		
 	}
 
@@ -159,6 +171,54 @@ public class GHCookRole extends Role implements Cook {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
+		
+		if(state == State.wantsOffWork){
+			boolean canGetOffWork = true;
+			for (Order o : orders)
+			{
+				if(o.os != OrderState.PENDING)
+				{
+					canGetOffWork = false;
+					break;
+				}
+			}
+			if(canGetOffWork){
+				state = State.leaving;
+			}
+		}
+		
+		if(state == State.relieveFromDuty){
+			state = State.none;
+			myPerson.releavedFromDuty(this);
+			if(replacementPerson != null){
+				replacementPerson.waitingResponse.release();
+			}
+			return true;
+		}
+		
+		/*if(state == State.goToWork){
+			if(state != State.leaving){
+				state = State.working;
+			}
+			cookGui.DoEnterRestaurant();
+			return true;
+		}*/
+		
+		
+		if(state == State.leaving){
+			state = State.none;
+			cookGui.DoLeaveRestaurant();
+			try {
+				atDestination.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			state = State.relieveFromDuty;
+			return true;
+		}
+		
+		
+		
 		
 		synchronized(orders){
 		for (Order o : orders) {
@@ -405,8 +465,9 @@ public class GHCookRole extends Role implements Cook {
 
 	@Override
 	public void msgMarketClosed(MarketAgent market) {
-		// TODO Auto-generated method stub
-		
+		nextmarket = (nextmarket+1)%markets.size();
+		OrderFromMarket();
+		stateChanged();
 	}
 }
 
