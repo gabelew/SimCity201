@@ -46,10 +46,10 @@ public class GHCookRole extends Role implements Cook {
 		//this.name = name;
 		nextmarket = 0;
 		
-		Inventory.put("Steak", new Food("Steak",5000));
-		Inventory.put("Chicken", new Food("Chicken",5000));
-		Inventory.put("Salad", new Food("Salad",amount));
-		Inventory.put("Pizza", new Food("Pizza",7000));	
+		Inventory.put("steak", new Food("steak",5000));
+		Inventory.put("chicken", new Food("chicken",5000));
+		Inventory.put("salad", new Food("salad",amount));
+		Inventory.put("pizza", new Food("pizza",7000));	
 		
 		/*Inventory.get("Steak").setAmount(10);
 		Inventory.get("Chicken").setAmount(10);
@@ -309,7 +309,13 @@ public class GHCookRole extends Role implements Cook {
 				order.marketState=marketOrderState.paying;
 			}
 		}
-		
+
+		for(String s : choices.keySet()) {
+			Food food = findFood(s);
+			food.addFoodAmount(choices.get(s));
+			//food.amount = food.amount + choices.get(key);
+		}
+
 	    /*for(String s : choices.keySet()){
 	        if(Inventory.keySet().equals(s)){
 	        	Inventory.get(s).addFoodAmount(choices.get(s));
@@ -317,6 +323,18 @@ public class GHCookRole extends Role implements Cook {
 	    }*/
 		
 		choices.keySet();
+	}
+
+	private Food findFood(String s) {
+		Food food = null;
+		
+		for(String i : Inventory.keySet()){
+			if(i.equals(s)){
+				food = Inventory.get(i);
+			}
+		}
+		
+		return food;
 	}
 
 	@Override
