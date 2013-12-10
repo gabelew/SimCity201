@@ -148,23 +148,6 @@ public class GCCookRole extends Role implements Cook
 	{
 		print("delivery order not fully satisfied");
 		state = CookState.makingMarketOrder;
-		/*
-		//makes a new order
-		Map<String, Integer> order = new HashMap<String, Integer>();
-		for(Food restFood: foodList)
-		{
-			for(String needFood : outOf)
-			{
-				if(needFood.equalsIgnoreCase(restFood.choice))
-				{
-					if(restFood.amount <= THRESHOLD)
-					{
-						order.put(needFood, new Integer(MAXSUPPLY-restFood.amount));
-					}
-				}
-			}
-		}*/
-		
 	}
 
 	public void gotFoodMsg(Order o) 
@@ -291,7 +274,7 @@ public class GCCookRole extends Role implements Cook
 	//(5) places the market order
 	private void placeMarketOrder(MarketOrder mkOrder)
 	{
-		print("DELIVERY MAN GIVE ME FOOD #######################");
+		//print("DELIVERY MAN GIVE ME FOOD #######################");
 		mkOrder.deliveryMan.msgHereIsOrder(mkOrder.choices);
 	}
 	
@@ -464,6 +447,11 @@ public class GCCookRole extends Role implements Cook
 	public void msgRestaurantClosing() {
 		restaurantClosed = true;
 		stateChanged();
+	}
+
+	public void msgMarketClosed(MarketAgent market) {
+		markets.remove(market);
+		
 	}
 
 }

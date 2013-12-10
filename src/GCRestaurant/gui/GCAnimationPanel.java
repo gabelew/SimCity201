@@ -68,7 +68,8 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     }
 
 	public void actionPerformed(ActionEvent e) {
-		repaint();  //Will have paintComponent called
+		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
+			repaint();
 	}
 
     public void paintComponent(Graphics g) {
@@ -100,21 +101,22 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         {
         	g2.drawImage(tableImg, TABLEX_START+ (i*TABLE_SPACING), TABLEY_START, null);
         }
-        try
+        synchronized(guis)
         {
 	        for(Gui gui : guis) {
 	            if (gui.isPresent()) {
 	                gui.updatePosition();
 	            }
 	        }
-	
+        }
+        synchronized(guis)
+        {
 	        for(Gui gui : guis) {
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
 	            }
 	        }
         }
-        catch(ConcurrentModificationException e){ } 
     }
 
     public void addGui(Gui g)
