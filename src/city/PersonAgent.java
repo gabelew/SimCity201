@@ -308,7 +308,9 @@ public class PersonAgent extends Agent implements Person
 	}
 	
 	public void addRestaurant(Restaurant r) {
-		restaurants.add(r);
+		if(job==null || job.type.toLowerCase().equals("landlord") || !(job.location.equals(r.location))){
+			restaurants.add(r);
+		}
 	}
 	public void addMarket(MarketAgent m) {
 		markets.add(m);
@@ -929,7 +931,7 @@ public class PersonAgent extends Agent implements Person
     }
     
 	private boolean workIsClosed() {
-		for(Restaurant r: simCityGui.getRestaurants()){
+		for(Restaurant r: restaurants){
 			if(job.location.equals(r.location)){
 				if(r.isOpen()==false)
 				 return true;

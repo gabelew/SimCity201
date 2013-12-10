@@ -115,9 +115,9 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	public AnimationPanel(SimCityGui gui){
 		this.simCityGui = gui;
 
-    	for(int i = 0;i< 44;i++){
+    	for(int i = 0;i< 45;i++){
     		for(int j =0; j<4;j++){
-    			gridMap.put(new Point(i*20, 115+j*80), new GridSpot(GridDirection.RIGHT));
+    			gridMap.put(new Point(i*20 -23, 115+j*80), new GridSpot(GridDirection.RIGHT));
     			if(i%2==0 && i<33){
         			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot(GridDirection.DOWN));
     			}
@@ -214,23 +214,23 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
 
 	    	
-	    	for(int i = 0;i< 44;i++){
+	    	for(int i = 0;i< 45;i++){
 	    		for(int j =0; j<4;j++){
-	    			/*g2.setColor(Color.CYAN);
-	    			g.fillRect(i*20 - 3, 115+j*80, 20, 20);
+	    			g2.setColor(Color.CYAN);
+	    			g.fillRect(i*20 - 23, 115+j*80, 20, 20);
 	    			g2.setColor(Color.RED);
-	    			g.drawRect(i*20 - 3, 115+j*80, 20, 20);*/
+	    			g.drawRect(i*20 - 23, 115+j*80, 20, 20);
 	    			if(i%2==0 && i<33){
-		    			/*g2.setColor(Color.CYAN);
+		    			g2.setColor(Color.CYAN);
 		    			g.fillRect(i*20 +97, 95+j*80, 20, 20);
 		    			g2.setColor(Color.RED);
-		    			g.drawRect(i*20 +97, 95+j*80, 20, 20);*/
+		    			g.drawRect(i*20 +97, 95+j*80, 20, 20);
 	    			}
 	    			if(i%2+1==2 && i<34){
-		    			/*g2.setColor(Color.CYAN);
+		    			g2.setColor(Color.CYAN);
 		    			g.fillRect(i*20 +97, 95+j*80, 20, 20);
 		    			g2.setColor(Color.RED);
-		    			g.drawRect(i*20 +97, 95+j*80, 20, 20);*/
+		    			g.drawRect(i*20 +97, 95+j*80, 20, 20);
 	    			}
 	    		}
 	    		
