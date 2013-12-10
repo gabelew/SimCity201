@@ -3,7 +3,9 @@ package GCRestaurant.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import CMRestaurant.gui.CMRestaurantPanel;
 import GCRestaurant.roles.GCWaiterRole;
+import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
@@ -131,6 +133,32 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         catch(ConcurrentModificationException e) {}
     }
 
+    /*
+     * For ListView
+     */
+    public void addWaiterToList(String name){
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).addWaiterToList(name);
+	}
+	public void removeWaiterFromList(String name){
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).removeWaiterFromList(name);
+	}
+	public void addCustomerToList(String name){
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).addCustomerToList(name);
+	}
+	public void removeCustomerFromList(String name){
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).removeCustomerFromList(name);
+	}
+	public void setHost(Host h)
+	{
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setHost(h);	
+	}
+	public void setWaiterCantBreak(String name) {
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).setWaiterCantBreak(name);
+	}
+
+	public void setWaiterWorking(String name) {
+		((GCRestaurantPanel) insideBuildingPanel.guiInteractionPanel).WaiterBackFromBreak(name);
+	}
     /**
      * START
      * Functions to set waiterGui home positions
@@ -150,4 +178,5 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
 	 * END
      * Functions to set waiterGui home positions
      */
+
 }

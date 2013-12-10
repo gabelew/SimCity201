@@ -1,6 +1,7 @@
 package GCRestaurant.roles;
 
 import GCRestaurant.gui.GCHostGui;
+import GCRestaurant.gui.GCAnimationPanel;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
@@ -24,7 +25,7 @@ public class GCHostRole extends Role implements Host
 	public List<Customer> waitingCustomers = Collections.synchronizedList(new ArrayList<Customer>());
 	public Collection<Table> tableList;
 	//enums
-	private enum WaiterState{askedForBreak, onBreak, Working, deniedBreak};
+	private enum WaiterState{askedForBreak, onBreak, Working};
 	enum State {none, goToWork, working, leaving, releaveFromDuty, aboutToClose, closing};
 	State state = State.none;
 	//backend animation
@@ -52,6 +53,7 @@ public class GCHostRole extends Role implements Host
 	public void setRestaurant(Restaurant r) 
 	{
 		this.restaurant = r;
+		((GCAnimationPanel) restaurant.insideAnimationPanel).setHost(this);
 	}
 	public List getWaitingCustomers() 
 	{
@@ -74,6 +76,7 @@ public class GCHostRole extends Role implements Host
 	
 	public void msgIWantToEat(Customer cust) {
 		waitingCustomers.add(cust);
+		((GCAnimationPanel) restaurant.insideAnimationPanel).addCustomerToList(((GCCustomerRole) cust).myPerson.getName());
 		stateChanged();
 	}
 	// msg from waiter, add a free table to lit
@@ -88,22 +91,16 @@ public class GCHostRole extends Role implements Host
 			}
 		}
 	}
-
-	public void takingBreakMsg(Waiter waiter)
-	{
-		print(waiter + "asked for a break");
-		for(myWaiter w: waiters)
-		{
-			if( w.w == waiter){ w.state = WaiterState.askedForBreak; }		
-		}
-		stateChanged();
-	}
 	
 	public void breakIsOverMsg(Waiter waiter)
 	{
 		for(myWaiter w: waiters)
 		{
-			if( w.w == waiter){ w.state = WaiterState.Working; }
+			if( w.w == waiter)
+			{
+				w.state = WaiterState.Working; 
+				((GCAnimationPanel) restaurant.insideAnimationPanel).setWaiterWorking(((GCWaiterRole)w.w).myPerson.getName());
+			}
 		}
 	}
 	
@@ -114,6 +111,7 @@ public class GCHostRole extends Role implements Host
 			for (Customer c: waitingCustomers) 
 			{
 				if(c == cust){
+					((GCAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(((GCCustomerRole) c).myPerson.getName());
 					waitingCustomers.remove(c);
 					break;
 				}
@@ -133,6 +131,7 @@ public class GCHostRole extends Role implements Host
 		if(addWaiter)
 		{
 			waiters.add(newWaiter);
+			((GCAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((GCWaiterRole) w).myPerson.getName());
 		}
 	}
 	
@@ -143,17 +142,30 @@ public class GCHostRole extends Role implements Host
 		this.stateChanged();
 	}
 	//needed for interface, not needed for GCRestaurant
-	public void msgCanIBreak(Waiter w) {}
+	public void msgCanIBreak(String name) 
+	{
+		for(myWaiter w: waiters)
+		{
+			if( ((GCWaiterRole)w.w).myPerson.getName().equals(name))
+			{
+				w.state = WaiterState.askedForBreak; 
+				break;
+			}		
+		}
+		
+		stateChanged();
+	}
 
 	public void msgDoneWorking(Waiter waiter) 
 	{
 		for(myWaiter w: waiters){
 			if(w.w.equals(waiter))
 			{
+				((GCAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((GCWaiterRole) w.w).myPerson.getName());
 				waiters.remove(w);
 			}
 		}
-		//((GCRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) waiter).getName());
+		
 	}
 	public void msgAnimationHasLeftRestaurant() 
 	{
@@ -203,11 +215,20 @@ public class GCHostRole extends Role implements Host
 	private void grantBreakAction(myWaiter w)
 	{
 		print("processing break");
-		if(waiters.size() == 1)
+		int workingWaiters = 0;
+		for(myWaiter waiter: waiters)
 		{
-			w.state = WaiterState.deniedBreak;
+			if(waiter.state != WaiterState.onBreak || waiter.state != WaiterState.askedForBreak)
+			{
+				workingWaiters++;
+			}
+		}
+		if(workingWaiters == 0)
+		{
+			w.state = WaiterState.Working;
 			print(((GCWaiterRole)w.w).getName() + ", you can't be on break!");
 			w.w.msgDontGoOnBreak();
+			((GCAnimationPanel) restaurant.insideAnimationPanel).setWaiterCantBreak(((GCWaiterRole)w.w).myPerson.getName());
 		}
 		else
 		{
@@ -285,7 +306,7 @@ public class GCHostRole extends Role implements Host
 			
 			if(!restaurant.isOpen && waiters.size() == 0 )//state == State.closing
 			{
-				print("^^^ CLOSING NOW");
+				//print("^^^ CLOSING NOW");
 				((GCCashierRole)restaurant.cashier).msgRestaurantClosing();
 				((GCCookRole)restaurant.cook).msgRestaurantClosing();
 				hostGui.DoLeaveRestaurant();
@@ -416,6 +437,12 @@ public class GCHostRole extends Role implements Host
 	public void goesToWork() {
 		state = State.goToWork;
 		this.stateChanged();
+	}
+
+	//unused method for this implementation
+	public void msgCanIBreak(Waiter w) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
