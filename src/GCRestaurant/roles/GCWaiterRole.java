@@ -169,16 +169,20 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 	
+	//Function not useful in simcity
 	public void msgAskForBreak() 
 	{
 		print("I want to go on Break");
 		event = WaiterEvent.AlmostOnBreak;
 		stateChanged();
 	}
+	
 	// (5) Go on Break
 	public void msgGoOnBreak() 
 	{
 		onBreak = true;
+		event = WaiterEvent.AlmostOnBreak;
+		stateChanged();
 	}
 
 	// (6) Refuses to go on break
@@ -300,10 +304,11 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		{
 			final GCWaiterRole wr = this;
 				print("I'm going on break");
+				event = WaiterEvent.onBreak;
 				timer.schedule(new TimerTask(){
 					public void run()
-					{		
-						onBreak = false;  
+					{	
+						onBreak = false; 	 
 						event = WaiterEvent.none;
 						((GCHostRole)host).breakIsOverMsg(wr);
 						print("Back from Break");
@@ -395,15 +400,15 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 				return true;
 			}
 			
-			if(event == WaiterEvent.onBreak && onBreak)
+			if(onBreak && event == WaiterEvent.onBreak)
 			{
 				return true;
 			}
-			if(event == WaiterEvent.AlmostOnBreak && customers.size() == 0)
+			
+			if( onBreak && customers.size() == 0)
 			{
-				event = WaiterEvent.onBreak;
 				onBreakAction();
-				return true; 
+				return true;
 			}
 			
 			if(!restaurant.isOpen&& customers.size() == 0)

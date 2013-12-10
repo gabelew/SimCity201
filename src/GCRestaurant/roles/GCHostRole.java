@@ -226,12 +226,13 @@ public class GCHostRole extends Role implements Host
 		if(workingWaiters == 0)
 		{
 			w.state = WaiterState.Working;
-			print(((GCWaiterRole)w.w).getName() + ", you can't be on break!");
+			print(((GCWaiterRole)w.w).myPerson.getName() + ", you can't be on break!");
 			w.w.msgDontGoOnBreak();
 			((GCAnimationPanel) restaurant.insideAnimationPanel).setWaiterCantBreak(((GCWaiterRole)w.w).myPerson.getName());
 		}
 		else
 		{
+			print(((GCWaiterRole)w.w).myPerson.getName() + ", you can go on break...");
 			w.state = WaiterState.onBreak;
 			w.w.msgGoOnBreak();
 		}
