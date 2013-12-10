@@ -26,8 +26,10 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     private final int xRegister = 100;
     private final int yRegister = 40;
     private final int TABLE_SPACING = 100;
-    private final int GRILL_SIZEX = 300;
-    private final int GRILL_SIZEY = 20;
+    private final int xCookOrderingStand = 180;
+    private final int yCookOrderingStand = 0;
+    private final int xWaitOrderingStand = 250;
+    private final int yWaitOrderingStand = 80;
     private final int xGRILL = 205;
     private final int yGRILL = -2;
     private final int xFRIDGE = 265; 
@@ -41,6 +43,7 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     private BufferedImage hostStandImg;
     private BufferedImage registerImg;
     private BufferedImage platingTableImg;
+    private BufferedImage orderingStandImg;
     private Dimension bufferSize;
 
     private List<Gui> guis = new ArrayList<Gui>();
@@ -63,6 +66,7 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
  			hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
 		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
 		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
+		    orderingStandImg = ImageIO.read(new File(path.toString() + "orderingstand.png"));
     	}
     	catch(Exception e){}
     }
@@ -85,9 +89,9 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         {
         	g2.drawImage(platingTableImg, xPlatingTable+ (i*platingTableDist), yPlatingTable, null);
         }
-        //makes fridge
-        g2.setColor(Color.GRAY);
-        g2.fillRect(WINDOWX-10, GRILL_SIZEY, 10, 55);
+        //draws rovolving orderstands
+        g2.drawImage(orderingStandImg, xCookOrderingStand, yCookOrderingStand, null);
+        g2.drawImage(orderingStandImg, xWaitOrderingStand, yWaitOrderingStand,null);
         //draws fridge
         g2.drawImage(fridgeImg, xFRIDGE, yFRIDGE, null);
         //draws grill

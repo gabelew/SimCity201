@@ -34,6 +34,8 @@ public class GCWaiterGui implements Gui {
     private int cookPosX = 200, cookPosY = 80;
     private int cashierPosX = 97, cashierPosY = 50;
     private int customerPos = 40;
+    private final int xWaitOrderingStand = 250;
+    private final int yWaitOrderingStand = 80;
     
     public int xTable;
     public int yTable;

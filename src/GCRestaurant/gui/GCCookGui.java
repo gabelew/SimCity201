@@ -30,6 +30,8 @@ public class GCCookGui implements Gui{
 	private final int FRIDGEY = 20;
 	private final int PLATINGX = 200;
 	private final int PLATINGY = 60;
+	private final int xCookOrderingStand = 180;
+    private final int yCookOrderingStand = 0;
 	private final int foodOffset = 30;
 	private int GRILLX = 225;
 	private int GRILLY = 20;

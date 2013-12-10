@@ -24,7 +24,7 @@ import city.roles.Role;
  * Restaurant Waiter Agent
  */
 
-public class GCWaiterRole extends Role implements Waiter{
+public abstract class GCWaiterRole extends Role implements Waiter{
 	
 	public enum CustomerState{Waiting, Seated, ReadyToOrder, ReorderFood, Ordering, 
 		Ordered, FoodCooking, FoodDoneCooking, orderDone, Served, Leaving, Left, checkGiven}
@@ -36,7 +36,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	
 	private Menu m = new Menu();
 	private String name;
-	private Semaphore busy = new Semaphore(0,true);
+	protected Semaphore busy = new Semaphore(0,true);
 	public boolean onBreak = false;
 	Timer timer = new Timer();
 	
@@ -46,7 +46,7 @@ public class GCWaiterRole extends Role implements Waiter{
 	//link to other agents
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
 	public Host host;
-	private Cook cook;
+	protected Cook cook;
 	public Cashier cashier;
 	private final int BREAKTIME = 10000;
 	
@@ -238,8 +238,9 @@ public class GCWaiterRole extends Role implements Waiter{
 			stateChanged();
 		}
 	// (3) gives order to cook
-		public void HereIsOrderCookAction(MyCustomer c)
-		{
+		protected abstract void HereIsOrderCookAction(MyCustomer c);
+		
+		/*{
 			print("giving order to cook");
 			
 			//animation details
@@ -250,7 +251,7 @@ public class GCWaiterRole extends Role implements Waiter{
 			//sends msg to cook
 			((GCCookRole)cook).HereIsOrderMsg(this, c.c, c.table, c.choice);
 			stateChanged();
-		}
+		}*/
 
 	// (4) Gives food to customer
 		public void HereIsFoodAction(MyCustomer c)
