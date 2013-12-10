@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
+import bank.gui.BankRobberGui;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
@@ -62,12 +63,13 @@ public class PersonAgent extends Agent implements Person
 	public Bank bankTeller;
 	
 	//Various States
-	public enum Task {goToMarket, goEatFood, goToWork, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
-	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome };
+	public enum Task {goToMarket, goEatFood, goToWork, goToRobBank, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
+	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome, goingToRobBank };
 	public enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	public enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
 	public boolean isRenter = false;
 	public boolean isManager = false;
+	public boolean isEvil = false;
 	public PersonAgent landlord;
 	
 	public String name;
@@ -282,6 +284,7 @@ public class PersonAgent extends Agent implements Person
 	    this.busRight = this.simCityGui.animationPanel.busRight;
 	    
 		this.myHome = h;
+		
 		BankCustomerRole bc = new BankCustomerRole(this);
 		roles.add(bc);
 		bc.active = false;
@@ -372,9 +375,11 @@ public class PersonAgent extends Agent implements Person
 	public void msgDoneAtBank() {
 		state = State.doingNothing;
 		for(Role role: roles) {
-    		if (role instanceof BankCustomerRole) {
-    			role.active = false;
-    		}
+			if (role instanceof BankCustomerRole) {
+	    		role.active = false;	
+			} else if(role instanceof BankRobberRole) {
+	    		role.active = false;
+			}
 		}
 		stateChanged();
 	}
@@ -393,6 +398,17 @@ public class PersonAgent extends Agent implements Person
 		this.hungerLevel += 1;
 		
 		checkIfWorking();
+		
+		if(isEvil && 1 == currentHour && dayOfWeek.equals("Saturday")) {
+			boolean inList = false;
+			for(Task t: taskList){
+				if(t == Task.goToRobBank)
+					inList = true;
+			}
+			if(!inList){
+				taskList.add(Task.goToRobBank);
+			}
+		}
 		
 		if(0 == (hour % 2) && isRenter){
 			boolean inList = false;
@@ -725,6 +741,18 @@ public class PersonAgent extends Agent implements Person
         	}
         
         	for(Task t:taskList){
+        		if(t == Task.goToRobBank){
+        			temp = t;
+        		}
+        	}
+        	
+        	if(temp != null){
+        		goToRobBank();
+        		taskList.remove(temp);
+        		return true;
+        	}
+        	
+        	for(Task t:taskList){
         		if(t == Task.doPayRent){
         			temp = t;
         		}
@@ -838,6 +866,10 @@ public class PersonAgent extends Agent implements Person
 			}
 			if(transportState == TransportState.none && state == State.goingToBank){
 				finishGoingToBank();
+				return true;
+			}
+			if(transportState == TransportState.none && state == State.goingToRobBank){
+				finishGoingToRobBank();
 				return true;
 			}
 			if(transportState == TransportState.none && state == State.goingToMarket){
@@ -1267,6 +1299,26 @@ public class PersonAgent extends Agent implements Person
     	}
     }
     
+    private void goToRobBank() {
+    	state = State.goingToRobBank;
+    	BankBuilding b  = banks.get(randInt(0, banks.size()));
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to rob bank 0" + banks.indexOf(b));
+	    destination = b.location;
+	    
+	    if(car == true || destination.y == personGui.yPos){
+    		personGui.DoWalkTo(destination);
+    		if(!testing){
+				try {
+					waitingResponse.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    		}
+    	}else{
+    		goToBusStop();
+    	} 
+    }
+    
     private void goToBank() {
     	//print("I'm going to bank");
     	state = State.goingToBank;
@@ -1295,6 +1347,32 @@ public class PersonAgent extends Agent implements Person
     	} 
     }
     
+    private void finishGoingToRobBank() {
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm at bank");
+    	//print("I'm at bank");
+    	state  = State.banking;
+    	BankBuilding b = findBank(destination);
+    	personGui.DoWalkTo(destination); //animationStub
+    	if(!testing){
+        	try {
+    			waitingResponse.acquire();
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	for(Role role: roles) {
+    		if (role instanceof BankRobberRole) {
+    			role.active = true;
+    			((BankRobberRole) role).setGui(new BankRobberGui((BankRobberRole) role));
+    	    	((BankRobberRole) role).getGui().setPresent(true);
+    	    	b.insideAnimationPanel.addGui(((BankRobberRole) role).getGui());
+    	    	((BankRobberRole) role).bank = b;
+    	    	((BankRobberRole) role).goingToBank();
+    	    	
+    		}
+    	}
+    }
+    
     private void finishGoingToBank(){
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm at bank");
     	//print("I'm at bank");
@@ -1309,17 +1387,16 @@ public class PersonAgent extends Agent implements Person
     		}
     	}
     	for(Role role: roles) {
-    		if (role instanceof BankCustomerRole) {
-    			role.active = true;
-    			((BankCustomerRole) role).setGui(new BankCustomerGui((BankCustomerRole) role));
-    	    	((BankCustomerRole) role).getGui().setPresent(true);
-    	    	b.insideAnimationPanel.addGui(((BankCustomerRole) role).getGui());
-    	    	((BankCustomerRole) role).bank = b;
-    	    	((BankCustomerRole) role).goingToBank();
-    	    	
-    		}
-    	}
-    	
+	    		if (role instanceof BankCustomerRole) {
+	    			role.active = true;
+	    			((BankCustomerRole) role).setGui(new BankCustomerGui((BankCustomerRole) role));
+	    	    	((BankCustomerRole) role).getGui().setPresent(true);
+	    	    	b.insideAnimationPanel.addGui(((BankCustomerRole) role).getGui());
+	    	    	((BankCustomerRole) role).bank = b;
+	    	    	((BankCustomerRole) role).goingToBank();
+	    	    	
+	    		}
+	    }
     }
 
 	private void goToMarket(){

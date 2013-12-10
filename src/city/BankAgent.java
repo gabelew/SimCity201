@@ -1,9 +1,11 @@
 package city;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import city.roles.BankCustomerRole;
+import city.roles.BankRobberRole;
 import agent.Agent;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
@@ -35,6 +37,20 @@ public class BankAgent extends Agent implements Bank{
 			}
 		}
 	}
+	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 4;
+	
+	
+	enum HackState {pending,attemptToDefend };
+	public class HackAttack {
+		public BankRobberRole hacker;
+		int hackAlgorithm = -1;
+		HackState hs = HackState.pending;
+		public HackAttack(BankRobberRole h, int hack) {
+			this.hacker = h;
+			this.hackAlgorithm = hack;
+		}
+	}
+	public List<HackAttack>hackAttacks = new CopyOnWriteArrayList<HackAttack>();
 	
 	public class Transaction {
 		public BankCustomer bc;
@@ -87,6 +103,12 @@ public class BankAgent extends Agent implements Bank{
 		if(account != null) {
 			transactions.add(new Transaction(TransactionState.checkBalance, 0, account, null, "balance"));
 		}
+		if(0 == getStateChangePermits())
+			stateChanged();
+	}
+	
+	public void msgThisIsAHackAttack(BankRobberRole brr, int hackAlgorithm){
+		hackAttacks.add(new HackAttack(brr, hackAlgorithm));
 		if(0 == getStateChangePermits())
 			stateChanged();
 	}
@@ -190,6 +212,15 @@ public class BankAgent extends Agent implements Bank{
 	// Scheduler
 	
 	public boolean pickAndExecuteAnAction() {
+		
+		for(HackAttack h : hackAttacks) {
+			if(HackState.pending == h.hs) {
+				h.hs = HackState.attemptToDefend;
+				defendHack(h);
+				return true;
+			}
+		}
+		
 		for(Transaction t : transactions) {
 			if(TransactionState.deposit == t.ts) {
 				t.ts = TransactionState.none;
@@ -243,6 +274,18 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	// Actions
+	
+	private void defendHack(HackAttack h) {
+		int defenseWeakness = randInt(ALGORITHM_MIN, ALGORITHM_MAX);
+		if(defenseWeakness == h.hackAlgorithm) {
+			double stolenAmount = h.hackAlgorithm * 500;
+			h.hacker.msgHackSuccessful(stolenAmount);
+			fundsAvailable -= stolenAmount;
+		} else {
+			h.hacker.msgHackDefended();
+		}
+		hackAttacks.remove(h);
+	}
 	
 	private void customerDeposit(Transaction t) {
 		t.amount = (Math.round(100*t.amount) / ((double)100));
@@ -343,6 +386,10 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	// Utilities
+	public static int randInt(int min, int max) {
+	    Random i = new Random();
+	    return i.nextInt((max - min) + 1) + min;
+	}
 	
 	private BankAccount findAccount(BankAccount b) {
 		BankAccount ba = null;

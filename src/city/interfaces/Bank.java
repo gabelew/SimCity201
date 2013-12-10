@@ -3,6 +3,7 @@ package city.interfaces;
 import city.BankAgent.BankAccount;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
+import city.roles.BankRobberRole;
 
 public interface Bank {
 	public abstract void msgCheckBalance(BankCustomer bcr, String accountType);
@@ -18,4 +19,5 @@ public interface Bank {
 			double amount, String accountType);
 	public abstract void msgDepositToAccount(BankCustomer bc, BankAccount businessAccount,
 			double amount);
+	public abstract void msgThisIsAHackAttack(BankRobberRole brr, int hackAlgorithm);
 }
