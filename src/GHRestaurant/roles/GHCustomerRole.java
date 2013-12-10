@@ -299,6 +299,7 @@ public class GHCustomerRole extends Role implements Customer{
 	private void LeaveRestaurant() {
 		print("Leaving Restaurant");
 		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(customerGui);
 	}
 
 	// Accessors, etc.
