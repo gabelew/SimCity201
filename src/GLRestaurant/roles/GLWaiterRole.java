@@ -72,6 +72,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	private final double CHICKENPRICE = 10.99;
 	private final double SALADPRICE = 5.99;
 	private final double COOKIEPRICE = 8.99;
+	private boolean restaurantClosed = false;
 	
 	/**
 	 * Constructor for WaiterAgent class.
@@ -91,6 +92,11 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 
 	// Messages
+	
+	public void msgRestaurantClosed() {
+		restaurantClosed = true;
+		stateChanged();
+	}
 	
 	public void msgWantToGoOnBreak() { //from gui
 		print("I want to go on a break.");
@@ -205,12 +211,19 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 			restaurant.insideAnimationPanel.removeGui(waiterGui);
 			return true;
 		}
-		if(customers.size() == 0 && (
+		if(0 == customers.size() && (
 				(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
 				(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
 			leaveWork();
 			return true;
 		}
+		
+		if(restaurantClosed && 0 == customers.size()) {
+			restaurantClosed = false;
+			leaveWork();
+			return true;
+		}
+		
 		if(event == agentEvent.goToWork)
 		{
 			event = agentEvent.none;
