@@ -145,7 +145,8 @@ public class GHCookRole extends Role implements Cook {
 				return true;
 			}
 		}
-			
+		
+		OrderFromMarket();
 		//cookgui.DoGoHome();
 		
 		return false;
@@ -166,15 +167,7 @@ public class GHCookRole extends Role implements Cook {
 			((GHWaiterRole) temp.waiter).msgOutOfOrder(temp.tablenumber, temp.choice);
 		}
 		else{
-		//if food is "low" then the cook orders from different market.
-		if(Inventory.get(o.choice).getAmount() <= Inventory.get(o.choice).getThreshold()){
-			Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
-			foodToOrder.put(o.choice, 20);
-			marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
-			markets.get(nextmarket).msgPlaceDeliveryOrder(this);
-			nextmarket = (nextmarket+1)%markets.size();
-		}
-		
+
 			
 		DoCookIt(o);
 		try {
@@ -225,6 +218,18 @@ public class GHCookRole extends Role implements Cook {
 	
 	private void SendInvoiceToCashier(MarketOrder mo) {
 		((GHCashierRole) restaurant.cashier).msgHereIsInvoice(mo.deliveryMan, mo.cost);
+	}
+	
+	private void OrderFromMarket() {
+		for(String s : Inventory.keySet()){
+			if(Inventory.get(s).getAmount() <= Inventory.get(s).getThreshold()){
+				Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
+				foodToOrder.put(s, ORDERAMOUNT);
+				marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
+				markets.get(nextmarket).msgPlaceDeliveryOrder(this);
+				nextmarket = (nextmarket+1)%markets.size();
+			}
+		}
 	}
 	
 	//utilities
