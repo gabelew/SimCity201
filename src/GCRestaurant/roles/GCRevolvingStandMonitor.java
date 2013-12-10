@@ -8,7 +8,7 @@ import city.gui.trace.AlertTag;
 
 public class GCRevolvingStandMonitor 
 {
-	private final int N_MAX_COUNT = 5;
+	private final int N_MAX_COUNT = 3;
 	private final int WAIT_TIME = 5000;
 	private int count = 0;
 	private List<GCOrder> orders = new ArrayList<GCOrder>();

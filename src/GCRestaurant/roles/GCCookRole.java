@@ -48,7 +48,7 @@ public class GCCookRole extends Role implements Cook
 	boolean restaurantClosed = false;
 	Restaurant restaurant;
 	public GCRevolvingStandMonitor orderStand;
-	public boolean checkOrderStand = false;
+	public boolean checkOrderStand = true;
 
 	public GCCookRole() {
 		super();
@@ -304,7 +304,7 @@ public class GCCookRole extends Role implements Cook
 		{
 			print("Orderstand has no orders in it!");
 		}
-		while(orderStand.isEmpty()) 
+		while(!orderStand.isEmpty()) 
 		{
 			GCOrder order = orderStand.remove();
 			if(order != null) 
@@ -383,11 +383,6 @@ public class GCCookRole extends Role implements Cook
 				}
 			}
 			
-			//Shared Data
-			if(checkOrderStand)
-			{
-				checkOrderStandAction();
-			}
 			for(GCOrder o: orders)
 			{
 				//if order is done put it on a plate and serve it
@@ -403,6 +398,11 @@ public class GCCookRole extends Role implements Cook
 					CookItAction(o);
 					return true;
 				}
+			}
+			//Shared Data
+			if(checkOrderStand)
+			{
+				checkOrderStandAction();
 			}
 			return false;
 		}
