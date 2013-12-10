@@ -103,11 +103,10 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     public class GridSpot{
     	public Semaphore spot = new Semaphore(1,true);
     	public boolean stopSign = false;
-    	GridDirection gridDriction;
-    	GridSpot(GridDirection gd){
+    	GridSpot(){
     		
     	}
-    	GridSpot(GridDirection gd, boolean ss){
+    	GridSpot(boolean ss){
     		stopSign = ss;
     	}
     }
@@ -117,12 +116,17 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
     	for(int i = 0;i< 45;i++){
     		for(int j =0; j<4;j++){
-    			gridMap.put(new Point(i*20 -23, 115+j*80), new GridSpot(GridDirection.RIGHT));
-    			if(i%2==0 && i<33){
-        			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot(GridDirection.DOWN));
+    			GridSpot gs = new GridSpot();
+    			gridMap.put(new Point(i*20 -23, 115+j*80), gs);
+    			if(i==2 || i==42){
+    				gs.stopSign=true;
     			}
-    			if(i%2+1==0 && i<34){
-    			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot(GridDirection.UP));
+    				
+    			if(i%2==0 && i<33){
+        			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot());
+    			}
+    			if(i%2+1==2 && i<34){
+    			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot());
     			}
     		}
     	}
@@ -212,14 +216,18 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        	g2.fillRect(802+30+20, 25+80*(i)+30, 20, SIDEWALK_WIDTH);
 	        }
 
-
-	    	/*
+/*
+	    	
 	    	for(int i = 0;i< 45;i++){
 	    		for(int j =0; j<4;j++){
 	    			g2.setColor(Color.CYAN);
 	    			g.fillRect(i*20 - 23, 115+j*80, 20, 20);
 	    			g2.setColor(Color.RED);
 	    			g.drawRect(i*20 - 23, 115+j*80, 20, 20);
+	    			if(i==2 || i==42){
+		    			g2.setColor(Color.magenta);
+		    			g.fillRect(i*20 - 23, 115+j*80, 20, 20);
+	    			}
 	    			if(i%2==0 && i<33){
 		    			g2.setColor(Color.CYAN);
 		    			g.fillRect(i*20 +97, 95+j*80, 20, 20);
@@ -234,8 +242,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	    			}
 	    		}
 	    		
-	    	}
-	    	*/
+	    	}*/
+	    	
 		synchronized(guis){
 		for(Gui gui : guis) {
 			//if (gui.isPresent()) {

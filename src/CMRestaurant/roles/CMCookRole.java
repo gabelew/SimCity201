@@ -195,19 +195,23 @@ public class CMCookRole extends Role implements Cook {
 	}
 	
 	public void msgCanIHelpYou(DeliveryMan DMR,MarketAgent m){
+		synchronized(marketOrders){
 		for (MarketOrder order: marketOrders){
 			if(order.Market==m){
 				order.deliveryMan=DMR;
 				order.marketState=marketOrderState.ordering;
 			}
 		}
+		}
 	}
 	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, double amountOwed){
+		synchronized(marketOrders){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
 				order.price=amountOwed;
 				order.marketState=marketOrderState.paying;
 			}
+		}
 		}
 		for(String key:choices.keySet()){
 			Food food=findFood(key);
@@ -617,28 +621,30 @@ public class CMCookRole extends Role implements Cook {
 		log.add(new LoggedEvent("Preformed orderFoodFromMarket"));
 		synchronized(markets){
 			for(MyMarket m: markets){
-				boolean placeOrder = false;
-				Map<String,Integer>foodsToOrder=new HashMap<String,Integer>();
-				//List<Food> foodsToOrder = new ArrayList<Food>();
-				synchronized(foods){
-					for(Food f: foods){
-						if(f.amount <= f.low && m.foodInventoryMap.get(f.getChoice().toLowerCase()) == InventoryState.POSSIBLE  
-								&& f.os != OrderingState.ordered){
-							f.os = OrderingState.ordered;
-							//print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
-							m.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.ATTEMPTING);
-							foodsToOrder.put(f.choice,20);
-							placeOrder = true;
-							//print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
-						} 
+				if(m.market.isOpen()){
+					boolean placeOrder = false;
+					Map<String,Integer>foodsToOrder=new HashMap<String,Integer>();
+					//List<Food> foodsToOrder = new ArrayList<Food>();
+					synchronized(foods){
+						for(Food f: foods){
+							if(f.amount <= f.low && m.foodInventoryMap.get(f.getChoice().toLowerCase()) == InventoryState.POSSIBLE  
+									&& f.os != OrderingState.ordered){
+								f.os = OrderingState.ordered;
+								//print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
+								m.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.ATTEMPTING);
+								foodsToOrder.put(f.choice,20);
+								placeOrder = true;
+								//print("\t\tChoice:"+ f.getChoice()+"\tAmount: " + f.amount+ "\tCapacity: " + f.capacity + "\tInventorystate: " + m.getMarket().getName() + " "+  m.foodInventoryMap.get(f.getChoice()));
+							} 
+						}
 					}
-				}
-	
-				if(placeOrder){
-					//m.market.msgHereIsOrder(this, cashier, foodsToOrder);
-					marketOrders.add(new MarketOrder(foodsToOrder,m.market,marketOrderState.waiting));
-					m.market.msgPlaceDeliveryOrder((Cook) this);
-					
+		
+					if(placeOrder){
+						//m.market.msgHereIsOrder(this, cashier, foodsToOrder);
+						marketOrders.add(new MarketOrder(foodsToOrder,m.market,marketOrderState.waiting));
+						m.market.msgPlaceDeliveryOrder((Cook) this);
+						
+					}
 				}
 			}
 		}
@@ -741,6 +747,20 @@ public class CMCookRole extends Role implements Cook {
 	public void msgLeaveWorkEarly() {
 		state = State.leaving;
 		stateChanged();
+	}
+
+	public void msgMarketClosed(MarketAgent market) {
+		MarketOrder removeMO = null;
+
+		synchronized(marketOrders){
+		for(MarketOrder mo:marketOrders){
+			if(mo.Market == market){
+				removeMO = mo;
+			}
+		}
+		}
+		marketOrders.remove(removeMO);
+		orderFromMarket = true;
 	}
 
 
