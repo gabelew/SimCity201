@@ -1,7 +1,6 @@
 package GHRestaurant.roles;
 
 import GHRestaurant.gui.GHCashierGui;
-import agent.Agent;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
@@ -20,7 +19,10 @@ public class GHCashierRole extends Role implements Cashier{
 	
 	public List<Check> checks
 	= Collections.synchronizedList(new ArrayList<Check>());
+	public List<DeliveryBills> bills
+	= Collections.synchronizedList(new ArrayList<DeliveryBills>());
 	public enum CheckState {PENDING,PROCESSED,GIVECHECK,PAYING,NEXTTIME,MARKET}
+	public enum billState {BILLED}
 	//private String name;
 	private double RestaurantMoney; 
 	private Restaurant restaurant;
@@ -38,7 +40,7 @@ public class GHCashierRole extends Role implements Cashier{
 		return name;
 	}*/
 
-	public List getChecks() {
+	public List<Check> getChecks() {
 		return checks;
 	}
 	
@@ -77,8 +79,7 @@ public class GHCashierRole extends Role implements Cashier{
 	
 	@Override
 	public void msgHereIsBill(DeliveryMan DMR, double bill) {
-		// TODO Auto-generated method stub
-		
+		bills.add(new DeliveryBills(DMR,bill,billState.BILLED));
 	}
 	
 	/**
@@ -230,6 +231,19 @@ public class GHCashierRole extends Role implements Cashier{
 		public double getCost(){
 			return cost;
 		}
+	}
+	
+	public class DeliveryBills{
+		DeliveryMan dm;
+		double cost;
+		billState bs;
+
+		public DeliveryBills(DeliveryMan dMR, double bill, billState billed) {
+			dm = dMR;
+			cost = bill;
+			bs = billed;
+		}
+		
 	}
 
 	@Override
