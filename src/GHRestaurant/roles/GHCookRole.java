@@ -109,6 +109,51 @@ public class GHCookRole extends Role implements Cook {
 		}	
 		stateChanged();
 	}
+	
+	@Override
+	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
+		if(markets.size()==0){
+			for(MarketAgent ma: restaurant.insideAnimationPanel.simCityGui.getMarkets()){
+				this.addMarket(ma);
+			}
+		}
+		
+		else {
+			for(MarketAgent ma : markets){
+			if(ma.equals(market)){
+				markets.remove(ma);
+			}
+		}
+		}
+	}
+
+	@Override
+	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String, Integer> choices, double cost) {
+		for (MarketOrder order:marketOrders){
+			if(order.deliveryMan==Dm){
+				order.cost=cost;
+				order.marketState=marketOrderState.paying;
+			}
+		}
+
+		for(String s : choices.keySet()) {
+			Food food = findFood(s);
+			food.addFoodAmount(choices.get(s));
+		}
+		
+	}
+	
+	@Override
+	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
+		//if the order is incomplete just change markets
+		nextmarket = (nextmarket+1)%markets.size();
+	}
+
+	@Override
+	public void msgRelieveFromDuty(PersonAgent p) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -222,7 +267,6 @@ public class GHCookRole extends Role implements Cook {
 	}
 	
 	private void OrderFromMarket() {
-		
 		Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
 		for(String s : Inventory.keySet()){
 			Food food = Inventory.get(s);
@@ -322,39 +366,6 @@ public class GHCookRole extends Role implements Cook {
 		MarketAgent Market;
 		double cost;
 	}
-	
-	@Override
-	public void msgNeverOrderFromMarketAgain(MarketAgent market) {
-		if(markets.size()==0){
-			for(MarketAgent ma: restaurant.insideAnimationPanel.simCityGui.getMarkets()){
-				this.addMarket(ma);
-			}
-		}
-		
-		else {
-			for(MarketAgent ma : markets){
-			if(ma.equals(market)){
-				markets.remove(ma);
-			}
-		}
-		}
-	}
-
-	@Override
-	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String, Integer> choices, double cost) {
-		for (MarketOrder order:marketOrders){
-			if(order.deliveryMan==Dm){
-				order.cost=cost;
-				order.marketState=marketOrderState.paying;
-			}
-		}
-
-		for(String s : choices.keySet()) {
-			Food food = findFood(s);
-			food.addFoodAmount(choices.get(s));
-		}
-		
-	}
 
 	private Food findFood(String s) {
 		Food food = null;
@@ -368,23 +379,10 @@ public class GHCookRole extends Role implements Cook {
 		return food;
 	}
 
-	@Override
-	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
-	public void msgRelieveFromDuty(PersonAgent p) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void goesToWork() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void goesToWork() {}
 
 	@Override
 	public void addMarket(MarketAgent m) {
