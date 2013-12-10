@@ -27,6 +27,8 @@ public class AtHomeGui implements Gui{
 	private static BufferedImage personImg = null;
 	private int xPos, yPos;
 	private int xDestination, yDestination;
+	private int xStartPos = -20;
+	private int yStartPos = 200;
 	private int xHomePosition = 20;
 	private int yHomePosition = 30;
 	private int xFRIDGE_POSITION = 0;
@@ -37,20 +39,20 @@ public class AtHomeGui implements Gui{
 	private int yTABLE_POS = 70;
 	private int xKITCHEN_COUNTER_POSITION = 0;
 	private int yKITCHEN_COUNTER_POSITION = 0;
-	static final int yTABLE_OFFSET = 300;
-	static final int xKITCHEN_OFFSET = 217;
-    static final int xFOOD_OFFSET = 10;
-    static final int yFOOD_OFFSET = 4;
-    static final int yKITCHEN_COUNTER_OFFSET = 30;
-    static final int yGRILL_RIGHT_OFFSET = 30;
-    static final int xGRILL_RIGHT_OFFSET = 52;
-    static final int yFIDGE_OFFSET = 15;
-    static final int xFIDGE_OFFSET = 100;
-    static final int yAPT_OFFSET = 310;
-    static final int xAPT_OFFSET = 30;
-    static final int HOUSE_TABLEPOS = 150;
-    static final int COOKING_OFFSET = 20;
-	static final int KITCHEN_OFFSET = 15;
+	private int yTABLE_OFFSET = 300;
+	private int xKITCHEN_OFFSET = 217;
+	private int xFOOD_OFFSET = 10;
+	private int yFOOD_OFFSET = 4;
+	private int yKITCHEN_COUNTER_OFFSET = 30;
+	private int yGRILL_RIGHT_OFFSET = 30;
+	private int xGRILL_RIGHT_OFFSET = 52;
+	private int yFIDGE_OFFSET = 15;
+	private int xFIDGE_OFFSET = 100;
+	private int yAPT_OFFSET = 310;
+    private int xAPT_OFFSET = 30;
+    private int HOUSE_TABLEPOS = 150;
+    private int COOKING_OFFSET = 20;
+	private int KITCHEN_OFFSET = 15;
 	List<MyFood> foods = Collections.synchronizedList(new ArrayList<MyFood>());
 	private enum Command {noCommand, GoHome, GoToFridge, GoToGrill, GoToCounter, GoToRestPost, EatFood, LeaveHome, GetFoodFromCounter, GetFoodFromGrill};
 	private enum FoodState{PutFoodOnGrill, PutFoodOnCounter, FoodOnGrill, FoodOnCounter, PickUpFromGrill, PickUpFromCounter, PutOnPickUpTable, OnPickUpTable, WaiterPickedUp};
@@ -116,8 +118,8 @@ public class AtHomeGui implements Gui{
 				xTABLE_POS = HOUSE_TABLEPOS;
 				yTABLE_POS = HOUSE_TABLEPOS;
 		}
-		xPos = 0;
-		yPos = 200;
+		xPos = xStartPos;
+		yPos = yStartPos;
 	}
 
 	
@@ -291,8 +293,8 @@ public class AtHomeGui implements Gui{
 	public void DoLeaveHome()
 	{
 		command = Command.LeaveHome;
-		xDestination = -20;
-		yDestination = 200;
+		xDestination = xStartPos;
+		yDestination = yStartPos;
 	}
 	
 /***********************************

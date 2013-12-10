@@ -108,4 +108,9 @@ public Gui getGui() {
 	return null;
 }
 
+public void msgAnimationAtCustomer() {
+	// TODO Auto-generated method stub
+	
+}
+
 }
