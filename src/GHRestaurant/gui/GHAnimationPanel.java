@@ -79,6 +79,7 @@ public class GHAnimationPanel extends InsideAnimationPanel implements ActionList
         g2.setColor(getBackground());
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
 
+        //host stand and cashier register
         g2.drawImage(hostStandImg,40,30,null);
         g2.drawImage(registerImg,85,35,null);
 

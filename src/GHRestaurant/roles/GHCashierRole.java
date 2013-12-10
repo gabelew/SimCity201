@@ -315,6 +315,10 @@ public class GHCashierRole extends Role implements Cashier{
 	public Gui getGui() {
 		return cashiergui;
 	}
+	
+	public GHCashierGui getgui(){
+		return cashiergui;
+	}
 
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;

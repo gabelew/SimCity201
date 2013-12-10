@@ -109,7 +109,7 @@ public class GHCustomerRole extends Role implements Customer{
 		case 3: choice = "pizza";
 		break;
 		}
-				
+		
 		event = AgentEvent.ordered;
 		stateChanged();
 	  
@@ -136,7 +136,7 @@ public class GHCustomerRole extends Role implements Customer{
 			break;
 			}
 			
-			if(!(choice == ch)){break;}
+			if(!(choice.equals(ch))){break;}
 		}
 		
 		event = AgentEvent.reordered;

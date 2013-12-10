@@ -122,7 +122,7 @@ public class GHHostRole extends Role implements Host{
 		 */
 
 		
-		if(!waitingCustomers.isEmpty() && !waiters.isEmpty()){
+		if(!waitingCustomers.isEmpty() && !waiters.isEmpty() && (((GHCashierRole) restaurant.cashier).getgui().getXPos() == 100 )){
 			for(Table table: tables){
 				if(!table.isOccupied()){
 					seatCustomer(waitingCustomers.get(0),table);

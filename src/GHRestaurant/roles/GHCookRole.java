@@ -166,7 +166,6 @@ public class GHCookRole extends Role implements Cook {
 			((GHWaiterRole) temp.waiter).msgOutOfOrder(temp.tablenumber, temp.choice);
 		}
 		else{
-			
 		//if food is "low" then the cook orders from different market.
 		if(Inventory.get(o.choice).getAmount() <= Inventory.get(o.choice).getThreshold()){
 			Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
@@ -174,7 +173,8 @@ public class GHCookRole extends Role implements Cook {
 			marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
 			markets.get(nextmarket).msgPlaceDeliveryOrder(this);
 			nextmarket = (nextmarket+1)%markets.size();
-			}
+		}
+		
 			
 		DoCookIt(o);
 		try {
@@ -190,11 +190,12 @@ public class GHCookRole extends Role implements Cook {
 			}
 		},Inventory.get(o.choice).cookingtime);
 		
-
 		}
+		
 	}
 	
 	private void GiveOrderToDeliverMan(MarketOrder mo) {
+		print("giving order to deliverman");
 		mo.deliveryMan.msgHereIsOrder(mo.order);
 	}
 
