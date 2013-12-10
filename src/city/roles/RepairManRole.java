@@ -7,6 +7,7 @@ import java.util.Map;
 
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.RepairManGui;
 import city.interfaces.RepairMan;
 
 public class RepairManRole extends Role implements RepairMan
@@ -17,7 +18,9 @@ public class RepairManRole extends Role implements RepairMan
 		List<Job> jobs = new ArrayList<Job>();
 		Map<String, Double> pricingMap = new HashMap<String, Double>();
 		enum JobState {none, requested, inProgess, awaitingPayment}
-		PersonAgent myPerson;
+		RepairManGui repairmanGui;
+		
+		//default constructor
 		public RepairManRole(PersonAgent p)
 		{
 			super(p);
@@ -25,6 +28,20 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("sink", new Double(85));
 			pricingMap.put("stove", new Double(100));
 			pricingMap.put("tv", new Double(75));
+		}
+		
+		public void setGui(Gui gui) 
+		{
+			this.repairmanGui = (RepairManGui) gui;
+		}
+		public Gui getGui() 
+		{
+			return repairmanGui;
+		}
+
+		public void msgAnimationAtCustomer() {
+			// TODO Auto-generated method stub
+			
 		}
 /*********************
  ***** MESSAGES
@@ -96,21 +113,5 @@ public class RepairManRole extends Role implements RepairMan
 			this.appliance = app;
 		}
 	}
-
-@Override
-public void setGui(Gui gui) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public Gui getGui() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-public void msgAnimationAtCustomer() {
-	// TODO Auto-generated method stub
-	
-}
 
 }

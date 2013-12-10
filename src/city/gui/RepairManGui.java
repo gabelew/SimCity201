@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 import city.gui.Gui;
 import city.roles.RepairManRole;
 
-public class RepairManDrivingGui implements Gui
+public class RepairManGui implements Gui
 {
 	private RepairManRole role = null;
 	private boolean isPresent = false;
@@ -20,6 +20,7 @@ public class RepairManDrivingGui implements Gui
 	private static BufferedImage vanRightImg = null;
 	private static BufferedImage vanBackImg = null;
 	private static BufferedImage vanFrontImg = null;
+	private static BufferedImage repairmanImg = null;
 	
 	private int xPos, yPos;
 	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
@@ -32,10 +33,13 @@ public class RepairManDrivingGui implements Gui
 	static final int CUST_START_POS = -40;
 	static final int xWAITING_START = 90;
 	static final int yWAITING_START = 190;
-	private enum DrivingDirection {up,down,right};
-	DrivingDirection drivingDirection = DrivingDirection.right;
+	private boolean driving = false;
 	
-	public RepairManDrivingGui(RepairManRole Role,SimCityGui gui) 
+	enum DrivingDirection {up,down,right};
+	enum Command {none, goToCustomer, leaving};
+	DrivingDirection drivingDirection = DrivingDirection.right;
+	Command command = Command.none;
+	public RepairManGui(RepairManRole Role,SimCityGui gui) 
 	{
 		try 
 		{
@@ -43,6 +47,7 @@ public class RepairManDrivingGui implements Gui
 			vanRightImg = ImageIO.read(new File(path.toString() + "RepairVanRight.png"));
 			vanBackImg = ImageIO.read(new File(path.toString() + "RepairVanBack.png"));
 			vanFrontImg = ImageIO.read(new File(path.toString() + "RepairVanFront.png"));
+			repairmanImg = ImageIO.read(new File(path.toString() + "repairman.png"));
 		} catch(IOException e) {
 			
 		}
@@ -52,41 +57,64 @@ public class RepairManDrivingGui implements Gui
 	
 	public void updatePosition() 
 	{
-		if(yPos == yDestination && xPos == xDestination && workingState==state.goingToCustomer)
+		if(driving)
 		{
-			workingState=state.atCustomerHome;
-			role.msgAnimationAtCustomer();
-			this.isPresent = false;
+			if(yPos == yDestination && xPos == xDestination && workingState==state.goingToCustomer)
+			{
+				workingState=state.atCustomerHome;
+				role.msgAnimationAtCustomer();
+			}
+			else if(yPos == yDestination && xPos == xDestination){
+				workingState=state.atCustomerHome;
+				this.isPresent = false;
+			}
+			else if(xPos > xDestination  && (yPos - 115)%80==0 && xPos < 950){
+				drivingDirection = DrivingDirection.right;
+				xPos++;
+			}
+			else if(yPos != yDestination && xPos != xDestination && (yPos - 115)%80!=0){
+				drivingDirection = DrivingDirection.down;
+				yPos++;
+			}else if (xPos == 950){
+				drivingDirection = DrivingDirection.right;
+				xPos = 0;
+				yPos = yDestination + 46;
+			}
+			else if (yPos != yDestination &&(xPos < xDestination || (xPos < 950 && (Math.abs(yPos - yDestination) > 47 || yPos - yDestination == -33)))){
+				drivingDirection = DrivingDirection.right;
+				xPos++;
+			}
+			else if (yPos > yDestination){
+				drivingDirection = DrivingDirection.up;
+				yPos--;
+			}
+			else if(xPos != xDestination){
+				drivingDirection = DrivingDirection.down;
+				yPos++;
+			}else{
+				System.out.println("car stuck");
+			}
 		}
-		else if(yPos == yDestination && xPos == xDestination){
-			workingState=state.atCustomerHome;
-			this.isPresent = false;
-		}
-		else if(xPos > xDestination  && (yPos - 115)%80==0 && xPos < 950){
-			drivingDirection = DrivingDirection.right;
-			xPos++;
-		}
-		else if(yPos != yDestination && xPos != xDestination && (yPos - 115)%80!=0){
-			drivingDirection = DrivingDirection.down;
-			yPos++;
-		}else if (xPos == 950){
-			drivingDirection = DrivingDirection.right;
-			xPos = 0;
-			yPos = yDestination + 46;
-		}
-		else if (yPos != yDestination &&(xPos < xDestination || (xPos < 950 && (Math.abs(yPos - yDestination) > 47 || yPos - yDestination == -33)))){
-			drivingDirection = DrivingDirection.right;
-			xPos++;
-		}
-		else if (yPos > yDestination){
-			drivingDirection = DrivingDirection.up;
-			yPos--;
-		}
-		else if(xPos != xDestination){
-			drivingDirection = DrivingDirection.down;
-			yPos++;
-		}else{
-			System.out.println("car stuck");
+		else//not driving
+		{
+			if (yPos < yDestination)
+				yPos++;
+			else if (yPos > yDestination)
+				yPos--;
+			if (xPos < xDestination)
+				xPos++;
+			else if (xPos > xDestination)
+				xPos--;
+			
+			if(xPos == xDestination && yPos == yDestination && command == Command.goToCustomer)
+			{
+				
+			}
+			
+			if(xPos == xDestination && yPos == yDestination && command == Command.leaving)
+			{
+				isPresent = false;
+			}
 		}
 	}
 
@@ -99,6 +127,8 @@ public class RepairManDrivingGui implements Gui
 			g.drawImage(vanFrontImg, xPos, yPos, null);
 		else if(this.drivingDirection == DrivingDirection.up)
 			g.drawImage(vanBackImg, xPos, yPos, null);
+		else
+			g.drawImage(repairmanImg, xPos, yPos, null);
 	}
 
 	
