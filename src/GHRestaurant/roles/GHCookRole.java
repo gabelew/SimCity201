@@ -62,13 +62,14 @@ public class GHCookRole extends Role implements Cook {
 		return name;
 	}*/
 
-	public List getOrders() {
+	public List<Order> getOrders() {
 		return orders;
 	}
 	
+	/*
 	public void setMarket(MarketAgent ma){
 		markets.add(ma);
-	}
+	}*/
 	
 	// Messages
 
@@ -313,14 +314,8 @@ public class GHCookRole extends Role implements Cook {
 		for(String s : choices.keySet()) {
 			Food food = findFood(s);
 			food.addFoodAmount(choices.get(s));
-			//food.amount = food.amount + choices.get(key);
 		}
 
-	    /*for(String s : choices.keySet()){
-	        if(Inventory.keySet().equals(s)){
-	        	Inventory.get(s).addFoodAmount(choices.get(s));
-	        }
-	    }*/
 		
 		choices.keySet();
 	}
@@ -357,8 +352,7 @@ public class GHCookRole extends Role implements Cook {
 
 	@Override
 	public void addMarket(MarketAgent m) {
-		// TODO Auto-generated method stub
-		
+		markets.add(m);
 	}
 
 	@Override
