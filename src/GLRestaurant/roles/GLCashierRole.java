@@ -86,12 +86,6 @@ public class GLCashierRole extends Role implements Cashier {
 	}
 
 	// Messages
-	
-//	public void msgHereIsBill(Market mkt, String choice, int amount) {
-//		bills.add(new MarketBill(mkt, choice, amount, BillState.pending));
-//		stateChanged();
-//	}
-	
 	public void msgRestaurantClosed() {
 		restaurantClosed = true;
 		stateChanged();
@@ -216,6 +210,7 @@ public class GLCashierRole extends Role implements Cashier {
 			for (Check c : checks) {
 				if (checkState.debt != c.cs && checkState.paid != c.cs) {
 					checksPaid = false;
+					return true;
 				}
 			}
 		}

@@ -112,8 +112,10 @@ public class GLHostRole extends Role implements Host{
 	
 	public void msgIAmLeaving(GLCustomerRole c) {
 		MyCustomer mc = findCustomer(c);
-		if(mc != null)
+		if(mc != null) {
 			mc.cs = customerState.done;
+			customers.remove(mc.c);
+		}
 		stateChanged();
 	}
 	
@@ -240,6 +242,7 @@ public class GLHostRole extends Role implements Host{
 		}
 		
 		if(closeRestaurant && customers.size() > 0) {
+			print("1 got claled dawg");
 			synchronized(customers) {
 				for(MyCustomer mc : customers) {
 					if (mc.cs == customerState.waiting) {
@@ -251,7 +254,9 @@ public class GLHostRole extends Role implements Host{
 		} 
 		
 		if(closeRestaurant && customers.isEmpty()) {
+			print("2 got called dawg!!");
 			askEmployeesToLeave();
+			return true;
 		}
 		
 		
@@ -287,6 +292,7 @@ public class GLHostRole extends Role implements Host{
 	}
 	
 	private void askEmployeesToLeave() {
+		print("WHAT IS HAPPENING?!");
 		synchronized(waiters) {
 			for(MyWaiter mw : waiters) {
 				mw.w.msgRestaurantClosed();
@@ -455,13 +461,10 @@ public class GLHostRole extends Role implements Host{
 		closeRestaurant = true;
 		stateChanged();
 	}
-	
-	public boolean getCloseRestaurant() {
-		return closeRestaurant;
-	}
 
 	@Override
 	public void msgOpenRestaurant() {
+		state = State.none;
 		closeRestaurant = false;
 		stateChanged();
 	}
