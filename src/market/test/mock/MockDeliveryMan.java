@@ -3,6 +3,7 @@ package market.test.mock;
 import java.util.Map;
 
 import city.MarketAgent;
+import city.roles.DeliveryManRole.Order;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
 import restaurant.test.mock.EventLog;
@@ -41,6 +42,11 @@ public class MockDeliveryMan extends Mock implements DeliveryMan {
 	@Override
 	public void msgDoneWithShift() {
 		log.add(new LoggedEvent("Received msgDoneWithShift"));
+	}
+
+	@Override
+	public void msgTryAgain(Order o, MarketAgent marketAgent) {
+		log.add(new LoggedEvent("Received msgTryAgain"));
 	}
 	
 	

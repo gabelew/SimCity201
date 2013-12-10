@@ -5,10 +5,12 @@ import java.util.*;
 
 import agent.Agent;
 import city.animationPanels.InsideAnimationPanel;
+import city.roles.DeliveryManRole.Order;
 import market.gui.MarketPanel;
 import market.interfaces.Clerk;
 import market.interfaces.DeliveryMan;
 import market.interfaces.Market;
+import restaurant.Restaurant;
 import restaurant.interfaces.Cook;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
@@ -22,6 +24,7 @@ public EventLog log = new EventLog();
 public InsideAnimationPanel insideAnimationPanel;
 public Point location;
 public List<chair>chairs=new ArrayList<chair>();
+public List<Order>failedOrders=new ArrayList<Order>();
 public boolean isOpen = true;
 public class chair{
 	public chair(int i, boolean b) {
@@ -161,6 +164,20 @@ public boolean pickAndExecuteAnAction() {
 				return true;
 			}
 		}
+		for(delivery d:deliverys){
+			if(d.deliveryState==state.free){
+				for (Order o:failedOrders){
+					for(Restaurant r:insideAnimationPanel.simCityGui.getRestaurants()){
+						if(r.cook==o.cook){
+							if(r.isOpen){
+							giveToDelivery(d,o);
+							return true;
+							}
+						}
+					}
+				}
+			}
+		}
 		for(delivery d: deliverys){
 			if(d.deliveryState==state.free){
 				for (MyCook MC:MyCooks){
@@ -199,6 +216,12 @@ private void giveToDelivery(delivery d,MyCook MC){
 	d.deliveryState=state.busy;
 	d.deliveryMan.msgTakeCustomer(MC.cook,this);
 	MyCooks.remove(MC);
+}
+
+private void giveToDelivery(delivery d,Order o){
+	d.deliveryState=state.busy;
+	d.deliveryMan.msgTryAgain(o,this);
+	failedOrders.remove(o);
 }
 
 private void clerkDone(clerk c){

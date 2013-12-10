@@ -371,10 +371,15 @@ public class EBHostRole extends Role implements Host {
 		waitingResponse.release();
 	}
 
-	@Override
 	public void msgCloseRestaurant() {
 		hostState=state.closed;
 		restaurantClosed=true;
+		stateChanged();
+	}
+
+	public void msgOpenRestaurant() {
+		hostState=state.none;
+		restaurantClosed=false;
 		stateChanged();
 	}
 	

@@ -3,6 +3,7 @@ package market.interfaces;
 import java.util.Map;
 
 import city.MarketAgent;
+import city.roles.DeliveryManRole.Order;
 import restaurant.interfaces.Cashier;
 import restaurant.interfaces.Cook;
 
@@ -22,5 +23,7 @@ public interface DeliveryMan {
 	public abstract void msgHereIsPayment(double payment, Cashier ca);
 
 	public abstract void msgDoneWithShift();
+
+	public abstract void msgTryAgain(Order o, MarketAgent marketAgent);
 
 }

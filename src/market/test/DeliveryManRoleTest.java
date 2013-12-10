@@ -66,7 +66,7 @@ public class DeliveryManRoleTest extends TestCase
 		 * Normal one customer coming into store.
 		 */
 		//pre-initializing checks
-		assertEquals("Delivey man cook customer should be null",deliveryMan.cook, null);
+		assertEquals("Delivey man cook customer should be null",deliveryMan.o.cook, null);
 		assertEquals("Delivery man order state should be no order",deliveryMan.o.s,orderState.noOrder);
 		
 		assertEquals(
@@ -83,7 +83,7 @@ public class DeliveryManRoleTest extends TestCase
 		//check post-conditions of message
 		assertTrue("Delivery Man should have logged \"Received msgTakeCustomer\". His log reads: " 
 				+ deliveryMan.log.getLastLoggedEvent().toString(), deliveryMan.log.containsString("Received msgTakeCustomer from Market."));
-		assertEquals("Delivery man cook customer should be equal to cook",deliveryMan.cook, cook);
+		assertEquals("Delivery man cook customer should be equal to cook",deliveryMan.o.cook, cook);
 		assertEquals("Delivery order state should be asked for order",deliveryMan.o.s,orderState.askedForOrder);
 		// run the Delivery man's scheduler
 		assertTrue("Delivery man's scheduler should have returned true (needs to react to ask cook for order).", 
@@ -119,7 +119,7 @@ public class DeliveryManRoleTest extends TestCase
 				deliveryMan.pickAndExecuteAnAction());
 		//check post-conditions of scheduler
 		assertEquals("Delivery order state should be done",deliveryMan.o.s,orderState.noOrder);
-		assertEquals("cook should be null",deliveryMan.cook,null);
+		assertEquals("cook should be null",deliveryMan.o.cook,null);
 		//run the clerk's scheduler
 		assertFalse("Delivery Man's scheduler should have returned false.", 
 				deliveryMan.pickAndExecuteAnAction());

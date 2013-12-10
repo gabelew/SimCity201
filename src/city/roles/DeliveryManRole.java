@@ -14,13 +14,11 @@ import java.util.concurrent.Semaphore;
 
 import market.gui.DeliveryManGui;
 import restaurant.interfaces.Cook;
-import market.interfaces.Clerk;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.DeliveryManDrivingGui;
 import city.gui.Gui;
-import city.roles.ClerkRole.AgentEvent;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.test.mock.EventLog;
@@ -36,7 +34,6 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public Restaurant restaurant;
 	private DeliveryManGui deliveryGui=new DeliveryManGui(this);
 	private DeliveryManDrivingGui drivingGui;
-	private String name;
 	public Order o;
 	Point location;
 	public class Order{
@@ -47,11 +44,11 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		public List<String> outOf= new ArrayList<String>();
 		public orderState s;
 		public double amountOwed;
+		public Cook cook;
 	}
 	Cashier cashier;
-	public Cook cook;
 	public MarketAgent Market;
-	public enum orderState{noOrder,askedForOrder,waitingForOrder,waiting,ordered,onMyWay,atRestaurant,givingBill,waitingForPayment,payed,backAtMarket,done};
+	public enum orderState{noOrder,closed,askedForOrder,waitingForOrder,waiting,ordered,onMyWay,atRestaurant,givingBill,waitingForPayment,payed,backAtMarket,done};
 	public enum AgentEvent{none,GoToWork,offWork};
 	AgentEvent event = AgentEvent.none;
 	public DeliveryManRole(PersonAgent p){
@@ -71,11 +68,27 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		stateChanged();	
 	}
 	public void msgTakeCustomer(Cook c,MarketAgent m){
-		cook=c;
+		o.cook=c;
 		Market=m;
 		o.s=orderState.askedForOrder;
 		stateChanged();
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
+	}
+	
+	public void msgTryAgain(Order order, MarketAgent marketAgent) {
+		for (Restaurant r: myPerson.simCityGui.getRestaurants()){
+			if(r.cook==o.cook){
+				if(r.isOpen){
+					Market=marketAgent;
+					o=order;
+					o.s=orderState.ordered;
+					stateChanged();
+				}
+				else{
+					o.s=orderState.closed;
+				}
+			}
+		}
 	}
 	
 	public void msgHereIsOrder(Map<String,Integer>choice){
@@ -117,12 +130,16 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 			leaveWork();
 			return true;
 		}
-		if(cook!=null&&o.s==orderState.askedForOrder){
+		if(o.cook!=null&&o.s==orderState.askedForOrder){
 			askForOrder();
 			return true;
 		}
 		if(o.s==orderState.waiting){
 			fillOrder();
+			return true;
+		}
+		if(o.s==orderState.closed){
+			dontDeliver();
 			return true;
 		}
 		if(o.s==orderState.ordered){
@@ -150,7 +167,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 
 	//actions
 	private void askForOrder(){
-		cook.msgCanIHelpYou((DeliveryMan) this,Market);
+		o.cook.msgCanIHelpYou((DeliveryMan) this,Market);
 		o.s=orderState.waitingForOrder;
 	}
 	
@@ -182,7 +199,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		}
 	    }
 	    if(!o.outOf.isEmpty())
-	    	cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
+	    	o.cook.msgIncompleteOrder((DeliveryMan)this,o.outOf);
 	    o.s=orderState.ordered;
 	}
 	
@@ -198,7 +215,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		if(notTesting){
 		drivingGui.setStartPos();
 		for (Restaurant r: myPerson.simCityGui.getRestaurants()){
-			if(r.cook==cook){
+			if(r.cook==o.cook){
 				drivingGui.setPresent(true);
 				drivingGui.DoGoDeliver(r.location);
 			}
@@ -208,13 +225,27 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	
 	private void atRestaurant(){
-		(cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
-		o.s=orderState.waitingForPayment;
+		for(Restaurant R: myPerson.simCityGui.getRestaurants()){
+			if(R.cook==o.cook){
+				if(R.isOpen){
+					(o.cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
+					o.s=orderState.waitingForPayment;
+				}
+				else{
+					Market.failedOrders.add(o);
+					o.s=orderState.payed;
+				}
+			}
+		}
+	}
+	private void dontDeliver(){
+		Market.failedOrders.add(o);
+		o.s=orderState.payed;
 	}
 	private void giveBill(){
 		o.s=orderState.givingBill;
 		for(Restaurant r:myPerson.simCityGui.getRestaurants()){
-			if(r.cook.equals(cook)){
+			if(r.cook.equals(o.cook)){
 				r.cashier.msgHereIsBill((DeliveryMan) this, o.amountOwed);
 			}
 		}
@@ -223,7 +254,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	private void orderDone(){
 		o.s=orderState.noOrder;
 		o.outOf.clear();
-		cook=null;
+		o.cook=null;
 		if(notTesting){
 			drivingGui.setPresent(true);
 			drivingGui.DoGoBack();
