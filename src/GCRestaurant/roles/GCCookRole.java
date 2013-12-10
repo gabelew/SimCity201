@@ -42,6 +42,7 @@ public class GCCookRole extends Role implements Cook
 	private final int MAXSUPPLY = 70;
 	private int marketCounter = 0;
 	public PersonAgent replacementPerson = null;
+	boolean restaurantClosed = false;
 	Restaurant restaurant;
 
 	public GCCookRole() {
@@ -331,6 +332,12 @@ public class GCCookRole extends Role implements Cook
 				return true;
 			}
 			
+			if(restaurantClosed)
+			{
+				state = CookState.leaving;
+				restaurantClosed = false;
+				return true;
+			}
 			if(state == CookState.makingMarketOrder && marketCounter < markets.size())
 			{
 				state = CookState.free;
@@ -452,6 +459,11 @@ public class GCCookRole extends Role implements Cook
 
 	public void setRestaurant(Restaurant r) {
 		this.restaurant = r;
+	}
+
+	public void msgRestaurantClosing() {
+		restaurantClosed = true;
+		stateChanged();
 	}
 
 }

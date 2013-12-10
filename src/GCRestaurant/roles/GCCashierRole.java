@@ -41,6 +41,7 @@ public class GCCashierRole extends Role implements Cashier
 	Restaurant restaurant;
 	PersonAgent replacementPerson = null;
 	public GCCashierGui cashierGui = null;
+	boolean restaurantClosed = false;
 	//constructor
 	public GCCashierRole() 
 	{
@@ -184,7 +185,12 @@ public class GCCashierRole extends Role implements Cashier
 				}
 				return true;
 			}
-			
+			if(restaurantClosed)
+			{
+				state = State.leaving;
+				restaurantClosed = false;
+				return true;
+			}
 			for(Check c : checks)
 			{
 				if(c.state == CheckState.calculated)
@@ -305,6 +311,11 @@ public class GCCashierRole extends Role implements Cashier
 	public void msgAnimationHasLeftRestaurant() {
 		waitingResponse.release();
 		state = State.releaveFromDuty;
+	}
+
+	public void msgRestaurantClosing() {
+		restaurantClosed = true;
+		stateChanged();
 	}
 
 }

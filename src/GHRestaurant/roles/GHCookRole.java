@@ -302,9 +302,21 @@ public class GHCookRole extends Role implements Cook {
 	}
 
 	@Override
-	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String, Integer> choices, double amount) {
-		// TODO Auto-generated method stub
+	public void msgHereIsOrderFromMarket(DeliveryMan Dm, Map<String, Integer> choices, double cost) {
+		for (MarketOrder order:marketOrders){
+			if(order.deliveryMan==Dm){
+				order.cost=cost;
+				order.marketState=marketOrderState.paying;
+			}
+		}
 		
+	    /*for(String s : choices.keySet()){
+	        if(Inventory.keySet().equals(s)){
+	        	Inventory.get(s).addFoodAmount(choices.get(s));
+	        }
+	    }*/
+		
+		choices.keySet();
 	}
 
 	@Override
@@ -343,6 +355,12 @@ public class GHCookRole extends Role implements Cook {
 
 	public void setRestaurant(Restaurant r) {
 		restaurant = r;
+	}
+
+	@Override
+	public void msgMarketClosed(MarketAgent market) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

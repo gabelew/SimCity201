@@ -42,7 +42,7 @@ public class GCCustomerRole extends Role implements Customer{
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
 	{DoingNothing, thinkingAboutLeaving,WaitingInRestaurant, WaitingToSeat, Seated, ReadyToOrder, Ordering, Ordered, 
-		Served, Eating, DoneEating, Paying, Leaving, ReorderFood, gotCheck};
+		Served, Eating, DoneEating, Paying, Leaving, ReorderFood, gotCheck, restaurantClosed};
 
 	public enum AgentEvent 
 	{none, gotHungry, followHost, seated, doneEating, doneLeaving};
@@ -134,6 +134,13 @@ public class GCCustomerRole extends Role implements Customer{
 		state = AgentState.thinkingAboutLeaving;
 		stateChanged();
 	}
+	
+	public void restaurantClosedMsg()
+	{
+		state = AgentState.restaurantClosed;
+		stateChanged();
+	}
+	
 /*********************************************
  * Actions
 ******************************************* */	
@@ -333,6 +340,16 @@ public class GCCustomerRole extends Role implements Customer{
 		}
 		stateChanged();
 	}
+	
+	public void restaurantClosedAction()
+	{
+		customerGui.DoExitRestaurant();
+		try {busy.acquire();} 
+		catch (InterruptedException e) { e.printStackTrace();}
+		state = AgentState.Leaving;
+		event = AgentEvent.doneLeaving;
+	}
+	
 	public void msgActionDone()
 	{
 		busy.release();
@@ -415,6 +432,11 @@ public class GCCustomerRole extends Role implements Customer{
 				PayingCheckAction();
 				return true;
 			}
+			if(state == AgentState.restaurantClosed)
+			{
+				restaurantClosedAction();
+				return true;
+			}
 			if(state == AgentState.Leaving && event == AgentEvent.doneLeaving)
 			{
 				state = AgentState.DoingNothing;
@@ -449,7 +471,18 @@ public class GCCustomerRole extends Role implements Customer{
 		customerGui.enterRestaurant();
 		try {busy.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
-		host.msgIWantToEat(this);//send our instance, so he can respond to us
+		if(restaurant.host == null)
+		{
+			customerGui.DoExitRestaurant();
+			try {busy.acquire();} 
+			catch (InterruptedException e) { e.printStackTrace();}
+			state = AgentState.Leaving;
+			event = AgentEvent.doneLeaving;
+		}
+		else
+		{
+			host.msgIWantToEat(this);
+		}
 	}
 
 	private void SitDown() {
