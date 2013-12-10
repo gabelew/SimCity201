@@ -176,7 +176,7 @@ public class GCCookRole extends Role implements Cook
 		//print(o.choice  + " " + o.food.amount);
 		if(state == CookState.free)
 		{
-			if(o.food.amount <= THRESHOLD)
+			if(o.food.amount <= THRESHOLD && marketOrders.size() == 0)
 			{
 				checkInventory();
 			}
