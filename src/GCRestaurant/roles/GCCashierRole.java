@@ -25,23 +25,28 @@ import GCRestaurant.gui.GCCashierGui;
 
 public class GCCashierRole extends Role implements Cashier
 {	
-	private String name;
-	private Map<String, Double> menuItems = new HashMap<String, Double>();
+	//Lists && Map
+	public Map<String, Double> menuItems = new HashMap<String, Double>();
 	public List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
 	public List<myCustomer> customers = Collections.synchronizedList(new ArrayList<myCustomer>());
 	public List<MarketBill> orders = Collections.synchronizedList(new ArrayList<MarketBill>());
+	//enum for states
 	private enum MarketBillState{none, unpaid, paid};
 	private enum CheckState{none, calculated, ReceivedPayment };
-	public double cash = 2000;
-	private DecimalFormat df = new DecimalFormat("#.##"); //formats all numbers to 2 decimal place
-	private Semaphore waitingResponse = new Semaphore(0,true);
-	
 	enum State {none, goToWork, working, leaving, releaveFromDuty};
 	State state = State.none;
+	//restaurant cash
+	public double cash = 2000;
+	//for formatting
+	private DecimalFormat df = new DecimalFormat("#.##"); //formats all numbers to 2 decimal place
+	//restaurant stuff
 	Restaurant restaurant;
 	PersonAgent replacementPerson = null;
-	public GCCashierGui cashierGui = null;
+	GCCashierGui cashierGui = null;
+	//animation and gui stuff
 	boolean restaurantClosed = false;
+	private Semaphore waitingResponse = new Semaphore(0,true);
+	
 	//constructor
 	public GCCashierRole() 
 	{
@@ -52,20 +57,23 @@ public class GCCashierRole extends Role implements Cashier
 		menuItems.put("Cookie", new Double(8.99) );
 		menuItems.put("Salad", new Double(5.99) );		
 	}
-
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
 	
 	public void setCash(double c)
 	{
 		this.cash = c;
 	}
 	
+	public Gui getGui() {
+		return (Gui) cashierGui;
+	}
+
+	public void setRestaurant(Restaurant r) {
+		this.restaurant = r;
+	}
+
+	public void setGui(Gui GuiFactory) {
+		cashierGui = (GCCashierGui) GuiFactory;
+	}
 	/**************************************************
 	* Messages
 	**************************************************/
@@ -122,6 +130,18 @@ public class GCCashierRole extends Role implements Cashier
 		replacementPerson = p;
 		state = State.leaving;
 		this.stateChanged();
+	}
+	
+	public void msgRestaurantClosing() 
+	{
+		restaurantClosed = true;
+		stateChanged();
+	}
+	
+	public void msgAnimationHasLeftRestaurant() 
+	{
+		waitingResponse.release();
+		state = State.releaveFromDuty;
 	}
 	/****************************************************
 	 * Actions
@@ -288,35 +308,14 @@ public class GCCashierRole extends Role implements Cashier
 	
 	}
 
-	@Override
+	/****************************************************
+	 * Animation Functions
+	 ***************************************************/
 	public void goesToWork() 
 	{
 		state = State.goToWork;
 		stateChanged();
 	}
-
-
-	public Gui getGui() {
-		return (Gui) cashierGui;
-	}
-
-	public void setRestaurant(Restaurant r) {
-		this.restaurant = r;
-	}
-
-	public void setGui(Gui GuiFactory) {
-		cashierGui = (GCCashierGui) GuiFactory;
-	}
-
-	public void msgAnimationHasLeftRestaurant() {
-		waitingResponse.release();
-		state = State.releaveFromDuty;
-	}
-
-	public void msgRestaurantClosing() {
-		restaurantClosed = true;
-		stateChanged();
-	}
-
+	
 }
 

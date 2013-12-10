@@ -25,6 +25,7 @@ public class GCCustomerGui implements Gui{
 	private int xDestination, yDestination;
 	private enum Command {noCommand, EnterRestaurant, GoToSeat, LeaveRestaurant, GoToCashier, GoToWaitingArea};
 	private enum FoodState{none, ordered, served};
+	private boolean sitting = false;
 	private FoodState foodState = FoodState.none;
 	private Command command=Command.noCommand;
 	
@@ -33,7 +34,7 @@ public class GCCustomerGui implements Gui{
 	private final int CUST_SIZE = 20;
 	private final int TABLE_SPACING = 100;
 	private int xTable = 100;
-	private final int yTable = 175;
+	private final int yTable = 183;
 	private String choice;
 	private int cashierPosX = 110, cashierPosY = 93;
 	private BufferedImage customerImg;
@@ -93,22 +94,21 @@ public class GCCustomerGui implements Gui{
                         yPos--;
 	        }
 		}
-		if (xPos == xDestination && yPos == yDestination && ((command==Command.GoToSeat) ||(command==Command.LeaveRestaurant) )) 
-		{
-			if (command==Command.GoToSeat)
-			{
-				command=Command.noCommand;
-				role.msgAnimationFinishedGoToSeat();
-			}
-			else if (command==Command.LeaveRestaurant) {
-				role.msgActionDone();
-				command=Command.noCommand;
-				role.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("about to call gui.setCustomerEnabled(agent);");
-				isHungry = false;
-			}
-			
+		if (xPos == xDestination && yPos == yDestination && command == Command.GoToSeat) 
+		{			
+			command=Command.noCommand;
+			sitting = true;
+			role.msgAnimationFinishedGoToSeat();
 		}
+		if (xPos == xDestination && yPos == yDestination && command == Command.LeaveRestaurant) 
+		{
+			role.msgActionDone();
+			command=Command.noCommand;
+			role.msgAnimationFinishedLeaveRestaurant();
+			System.out.println("about to call gui.setCustomerEnabled(agent);");
+			isHungry = false;
+		}
+			
 		if (xPos == xDestination && yPos == yDestination && command == Command.GoToCashier) 
 		{
 			command = Command.noCommand;
@@ -121,8 +121,11 @@ public class GCCustomerGui implements Gui{
 		}
 	}
 
-	public void draw(Graphics2D g) {
-		g.drawImage(customerImg, xPos, yPos, null);
+	public void draw(Graphics2D g) 
+	{
+		if(sitting){ g.drawImage(customerSittingImg, xPos, yPos, null);}
+		else{ g.drawImage(customerImg, xPos, yPos, null); }
+		
 		try
 		{
 		switch(foodState)
@@ -188,6 +191,7 @@ public class GCCustomerGui implements Gui{
 		command = Command.GoToCashier;
 		xDestination = cashierPosX;
 		yDestination = cashierPosY;
+		sitting = false;
 	}
 	//seatnumber determines table destination
 	public void DoGoToSeat(int seatnumber) 
@@ -199,8 +203,8 @@ public class GCCustomerGui implements Gui{
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = -60;//DEFAULT_POS;
-		yDestination = -60;
+		xDestination = DEFAULT_POS;
+		yDestination = DEFAULT_POS;
 		command = Command.LeaveRestaurant;
 	}
 }

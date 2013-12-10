@@ -3,6 +3,8 @@ package GCRestaurant.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import GCRestaurant.roles.GCWaiterRole;
+import restaurant.interfaces.Waiter;
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 public class GCAnimationPanel extends InsideAnimationPanel implements ActionListener {
 
 	private final int N_TABLES = 4;
-    private final int TABLEX_START = 100;
+    private final int TABLEX_START = 70;
     private final int TABLEY_START = 175;
     private final int xHostStand = 70;
     private final int yHostStand = 20;
@@ -46,6 +48,7 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     private BufferedImage orderingStandImg;
     private Dimension bufferSize;
 
+    private List<Waiter> waiters = new ArrayList<Waiter>();//list for waiter home positions
     private List<Gui> guis = new ArrayList<Gui>();
     SimCityGui gui;
     
@@ -71,6 +74,11 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     	catch(Exception e){}
     }
 
+    public void addGui(Gui g)
+    {
+    	guis.add(g);
+    }
+    
 	public void actionPerformed(ActionEvent e) {
 		if(insideBuildingPanel != null && insideBuildingPanel.isVisible)
 			repaint();
@@ -89,7 +97,7 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         {
         	g2.drawImage(platingTableImg, xPlatingTable+ (i*platingTableDist), yPlatingTable, null);
         }
-        //draws rovolving orderstands
+        //draws orderstands
         g2.drawImage(orderingStandImg, xCookOrderingStand, yCookOrderingStand, null);
         g2.drawImage(orderingStandImg, xWaitOrderingStand, yWaitOrderingStand,null);
         //draws fridge
@@ -105,26 +113,41 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
         {
         	g2.drawImage(tableImg, TABLEX_START+ (i*TABLE_SPACING), TABLEY_START, null);
         }
-        synchronized(guis)
+        try
         {
 	        for(Gui gui : guis) {
 	            if (gui.isPresent()) {
 	                gui.updatePosition();
 	            }
 	        }
-        }
-        synchronized(guis)
-        {
+        
+        
 	        for(Gui gui : guis) {
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
 	            }
 	        }
         }
+        catch(ConcurrentModificationException e) {}
     }
 
-    public void addGui(Gui g)
+    /**
+     * START
+     * Functions to set waiterGui home positions
+     */
+    public int choosingWaiterHomePos(GCWaiterRole w)
     {
-    	guis.add(g);
+    	return waiters.indexOf(w);
     }
+	public void addWaiter(Waiter w) {
+		waiters.add(w);
+	}
+	public void removeWaiter(Waiter w)
+	{
+		waiters.remove(w);
+	}
+	/**
+	 * END
+     * Functions to set waiterGui home positions
+     */
 }

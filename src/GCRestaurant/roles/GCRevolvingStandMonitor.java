@@ -14,10 +14,13 @@ public class GCRevolvingStandMonitor
 	private List<GCOrder> orders = new ArrayList<GCOrder>();
 	
 	
-	public GCRevolvingStandMonitor() {
+	//Default Constructor
+	public GCRevolvingStandMonitor() 
+	{
 		
 	}
 	
+	//attempts to add order onto stand
 	synchronized public void insert(GCOrder order) {
 		while (isFull()) 
 		{
@@ -38,6 +41,7 @@ public class GCRevolvingStandMonitor
 		}
 	}
 	
+	//removes order from stand
 	synchronized public GCOrder remove() {
 		GCOrder order;
 		while(isEmpty()) 
@@ -60,10 +64,12 @@ public class GCRevolvingStandMonitor
 		return order;
 	}
 	
+	//queues order for cook
 	private void insertOrder(GCOrder order) {
 		orders.add(order);
 	}
 	
+	//cook receives order, takes off list
 	private GCOrder removeOrder() 
 	{
 		if(!isEmpty())
@@ -75,15 +81,27 @@ public class GCRevolvingStandMonitor
 		return null;
 	}
 	
-	public int getCount() {
+	/**
+	 * START
+	 * getter functions
+	 */
+	public int getCount() 
+	{
 		return count;
 	}
 	
-	public boolean isFull(){
+	public boolean isFull()
+	{
 		return count == N_MAX_COUNT;
 	}
 	
-	public boolean isEmpty(){
+	public boolean isEmpty()
+	{
 		return count == 0;
 	}
+	
+	/**
+	 * END
+	 * getter functions
+	 */
 }

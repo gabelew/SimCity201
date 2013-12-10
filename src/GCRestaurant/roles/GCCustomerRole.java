@@ -25,7 +25,10 @@ import city.roles.Role;
 /**
  * Restaurant customer agent.
  */
-public class GCCustomerRole extends Role implements Customer{
+public class GCCustomerRole extends Role implements Customer
+{
+	
+	//animation variables
 	final int TIMERCONST = 1000;
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber;
@@ -33,31 +36,30 @@ public class GCCustomerRole extends Role implements Customer{
 	private GCCustomerGui customerGui;
 	private Semaphore busy = new Semaphore(0,true);
 	private Semaphore atCashier = new Semaphore(0,true);
+	
 	// agent correspondents
 	private Host host;
 	private Waiter waiter;
 	private Cashier cashier;
 	private Restaurant restaurant;
 
-	//    private boolean isHungry = false; //hack for gui
+	//enums
 	public enum AgentState
 	{DoingNothing, thinkingAboutLeaving,WaitingInRestaurant, WaitingToSeat, Seated, ReadyToOrder, Ordering, Ordered, 
 		Served, Eating, DoneEating, Paying, Leaving, ReorderFood, gotCheck, restaurantClosed};
-
-	public enum AgentEvent 
-	{none, gotHungry, followHost, seated, doneEating, doneLeaving};
+	public enum AgentEvent {none, gotHungry, followHost, seated, doneEating, doneLeaving};
+	AgentEvent event = AgentEvent.none;
+	AgentState state = AgentState.DoingNothing;
 	
+	//variables for ordering && paying
 	private String choice_;
-	
 	private Menu menu = null;
 	private List<String> badChoices = new ArrayList<String>();
 	private Check check;
 	
-	//default states
-	AgentEvent event = AgentEvent.none;
-	public AgentState state = AgentState.DoingNothing;//The start state
-	
-	public GCCustomerRole(PersonAgent p, Restaurant r){
+	//default constructor
+	public GCCustomerRole(PersonAgent p, Restaurant r)
+	{
 		super(p);
 		this.host = r.host;
 		this.cashier = r.cashier;
@@ -77,6 +79,30 @@ public class GCCustomerRole extends Role implements Customer{
 	public void setCashier(GCCashierRole c) {
 		this.cashier = c;
 	}
+	// Accessors, etc.
+		public void setTableNumber(int tn)
+		{
+			tableNumber = tn;
+		}
+		public int getHungerLevel() {
+			return hungerLevel;
+		}
+
+		public void setHungerLevel(int hungerLevel) {
+			this.hungerLevel = hungerLevel;
+		}
+
+		public String toString() {
+			return "customer " + getName();
+		}
+
+		public Gui getGui() {
+			return (Gui) customerGui;
+		}
+
+		public void setGui(Gui GuiFactory) {
+			customerGui = (GCCustomerGui) GuiFactory;
+		}
 /**************************************************
 * Messages
 **************************************************/
@@ -491,29 +517,5 @@ public class GCCustomerRole extends Role implements Customer{
 		stateChanged();
 	}
 
-	// Accessors, etc.
-	public void setTableNumber(int tn)
-	{
-		tableNumber = tn;
-	}
-	public int getHungerLevel() {
-		return hungerLevel;
-	}
-
-	public void setHungerLevel(int hungerLevel) {
-		this.hungerLevel = hungerLevel;
-	}
-
-	public String toString() {
-		return "customer " + getName();
-	}
-
-	public Gui getGui() {
-		return (Gui) customerGui;
-	}
-
-	public void setGui(Gui GuiFactory) {
-		customerGui = (GCCustomerGui) GuiFactory;
-	}
 }
 

@@ -968,7 +968,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GCWaiterRole");
-			return new GCSharedWaiterRole(p,r);
+			if(p.getName().toLowerCase().contains("shared")){
+				return new GCSharedWaiterRole(p, r);
+			}else{
+				return new GCNormalWaiterRole(p, r);
+			}
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
 			if(p.getName().toLowerCase().contains("shared")){
 				return new GLSharedWaiterRole(p, r);

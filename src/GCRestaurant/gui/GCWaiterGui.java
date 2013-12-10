@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 
 import restaurant.interfaces.Customer;
+import restaurant.interfaces.Waiter;
 import city.gui.Gui;
 import GCRestaurant.gui.GCCashierGui.Command;
 import GCRestaurant.roles.GCCustomerRole;
@@ -30,7 +31,7 @@ public class GCWaiterGui implements Gui {
     private int DEFAULT_POSX = 20;
     private int xPos = DEFAULT_POSX, yPos = DEFAULT_POSY;//default waiter position
     private int xDestination = DEFAULT_POSX, yDestination = DEFAULT_POSY;//default start position
-    private int personSize = 20;
+    private int personSize = 30;
     private int cookPosX = 200, cookPosY = 80;
     private int cashierPosX = 97, cashierPosY = 88;
     private int customerPos = 40;
@@ -56,12 +57,13 @@ public class GCWaiterGui implements Gui {
         yPos = startPos;
         xDestination = startPos;
         yDestination = startPos;
-        
-        //random position in restaurant for home
-        int homePos = (new Random()).nextInt(3);
-        this.DEFAULT_POSY += homePos*personSize;
     }
     
+    public void setHomePosition()
+    {
+        int homePos = ((GCAnimationPanel)role.restaurant.insideAnimationPanel).choosingWaiterHomePos(role);//(new Random()).nextInt(3);
+        this.DEFAULT_POSY += homePos*personSize;
+    }
     
     public void updatePosition() {
     	

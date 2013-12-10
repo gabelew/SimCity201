@@ -46,5 +46,6 @@ public class GCSharedWaiterRole extends GCWaiterRole
 		}
 		stateChanged();
 	}
+
 	
 }

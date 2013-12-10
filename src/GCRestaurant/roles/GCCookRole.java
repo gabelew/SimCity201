@@ -1,13 +1,11 @@
 package GCRestaurant.roles;
 
 import restaurant.Restaurant;
-import restaurant.RoleOrder;
 import GCRestaurant.gui.GCCookGui;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
-import restaurant.test.mock.LoggedEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -165,11 +163,34 @@ public class GCCookRole extends Role implements Cook
 		state = CookState.leaving;
 		this.stateChanged();
 	}
-
-	public void goesToWork() {
-		state = CookState.goToWork;
+	public void msgRestaurantClosing() {
+		restaurantClosed = true;
 		stateChanged();
 	}
+
+	public void msgMarketClosed(MarketAgent market) {
+		markets.remove(market);
+		
+	}
+
+	/****************************************************
+	 * Animation functions
+	 ***************************************************/
+		public void goesToWork() 
+		{
+			state = CookState.goToWork;
+			stateChanged();
+		}
+		//release semaphore when action is done
+		public void msgActionDone() {
+			busy.release();
+		}
+		//release semaphore for shift change
+		public void doneWithShift()
+		{
+			busy.release();
+			state = CookState.relieveFromDuty;
+		}
 	/****************************************************
 	 * Actions
 	 ***************************************************/
@@ -412,16 +433,7 @@ public class GCCookRole extends Role implements Cook
 		}
 	}
 	
-	//release semaphore when action is done
-	public void msgActionDone() {
-		busy.release();
-	}
-	//release semaphore for shift change
-	public void doneWithShift()
-	{
-		busy.release();
-		state = CookState.relieveFromDuty;
-	}
+	
 	
 	//Utility classes
 	public class Food
@@ -466,16 +478,6 @@ public class GCCookRole extends Role implements Cook
 
 	public void setRestaurant(Restaurant r) {
 		this.restaurant = r;
-	}
-
-	public void msgRestaurantClosing() {
-		restaurantClosed = true;
-		stateChanged();
-	}
-
-	public void msgMarketClosed(MarketAgent market) {
-		markets.remove(market);
-		
 	}
 
 	public void setRevolvingStand(GCRevolvingStandMonitor r) {

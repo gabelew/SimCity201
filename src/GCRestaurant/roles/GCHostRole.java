@@ -5,7 +5,6 @@ import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Host;
 import restaurant.interfaces.Waiter;
-
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
@@ -20,43 +19,54 @@ import city.roles.Role;
 public class GCHostRole extends Role implements Host 
 {
 	static final int NTABLES = 4;
-
+	//lists 
+	public List<myWaiter> waiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	public List<Customer> waitingCustomers = Collections.synchronizedList(new ArrayList<Customer>());
 	public Collection<Table> tableList;
-	private Semaphore waitingResponse = new Semaphore(0,true);
-	public Restaurant restaurant;
-	PersonAgent replacementPerson = null;
-	public GCHostGui hostGui = null;
-	public List<myWaiter> waiters = Collections.synchronizedList(new ArrayList<myWaiter>());
+	//enums
 	private enum WaiterState{askedForBreak, onBreak, Working, deniedBreak};
 	enum State {none, goToWork, working, leaving, releaveFromDuty, aboutToClose, closing};
 	State state = State.none;
+	//backend animation
+	public Restaurant restaurant;
+	PersonAgent replacementPerson = null;
+	public GCHostGui hostGui = null;
+	//animation variables
+	private Semaphore waitingResponse = new Semaphore(0,true);
 	boolean restaurantClosed = false;
 
+	//default constructor
 	public GCHostRole() 
 	{
 		super();
-		// make some tables
 		tableList = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tableList.add(new Table(ix));//how you add to a collections
 		}
 	}
 
-	public Gui getGui() {
+	public Gui getGui() 
+	{
 		return (Gui) hostGui;
 	}
-
-	public void setRestaurant(Restaurant r) {
+	public void setRestaurant(Restaurant r) 
+	{
 		this.restaurant = r;
 	}
-	public List getWaitingCustomers() {
+	public List getWaitingCustomers() 
+	{
 		return waitingCustomers;
 	}
 
-	public Collection getTables() {
+	public Collection getTables() 
+	{
 		return tableList;
 	}
+	public void setGui(Gui GuiFactory) 
+	{
+		hostGui = (GCHostGui) GuiFactory;	
+	}
+
 
 	/**************************************************
 	 * Messages
@@ -120,7 +130,10 @@ public class GCHostRole extends Role implements Host
 				if(onListWaiter.w == w){addWaiter = false;}
 			}
 		myWaiter newWaiter = new myWaiter(w);
-		if(addWaiter){waiters.add(newWaiter);}
+		if(addWaiter)
+		{
+			waiters.add(newWaiter);
+		}
 	}
 	
 	public void msgReleaveFromDuty(PersonAgent p) 
@@ -142,7 +155,25 @@ public class GCHostRole extends Role implements Host
 		}
 		//((GCRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((CMWaiterRole) waiter).getName());
 	}
-	
+	public void msgAnimationHasLeftRestaurant() 
+	{
+		state = State.releaveFromDuty;
+		waitingResponse.release();
+	}
+
+	public void msgCloseRestaurant() 
+	{
+		restaurantClosed = true;
+		state = State.aboutToClose;
+		stateChanged();
+	}
+
+	public void msgOpenRestaurant() 
+	{
+		restaurantClosed = false;
+		state = State.none;
+		stateChanged();
+	}
 	/****************************************************
 	 * Actions
 	 ***************************************************/
@@ -386,31 +417,6 @@ public class GCHostRole extends Role implements Host
 		state = State.goToWork;
 		this.stateChanged();
 	}
-
-	public void setGui(Gui GuiFactory) {
-		hostGui = (GCHostGui) GuiFactory;
-		
-	}
-
-	public void msgAnimationHasLeftRestaurant() {
-		state = State.releaveFromDuty;
-		waitingResponse.release();
-	}
-
-	@Override
-	public void msgCloseRestaurant() {
-		restaurantClosed = true;
-		state = State.aboutToClose;
-		stateChanged();
-	}
-
-	@Override
-	public void msgOpenRestaurant() {
-		restaurantClosed = false;
-		state = state.none;
-		stateChanged();
-	}
-
 	
 }
 

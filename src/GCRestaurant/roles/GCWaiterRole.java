@@ -1,5 +1,6 @@
 package GCRestaurant.roles;
 
+import GCRestaurant.gui.GCAnimationPanel;
 import GCRestaurant.gui.GCWaiterGui;
 import GCRestaurant.roles.GCCashierRole.Check;
 import GCRestaurant.roles.GCHostRole.Table;
@@ -42,7 +43,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 	boolean checkStand = false;
 	
 	//gui
-	Restaurant restaurant;
+	public Restaurant restaurant;
 	GCWaiterGui waiterGui = null;
 	//link to other agents
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
@@ -84,6 +85,18 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 
 	public Collection getTables() {
 		return tables;
+	}
+	public void setGui(Gui waiterGuiFactory) 
+	{
+		waiterGui = (GCWaiterGui) waiterGuiFactory;
+	}
+	public Gui getGui() 
+	{
+		return (Gui) waiterGui;
+	}
+	public Restaurant getRestaurant() 
+	{
+		return restaurant;
 	}
 	
 /*********************************************
@@ -201,11 +214,18 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 			}
 		}
 	}
-
-	public void msgAnimationDone() {//from animation
-		//print("msgAtTable() called");
-		busy.release();// = true;
+	
+	// (9) Restaurant closes, leave once finished tasks
+	public void msgRestaurantClosing() 
+	{
+		restaurantClosed = true;
 		stateChanged();
+	}
+
+	//Empty Function, inherited, not needed in this implementation
+	public void msgLeftTheRestaurant()
+	{
+		
 	}
 /*********************************************
  * Actions
@@ -241,20 +261,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		}
 	// (3) gives order to cook
 		protected abstract void HereIsOrderCookAction(MyCustomer c);
-		
-		/*{
-			print("giving order to cook");
-			
-			//animation details
-			waiterGui.goToCook();
-			try {busy.acquire();} 
-			catch (InterruptedException e) { e.printStackTrace();}
-			
-			//sends msg to cook
-			((GCCookRole)cook).HereIsOrderMsg(this, c.c, c.table, c.choice);
-			stateChanged();
-		}*/
-
+	
 	// (4) Gives food to customer
 		public void HereIsFoodAction(MyCustomer c)
 		{
@@ -320,6 +327,8 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		}
 		
 		private void tellHostImHere() {
+			((GCAnimationPanel)restaurant.insideAnimationPanel).addWaiter(this);
+			waiterGui.setHomePosition();
 			waiterGui.enterRestaurant();
 			restaurant.host.msgReadyToWork(this);
 		}
@@ -327,6 +336,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		private void shiftOver() 
 		{
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+			((GCAnimationPanel)restaurant.insideAnimationPanel).removeWaiter(this);
 			waiterGui.DoLeaveRestaurant();
 			restaurant.host.msgDoneWorking(this);
 			try {busy.acquire();} 
@@ -335,6 +345,10 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 /*********************************************
  * Animation Functions
 ******************************************* */
+		public void goesToWork() {
+			event = WaiterEvent.gotToWork;
+			stateChanged();
+		}
 		private void seatCustomerAnimation(Customer c, int tableNumber)
 		{
 			waiterGui.DoBringToTable(c, tableNumber);
@@ -347,6 +361,11 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		public void msgDoneWorkingLeave() {
 			busy.release();
 			event = WaiterEvent.relieveFromDuty;
+		}
+		public void msgAnimationDone() 
+		{
+			busy.release();// = true;
+			stateChanged();
 		}
 /*********************************************
  * Scheduler.  Determine what action is called for, and do it.
@@ -490,6 +509,9 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		}
 	}
 
+	/*********************************************
+	 * INNER CLASSES
+	******************************************* */
 	public class MyCustomer 
 	{
 		public Customer c;
@@ -507,37 +529,6 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		}
 		
 	}
-
-	public void msgLeftTheRestaurant() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Restaurant getRestaurant() {
-		return restaurant;
-	}
-
-	/*
-	 * Animation functions to go to work
-	 */
-	public void goesToWork() {
-		event = WaiterEvent.gotToWork;
-		stateChanged();
-	}
-
-	public void setGui(Gui waiterGuiFactory) {
-		waiterGui = (GCWaiterGui) waiterGuiFactory;
-	}
-
-	public Gui getGui() {
-		return (Gui) waiterGui;
-	}
-
-	public void msgRestaurantClosing() 
-	{
-		restaurantClosed = true;
-		stateChanged();
-	}
-		
+	
 }
 
