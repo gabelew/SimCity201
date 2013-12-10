@@ -467,5 +467,12 @@ public class GLCookRole extends Role implements Cook{
 		return revolvingStand;
 	}
 
+	@Override
+	public void msgMarketClosed(MarketAgent market) {
+		changeMarket();
+		orderFoodFromMarket();
+		stateChanged();
+	}
+
 }
 
