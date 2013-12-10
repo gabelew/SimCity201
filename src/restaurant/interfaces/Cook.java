@@ -39,4 +39,6 @@ public interface Cook {
 	public abstract void goesToWork();
 	
 	public abstract void addMarket(MarketAgent m);
+
+	public abstract void msgMarketClosed(MarketAgent market);
 }

@@ -55,7 +55,7 @@ public class EBCookRole extends Role implements Cook {
 		states marketState;
 		double amountOwed;
 	}
-	public enum states{waiting,ordering,ordered,payed,received};
+	public enum states{waiting,ordering,ordered,payed,received,retry};
 
 	HashMap<String,Integer>Inventory=new HashMap<String,Integer>();
 	HashMap<String,Integer> hm=new HashMap<String,Integer>();
@@ -124,6 +124,15 @@ public class EBCookRole extends Role implements Cook {
 		putOrder=false;
 		stateChanged();
 	}
+	
+	public void msgMarketClosed(MarketAgent market) {
+			for(marketOrder order:marketOrders){
+				if(order.market==market){
+					order.marketState=states.retry;
+					stateChanged();
+				}
+			}
+	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -189,6 +198,11 @@ public class EBCookRole extends Role implements Cook {
 			}
 		}
 		for(marketOrder m:marketOrders){
+			if(m.marketState==states.retry){
+				m.marketState=states.waiting;
+				orderIt(m.order,numMarket);
+				marketOrders.remove(m);
+			}
 			if(m.marketState==states.received){
 				giveInvoice(m);
 			}
@@ -214,10 +228,6 @@ public class EBCookRole extends Role implements Cook {
 						putOrder=true;
 						orderIt(marketorder,numMarket);
 						return true;
-					}
-					numMarket++;
-					if (numMarket>=markets.size()){
-						numMarket=0;
 					}
 				}
 			}
@@ -281,6 +291,12 @@ public class EBCookRole extends Role implements Cook {
 	}
 	
 	private void orderIt(HashMap<String,Integer>orders, int numMarket){
+		for(market m:markets){
+			if(m.market.isOpen){
+				numMarket=markets.indexOf(m);
+				break;
+			}
+		}
 		marketOrders.add(new marketOrder(orders,states.waiting,markets.get(numMarket).market));
 		markets.get(numMarket).market.msgPlaceDeliveryOrder(this);
 	}

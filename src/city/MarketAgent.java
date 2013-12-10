@@ -116,6 +116,9 @@ public void msgPlaceDeliveryOrder(Cook cook){
 			}
 		log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
 	}
+	else{
+		cook.msgMarketClosed(this);
+	}
 }
 
 public void msgClerkDone(Clerk c){
@@ -158,11 +161,8 @@ public void msgDeliveryDone(DeliveryMan D){
 //scheduler
 public boolean pickAndExecuteAnAction() {
 	if(!isOpen){
-		print("hhh");
 		for(clerk c:clerks){
-			print("aaa");
 			if(MyCustomers.size()==0&&c.clerkState==state.free){
-				print("bbb");
 				tellClerkToLeave(c);
 				return true;
 			}
