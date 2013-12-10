@@ -57,7 +57,7 @@ public class GHCustomerRole extends Role implements Customer{
 		super(p);
 		//this.name = name;
 		this.restaurant = r;
-		
+		myPerson = p;
 		money = 50;
 	}
 
@@ -233,7 +233,7 @@ public class GHCustomerRole extends Role implements Customer{
 		
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
-			//no action 
+			LeaveRestaurant();
 			return true;
 		}
 				
@@ -294,6 +294,11 @@ public class GHCustomerRole extends Role implements Customer{
 		print("Going to pay bill");
 		((GHCashierRole) restaurant.cashier).msgCustomerPaying(this,check.choice,check.cost,tableNumber);
 		customerGui.DoExitRestaurant();
+	}
+	
+	private void LeaveRestaurant() {
+		print("Leaving Restaurant");
+		myPerson.msgDoneEatingAtRestaurant();
 	}
 
 	// Accessors, etc.
