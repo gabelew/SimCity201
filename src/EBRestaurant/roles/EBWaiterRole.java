@@ -13,6 +13,7 @@ import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
+import restaurant.test.mock.EventLog;
 
 /**
  * Restaurant Waiter Agent
@@ -23,21 +24,20 @@ import restaurant.interfaces.*;
 //is proceeded as he wishes.
 public abstract class EBWaiterRole extends Role implements Waiter {
 	static final int NTABLES = 3;//a global for the number of tables.
-	//Notice that we implement waitingCustomers using ArrayList, but type it
-	//with List semantics.
 	public Restaurant restaurant;
+	public EventLog log = new EventLog();
 	private boolean restaurantClosed=false;
 	protected EBRevolvingStandMonitor revolvingStand;
 	public boolean checked=false;
 	public boolean testingMonitor=false;
 	Timer timer=new Timer();
 	protected EBWaiterGui waiterGui;
-	List<MyCustomer>Customers=new ArrayList<MyCustomer>();
+	public List<MyCustomer>Customers=new ArrayList<MyCustomer>();
 	public class MyCustomer{
 		Customer C;
 		int tableNumber;
-		String choice;
-		customerState S;
+		public String choice;
+		public customerState S;
 		float amountOwed;
 		boolean check;
 		boolean billReady;
@@ -95,7 +95,9 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			{
 				C.S=customerState.done;
 				stateChanged();
+				if(!testingMonitor){
 				waiterGui.setChoice("", C.tableNumber);
+				}
 			}
 		}
 	}
@@ -107,7 +109,9 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			{
 				c.S=customerState.ordered;
 				c.choice=choice;
+				if(!testingMonitor){
 				waiterGui.setChoice(c.choice+"?", c.tableNumber);
+				}
 				stateChanged();
 			}
 		}
@@ -292,7 +296,8 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			if (requestBreak){
 				askForBreak();
 			}
-		waiterGui.DoLeaveCustomer();
+			if(!testingMonitor)
+				waiterGui.DoLeaveCustomer();
 		return false;
 		}
 		catch(ConcurrentModificationException e){
@@ -335,15 +340,17 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	}
 	
 	private void seatCustomer(MyCustomer mc) {
+		mc.S=customerState.seated;
 		((EBCustomerRole) mc.C).msgFollowMe(this, mc.tableNumber);
+		if(!testingMonitor){
 		waiterGui.DoBringToTable(mc.C, mc.tableNumber);
 		try {
 			atTable.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		mc.S=customerState.seated;
 		waiterGui.DoLeaveCustomer();
+		}
 	}
 
 	public void wantBreak(){
@@ -354,19 +361,23 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 		((EBHostRole) host).msgBackFromBreak(this);
 	}
 	private void goTakeOrder(MyCustomer mc){
+		if(!testingMonitor){
 		waiterGui.DoBringToTable(mc.C, mc.tableNumber);
 		try {
 			atTable.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		}
 		((EBCustomerRole) mc.C).msgWhatDoYouWant();
 		mc.S=customerState.asked;
+		if(!testingMonitor){
 		waiterGui.DoGoToCook();
 		try {
 			atCook.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
 		}
 	}
 	
@@ -425,9 +436,11 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	}
 	
 	private void tellHostCustomerLeft(MyCustomer mc){
+		if(!testingMonitor){
 		((EBHostRole) restaurant.host).msgTableEmpty(mc.tableNumber);
 		waiterGui.setChoice("", mc.tableNumber);
 		waiterGui.DoLeaveCustomer();
+		}
 		Customers.remove(mc);
 	}
 	

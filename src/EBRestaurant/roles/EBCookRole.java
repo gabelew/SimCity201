@@ -24,6 +24,7 @@ import restaurant.interfaces.*;
 //is proceeded as he wishes.
 public class EBCookRole extends Role implements Cook {
 	public Restaurant restaurant;
+	public boolean testingMonitor=false;
 	PersonAgent replacementPerson = null;
 	private boolean restaurantClosed=false;
 	private String name;
@@ -241,13 +242,14 @@ public class EBCookRole extends Role implements Cook {
 	}
 
 	// Actions
-	private void checkRevolving() {
+	public void checkRevolving() {
 		while(!revolvingStand.isEmpty()) {
 			//AlertLog.getInstance().logMessage(AlertTag.REST_COOK,this.getName(), "Got order form revolving stand");
 			Order order = revolvingStand.remove();
 			if(order != null) {
 				Orders.add(order);
-				AlertLog.getInstance().logMessage(AlertTag.REST_COOK,this.getName(), "Got order form revolving stand");
+				if(!testingMonitor)
+					AlertLog.getInstance().logMessage(AlertTag.REST_COOK,this.getName(), "Got order form revolving stand");
 			}
 			
 		}
