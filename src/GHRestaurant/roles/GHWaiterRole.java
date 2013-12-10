@@ -105,7 +105,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	  }
 	  
 	 public void msgHereIsMyOrder(Customer c, String choice){
-		 print("Customer ordered");
+		 print("Customer ordered" + choice);
 		 for(MyCustomer mycust : waitingCustomers){
 				if(mycust.customer == c){
 					mycust.cs = CustomerState.Ordered;

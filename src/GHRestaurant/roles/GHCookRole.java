@@ -48,10 +48,8 @@ public class GHCookRole extends Role implements Cook {
 		Inventory.put("salad", new Food("salad",amount));
 		Inventory.put("pizza", new Food("pizza",7000));	
 		
-		/*Inventory.get("Steak").setAmount(10);
-		Inventory.get("Chicken").setAmount(10);
-		Inventory.get("Salad").setAmount(10);
-		Inventory.get("Pizza").setAmount(10);*/
+		Inventory.get("salad").setAmount(amount);
+
 
 	}
 
@@ -166,9 +164,7 @@ public class GHCookRole extends Role implements Cook {
 			orders.remove(o);
 			((GHWaiterRole) temp.waiter).msgOutOfOrder(temp.tablenumber, temp.choice);
 		}
-		else{
-
-			
+		else{			
 		DoCookIt(o);
 		try {
 			atDestination.acquire();
@@ -218,18 +214,20 @@ public class GHCookRole extends Role implements Cook {
 	
 	private void SendInvoiceToCashier(MarketOrder mo) {
 		((GHCashierRole) restaurant.cashier).msgHereIsInvoice(mo.deliveryMan, mo.cost);
+		marketOrders.remove(mo);
 	}
 	
 	private void OrderFromMarket() {
+		Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
 		for(String s : Inventory.keySet()){
-			if(Inventory.get(s).getAmount() <= Inventory.get(s).getThreshold()){
-				Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
+			Food food = Inventory.get(s);
+			if(food.getAmount() <= food.getThreshold()){
 				foodToOrder.put(s, ORDERAMOUNT);
-				marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
-				markets.get(nextmarket).msgPlaceDeliveryOrder(this);
-				nextmarket = (nextmarket+1)%markets.size();
 			}
 		}
+		marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
+		markets.get(nextmarket).msgPlaceDeliveryOrder(this);
+		nextmarket = (nextmarket+1)%markets.size();
 	}
 	
 	//utilities
