@@ -231,6 +231,8 @@ public class GHWaiterRole extends Role implements Waiter{
 			  	return true;
 		  }
 		}
+		//waitergui.DoLeaveCustomer();
+
 	}  
 	catch(ConcurrentModificationException cme){
 			return false;
@@ -259,7 +261,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		customer.cs = CustomerState.Idle;
@@ -276,7 +277,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
@@ -294,7 +294,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
@@ -307,7 +306,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
@@ -324,14 +322,12 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		DoTakeOrderToCustomer(c);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		c.cs = CustomerState.Idle;
@@ -342,7 +338,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//cashier.msgGiveMeCheck(this);
@@ -397,7 +392,6 @@ public class GHWaiterRole extends Role implements Waiter{
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		c.customer.msgHeresCheck(c.choice, c.cost);
@@ -482,7 +476,6 @@ public class GHWaiterRole extends Role implements Waiter{
 
 	@Override
 	public Restaurant getRestaurant() {
-		// TODO Auto-generated method stub
 		return restaurant;
 	}
 
