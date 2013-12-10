@@ -215,7 +215,7 @@ public class GHCashierRole extends Role implements Cashier{
 
 	private void payBill(DeliveryBills temp2, DeliveryBills temp3) {
 		if(temp2.cost == temp3.cost){
-			RestaurantMoney = RestaurantMoney - temp2.cost;
+			RestaurantMoney -= temp2.cost;
 			temp2.dm.msgHereIsPayment(temp2.cost, this);
 			bills.remove(temp2);
 			bills.remove(temp3);
