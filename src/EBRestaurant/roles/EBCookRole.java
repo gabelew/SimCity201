@@ -9,6 +9,8 @@ import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
@@ -91,9 +93,6 @@ public class EBCookRole extends Role implements Cook {
 		stock.add("salad");
 	}
 	
-	public String getName() {
-		return name;
-	}
 	// Messages
 	
 	public void msgHereIsOrder(String choice, int tableNumber, Waiter waiter)
@@ -244,10 +243,13 @@ public class EBCookRole extends Role implements Cook {
 	// Actions
 	private void checkRevolving() {
 		while(!revolvingStand.isEmpty()) {
+			//AlertLog.getInstance().logMessage(AlertTag.REST_COOK,this.getName(), "Got order form revolving stand");
 			Order order = revolvingStand.remove();
 			if(order != null) {
 				Orders.add(order);
+				AlertLog.getInstance().logMessage(AlertTag.REST_COOK,this.getName(), "Got order form revolving stand");
 			}
+			
 		}
 		check=false;
 		timer.schedule(new TimerTask() {

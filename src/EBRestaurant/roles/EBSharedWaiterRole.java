@@ -21,13 +21,11 @@ public class EBSharedWaiterRole extends EBWaiterRole{
 	
 	@Override
 	protected void giveOrderToCook(MyCustomer c) {
-		if(waiterGui != null){
+    	//AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Shared data waiter put order on revolving stand");
 		c.S=customerState.waitForFood;
-		}
 		if(!revolvingStand.isFull()) {
-			revolvingStand.insert(new Order(this, c.choice, c.tableNumber,state.pending));
-			c.S = customerState.ordered;
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Inserting order into revolving stand");
+			revolvingStand.insert(new Order(this, c.choice, c.tableNumber,state.pending));
 		}
 		 else {
 				checked= false;

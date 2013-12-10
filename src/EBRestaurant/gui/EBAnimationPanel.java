@@ -98,26 +98,30 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
       	}
         //g2.fillRect(300, 230, 20, 100);
         //g2.fillRect(300, 200, 80, 20);
-
+        synchronized(getGuis()){
         for(Gui gui : getGuis()) {
         	if(!(gui instanceof EBCustomerGui || gui instanceof EBWaiterGui))
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
 	            }
         }
-
+        }
+        synchronized(getGuis()){
         for(Gui gui : getGuis()) {
         	if(gui instanceof EBCustomerGui || gui instanceof EBWaiterGui)
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
 	            }
         }
+        }
+       synchronized(getGuis()){
        for(Gui gui : getGuis()) {
         	if(gui instanceof EBCashierGui)
 	            if (gui.isPresent()) {
 	                gui.draw(g2);
 	            }
         }
+       }
     }
     
     public void addWaiterToList(String name){
