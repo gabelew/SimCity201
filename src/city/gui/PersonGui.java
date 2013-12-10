@@ -96,15 +96,13 @@ public class PersonGui implements Gui{
 	    					
 	    					timer.schedule(new TimerTask() {
 	    						public void run() {
-	    							AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, agent.getName(), "Timer complete");
 	    							atStopSign=true;
 	    						}
 	    					}, 
 	    					200);
-							AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, agent.getName(), "at stop sign = true");
+
 	    					timer.schedule(new TimerTask() {
 	    						public void run() {
-	    							AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, agent.getName(), "Timer complete");
 	    							atStopSign = false;
 	    						}
 	    					}, 
