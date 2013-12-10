@@ -96,19 +96,26 @@ public MarketAgent(Point Location,String Name, InsideAnimationPanel iap){
 
 //messages to market
 public void msgPlaceOrder(MarketCustomer CR){
-	MyCustomers.add(new MyCustomer(CR, customerState.waiting));
-	if(getStateChangePermits()==0){
-			stateChanged();	
-		}
-	log.add(new LoggedEvent("Received msgPlaceOrder from MarketCustomer."));
+	if(isOpen){
+		MyCustomers.add(new MyCustomer(CR, customerState.waiting));
+		if(getStateChangePermits()==0){
+				stateChanged();	
+			}
+		log.add(new LoggedEvent("Received msgPlaceOrder from MarketCustomer."));
+	}
+	else{
+		CR.msgMarketClosed();
+	}
 }
 
 public void msgPlaceDeliveryOrder(Cook cook){
-	MyCooks.add(new MyCook(cook, cookState.waiting));
-	if(getStateChangePermits()==0){
-			stateChanged();	
-		}
-	log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
+	if(isOpen){
+		MyCooks.add(new MyCook(cook, cookState.waiting));
+		if(getStateChangePermits()==0){
+				stateChanged();	
+			}
+		log.add(new LoggedEvent("Received msgPlaceDeliveryOrder from CookCustomer."));
+	}
 }
 
 public void msgClerkDone(Clerk c){
@@ -150,7 +157,23 @@ public void msgDeliveryDone(DeliveryMan D){
 
 //scheduler
 public boolean pickAndExecuteAnAction() {
-	
+	if(!isOpen){
+		print("hhh");
+		for(clerk c:clerks){
+			print("aaa");
+			if(MyCustomers.size()==0&&c.clerkState==state.free){
+				print("bbb");
+				tellClerkToLeave(c);
+				return true;
+			}
+		}
+		for(delivery d:deliverys){
+			if(MyCooks.size()==0&&d.deliveryState==state.free){
+				tellDeliveryToLeave(d);
+				return true;
+			}
+		}
+	}
 	try{
 		for(clerk c:clerks){
 			if(c.clerkState==state.free){
@@ -208,13 +231,22 @@ public boolean pickAndExecuteAnAction() {
 	return false;
 }
 
+
 //actions
 private void giveToClerk(clerk c,MyCustomer MC){
 	c.clerkState=state.busy;
 	c.clerk.msgTakeCustomer(MC.MC,this);
 	MyCustomers.remove(MC);
 }
-
+private void tellClerkToLeave(clerk c) {
+	print("clerk please leave");
+	c.clerk.msgMarketClosed();
+	clerks.remove(c);
+}
+private void tellDeliveryToLeave(delivery d) {
+	d.deliveryMan.msgMarketClosed();
+	deliverys.remove(d);
+}
 private void giveToDelivery(delivery d,MyCook MC){
 	d.deliveryState=state.busy;
 	d.deliveryMan.msgTakeCustomer(MC.cook,this);
@@ -223,7 +255,6 @@ private void giveToDelivery(delivery d,MyCook MC){
 
 private void giveToDelivery(delivery d,Order o){
 	d.deliveryState=state.busy;
-	print("redeliver");
 	d.deliveryMan.msgTryAgain(o,this);
 	failedOrders.remove(o);
 }
@@ -310,18 +341,16 @@ public void offWork(DeliveryMan DM){
 public void setPanel(MarketPanel p){
 	panel=p;
 }
-
-
 public boolean isOpen() {
 	return isOpen;
 }
 public void closeRestaurant(){
 	isOpen = false;
-	//TODO:notify employee to leave once no more customers
-	
+	stateChanged();
 }
 public void openRestaurant(){
 	isOpen = true;
+	stateChanged();
 }
 
 }

@@ -22,4 +22,6 @@ public abstract void msgPlaceOrder(Map<String,Integer> choice);
 public abstract void msgHereIsPayment(double money);
 
 public abstract void msgDoneWithShift();
+
+public abstract void msgMarketClosed();
 }

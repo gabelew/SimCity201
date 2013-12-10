@@ -26,4 +26,6 @@ public interface DeliveryMan {
 
 	public abstract void msgTryAgain(Order o, MarketAgent marketAgent);
 
+	public abstract void msgMarketClosed();
+
 }

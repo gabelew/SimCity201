@@ -14,7 +14,6 @@ import java.util.concurrent.Semaphore;
 import market.gui.ClerkGui;
 import market.interfaces.*;
 import city.MarketAgent;
-import city.PersonAgent;
 import city.gui.Gui;
 
 /**
@@ -71,6 +70,10 @@ public class ClerkRole extends Role implements Clerk {
 	}
 	
 	public void msgDoneWithShift(){
+		event=AgentEvent.offWork;
+		stateChanged();
+	}
+	public void msgMarketClosed() {
 		event=AgentEvent.offWork;
 		stateChanged();
 	}
@@ -197,5 +200,6 @@ public class ClerkRole extends Role implements Clerk {
 		clerkGui = (ClerkGui) gui;
 		
 	}
+
 }
 

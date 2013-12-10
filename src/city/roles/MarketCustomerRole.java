@@ -37,7 +37,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 			this.s = s;
 		}
 	}
-	private enum orderState{waiting,entered, ordering,ordered,paymentReceived, payed,done,left};
+	private enum orderState{closed,waiting,entered, ordering,ordered,paymentReceived, payed,done,left};
 	public MarketCustomerRole(PersonAgent p){
 		super(p);
 		this.myPerson=p;
@@ -75,11 +75,17 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		}
 		stateChanged();	
 	}
-	
+	public void msgMarketClosed() {
+		o.s=orderState.closed;
+	}
 	
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
 		if (o!=null){
+			if(o.s==orderState.closed){
+				leave();
+				return true;
+			}
 			if(o.s==orderState.ordering){
 				giveOrder();
 				return true;
@@ -135,6 +141,19 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		myPerson.cashOnHand=(Math.round(100*cash) / ((double)100));
 		Clerk.msgHereIsPayment(o.amountOwed);
 		o.s=orderState.payed;
+	}
+	
+	private void leave(){
+		marketCGui.DoLeaveMarket();
+	    try {
+			atShelf.acquire();
+		} catch (InterruptedException e) {
+			
+		}
+	    if(!o.outOf.equals(null))
+	    	myPerson.marketNotStocked(market);
+	    myPerson.doneShopping(o.Choices,market);
+		o=null;
 	}
 	
 	private void receivedOrder(){

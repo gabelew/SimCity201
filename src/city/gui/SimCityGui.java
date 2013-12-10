@@ -1035,6 +1035,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			r.closeRestaurant();
 		}else if(name.toLowerCase().contains("market")){
 			MarketAgent m = markets.get(buildingNumber);
+			m.closeRestaurant();
 		}else if(name.toLowerCase().contains("bank")){
 			BankBuilding b = banks.get(buildingNumber);
 			b.setIsOpen(false);

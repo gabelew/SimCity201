@@ -11,8 +11,6 @@ import city.PersonAgent;
 import city.gui.Gui;
 import city.roles.Role;
 import restaurant.Restaurant;
-import restaurant.RevolvingStandMonitor;
-import restaurant.RoleOrder;
 import restaurant.interfaces.*;
 
 /**

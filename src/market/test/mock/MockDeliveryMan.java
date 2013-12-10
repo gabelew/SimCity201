@@ -48,6 +48,11 @@ public class MockDeliveryMan extends Mock implements DeliveryMan {
 	public void msgTryAgain(Order o, MarketAgent marketAgent) {
 		log.add(new LoggedEvent("Received msgTryAgain"));
 	}
+
+	@Override
+	public void msgMarketClosed() {
+		log.add(new LoggedEvent("Received msgMarketClosed from market"));
+	}
 	
 	
 }

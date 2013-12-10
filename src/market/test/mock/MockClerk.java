@@ -2,13 +2,6 @@ package market.test.mock;
 
 import java.util.Map;
 
-import CMRestaurant.gui.CMCustomerGui;
-import city.MarketAgent;
-import city.roles.MarketCustomerRole;
-import restaurant.interfaces.Waiter.Menu;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 import market.interfaces.*;
@@ -23,7 +16,6 @@ public class MockClerk extends Mock implements Clerk {
 	/**
 	 * Reference to the Cashier under test that can be set by the unit test.
 	 */
-	public Cashier cashier;
 	public boolean goToATM = false;
 	public EventLog log = new EventLog();
 	
@@ -47,6 +39,11 @@ public class MockClerk extends Mock implements Clerk {
 
 	@Override
 	public void msgDoneWithShift() {
-		log.add(new LoggedEvent("Received msgDoneWithShift from market customer"));
+		log.add(new LoggedEvent("Received msgDoneWithShift from market"));
+	}
+
+	@Override
+	public void msgMarketClosed() {
+		log.add(new LoggedEvent("Received msgMarktClosed from market"));
 	}
 }

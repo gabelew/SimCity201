@@ -119,7 +119,10 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.backAtMarket;
 		stateChanged();
 	}
-	
+	public void msgMarketClosed() {
+		event=AgentEvent.offWork;
+		stateChanged();
+	}
 	//scheduler
 	public boolean pickAndExecuteAnAction() {
 		if(event == AgentEvent.GoToWork){
@@ -304,6 +307,5 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	public void setGui(Gui gui) {
 		
 	}
-
 }
 
