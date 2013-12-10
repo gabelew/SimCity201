@@ -22,7 +22,7 @@ public class GHCashierRole extends Role implements Cashier{
 	public List<DeliveryBills> bills
 	= Collections.synchronizedList(new ArrayList<DeliveryBills>());
 	public enum CheckState {PENDING,PROCESSED,GIVECHECK,PAYING,NEXTTIME,MARKET}
-	public enum billState {BILLED}
+	public enum billState {BILLED,INVOICED}
 	//private String name;
 	private double RestaurantMoney; 
 	private Restaurant restaurant;
@@ -80,6 +80,12 @@ public class GHCashierRole extends Role implements Cashier{
 	@Override
 	public void msgHereIsBill(DeliveryMan DMR, double bill) {
 		bills.add(new DeliveryBills(DMR,bill,billState.BILLED));
+		stateChanged();
+	}
+	
+	public void msgHereIsInvoice(DeliveryMan dm, double cost){
+		bills.add(new DeliveryBills(dm,cost,billState.INVOICED));
+		stateChanged();
 	}
 	
 	/**
@@ -137,16 +143,16 @@ public class GHCashierRole extends Role implements Cashier{
 
 		switch(c.choice){
 		
-		case "Steak": c.cost = 15.99;
+		case "steak": c.cost = 15.99;
 		break;
 		
-		case "Chicken": c.cost = 10.99;
+		case "chicken": c.cost = 10.99;
 		break;
 		
-		case "Salad": c.cost = 5.99;
+		case "salad": c.cost = 5.99;
 		break;
 		
-		case "Pizza": c.cost = 8.99;
+		case "pizza": c.cost = 8.99;
 		break;
 		}
 		
