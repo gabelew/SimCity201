@@ -152,11 +152,19 @@ public class EBCashierRole extends Role implements Cashier {
 				return true;
 			}
 			if(cashierState == CashState.leaving){
-				cashierState = CashState.none;
-				if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
-					DepositBusinessCash();
-				cashierGui.DoLeaveRestaurant();
-				return true;
+				boolean needsToPay=false;
+				for (payment p:Payments){
+					if(p.pState!=payState.owes){
+						needsToPay=true;
+					}
+				}
+				if(!needsToPay){
+					cashierState = CashState.none;
+					if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
+						DepositBusinessCash();
+					cashierGui.DoLeaveRestaurant();
+					return true;
+				}
 			}
 			for (payment p:Payments){
 				if(p.pState==payState.receivedBill&&receivedInvoice&&bank>0){

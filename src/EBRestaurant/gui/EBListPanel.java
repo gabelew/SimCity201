@@ -180,6 +180,7 @@ public class EBListPanel extends JPanel implements ActionListener {
     	}
 		invalidate();
 		validate();	
+		repaint();
 }
     
     public void addWaiter(String name) {

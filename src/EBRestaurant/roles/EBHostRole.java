@@ -296,6 +296,7 @@ public class EBHostRole extends Role implements Host {
 	//utilities
 
 	public void msgReadyToWork(Waiter w){
+		restaurantClosed=false;
 		waiters.add(new MyWaiters(w,false));
 		((EBAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((EBWaiterRole) w).getName());
 		this.stateChanged();
