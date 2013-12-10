@@ -95,7 +95,7 @@ public class PersonGui implements Gui{
 				//release semaphore 
 					//if at destination xPos== semaphore -7 && yPos == semaphore
 			
-			for(int i = 0;i< 44;i++){
+			/*for(int i = 0;i< 44;i++){
 	    		for(int j =0; j<4;j++){
 	    			if((xPos == i*20 - 23 - 35 && yPos == 115+j*80) || (xPos ==i*20 - 23 && yPos == 115+j*80-20 && drivingDirection == DrivingDirection.down)){
 	    				GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(i*20 - 23,115+j*80));
@@ -119,7 +119,7 @@ public class PersonGui implements Gui{
 	    			}
 	    		}
 	    		
-	    	}
+	    	}*/
 			
 			if(canKeepMoving){
 				if(yPos == yDestination && xPos == xDestination){
@@ -144,7 +144,7 @@ public class PersonGui implements Gui{
 				}
 				else if (yPos > yDestination){
 					drivingDirection = DrivingDirection.up;
-					GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(xPos+20,yPos));
+				/*	GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(xPos+20,yPos));
     				if(gridSpot!=null){
     					if(gridSpot.spot.availablePermits()==0){
 	    					gridSpot.spot.release();
@@ -156,7 +156,7 @@ public class PersonGui implements Gui{
 	    					gridSpot.spot.release();
 	    				}
     				}
-    				
+    				*/
 					yPos--;
 				}
 				else if(xPos != xDestination){

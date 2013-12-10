@@ -194,7 +194,7 @@ public class PersonAgent extends Agent implements Person
 	}
 
 	private Restaurant findRestaurant(Point d) {
-		for(Restaurant r: restaurants){
+		for(Restaurant r: simCityGui.getRestaurants()){
 			if(r.location.equals(d)){
 				return r;
 			}
@@ -931,7 +931,7 @@ public class PersonAgent extends Agent implements Person
     }
     
 	private boolean workIsClosed() {
-		for(Restaurant r: restaurants){
+		for(Restaurant r: simCityGui.getRestaurants()){
 			if(job.location.equals(r.location)){
 				if(r.isOpen()==false)
 				 return true;

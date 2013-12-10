@@ -213,7 +213,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        }
 
 
-	    	
+	    	/*
 	    	for(int i = 0;i< 45;i++){
 	    		for(int j =0; j<4;j++){
 	    			g2.setColor(Color.CYAN);
@@ -235,7 +235,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	    		}
 	    		
 	    	}
-	    	
+	    	*/
 		synchronized(guis){
 		for(Gui gui : guis) {
 			//if (gui.isPresent()) {
