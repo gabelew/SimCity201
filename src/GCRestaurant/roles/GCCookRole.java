@@ -1,11 +1,13 @@
 package GCRestaurant.roles;
 
 import restaurant.Restaurant;
+import restaurant.RoleOrder;
 import GCRestaurant.gui.GCCookGui;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.LoggedEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -27,16 +29,17 @@ public class GCCookRole extends Role implements Cook
 	private Semaphore busy = new Semaphore(0,true);
 	private Timer timer = new Timer();
 	final int TIMERCONST = 1000;
+	private final int CHECK_STAND_TIME = 4000;
 	private Map<String, Food> foods= new HashMap<String, Food>();
 	
-	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
+	public enum OrderState{pending, cooking, done, served}
+	private List<GCOrder> orders = Collections.synchronizedList(new ArrayList<GCOrder>());
 	private List<Food> foodList = new ArrayList<Food>();
 	private List<MarketAgent> markets = new ArrayList<MarketAgent>();
 	private List<MarketOrder> marketOrders = new ArrayList<MarketOrder>();
 	public enum MarketState {hasItems, ordering, noItems, paying, made, paid, ordered};
 	
 	private CookState state = CookState.makingMarketOrder;
-	private enum OrderState{pending, cooking, done, served}
 	private enum CookState {free, cooking, makingMarketOrder, wantsOffWork, leaving, relieveFromDuty, none, goToWork}
 	private final int THRESHOLD = 56;
 	private final int MAXSUPPLY = 70;
@@ -45,6 +48,7 @@ public class GCCookRole extends Role implements Cook
 	boolean restaurantClosed = false;
 	Restaurant restaurant;
 	public GCRevolvingStandMonitor orderStand;
+	public boolean checkOrderStand = false;
 
 	public GCCookRole() {
 		super();
@@ -72,8 +76,7 @@ public class GCCookRole extends Role implements Cook
 	public void HereIsOrderMsg(Waiter w, Customer c, Table t, String choice)
 	{
 		print("Received order from " + ((GCWaiterRole)w).getName());
-		//Food food = new Food(choice,getCookingTime(choice));
-		orders.add(new Order(w,c,t,choice));
+		orders.add(new GCOrder(w,c,t,choice));
 		stateChanged();
 	}
 	
@@ -151,7 +154,7 @@ public class GCCookRole extends Role implements Cook
 		state = CookState.makingMarketOrder;
 	}
 
-	public void gotFoodMsg(Order o) 
+	public void gotFoodMsg(GCOrder o) 
 	{
 		print("Waiter received order");
 		cookGui.pickedUpFood(o);
@@ -172,16 +175,16 @@ public class GCCookRole extends Role implements Cook
 	 ***************************************************/
 	
 	// (1) Cooks order
-	private void CookItAction(Order o)
+	private void CookItAction(GCOrder o)
 	{
 		//print(o.choice  + " " + o.food.amount);
 		if(state == CookState.free)
 		{
-			if(o.food.amount <= THRESHOLD && marketOrders.size() == 0)
+			if((foods.get(o.choice)).amount <= THRESHOLD && marketOrders.size() == 0)
 			{
 				checkInventory();
 			}
-			if(o.food.amount > 0)
+			if((foods.get(o.choice)).amount > 0)
 			{
 				state = CookState.cooking;
 				o.state = OrderState.cooking;
@@ -190,7 +193,7 @@ public class GCCookRole extends Role implements Cook
 			}
 			else
 			{
-				print(o.food.choice + " is out of stock");
+				print(o.choice + " is out of stock");
 				((GCWaiterRole)o.waiter).OutOfStockMsg(o.customer);
 				orders.remove(o);
 				marketCounter = 0;
@@ -201,7 +204,7 @@ public class GCCookRole extends Role implements Cook
 	}
 	
 	// (2) Helper Class for CookIt()
-	private void DoCooking(final Order o)
+	private void DoCooking(final GCOrder o)
 	{
 		//gets food from fridge
 		print("Getting food from fridge");
@@ -215,8 +218,8 @@ public class GCCookRole extends Role implements Cook
 		try {busy.acquire();} 
 		catch (InterruptedException e) { e.printStackTrace();}
 		
-		o.food.amount--;//Decrease inventory
-		int cookingTime = o.food.cookingTime;
+		(foods.get(o.choice)).amount--;//Decrease inventory
+		int cookingTime = (foods.get(o.choice)).cookingTime;
 		//Runs Timer for Food's Cooking time
 		timer.schedule(new TimerTask() {
 			public void run() 
@@ -239,7 +242,7 @@ public class GCCookRole extends Role implements Cook
 	}
 	
 	// (3) Food is done, Alert Waiter
-	private void OrderDone(Order o)
+	private void OrderDone(GCOrder o)
 		{
 			print(((GCWaiterRole)o.waiter).getName() + ", " + ((GCCustomerRole)o.customer).getName() + "'s order is done");
 			((GCWaiterRole)o.waiter).getFoodFromCookMsg(o);
@@ -284,6 +287,40 @@ public class GCCookRole extends Role implements Cook
 	{
 		((GCCashierRole)restaurant.cashier).msgHereIsBill(mkOrder.deliveryMan,mkOrder.price);
 		marketOrders.remove(mkOrder);
+	}
+	
+	//(7) checks order stand
+	private void checkOrderStandAction()
+	{
+		cookGui.checkOrderStand();
+		try { busy.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		
+		if(!orderStand.isEmpty())
+		{
+			print("Orderstand has orders in it!");
+		}
+		else
+		{
+			print("Orderstand has no orders in it!");
+		}
+		while(orderStand.isEmpty()) 
+		{
+			GCOrder order = orderStand.remove();
+			if(order != null) 
+			{
+				orders.add(order);
+			}
+		}
+			
+			timer.schedule(new TimerTask() {
+				public void run() 
+				{
+					checkOrderStand = true;
+					stateChanged();
+				}
+			}, CHECK_STAND_TIME);
+		checkOrderStand = false;
 	}
 	/****************************************************
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -345,7 +382,13 @@ public class GCCookRole extends Role implements Cook
 					m.marketState = MarketState.paid;
 				}
 			}
-			for(Order o: orders)
+			
+			//Shared Data
+			if(checkOrderStand)
+			{
+				checkOrderStandAction();
+			}
+			for(GCOrder o: orders)
 			{
 				//if order is done put it on a plate and serve it
 				if(o.state == OrderState.done)
@@ -392,26 +435,6 @@ public class GCCookRole extends Role implements Cook
 			this.amount = inventory;
 			this.cookingTime = cooktime;
 		}	
-	}
-	
-	public class Order 
-	{
-		public Food food;
-		public Table table;
-		public Waiter waiter;
-		public Customer customer;
-		public OrderState state;
-		public String choice;
-		
-		Order(Waiter w, Customer c, Table t, String choice)
-		{
-			this.choice = choice;
-			food = foods.get(choice);
-			this.table = t;
-			this.waiter = w;
-			this.customer = c;
-			state = OrderState.pending;
-		}
 	}
 
 	public class MarketOrder

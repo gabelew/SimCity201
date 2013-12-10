@@ -2,7 +2,6 @@ package GCRestaurant.roles;
 
 import GCRestaurant.gui.GCWaiterGui;
 import GCRestaurant.roles.GCCashierRole.Check;
-import GCRestaurant.roles.GCCookRole.Order;
 import GCRestaurant.roles.GCHostRole.Table;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
@@ -39,6 +38,8 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 	protected Semaphore busy = new Semaphore(0,true);
 	public boolean onBreak = false;
 	Timer timer = new Timer();
+	GCRevolvingStandMonitor orderStand;
+	boolean checkStand = false;
 	
 	//gui
 	Restaurant restaurant;
@@ -56,6 +57,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		this.host = r.host;
 		this.cook = r.cook;
 		this.cashier = r.cashier;
+		this.orderStand = ((GCCookRole)restaurant.cook).orderStand;
 	}
 	
 	public void setHost(GCHostRole h)
@@ -125,7 +127,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 	}
 	
 	// (4) Msg from Cook that Food is done
-	public void getFoodFromCookMsg(Order o)
+	public void getFoodFromCookMsg(GCOrder o)
 	{
 			for(MyCustomer c: customers)
 			{
@@ -200,7 +202,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		}
 	}
 
-	public void msgAtTable() {//from animation
+	public void msgAnimationDone() {//from animation
 		//print("msgAtTable() called");
 		busy.release();// = true;
 		stateChanged();
@@ -495,7 +497,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		public CustomerState state;
 		public String choice;
 		public Check check;
-		public Order order;
+		public GCOrder order;
 		MyCustomer(Customer customer, Table t)
 		{
 			this.c = customer;
