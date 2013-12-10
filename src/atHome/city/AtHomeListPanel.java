@@ -114,7 +114,7 @@ public class AtHomeListPanel extends JPanel implements ActionListener
             
         	addNewCustView.setLayout(new BorderLayout(LIST_ITEM_VIEW_GAP, LIST_ITEM_VIEW_GAP));  
             Dimension addCustViewSize = new Dimension(paneSize.width - LIST_ITEM_VIEW_OFFSET,
-                    (int) (paneSize.height / LIST_ITEM_H));
+                    (int) (paneSize.height / LIST_ITEM_H)*2);
             addNewCustView.setPreferredSize(addCustViewSize);
             addNewCustView.setMinimumSize(addCustViewSize);
             addNewCustView.setMaximumSize(addCustViewSize);      
@@ -124,7 +124,7 @@ public class AtHomeListPanel extends JPanel implements ActionListener
             newstateCB.setText("Break Appliance?");
             newstateCB.setSelected(false);
             
-            addNewCustView.add(newstateCB, BorderLayout.EAST);
+            addNewCustView.add(newstateCB, BorderLayout.SOUTH);
 
             newstateCB.addActionListener(this);
             
