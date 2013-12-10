@@ -524,6 +524,18 @@ public class CMHostRole extends Role implements Host {
 		stateChanged();
 	}
 
+	public void msgOpenRestaurant() {
+		closeRestaurant = false;
+		for(MyWaiter w:waiters){
+			if(w.tableCount==0)
+			((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterBreakable(((CMWaiterRole) w.w).getName());
+		}
+
+		stateChanged();
+	}
+
+
+
 
 
 

@@ -181,7 +181,14 @@ public class CMCashierRole extends Role implements Cashier {
 			cashierGui.DoEnterRestaurant();
 			return true;
 		}
-		if(state == State.leavingEarly && orders.size()==0){
+		
+		boolean canLeave = true;
+		for(Order o: orders){
+			if(o.state != OrderState.inDebt){
+				canLeave = false;
+			}
+		}
+		if(state == State.leavingEarly && canLeave){
 			state = State.none;
 			if(!"Saturday".equals(myPerson.dayOfWeek) && !"Sunday".equals(myPerson.dayOfWeek) && myPerson.aBankIsOpen())
 				DepositBusinessCash();

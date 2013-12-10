@@ -32,5 +32,6 @@ public interface Host{
 	
 	public abstract void goesToWork();
 	public abstract void msgCloseRestaurant();
+	public abstract void msgOpenRestaurant();
 	
 }

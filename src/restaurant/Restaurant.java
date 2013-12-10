@@ -46,12 +46,12 @@ public class Restaurant {
 	}
 	public void closeRestaurant(){
 		isOpen = false;
-		//TODO:notify host
 		this.host.msgCloseRestaurant();
 		
 	}
 	public void openRestaurant(){
 		isOpen = true;
+		this.host.msgOpenRestaurant();
 	}
 
 	/*public boolean isEmpty() {
