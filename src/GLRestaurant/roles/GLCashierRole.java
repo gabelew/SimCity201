@@ -97,8 +97,10 @@ public class GLCashierRole extends Role implements Cashier {
 		stateChanged();
 	}
 	public void goesToWork() {
-		state = State.goToWork;
-		stateChanged();
+		if(!restaurantClosed) {
+			state = State.goToWork;
+			stateChanged();
+		}
 	}
 	public void msgReleaveFromDuty(PersonAgent p) {
 		replacementPerson = p;
@@ -209,7 +211,16 @@ public class GLCashierRole extends Role implements Cashier {
 			return true;
 		}
 		
-		if(restaurantClosed && bills.isEmpty()) {
+		boolean checksPaid = true;
+		synchronized(checks) {
+			for (Check c : checks) {
+				if (checkState.debt != c.cs && checkState.paid != c.cs) {
+					checksPaid = false;
+				}
+			}
+		}
+		
+		if(restaurantClosed && bills.isEmpty() && checksPaid) {
 			state = State.leaving;
 			restaurantClosed = false;
 		}

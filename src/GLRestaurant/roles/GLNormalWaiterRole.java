@@ -18,7 +18,7 @@ public class GLNormalWaiterRole extends GLWaiterRole{
 	}
 	
 	protected void sendOrderToCook(MyCustomer mc) {
-		Do("Giving order to " + ((GLCookRole)restaurant.cook).getName());	
+		Do("Giving order to cook.");	
 		mc.cs = customerState.waitingForFood;
 		((GLCookRole)restaurant.cook).msgHereIsOrder(this, mc.choice, mc.c);
 		waiterGui.DoLeaveCustomer();

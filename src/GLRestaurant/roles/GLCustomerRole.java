@@ -220,13 +220,18 @@ public class GLCustomerRole extends Role implements Customer{
 		
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
-			//no action
+			reactivatePerson();
 			return true;
 		}
 		return false;
 	}
 
 	// Actions
+	
+	private void reactivatePerson() {
+		myPerson.msgDoneEatingAtRestaurant();
+		restaurant.insideAnimationPanel.removeGui(customerGui);
+	}
 
 	private void goToRestaurant() {
 		Do("Going to restaurant.");
@@ -234,7 +239,12 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 	
 	public void tellHost() {
-		restaurant.host.msgIWantToEat(this);
+		if(((GLHostRole)restaurant.host).myPerson != null) {
+			restaurant.host.msgIWantToEat(this);
+		} else {
+			state = AgentState.WaitingInRestaurant;
+			event = AgentEvent.tiredOfWaiting;
+		}
 	}
 
 	private void SitDown() {

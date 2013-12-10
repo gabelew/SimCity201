@@ -1,5 +1,6 @@
 package GLRestaurant.roles;
 
+import CMRestaurant.roles.CMWaiterRole.AgentEvent;
 import GLRestaurant.roles.GLCashierRole.Check;
 import GLRestaurant.roles.GLCashierRole.checkState;
 import GLRestaurant.roles.GLCookRole.Food;
@@ -59,7 +60,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	private Semaphore atPlate = new Semaphore(0,true);
 	protected Semaphore waitingResponse = new Semaphore(0,true);
 	public enum customerState {waiting, seated, askedToOrder, ordering, ordered, reorder, waitingForFood, readyToEat, eating, eatingDone, waitingForCheck, checkReceived, leaving, leftRestaurant};
-	public enum agentEvent {none, goOnBreak, onBreak, relieveFromDuty, goToWork};
+	public enum agentEvent {none, goOnBreak, onBreak, relieveFromDuty, goToWork, leaveWork};
 	public enum checkState {pending, preparing, finished};
 	agentEvent event = agentEvent.none;
 	public GLWaiterGui waiterGui = null;
@@ -94,7 +95,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	// Messages
 	
 	public void msgRestaurantClosed() {
-		restaurantClosed = true;
+		event = agentEvent.leaveWork;
 		stateChanged();
 	}
 	
@@ -211,16 +212,15 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 			restaurant.insideAnimationPanel.removeGui(waiterGui);
 			return true;
 		}
-		if(0 == customers.size() && (
+		if(customers.isEmpty() && (
 				(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
 				(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
 			leaveWork();
 			return true;
 		}
 		
-		if(restaurantClosed && 0 == customers.size()) {
-			restaurantClosed = false;
-			leaveWork();
+		if(event == agentEvent.leaveWork) {
+			closedLeaving();
 			return true;
 		}
 		
@@ -326,7 +326,6 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 
 	private void seatCustomer(MyCustomer mc) {
 		mc.c.customerGui.setWaiterGui(waiterGui);
-		//waiterGui.setCustomerGui(mc.c.customerGui);
 		waiterGui.GoToCustomer(mc.c.customerGui.getXPos(), mc.c.customerGui.getYPos());	
 		waiterGui.ifAtCustomer(mc.c.customerGui.getXPos(), mc.c.customerGui.getYPos());
 		try {
@@ -433,6 +432,16 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 			
 		}
 	}
+	
+	private void closedLeaving() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+		waiterGui.DoLeaveRestaurant();
+		try {
+			waitingResponse.acquire();
+		} catch (InterruptedException e) {
+			
+		}
+	}
 
 	// The animation DoXYZ() routines
 	private void DoSeatCustomer(GLCustomerRole customer, Table table) {
@@ -520,7 +529,9 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	@Override
 	public void msgLeftTheRestaurant() {
 		waitingResponse.release();
-		event = agentEvent.relieveFromDuty;
+		if(!restaurantClosed)	
+			event = agentEvent.relieveFromDuty;
+		restaurantClosed = false;
 	}
 	
 	public void msgAtStand() {
@@ -534,8 +545,10 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 
 	@Override
 	public void goesToWork() {
-		event = agentEvent.goToWork;
-		stateChanged();
+		if(event != agentEvent.leaveWork) {
+			event = agentEvent.goToWork;
+			stateChanged();
+		}
 	}
 	
 	public void setRevolvingStand(GLRevolvingStandMonitor r) {

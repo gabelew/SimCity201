@@ -115,8 +115,10 @@ public class GLCookRole extends Role implements Cook{
 	}
 	
 	public void goesToWork() {
-		state = State.goToWork;
-		stateChanged();
+		if(!restaurantClosed) {
+			state = State.goToWork;
+			stateChanged();
+		}
 	}
 	public void msgRelieveFromDuty(PersonAgent p) {
 		replacementPerson = p;
@@ -212,6 +214,9 @@ public class GLCookRole extends Role implements Cook{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			if(restaurantClosed) {
+				restaurantClosed = false;
+			}
 			return true;
 		}
 		
@@ -270,7 +275,6 @@ public class GLCookRole extends Role implements Cook{
 		}
 		
 		if(restaurantClosed) {
-			restaurantClosed = false;
 			state = State.wantsOffWork;
 		}
 		

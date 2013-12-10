@@ -112,7 +112,8 @@ public class GLHostRole extends Role implements Host{
 	
 	public void msgIAmLeaving(GLCustomerRole c) {
 		MyCustomer mc = findCustomer(c);
-		mc.cs = customerState.done;
+		if(mc != null)
+			mc.cs = customerState.done;
 		stateChanged();
 	}
 	
@@ -293,6 +294,7 @@ public class GLHostRole extends Role implements Host{
 		}
 		waiters.removeAll(waiters);
 		((GLCashierRole) restaurant.cashier).msgRestaurantClosed();
+		((GLCookRole) restaurant.cook).msgRestaurantClosed();
 		state = State.leaving;
 		closeRestaurant = false;
 	}
@@ -451,6 +453,16 @@ public class GLHostRole extends Role implements Host{
 	@Override
 	public void msgCloseRestaurant() {
 		closeRestaurant = true;
+		stateChanged();
+	}
+	
+	public boolean getCloseRestaurant() {
+		return closeRestaurant;
+	}
+
+	@Override
+	public void msgOpenRestaurant() {
+		closeRestaurant = false;
 		stateChanged();
 	}
 
