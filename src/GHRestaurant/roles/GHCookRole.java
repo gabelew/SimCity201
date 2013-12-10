@@ -28,6 +28,7 @@ public class GHCookRole extends Role implements Cook {
 	private Timer timer = new Timer();
 	public enum OrderState {PENDING,COOKING,DONECOOKING}
 	public enum marketOrderState {waiting, ordering,ordered,waitingForBill, paying};
+	public enum marketState {NONE, ORDERING}
 	//public String name;
 	private GHCookGui cookgui = null;
 	Map<String,Food> Inventory = new HashMap<String,Food>();	
@@ -35,6 +36,9 @@ public class GHCookRole extends Role implements Cook {
 	= new ArrayList<MarketAgent>();
 	private Semaphore atDestination = new Semaphore(0,true);
 	private Restaurant restaurant;
+	private boolean orderNeeded = false;
+
+
 
 
 	public GHCookRole(int amount) {
@@ -218,17 +222,22 @@ public class GHCookRole extends Role implements Cook {
 	}
 	
 	private void OrderFromMarket() {
+		
 		Map<String,Integer>foodToOrder=new HashMap<String,Integer>();
 		for(String s : Inventory.keySet()){
 			Food food = Inventory.get(s);
-			if(food.getAmount() <= food.getThreshold()){
+			if(food.getAmount() <= food.getThreshold() && (food.ms != marketState.ORDERING)){
 				foodToOrder.put(s, ORDERAMOUNT);
+				food.ms = marketState.ORDERING;
+				orderNeeded = true;
 			}
 		}
-		if(foodToOrder.size() != 0){
+		
+		if(orderNeeded){
 		marketOrders.add(new MarketOrder(foodToOrder, markets.get(nextmarket), marketOrderState.waiting));
 		markets.get(nextmarket).msgPlaceDeliveryOrder(this);
 		nextmarket = (nextmarket+1)%markets.size();
+		orderNeeded = false;
 		}
 	}
 	
@@ -264,13 +273,16 @@ public class GHCookRole extends Role implements Cook {
 		int amount;
 		int threshold;
 		//int capacity;
+		marketState ms;
+
 		
 		Food(String choice, int ct){
 			foodtype = choice;
 			cookingtime = ct;
 			amount = 20;
 			threshold = 10;
-			//capacity = 100;	
+			//capacity = 100;
+			ms = marketState.NONE;
 		}
 		
 		public void decAmount(){
