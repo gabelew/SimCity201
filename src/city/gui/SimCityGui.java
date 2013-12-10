@@ -49,6 +49,7 @@ import GCRestaurant.roles.GCCustomerRole;
 import GCRestaurant.roles.GCHostRole;
 import GCRestaurant.roles.GCNormalWaiterRole;
 import GCRestaurant.roles.GCRevolvingStandMonitor;
+import GCRestaurant.roles.GCSharedWaiterRole;
 import GCRestaurant.roles.GCWaiterRole;
 import GHRestaurant.gui.GHAnimationPanel;
 import GHRestaurant.gui.GHCashierGui;
@@ -967,7 +968,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			}
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGCWaiterRole")){
 			AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, "waiter factory", "creating GCWaiterRole");
-			return new GCNormalWaiterRole(p,r);
+			return new GCSharedWaiterRole(p,r);
 		}else if(r.waiterRole.equalsIgnoreCase("RestaurantGLWaiterRole")){
 			if(p.getName().toLowerCase().contains("shared")){
 				return new GLSharedWaiterRole(p, r);

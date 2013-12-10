@@ -121,6 +121,8 @@ public class GCCookGui implements Gui{
 		if(xPos == xDestination && yPos == yDestination && command == Command.checkOrderStand)
 		{
 			command = Command.none;
+			xDestination = DEFAULT_POSX;
+			yDestination = DEFAULT_POSY;
 			role.msgActionDone();
 		}
 		
