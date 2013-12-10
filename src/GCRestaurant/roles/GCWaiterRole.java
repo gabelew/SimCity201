@@ -50,7 +50,7 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 	public Host host;
 	protected Cook cook;
 	public Cashier cashier;
-	private final int BREAKTIME = 10000;
+	private final int BREAKTIME = 7000;
 	
 	public GCWaiterRole(PersonAgent p, Restaurant r) {
 		super(p);
@@ -169,17 +169,16 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		stateChanged();
 	}
 	
-	// (5) Go on Break
 	public void msgAskForBreak() 
 	{
 		print("I want to go on Break");
 		event = WaiterEvent.AlmostOnBreak;
 		stateChanged();
 	}
-	@Override
-	public void msgGoOnBreak() {
-		// TODO Auto-generated method stub
-		
+	// (5) Go on Break
+	public void msgGoOnBreak() 
+	{
+		onBreak = true;
 	}
 
 	// (6) Refuses to go on break
@@ -300,12 +299,12 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 		public void onBreakAction()
 		{
 			final GCWaiterRole wr = this;
-				//host.takingBreakMsg(this);
 				print("I'm going on break");
 				timer.schedule(new TimerTask(){
 					public void run()
 					{		
 						onBreak = false;  
+						event = WaiterEvent.none;
 						((GCHostRole)host).breakIsOverMsg(wr);
 						print("Back from Break");
 						stateChanged();
@@ -396,6 +395,10 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 				return true;
 			}
 			
+			if(event == WaiterEvent.onBreak && onBreak)
+			{
+				return true;
+			}
 			if(event == WaiterEvent.AlmostOnBreak && customers.size() == 0)
 			{
 				event = WaiterEvent.onBreak;

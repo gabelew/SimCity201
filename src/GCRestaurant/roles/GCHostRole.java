@@ -218,7 +218,7 @@ public class GCHostRole extends Role implements Host
 		int workingWaiters = 0;
 		for(myWaiter waiter: waiters)
 		{
-			if(waiter.state != WaiterState.onBreak || waiter.state != WaiterState.askedForBreak)
+			if(waiter.state == WaiterState.Working)
 			{
 				workingWaiters++;
 			}
