@@ -35,6 +35,7 @@ public class GLCashierRole extends Role implements Cashier {
 	private final double COOKIEPRICE = 8.99;
 	enum State {none, goToWork, working, leaving, relieveFromDuty};
 	State state = State.none;
+	private boolean restaurantClosed = false;
 	PersonAgent replacementPerson = null;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	
@@ -90,6 +91,11 @@ public class GLCashierRole extends Role implements Cashier {
 //		bills.add(new MarketBill(mkt, choice, amount, BillState.pending));
 //		stateChanged();
 //	}
+	
+	public void msgRestaurantClosed() {
+		restaurantClosed = true;
+		stateChanged();
+	}
 	public void goesToWork() {
 		state = State.goToWork;
 		stateChanged();
@@ -203,24 +209,10 @@ public class GLCashierRole extends Role implements Cashier {
 			return true;
 		}
 		
-//		synchronized(bills) {
-//			for (MarketBill b : bills) {
-//				if (BillState.pending == b.bs) {
-//					b.bs = BillState.paying;
-//					payBill(b);
-//					return true;
-//				}
-//			}
-//		}
-//		
-//		synchronized(bills) {
-//			for (MarketBill b : bills) {
-//				if (BillState.debt == b.bs && currentBalance > b.cost) {
-//					b.bs = BillState.pending;
-//					return true;
-//				}
-//			}
-//		}
+		if(restaurantClosed && bills.isEmpty()) {
+			state = State.leaving;
+			restaurantClosed = false;
+		}
 		
 		return false;
 		//we have tried all our rules and found

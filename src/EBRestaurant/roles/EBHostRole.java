@@ -1,6 +1,5 @@
 package EBRestaurant.roles;
 
-
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBHostGui;
 
@@ -164,14 +163,13 @@ public class EBHostRole extends Role implements Host {
 		try{
 			if(waitingCustomers.size()==0&&restaurantClosed&&hostState==state.closed){
 				int tableNum=0;
-				hostState=state.none;
 				for (Table table : tables) {
 					if (!table.isOccupied()) {
 						tableNum++;
 					}
 				}
 				if(tableNum==tables.size()){
-					print("go home");
+					hostState=state.none;
 					tellStaff();
 					return true;
 				}
@@ -198,6 +196,7 @@ public class EBHostRole extends Role implements Host {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				hostState=state.relieveDuty;
 				return true;
 			}
 			if(hostState == state.goToWork){
@@ -282,16 +281,22 @@ public class EBHostRole extends Role implements Host {
 	}
 	
 	private void tellStaff(){
-		((EBCookRole) restaurant.cook).msgClosed();
-		((EBCashierRole)restaurant.cashier).msgClosed();
+		for(MyWaiters w: waiters){
+			((EBAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((EBWaiterRole) w.w).getName());
+		}
 		for (MyWaiters w:waiters){
 			((EBWaiterRole)w.w).msgClosed();
 		}
+		((EBCookRole) restaurant.cook).msgClosed();
+		((EBCashierRole)restaurant.cashier).msgClosed();
+		waiters.removeAll(waiters);
+		hostState = state.leaveWork;
 	}
 	
 	//utilities
 
 	public void msgReadyToWork(Waiter w){
+		restaurantClosed=false;
 		waiters.add(new MyWaiters(w,false));
 		((EBAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((EBWaiterRole) w).getName());
 		this.stateChanged();
@@ -347,6 +352,10 @@ public class EBHostRole extends Role implements Host {
 		}
 		stateChanged();
 	}
+	
+	public void msgLeavingEarly(Waiter wait){
+		((EBAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((EBWaiterRole) wait).getName());
+	}
 
 	public void setRestaurant(Restaurant r) {
 		restaurant=r;
@@ -364,7 +373,6 @@ public class EBHostRole extends Role implements Host {
 
 	@Override
 	public void msgCloseRestaurant() {
-		print("closing EB");
 		hostState=state.closed;
 		restaurantClosed=true;
 		stateChanged();

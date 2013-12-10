@@ -26,6 +26,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public Restaurant restaurant;
+	private boolean restaurantClosed=false;
 	protected EBRevolvingStandMonitor revolvingStand;
 	public boolean checked=false;
 	public boolean testingMonitor=false;
@@ -57,7 +58,6 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	private Semaphore atCook = new Semaphore(0,true);
 	public EBHostGui hostGui = null;
 	private Host host;
-	private Cook cook;
 	public boolean atStart=true;
 	private boolean requestBreak=false;
 	
@@ -66,11 +66,6 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 		restaurant=r;
 	}
 
-
-	public void setCook(Cook cook) {
-		this.cook = cook;
-	}
-	
 	public void setHost(Host host){
 		this.host=host;
 	}
@@ -190,12 +185,20 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 				restaurant.insideAnimationPanel.removeGui(waiterGui);
 				return true;
 			}
-			
+			if(waiterState==wState.leaving){
+				waiterState=wState.none;
+				workClosed();
+				return true;
+			}
 			if(Customers.size() == 0 && (
 					(getName().toLowerCase().contains("day") && myPerson.currentHour >= 11 && myPerson.currentHour <=21) ||
 					(getName().toLowerCase().contains("night") && myPerson.currentHour < 10 || myPerson.currentHour >=22))){
-				waiterState = wState.leaving;
+				waiterState = wState.none;
 				leaveWork();
+				return true;
+			}
+			if(restaurantClosed&&Customers.size() == 0){
+				waiterState = wState.leaving;
 				return true;
 			}
 			if(waiterState == wState.gotToWork)
@@ -317,7 +320,13 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	}
 	
 	private void leaveWork() {
+		waiterState=wState.none;
 		restaurant.host.msgDoneWorking(this);
+		waiterGui.DoLeaveRestaurant();
+	}
+	
+	private void workClosed() {
+		waiterState=wState.none;
 		waiterGui.DoLeaveRestaurant();
 	}
 
@@ -455,6 +464,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	}
 
 	public void goesToWork() {
+		restaurantClosed=false;
 		waiterState = wState.gotToWork;
 		stateChanged();
 	}
@@ -479,8 +489,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 
 
 	public void msgClosed() {
-		// TODO Auto-generated method stub
-		
+		restaurantClosed=true;
 	}
 }
 
