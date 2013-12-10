@@ -1355,8 +1355,6 @@ public class PersonAgent extends Agent implements Person
     	}
     	for(Role role: roles) {
     		if (role instanceof BankRobberRole) {
-    	    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "There is bank robber role");
-
     			role.active = true;
     			((BankRobberRole) role).setGui(new BankRobberGui((BankRobberRole) role));
     	    	((BankRobberRole) role).getGui().setPresent(true);

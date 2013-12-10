@@ -19,7 +19,7 @@ public class BankRobberRole extends Role{
 	private BankRobberGui robberGui;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 5;
-	static final int AT_ATM_TIME = 5000;
+	static final int AT_ATM_TIME = 3200;
 	Timer timer = new Timer();
 
 	
@@ -34,20 +34,28 @@ public class BankRobberRole extends Role{
 	}
 	
 	public void msgHackSuccessful(double amountStolen){
+		print("SUCCESS!!! YOU STOLE " + amountStolen);
 		state = GuiState.DoneRobbing;
 		myPerson.cashOnHand += amountStolen;
 		stateChanged();
 	}
 	
 	public void msgHackDefended() {
+		print("FAILURE!");
 		state = GuiState.InBank;
 		stateChanged();
 	}
 	
 	// msgs from animation
 	public void msgAtATM() {
+		print("msgAtAtm received");
 		waitingResponse.release();
 		state = GuiState.AtAtm;
+		stateChanged();
+	}
+	
+	public void msgNoMoreATMS() {
+		state = GuiState.DoneRobbing;
 		stateChanged();
 	}
 	
@@ -90,8 +98,6 @@ public class BankRobberRole extends Role{
 	}
 
 	private void EnterBank() {
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "gui to enter");
-
 		robberGui.DoEnterBank();
 		try {
 			waitingResponse.acquire();
@@ -115,6 +121,7 @@ public class BankRobberRole extends Role{
 	}
 	
 	private void RobBank() {
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Attempting robbery");
 		int hackAlgorithm = randInt(ALGORITHM_MIN,ALGORITHM_MAX);
 		myPerson.bankTeller.msgThisIsAHackAttack(this, hackAlgorithm);
 	}

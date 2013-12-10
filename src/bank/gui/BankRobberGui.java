@@ -116,10 +116,13 @@ public class BankRobberGui implements Gui{
 	}
 	
 	public void DoGoToATM() {
-		while(atmNumber < 0) {
-			findATM();
+		findATM();
+		if(atmNumber >= 0) {
+			command = Command.GoToATM;
+		} else {
+			role.msgNoMoreATMS();
 		}
-		command = Command.GoToATM;
+		atmNumber = -1;
 	}
 	
 	private void findATM() {

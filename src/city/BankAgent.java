@@ -39,10 +39,12 @@ public class BankAgent extends Agent implements Bank{
 	}
 	static final int ALGORITHM_MIN = 1, ALGORITHM_MAX = 5;
 	
+	
+	enum HackState {pending,attemptToDefend };
 	public class HackAttack {
 		public BankRobberRole hacker;
 		int hackAlgorithm = -1;
-		int defenseAlgorithm = -1;
+		HackState hs = HackState.pending;
 		public HackAttack(BankRobberRole h, int hack) {
 			this.hacker = h;
 			this.hackAlgorithm = hack;
@@ -106,7 +108,10 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	public void msgThisIsAHackAttack(BankRobberRole brr, int hackAlgorithm){
-		
+		print("being hacked!!");
+		hackAttacks.add(new HackAttack(brr, hackAlgorithm));
+		if(0 == getStateChangePermits())
+			stateChanged();
 	}
 	
 	/**
@@ -208,6 +213,15 @@ public class BankAgent extends Agent implements Bank{
 	// Scheduler
 	
 	public boolean pickAndExecuteAnAction() {
+		
+		for(HackAttack h : hackAttacks) {
+			if(HackState.pending == h.hs) {
+				h.hs = HackState.attemptToDefend;
+				defendHack(h);
+				return true;
+			}
+		}
+		
 		for(Transaction t : transactions) {
 			if(TransactionState.deposit == t.ts) {
 				t.ts = TransactionState.none;
@@ -261,6 +275,19 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	// Actions
+	
+	private void defendHack(HackAttack h) {
+		print("try to defend hack!");
+		int defenseWeakness = randInt(ALGORITHM_MIN, ALGORITHM_MAX);
+		if(defenseWeakness == h.hackAlgorithm) {
+			double stolenAmount = h.hackAlgorithm * 500;
+			h.hacker.msgHackSuccessful(stolenAmount);
+			fundsAvailable -= stolenAmount;
+		} else {
+			h.hacker.msgHackDefended();
+		}
+		hackAttacks.remove(h);
+	}
 	
 	private void customerDeposit(Transaction t) {
 		t.amount = (Math.round(100*t.amount) / ((double)100));

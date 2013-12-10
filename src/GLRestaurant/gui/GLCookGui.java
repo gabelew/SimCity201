@@ -171,10 +171,6 @@ public class GLCookGui implements Gui {
     
     public void plate(String item, int orderNum) {
     	for(Plate p: plates) {
-    		System.out.println("Plating " + item + " " + p.plateNum + " is occupied?: " + p.occupied);
-    		if(p.occupied) {
-    			System.out.println("Platenum " + p.plateNum + " is occupied with: " + p.item);
-    		}
     		if(!p.occupied) {
     			p.occupied = true;
     			if("steak".equals(item)) {
