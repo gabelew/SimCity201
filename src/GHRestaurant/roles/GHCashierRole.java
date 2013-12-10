@@ -1,6 +1,8 @@
 package GHRestaurant.roles;
 
 import GHRestaurant.gui.GHCashierGui;
+import GLRestaurant.roles.GLCashierRole.Bill;
+import GLRestaurant.roles.GLCashierRole.BillState;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
@@ -9,6 +11,7 @@ import java.util.*;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.roles.DeliveryManRole;
 import city.roles.Role;
 
 /**
@@ -72,10 +75,10 @@ public class GHCashierRole extends Role implements Cashier{
 		stateChanged();
 	}
 	  
-	public void msgPayMarket(Market m, double cost){
+	/*public void msgPayMarket(Market m, double cost){
 		print("Recieved msgPayMarket");
 		checks.add(new Check(m,cost,CheckState.MARKET));
-	}
+	}*/
 	
 	@Override
 	public void msgHereIsBill(DeliveryMan DMR, double bill) {
@@ -121,14 +124,35 @@ public class GHCashierRole extends Role implements Cashier{
 		}	
 		}
 		
-		synchronized(checks){
-		for (Check c : checks) {
+		
+		DeliveryBills temp2 = null;
+		DeliveryBills temp3 = null;
+		synchronized(bills) {
+			for(DeliveryBills b: bills) {
+				if(b.bs == billState.BILLED && temp2 == null) {
+					for(DeliveryBills b2 : bills) {
+						if(b2.bs == billState.INVOICED && b2.dm == b.dm) {
+							temp2 = b;
+							temp3 = b2;
+						}
+					}
+				}
+			}
+		}
+		if(temp2 != null) {
+			payBill(temp2, temp3);
+			return true;
+		}
+		
+		
+		/*synchronized(checks){
+		for (DeliveryBills db : bills) {
 			if (c.getState() == CheckState.MARKET) {
 					PayMarket(c);//the action
 					return true;//return true to the abstract agent to reinvoke the scheduler.
 		}
 		}	
-		}
+		}*/
 		
 		return false;
 		//we have tried all our rules and found
@@ -190,13 +214,31 @@ public class GHCashierRole extends Role implements Cashier{
 		}
 	}
 	
+
+	private void payBill(DeliveryBills temp2, DeliveryBills temp3) {
+		if(temp2.cost == temp3.cost){
+			RestaurantMoney = RestaurantMoney - temp2.cost;
+			temp2.dm.msgHereIsPayment(temp2.cost, this);
+			bills.remove(temp2);
+			bills.remove(temp3);
+		}else{
+			print("We are never ordering from this Market again.");
+			RestaurantMoney = RestaurantMoney - temp2.cost;
+			temp2.dm.msgHereIsPayment(temp2.cost, this);
+			//tell cook to put market on naughty list
+			restaurant.cook.msgNeverOrderFromMarketAgain(((DeliveryManRole)temp2.dm).Market);
+			bills.remove(temp2);
+			bills.remove(temp3);
+		}		
+	}
+	
 	//the cashier will for now always have enough money to pay the market.
-	private void PayMarket(Check c){
+	/*private void PayMarket(Check c){
 		print("Paying " + c.market.getName() + " for order");
 		RestaurantMoney -= c.cost;
 		//c.market.msgHereIsPayment(c.cost,this);
 		checks.remove(c);
-	}
+	}*/
 	
 	//utilities
 	public class Check {
