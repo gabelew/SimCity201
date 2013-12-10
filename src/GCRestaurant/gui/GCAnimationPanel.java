@@ -24,7 +24,7 @@ public class GCAnimationPanel extends InsideAnimationPanel implements ActionList
     private final int xHostStand = 70;
     private final int yHostStand = 20;
     private final int xRegister = 100;
-    private final int yRegister = 40;
+    private final int yRegister = 80;
     private final int TABLE_SPACING = 100;
     private final int xCookOrderingStand = 180;
     private final int yCookOrderingStand = 0;

@@ -35,7 +35,7 @@ public class GCCustomerGui implements Gui{
 	private int xTable = 100;
 	private final int yTable = 175;
 	private String choice;
-	private int cashierPosX = 110, cashierPosY = 54;
+	private int cashierPosX = 110, cashierPosY = 93;
 	private BufferedImage customerImg;
 	private BufferedImage customerSittingImg;
 

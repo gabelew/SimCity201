@@ -3,16 +3,13 @@ package GHRestaurant.roles;
 import GHRestaurant.gui.*;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
-import agent.Agent;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
 import city.gui.Gui;
-import city.interfaces.Person;
 import city.roles.Role;
 
 /**
@@ -29,13 +26,12 @@ public class GHCustomerRole extends Role implements Customer{
 	private double money;				
 
 	private Random generator = new Random();
-	private Semaphore atDestination = new Semaphore(0,true);
 	private Check check;
 	private Restaurant restaurant = null;
 	
 	// agent correspondents
-	private Host host;
-	private Cashier cashier;
+	//private Host host;
+	//private Cashier cashier;
 	private Waiter waiter;
 
 	//    private boolean isHungry = false; //hack for gui
@@ -64,13 +60,13 @@ public class GHCustomerRole extends Role implements Customer{
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(Host host) {
+	/*public void setHost(Host host) {
 		this.host = host;
 	}
 	
 	public void setCashier(Cashier ca){
 		this.cashier = ca;
-	}
+	}*/
 	
 	public double getMoney(){
 		return money;

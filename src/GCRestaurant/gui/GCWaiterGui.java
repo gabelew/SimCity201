@@ -32,7 +32,7 @@ public class GCWaiterGui implements Gui {
     private int xDestination = DEFAULT_POSX, yDestination = DEFAULT_POSY;//default start position
     private int personSize = 20;
     private int cookPosX = 200, cookPosY = 80;
-    private int cashierPosX = 97, cashierPosY = 50;
+    private int cashierPosX = 97, cashierPosY = 88;
     private int customerPos = 40;
     private final int xWaitOrderingStand = 250;
     private final int yWaitOrderingStand = 80;
@@ -43,7 +43,7 @@ public class GCWaiterGui implements Gui {
     private List<String> foods = Collections.synchronizedList(new ArrayList<String>());
     private BufferedImage waiterImg;
     
-    enum Command {none,enterRestaurant, leaveRestaurant, goToCashier, goToCook, GoSeatCustomer };
+    enum Command {none,enterRestaurant, leaveRestaurant, goToCashier, goToCook, GoSeatCustomer, checkOrderStand };
     Command command = Command.none;
 
     public GCWaiterGui(GCWaiterRole r) {
@@ -77,32 +77,38 @@ public class GCWaiterGui implements Gui {
         if (xPos == xDestination && yPos == yDestination
        		& (xDestination == xTable + personSize) & (yDestination == yTable - personSize)) {
         	command = Command.none;
-        	role.msgAtTable();
+        	role.msgAnimationDone();
         }
         
         if (xPos == xDestination && yPos == yDestination && command == Command.goToCook) {
              xDestination = DEFAULT_POSX;
              yDestination = DEFAULT_POSY;
              command = Command.none;
-        	 role.msgAtTable();
+        	 role.msgAnimationDone();
             }
         if (xPos == xDestination && yPos == yDestination && command == Command.goToCashier){
              xDestination = DEFAULT_POSX;
              yDestination = DEFAULT_POSY;
              command = Command.none;
-        	 role.msgAtTable();
+        	 role.msgAnimationDone();
             }
        if (xPos == xDestination && yPos == yDestination && command == Command.GoSeatCustomer) 
         {
     	   command = Command.none;
-    	   role.msgAtTable();
+    	   role.msgAnimationDone();
         }
        if(xPos == xDestination && yPos == yDestination && command == Command.leaveRestaurant)
        {
     	   command = Command.none;
     	   role.msgDoneWorkingLeave();
        }
-        
+       if(xPos == xDestination && yPos == yDestination && command == Command.checkOrderStand)
+       {
+    	   command = Command.none;
+    	   xDestination = DEFAULT_POSX;
+           yDestination = DEFAULT_POSY;
+    	   role.msgAnimationDone();
+       }
         if(xPos == DEFAULT_POSX && yPos == DEFAULT_POSY){atStart = true;}
         else{atStart = false;}
     }
@@ -189,6 +195,12 @@ public class GCWaiterGui implements Gui {
         yDestination = DEFAULT_POSY;
     }
     
+    public void checkOrderStand()
+    {
+    	xDestination = xWaitOrderingStand;
+    	yDestination = yWaitOrderingStand;
+    	command = Command.checkOrderStand;
+    }
     public boolean atStartPos()
     {
     	return atStart;
@@ -202,7 +214,7 @@ public class GCWaiterGui implements Gui {
         return yPos;
     }
 
-	@Override
+	
 	public void setPresent(boolean b) {
 		
 	}

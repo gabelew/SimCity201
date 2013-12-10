@@ -11,9 +11,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import city.gui.Gui;
-import GCRestaurant.gui.GCCashierGui.Command;
 import GCRestaurant.roles.GCCookRole;
-import GCRestaurant.roles.GCCookRole.Order;
+import GCRestaurant.roles.GCOrder;
 
 public class GCCookGui implements Gui{
 
@@ -38,7 +37,7 @@ public class GCCookGui implements Gui{
 	private List<FoodIcon> orders = Collections.synchronizedList(new ArrayList<FoodIcon>());
 	private enum foodstate{none, plating, cooking, served, gettingFromFridge, gotFood, readyToPickUp};
 	private BufferedImage cookImg;
-	enum Command {none,enterRestaurant, leaveRestaurant, goToFridge, putFoodOnGrill, plateFood, getCookedFood };
+	enum Command {none,enterRestaurant, leaveRestaurant, goToFridge, putFoodOnGrill, plateFood, getCookedFood, checkOrderStand };
 	Command command = Command.none;
 
 	public GCCookGui(GCCookRole r){
@@ -119,6 +118,13 @@ public class GCCookGui implements Gui{
 			xDestination = DEFAULT_POSX;
 			yDestination = DEFAULT_POSY;
 		}
+		if(xPos == xDestination && yPos == yDestination && command == Command.checkOrderStand)
+		{
+			command = Command.none;
+			xDestination = DEFAULT_POSX;
+			yDestination = DEFAULT_POSY;
+			role.msgActionDone();
+		}
 		
 		if(xPos == xDestination && yPos == yDestination && command == Command.leaveRestaurant)
 		{
@@ -133,7 +139,7 @@ public class GCCookGui implements Gui{
 		xDestination = DEFAULT_POSX;
 		yDestination = DEFAULT_POSY;
 	}
-	public void goToFridge(Order o)
+	public void goToFridge(GCOrder o)
 	{
 		xDestination = FRIDGEX;
 		yDestination = FRIDGEY;
@@ -141,7 +147,7 @@ public class GCCookGui implements Gui{
 		command = Command.goToFridge;
 	}
 	
-	public void cookFoodOnGrill(Order ordr, int grillLoc)
+	public void cookFoodOnGrill(GCOrder ordr, int grillLoc)
 	{
 		command = Command.putFoodOnGrill;
 		for(FoodIcon f: orders)
@@ -154,7 +160,7 @@ public class GCCookGui implements Gui{
 			}
 		}
 	}
-	public void getFoodFromGrill(Order ordr)
+	public void getFoodFromGrill(GCOrder ordr)
 	{
 		command = Command.getCookedFood;
 		for(FoodIcon f: orders)
@@ -167,7 +173,7 @@ public class GCCookGui implements Gui{
 			}
 		}
 	}
-	public void plateFood(Order o)
+	public void plateFood(GCOrder o)
 	{
 		for(FoodIcon f: orders)
 		{
@@ -181,7 +187,7 @@ public class GCCookGui implements Gui{
 		}
 		doneplating = false;
 	}
-	public void pickedUpFood(Order o)
+	public void pickedUpFood(GCOrder o)
 	{
 		synchronized(orders)
 		{
@@ -231,11 +237,11 @@ public class GCCookGui implements Gui{
 	private class FoodIcon
 	{
 		public String choice;
-		public Order order;
+		public GCOrder order;
 		public int xLoc = GRILLX;
 		public int yLoc = GRILLY;
 		public foodstate state = foodstate.gettingFromFridge;
-		public FoodIcon(Order o, String c)
+		public FoodIcon(GCOrder o, String c)
 		{
 			this.order = o;
 			this.choice = c;
@@ -253,4 +259,11 @@ public class GCCookGui implements Gui{
 		yDestination = startPos;
 		
 	}
+	
+	public void checkOrderStand()
+    {
+    	xDestination = xCookOrderingStand;
+    	yDestination = yCookOrderingStand;
+    	command = Command.checkOrderStand;
+    }
 }

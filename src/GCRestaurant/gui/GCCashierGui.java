@@ -15,7 +15,7 @@ public class GCCashierGui implements Gui{
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 	private int xWorkingPos = 100;
-	private int yWorkingPos = 50;
+	private int yWorkingPos = 82;
 	
 	final int DEFAULT_POS = -20;
 	private BufferedImage cashierImg;
