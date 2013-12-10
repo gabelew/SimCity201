@@ -134,17 +134,24 @@ public class PersonAgent extends Agent implements Person
 	}
 
     private MarketAgent chooseClosestMarket() {
-    	
-    	MarketAgent closestMa = markets.get(0);
+    	MarketAgent closestMa = null;
+    	for(MarketAgent m:markets){
+    		if(m.isOpen){
+    			closestMa=m;
+    			break;
+    		}
+    	}
 	    if(this.name.toLowerCase().contains("bus")){
 	    	closestMa = markets.get(5);
 	    }else{
 	    	for(MarketAgent m: markets){
-				if(Math.abs(closestMa.location.y - personGui.yPos) >= Math.abs(m.location.y - personGui.yPos)){
-					if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
-						closestMa = m;
+	    		if(m.isOpen){
+					if(Math.abs(closestMa.location.y - personGui.yPos) >= Math.abs(m.location.y - personGui.yPos)){
+						if(Math.abs(closestMa.location.x - personGui.xPos) > Math.abs(m.location.x - personGui.xPos)){
+							closestMa = m;
+						}
 					}
-				}
+	    		}
 			}
 	    }
 		return closestMa;
@@ -1319,9 +1326,9 @@ public class PersonAgent extends Agent implements Person
     	//print("I'm going to market");
     	state = State.goingToMarket;
 	    MarketAgent m  = chooseClosestMarket();
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market 0"+markets.indexOf(m));
-	    destination = m.location;
-	    
+    	if(m!=null){
+	    AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market 0"+markets.indexOf(m));
+	    destination = m.location; 
 	    if(car == true || destination.y == personGui.yPos){
     		personGui.DoWalkTo(destination);
     		
@@ -1337,6 +1344,11 @@ public class PersonAgent extends Agent implements Person
     	} 
 	    
 	    log.add(new LoggedEvent("Called goToMarket from scheduler going to closest market"));
+    	}
+    	else{
+    		AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "All markets are closed. I will try again when they are open.");
+	    	state = State.doingNothing;
+    	}
     }
     
     private void finishGoingToMarket(){
