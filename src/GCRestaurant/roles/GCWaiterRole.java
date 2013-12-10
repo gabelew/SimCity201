@@ -30,7 +30,7 @@ public class GCWaiterRole extends Role implements Waiter{
 		Ordered, FoodCooking, FoodDoneCooking, orderDone, Served, Leaving, Left, checkGiven}
 	public enum WaiterEvent{onBreak, none,seatingCustomer, goingToCustomer,
 		goingToCook, gettingFood, givingFood, giveCheckToCashier, AlmostOnBreak, gotToWork, relieveFromDuty }
-	
+	boolean restaurantClosed = false;
 	private WaiterEvent event = WaiterEvent.none;
 	public Collection<Table> tables;
 	
@@ -381,6 +381,12 @@ public class GCWaiterRole extends Role implements Waiter{
 				return true; 
 			}
 			
+			if(!restaurant.isOpen&& customers.size() == 0)
+			{
+				shiftOver();
+				return true;
+			}
+			
 			// (4) Gives Order to Customer
 			for (MyCustomer customer : customers)
 			{
@@ -499,7 +505,6 @@ public class GCWaiterRole extends Role implements Waiter{
 		
 	}
 
-	@Override
 	public void msgLeftTheRestaurant() {
 		// TODO Auto-generated method stub
 		
@@ -525,8 +530,11 @@ public class GCWaiterRole extends Role implements Waiter{
 		return (Gui) waiterGui;
 	}
 
-	
-	
+	public void msgRestaurantClosing() 
+	{
+		restaurantClosed = true;
+		stateChanged();
+	}
 		
 }
 

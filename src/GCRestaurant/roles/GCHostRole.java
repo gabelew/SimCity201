@@ -29,8 +29,9 @@ public class GCHostRole extends Role implements Host
 	public GCHostGui hostGui = null;
 	public List<myWaiter> waiters = Collections.synchronizedList(new ArrayList<myWaiter>());
 	private enum WaiterState{askedForBreak, onBreak, Working, deniedBreak};
-	enum State {none, goToWork, working, leaving, releaveFromDuty};
+	enum State {none, goToWork, working, leaving, releaveFromDuty, aboutToClose, closing};
 	State state = State.none;
+	boolean restaurantClosed = false;
 
 	public GCHostRole() 
 	{
@@ -131,7 +132,6 @@ public class GCHostRole extends Role implements Host
 	//needed for interface, not needed for GCRestaurant
 	public void msgCanIBreak(Waiter w) {}
 
-	@Override
 	public void msgDoneWorking(Waiter waiter) 
 	{
 		for(myWaiter w: waiters){
@@ -233,6 +233,34 @@ public class GCHostRole extends Role implements Host
 					e.printStackTrace();
 				}
 				return true;
+			}
+			//turns away customers if restaurant is closed
+			if(restaurantClosed)
+			{
+				for(Customer c : waitingCustomers)
+				{
+					((GCCustomerRole)c).restaurantClosedMsg();
+					waitingCustomers.remove(c);
+				}
+			}
+			if(state == State.aboutToClose)
+			{
+				for(myWaiter w : waiters)
+				{
+					((GCWaiterRole)w.w).msgRestaurantClosing();
+				}
+				state = State.closing;
+			}
+			
+			if(!restaurant.isOpen && waiters.size() == 0 )//state == State.closing
+			{
+				print("^^^ CLOSING NOW");
+				((GCCashierRole)restaurant.cashier).msgRestaurantClosing();
+				((GCCookRole)restaurant.cook).msgRestaurantClosing();
+				hostGui.DoLeaveRestaurant();
+				try {waitingResponse.acquire();} 
+				catch (InterruptedException e) { e.printStackTrace(); }
+				
 			}
 			/**
 			 * Animation to enter restaurant ->> END
@@ -371,14 +399,16 @@ public class GCHostRole extends Role implements Host
 
 	@Override
 	public void msgCloseRestaurant() {
-		// TODO Auto-generated method stub
-		
+		restaurantClosed = true;
+		state = State.aboutToClose;
+		stateChanged();
 	}
 
 	@Override
 	public void msgOpenRestaurant() {
-		// TODO Auto-generated method stub
-		
+		restaurantClosed = false;
+		state = state.none;
+		stateChanged();
 	}
 
 	
