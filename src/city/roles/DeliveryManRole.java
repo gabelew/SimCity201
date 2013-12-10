@@ -19,6 +19,8 @@ import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.DeliveryManDrivingGui;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cashier;
 import restaurant.test.mock.EventLog;
@@ -73,6 +75,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.askedForOrder;
 		stateChanged();
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Received order");
 	}
 	
 	public void msgTryAgain(Order order, MarketAgent marketAgent) {
@@ -82,7 +85,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 					Market=marketAgent;
 					o=order;
 					o.s=orderState.ordered;
-					print("Deliver again");
+					AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Restaurant opened. Trying to deliver again");
 					stateChanged();
 				}
 				else{
@@ -103,6 +106,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		cashier=ca;
 		o.s=orderState.payed;
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Received payment for order");
 	}
 	
 	public void msgDoneWithShift(){
@@ -235,6 +239,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 				if(R.isOpen){
 					(o.cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
 					o.s=orderState.waitingForPayment;
+					AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Giving order to cook");
 				}
 				else{
 					Order tempOrder=new Order(null);
@@ -244,6 +249,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 					tempOrder.outOf=o.outOf;
 					Market.failedOrders.add(tempOrder);
 					o.s=orderState.payed;
+					AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Delivery failed because restaurant closed");
 				}
 			}
 		}
