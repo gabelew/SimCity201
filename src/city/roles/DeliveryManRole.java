@@ -77,15 +77,17 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	
 	public void msgTryAgain(Order order, MarketAgent marketAgent) {
 		for (Restaurant r: myPerson.simCityGui.getRestaurants()){
-			if(r.cook==o.cook){
+			if(r.cook==order.cook){
 				if(r.isOpen){
 					Market=marketAgent;
 					o=order;
 					o.s=orderState.ordered;
+					print("Deliver again");
 					stateChanged();
 				}
 				else{
 					o.s=orderState.closed;
+					stateChanged();
 				}
 			}
 		}
@@ -232,7 +234,12 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 					o.s=orderState.waitingForPayment;
 				}
 				else{
-					Market.failedOrders.add(o);
+					Order tempOrder=new Order(null);
+					tempOrder.amountOwed=o.amountOwed;
+					tempOrder.Choices=o.Choices;
+					tempOrder.cook=o.cook;
+					tempOrder.outOf=o.outOf;
+					Market.failedOrders.add(tempOrder);
 					o.s=orderState.payed;
 				}
 			}
