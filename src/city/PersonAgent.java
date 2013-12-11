@@ -196,7 +196,11 @@ public class PersonAgent extends Agent implements Person
 	}
 
 	private boolean youAreRich() {
-		if(personalAccount != null && this.mustEatAtHomeFirst==false && this.job.type.equals("repairman")){
+		if(this.job!=null && this.job.type.equals("repairman")){
+			return false;
+		}
+		
+		if(personalAccount != null && this.mustEatAtHomeFirst==false ){
 			if(personalAccount.currentBalance > 200){
 				return true;
 			}
