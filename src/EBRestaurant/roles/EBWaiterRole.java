@@ -478,7 +478,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 
 	public void setGui(Gui g) {
 		waiterGui = (EBWaiterGui) g;
-		if(getName().toLowerCase().contains("car")){
+		if(getName().toLowerCase().contains("car")||getName().toLowerCase().contains("poor")){
 			if(getName().toLowerCase().contains("night"))
 				waiterGui.setWaitingPosition(50,-30);
 			else
