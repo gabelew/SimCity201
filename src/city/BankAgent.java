@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import city.roles.BankCustomerRole;
 import city.roles.BankRobberRole;
 import agent.Agent;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 
@@ -108,6 +110,7 @@ public class BankAgent extends Agent implements Bank{
 	}
 	
 	public void msgThisIsAHackAttack(BankRobberRole brr, int hackAlgorithm){
+		AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "We are getting hacked!");
 		hackAttacks.add(new HackAttack(brr, hackAlgorithm));
 		if(0 == getStateChangePermits())
 			stateChanged();
@@ -281,8 +284,10 @@ public class BankAgent extends Agent implements Bank{
 			double stolenAmount = h.hackAlgorithm * 500;
 			h.hacker.msgHackSuccessful(stolenAmount);
 			fundsAvailable -= stolenAmount;
+			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Failed to defend against hack. Lost " + stolenAmount);
 		} else {
 			h.hacker.msgHackDefended();
+			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Successfully protected against the hack!");
 		}
 		hackAttacks.remove(h);
 	}
@@ -313,6 +318,7 @@ public class BankAgent extends Agent implements Bank{
 		if(-1 == owedBalance) {
 			t.customer.owed = 0;
 		}
+		AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Received loan payment from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
 		transactions.remove(t);
 	}
@@ -328,6 +334,7 @@ public class BankAgent extends Agent implements Bank{
 		if(-1 == owedBalance) {
 			t.customer.owed = 0;
 		}
+		AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Received loan payment from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
 		transactions.remove(t);
 	}
@@ -344,6 +351,7 @@ public class BankAgent extends Agent implements Bank{
 		int bankLimit = Double.compare(fundsAvailable, t.amount);
 		if(-1 == loanLimit || -1 == bankLimit) {
 			t.customer.accountHolder.msgLoanDenied(t.amount, t.customer.accountType);
+			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Denied loan request from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		} else{
 			
 			t.customer.owed += t.amount;
@@ -351,6 +359,7 @@ public class BankAgent extends Agent implements Bank{
 			fundsAvailable -= t.amount;
 			fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 			t.customer.accountHolder.msgLoanApproved(t.customer.owed, t.customer.accountType);
+			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Approved loan request from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		}
 		transactions.remove(t);
 	}
