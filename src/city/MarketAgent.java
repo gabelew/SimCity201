@@ -352,4 +352,8 @@ public void openRestaurant(){
 	stateChanged();
 }
 
+public void msgNextHour(int hour) {
+	stateChanged();
+}
+
 }

@@ -427,7 +427,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     			r.landlord = landlord;
     		}
     		r.insurance = insurance;
-    		r.insurance = repairman;
+    		r.repairman = repairman;
     	}
     }
     
@@ -923,7 +923,11 @@ public class SimCityGui extends JFrame implements ActionListener {
 				p.msgNextHour(hour, dayOfWeek);
 			}
 		}
-	
+		synchronized(markets){
+			for (MarketAgent market:markets){
+				market.msgNextHour(hour);
+			}
+		}
 	}
 
 	public void displayBuildingPanel(InsideBuildingPanel ibp) {
