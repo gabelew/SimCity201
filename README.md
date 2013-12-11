@@ -155,7 +155,8 @@ SimCity201 Project Repository for CS 201 students
 	He is in the seventh home (the first row, 7th from the left). His name appears in the panel in his 
 	home.
 	visiterhomecar08LowSteak eats at home, then drives his car to the bank, market, and a restaurant. 
-	To view his log, type his name into the Person Filter. Make sure the Person Alert Tag is turned on. He is in the 	eighth home (the first row, 8th from the left). His name appears in the panel in his home.
+	To view his log, type his name into the Person Filter. Make sure the Person Alert Tag is turned on. He is in 
+	the eighth home (the first row, 8th from the left). His name appears in the panel in his home.
 ###Scenario C
 	Each restaurant is low on at least one item. When the cook gets to the restaurant, he will order from the 
 	closest open market. 
