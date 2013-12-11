@@ -5,8 +5,9 @@ import javax.swing.*;
 import restaurant.interfaces.Host;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
-
+import city.roles.AtHomeRole;
 import GCRestaurant.roles.GCHostRole;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -23,13 +24,13 @@ public class AtHomeListPanel extends JPanel implements ActionListener
             new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     private JPanel view = new JPanel();
-    //private JPanel addListItemView = new JPanel();
     private JPanel buttonGroup = new JPanel();
 
     private AtHomePanel restPanel;
     private String type;
     
     private JCheckBox setStateCB;
+    private List<AtHomeRole> people = new ArrayList<AtHomeRole>();
     private List<ListItem> listItems = new ArrayList<ListItem>();
 
     static final int LIST_ITEM_VIEW_GAP = 5;
@@ -91,7 +92,15 @@ public class AtHomeListPanel extends JPanel implements ActionListener
 	               	temp.stateCB.setText("has broken app");
 	               	temp.stateCB.setEnabled(false);
 	               	temp.stateCB.setSelected(true);
-	               	//((GCHostRole)host).msgCanIBreak(temp.stateCB.getName());
+	               	
+	               	//finds role
+	               	for(AtHomeRole r : people)
+	               	{
+	               		if(r.myPerson.getName().equals(temp.label.getText()))
+	               		{
+	               			r.BrokenApplianceMsg("fridge");
+	               		}
+	               	}
 	               }
     		}
         }	
@@ -103,8 +112,9 @@ public class AtHomeListPanel extends JPanel implements ActionListener
      * to add a new person.
      *
      */    	
-    public void addPerson(String name) 
+    public void addPerson(String name, AtHomeRole role) 
     {
+    	people.add(role);
         if (name != null) {
             
             JPanel addNewCustView = new JPanel();

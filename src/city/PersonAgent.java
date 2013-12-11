@@ -25,10 +25,13 @@ import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMWaiterRole;
 import agent.Agent;
+import atHome.city.Apartment;
 import atHome.city.AtHomeGui;
 import atHome.city.Home;
 import atHome.city.Residence;
 import city.BankAgent.BankAccount;
+import city.animationPanels.ApartmentAnimationPanel;
+import city.animationPanels.HouseAnimationPanel;
 import city.gui.PersonGui;
 import city.gui.SimCityGui;
 import city.gui.trace.AlertLog;
@@ -315,6 +318,14 @@ public class PersonAgent extends Agent implements Person
 		ahGui.setPresent(false);
 		if(!testing){
 			myHome.insideAnimationPanel.addGui(ahGui);
+		}
+		if(myHome instanceof Apartment)
+		{
+			((ApartmentAnimationPanel)myHome.insideAnimationPanel).addPersonToList(name, role);
+		}
+		else
+		{
+			((HouseAnimationPanel)myHome.insideAnimationPanel).addPersonToList(name, role);
 		}
 	}
 /***********************

@@ -203,12 +203,10 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     		if(residence instanceof Apartment)
     		{
     			((Apartment)residence).addRenter(p);
-    			((ApartmentAnimationPanel)residence.insideAnimationPanel).addPersonToList(name);
     			p.isRenter = true;
     		}
     		else
     		{
-    			((HouseAnimationPanel)residence.insideAnimationPanel).addPersonToList(name);
     			((Home)residence).owner = p;
     		}
     		

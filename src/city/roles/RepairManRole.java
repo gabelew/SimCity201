@@ -58,7 +58,9 @@ public class RepairManRole extends Role implements RepairMan
 		//adds a new order to fix
 		public void fixAppliance(AtHomeRole role, String app)
 		{
+			print("!@#$ I have a job to do");
 			jobs.add(new Job(role,app,role.myPerson.myHome.location));
+			stateChanged();
 		}
 		
 		//Customer bank transfers money over
@@ -72,6 +74,7 @@ public class RepairManRole extends Role implements RepairMan
 					break;
 				}
 			}
+			stateChanged();
 		}
 		
 		//Lets it slide, person doesn't pay
@@ -86,6 +89,7 @@ public class RepairManRole extends Role implements RepairMan
 					break;
 				}
 			}
+			stateChanged();
 		}
 /*********************
  ***** ACTIONS
