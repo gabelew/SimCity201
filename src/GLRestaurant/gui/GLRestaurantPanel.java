@@ -1,13 +1,5 @@
 package GLRestaurant.gui;
 
-import CMRestaurant.roles.CMHostRole;
-import CMRestaurant.roles.CMWaiterRole;
-import GLRestaurant.roles.GLCustomerRole;
-import GLRestaurant.roles.GLHostRole;
-import GLRestaurant.roles.GLWaiterRole;
-import GLRestaurant.roles.GLCookRole;
-import GLRestaurant.roles.GLCashierRole;
-import agent.Agent;
 
 import javax.swing.*;
 
@@ -38,16 +30,12 @@ public class GLRestaurantPanel extends JPanel {
 //    private JPanel restLabel = new JPanel();
     //private ListPanel customerPanel = new ListPanel(this, "Customers");
     private GLRestaurantListPanel waiterPanel = new GLRestaurantListPanel(this, "Waiters");
+    private GLRestaurantListPanel customerPanel = new GLRestaurantListPanel(this, "Customers");
+
     private JPanel group = new JPanel();
 
     private SimCityGui gui;
     private InsideBuildingPanel insideBuildingPanel;
-    
-    private int WAITERX = 300;
-    private int WAITERY = 40;
-    
-    private int CUSTOMERX = 300;
-    private int CUSTOMERY = 200;
     
     public GLRestaurantPanel(SimCityGui gui) {
     	
@@ -56,10 +44,10 @@ public class GLRestaurantPanel extends JPanel {
     	setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
         group.setLayout(new GridLayout(GROUP_NROWS, GROUP_NCOLUMNS, GROUP_PANEL_GAP, GROUP_PANEL_GAP));
 
-        //group.add(customerPanel);
-        group.add(waiterPanel);
+        add(waiterPanel);
+        add(customerPanel);
       
-        add(group);
+       // add(group);
     }
     
 //    public void setWorking(String type, String name) {
@@ -80,7 +68,13 @@ public class GLRestaurantPanel extends JPanel {
 		waiterPanel.addPerson(name);
 	}
 	public void removeWaiterFromList(String name){
-		//waiterPanel.removeWaiter(name);
+		waiterPanel.removePerson(name);
+	}
+	public void addCustomerToList(String name){
+		customerPanel.addPerson(name);
+	}
+	public void removeCustomerFromList(String name){
+		customerPanel.removePerson(name);
 	}
 	
 	public void setInsideBuildingPanel(InsideBuildingPanel parent){

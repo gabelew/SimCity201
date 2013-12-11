@@ -169,6 +169,12 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 	public void removeWaiterFromList(String name){
 		((GLRestaurantPanel) insideBuildingPanel.guiInteractionPanel).removeWaiterFromList(name);
 	}
+	public void addCustomerToList(String name){
+		((GLRestaurantPanel) insideBuildingPanel.guiInteractionPanel).addCustomerToList(name);
+	}
+	public void removeCustomerFromList(String name){
+		((GLRestaurantPanel) insideBuildingPanel.guiInteractionPanel).removeCustomerFromList(name);
+	}
 
 	
 }
