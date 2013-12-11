@@ -249,19 +249,12 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 				{
 					if(cust.S == customerState.ordered)
 					{
+						print("test");
 						giveOrderToCook(cust);
 						return true;
 					}
 				}
 			}
-			/*for (MyCustomer cust : Customers)
-			{
-				if (cust.S==customerState.ordered)
-				{
-					giveOrderToCook(cust);
-					return true;
-				}
-			}*/
 			for (MyCustomer cust : Customers)
 			{
 				if (cust.S==customerState.wantBill&&cust.billReady&&atStart)
@@ -296,8 +289,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			if (requestBreak){
 				askForBreak();
 			}
-			if(!testingMonitor)
-				waiterGui.DoLeaveCustomer();
+		waiterGui.DoLeaveCustomer();
 		return false;
 		}
 		catch(ConcurrentModificationException e){
@@ -316,10 +308,12 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	
 	private void goPickUpFood(MyCustomer c){
 		waiterGui.DoGoToCook();
-		try {
-			atCook.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if(!testingMonitor){
+			try {
+				atCook.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		c.S=customerState.giveFood;
 	}
@@ -409,12 +403,13 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	private void giveBillToCustomer(MyCustomer mc){
 		mc.S=customerState.gaveBill;
 		waiterGui.DoBringToTable(mc.C,mc.tableNumber);//animation
-		try {
-			atTable.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if(!testingMonitor){
+			try {
+				atTable.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		Do("Here is bill.Please go to Cashier");
 		((EBCustomerRole) mc.C).msgBill(mc.amountOwed);
 		waiterGui.DoLeaveCustomer();
 	}
@@ -422,12 +417,13 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	private void giveOrderToCustomer(MyCustomer mc){
 		((EBCookRole) restaurant.cook).msgAnimationTakingFood(mc.tableNumber);
 		waiterGui.DoBringToTable(mc.C,mc.tableNumber);//animation
-		try {
-			atTable.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if(!testingMonitor){
+			try {
+				atTable.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		Do("Here is your "+mc.choice);
 		waiterGui.setChoice(mc.choice, mc.tableNumber);
 		mc.S=customerState.eating;
 		((EBCustomerRole) mc.C).msgHereIsOrder(mc.choice);
@@ -446,7 +442,8 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	
 	private void createCheck(MyCustomer mc){
 		mc.check=false;
-		((EBCashierRole) restaurant.cashier).msgHereIsCheck(this,mc.choice, mc.tableNumber);
+		if(!testingMonitor)
+			((EBCashierRole) restaurant.cashier).msgHereIsCheck(this,mc.choice, mc.tableNumber);
 	}
 
 	//utilities

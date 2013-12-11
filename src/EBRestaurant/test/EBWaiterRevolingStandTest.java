@@ -2,8 +2,8 @@ package EBRestaurant.test;
 
 import java.util.Timer;
 
-import CMRestaurant.roles.CMWaiterRole.CustomerState;
-import CMRestaurant.roles.CMWaiterRole.MyCustomer;
+import EBRestaurant.gui.EBCookGui;
+import EBRestaurant.gui.EBWaiterGui;
 import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCustomerRole;
 import EBRestaurant.roles.EBNormalWaiterRole;
@@ -18,9 +18,12 @@ import city.PersonAgent;
 
 public class EBWaiterRevolingStandTest  extends TestCase{
 	EBWaiterRole waiterShared;
+	EBWaiterGui waiterGui;
+	EBWaiterGui waiterGui2;
 	EBWaiterRole waiterNormal;
 	EBRevolvingStandMonitor EBrevolvingStand;
 	EBCookRole cook;
+	EBCookGui cookGui;
 	PersonAgent person;
 	PersonAgent person2;
 	EBCustomerRole customer;
@@ -46,13 +49,19 @@ public class EBWaiterRevolingStandTest  extends TestCase{
 		waiterNormal = new EBNormalWaiterRole(person, restaurant);
 		customer = new EBCustomerRole(person2,restaurant);
 		customer2 = new EBCustomerRole(person2,restaurant);
-		
+		waiterGui = new EBWaiterGui(waiterNormal);
+		waiterGui2 = new EBWaiterGui(waiterShared);
+		waiterShared.setGui(waiterGui2);
+		waiterNormal.setGui(waiterGui);
+		cookGui = new EBCookGui(cook);
+		cook.setGui(cookGui);
+		waiterNormal.testingMonitor=true;
 		waiterShared.testingMonitor = true;
 		cook.testingMonitor = true;
 	}	
 	
 	/**
-	 * First test is empty revolving stand, waiter puts one order on the stand succesfully, and the coo removes it.
+	 * First test is empty revolving stand, waiter puts five orders on the stand successfully, 6th fails. Cook removes orders, waiter puts on the one.
 	 */
 	public void testSharedWaiterNormal() {
 		//setUp() runs first before this test!
@@ -288,5 +297,44 @@ public class EBWaiterRevolingStandTest  extends TestCase{
 		assertEquals("Customer state should be wait for food now that order is on stand.",waiterShared.Customers.get(1).S,customerState.waitForFood);
 		assertEquals("Revolving stand should have 1 orders in it. It does.", 1,EBrevolvingStand.getCount());	
 	}
-	
+	public void testNormalWaiterNormal() {
+		// check preconditions
+		assertEquals("watierNormal should have an empty event log. Instead, the watierShared's event log reads: "
+						+ waiterNormal.log.toString(), 0, waiterNormal.log.size());
+				
+		//Waiter seats customer
+		waiterNormal.msgSeatCustomer(customer, 1);
+		assertEquals("waiterNormal customer state should be waiting",waiterNormal.Customers.get(0).S,customerState.waiting);
+		//Scheduler should return true, will seat customer
+		assertTrue("watierNormal scheduler should return true.", waiterNormal.pickAndExecuteAnAction());
+		assertEquals("waiterNormal customer state should now be seated",waiterNormal.Customers.get(0).S,customerState.seated);
+		assertFalse("watierNormal scheduler should return false.", waiterNormal.pickAndExecuteAnAction());
+				
+				
+		//Customer is ready to order
+		waiterNormal.msgReadyToOrder(customer);
+		assertEquals("waiterNormal customer state should now be ready to order",waiterNormal.Customers.get(0).S,customerState.readyToOrder);
+		assertTrue("watierNormal scheduler should return true.", waiterNormal.pickAndExecuteAnAction());
+		assertEquals("waiterNormal customer state should now be asked",waiterNormal.Customers.get(0).S,customerState.asked);
+		assertFalse("watierNormal scheduler should return false.", waiterNormal.pickAndExecuteAnAction());
+				
+		//Customer orders steak
+		waiterNormal.msgHereIsMyOrder("steak", customer);
+		assertEquals("waiterNormal customer state should now be ordered",waiterNormal.Customers.get(0).S,customerState.ordered);
+		assertEquals("waiterNormal customer should have choice steak",waiterNormal.Customers.get(0).choice,"steak");
+		assertTrue("watierNormal scheduler should return true.", waiterNormal.pickAndExecuteAnAction());
+		assertEquals("waiterNormal customer state should now be waitForFood",waiterNormal.Customers.get(0).S,customerState.waitForFood);
+		assertFalse("waiterNormal scheduler should return false.", waiterNormal.pickAndExecuteAnAction());
+		
+		//Cook should now have an order because he got the message
+		assertEquals("Cook should have one order",cook.Orders.size(),1);
+		
+		//cook messages waiter when order is ready
+		waiterNormal.msgOrderIsReady("steak", 1);
+		assertEquals("waiterNormal customer state should now be ready to order",waiterNormal.Customers.get(0).S,customerState.foodReady);
+		assertTrue("waiterNormal scheduler should return true.", waiterNormal.pickAndExecuteAnAction());
+		//waiter gives food to customer
+		assertEquals("waiterNormal customer state should now be ready to order",waiterNormal.Customers.get(0).S,customerState.giveFood);
+		assertTrue("waiterNormal scheduler should return true.", waiterNormal.pickAndExecuteAnAction());
+	}
 }

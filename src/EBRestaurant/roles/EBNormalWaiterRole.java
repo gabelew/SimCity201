@@ -10,7 +10,7 @@ public class EBNormalWaiterRole extends EBWaiterRole {
 	}
 	@Override
 	protected void giveOrderToCook(MyCustomer c) {
-		c.S=customerState.asked;
+		c.S=customerState.waitForFood;
 		if(waiterGui != null){
 			waiterGui.DoGoToCook();
 		}
