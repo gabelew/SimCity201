@@ -1,21 +1,14 @@
 package city.gui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import agent.Agent;
-import CMRestaurant.gui.CMCustomerGui;
-import CMRestaurant.gui.CMWaiterGui;
 import city.BusAgent;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -125,14 +118,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     			gridMap.put(new Point(i*20 +97, 95+j*80), new GridSpot());
     			}
     		}
-    	}
-    			
-		/*try {
-			StringBuilder path = new StringBuilder("imgs/");
-			bridgeImg = ImageIO.read(new File(path.toString() + "bridge.png"));
-		} catch (IOException e) {
-		}*/
-		
+    	}		
 
 	    BusGui bg1 = new BusGui(busLeft, simCityGui, 'B');
 	    busLeft.setBusGui(bg1);
@@ -265,6 +251,14 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
         }
 		}
 
+		synchronized(guis){		
+	        for(Gui gui : guis) {
+	        	if(gui instanceof PersonGui && ((PersonGui)gui).agent.car==false)
+		            if (gui.isPresent()) {
+		                gui.draw(g2);
+		            }
+	        }
+    	}
     	synchronized(guis){		
 	        for(Gui gui : guis) {
 	        	if(gui instanceof BusGui)

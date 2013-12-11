@@ -18,7 +18,7 @@ import city.gui.trace.AlertTag;
 
 public class PersonGui implements Gui{
 	
-	private PersonAgent agent = null;
+	PersonAgent agent = null;
 	private boolean isPresent = false;
 	private boolean leavingBuilding = false;
 	private boolean atStopSign = false;
