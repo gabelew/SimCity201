@@ -57,7 +57,14 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		super(p);
 		o=new Order(orderState.noOrder);
 		drivingGui=new DeliveryManDrivingGui(this,myPerson.simCityGui);
-		myPerson.simCityGui.animationPanel.addGui(drivingGui);
+		if(notTesting)
+			myPerson.simCityGui.animationPanel.addGui(drivingGui);
+	}
+	public DeliveryManRole(PersonAgent p,boolean test){
+		super(p);
+		myPerson=p;
+		o=new Order(orderState.noOrder);
+		drivingGui=new DeliveryManDrivingGui(this,myPerson.simCityGui);
 	}
 	public DeliveryManRole(){
 		super();
@@ -79,20 +86,29 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	
 	public void msgTryAgain(Order order, MarketAgent marketAgent) {
-		for (Restaurant r: myPerson.simCityGui.getRestaurants()){
-			if(r.cook==order.cook){
-				if(r.isOpen){
-					Market=marketAgent;
-					o=order;
-					o.s=orderState.ordered;
-					AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Restaurant opened. Trying to deliver again");
-					stateChanged();
-				}
-				else{
-					o.s=orderState.closed;
-					stateChanged();
+		if(notTesting){
+			for (Restaurant r: myPerson.simCityGui.getRestaurants()){
+				if(r.cook==order.cook){
+					if(r.isOpen){
+						Market=marketAgent;
+						o=order;
+						o.s=orderState.ordered;
+						AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Restaurant opened. Trying to deliver again");
+						stateChanged();
+					}
+					else{
+						o.s=orderState.closed;
+						stateChanged();
+					}
 				}
 			}
+		}
+		else{
+			Market=marketAgent;
+			o=order;
+			o.s=orderState.ordered;
+			AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Restaurant opened. Trying to deliver again");
+			stateChanged();
 		}
 	}
 	
@@ -234,24 +250,36 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 	}
 	
 	private void atRestaurant(){
-		for(Restaurant R: myPerson.simCityGui.getRestaurants()){
-			if(R.cook==o.cook){
-				if(R.isOpen){
-					(o.cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
-					o.s=orderState.waitingForPayment;
-					AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Giving order to cook");
-				}
-				else{
-					Order tempOrder=new Order(null);
-					tempOrder.amountOwed=o.amountOwed;
-					tempOrder.Choices=o.Choices;
-					tempOrder.cook=o.cook;
-					tempOrder.outOf=o.outOf;
-					Market.failedOrders.add(tempOrder);
-					o.s=orderState.payed;
-					AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Delivery failed because restaurant closed");
+		if(notTesting){
+			for(Restaurant R: myPerson.simCityGui.getRestaurants()){
+				if(R.cook==o.cook){
+					if(R.isOpen){
+						(o.cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
+						o.s=orderState.waitingForPayment;
+						AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Giving order to cook");
+					}
+					else{
+						Order tempOrder=new Order(null);
+						tempOrder.amountOwed=o.amountOwed;
+						tempOrder.Choices=o.Choices;
+						tempOrder.cook=o.cook;
+						tempOrder.outOf=o.outOf;
+						Market.failedOrders.add(tempOrder);
+						o.s=orderState.payed;
+						AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Delivery failed because restaurant closed");
+					}
 				}
 			}
+		}
+		else{
+			Order tempOrder=new Order(null);
+			tempOrder.amountOwed=o.amountOwed;
+			tempOrder.Choices=o.Choices;
+			tempOrder.cook=o.cook;
+			tempOrder.outOf=o.outOf;
+			Market.failedOrders.add(tempOrder);
+			o.s=orderState.payed;
+			AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Delivery failed because restaurant closed");
 		}
 	}
 	private void dontDeliver(){
