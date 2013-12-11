@@ -72,7 +72,7 @@ public class PersonAgent extends Agent implements Person
 	public boolean isEvil = false;
 	public PersonAgent landlord;
 	public PersonAgent insurance;
-	public PersonAgent repairman;
+	public RepairManRole repairman;
 	
 	public String name;
 	public boolean car = false;

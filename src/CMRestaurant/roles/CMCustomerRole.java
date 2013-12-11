@@ -368,7 +368,6 @@ public class CMCustomerRole extends Role implements Customer {
 
 	private void eatFood() {
 		customerGui.foodIsHere(choice);
-		Do("Eating Food");
 		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Eating Food");
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.

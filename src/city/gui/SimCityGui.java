@@ -95,6 +95,7 @@ import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.gui.trace.TraceControlPanel;
 import city.gui.trace.TracePanel;
+import city.roles.RepairManRole;
 import city.roles.Role;
 
 import java.awt.*;
@@ -410,7 +411,7 @@ public class SimCityGui extends JFrame implements ActionListener {
     private void setLandlordForRenters() {
     	PersonAgent landlord = null;
     	PersonAgent insurance = null;
-    	PersonAgent repairman = null;
+    	RepairManRole repairman = null;
     	for(PersonAgent p: persons) {
     		if(p.job!= null && p.job.type.equals("landlord")) {
     			landlord = p;
@@ -419,7 +420,11 @@ public class SimCityGui extends JFrame implements ActionListener {
     			insurance = p;
     		}
     		if(p.job!= null && p.job.type.equals("repairman")) {
-    			repairman = p;
+    			for(Role role: p.roles){
+    				if(role instanceof RepairManRole){
+    	    			repairman = (RepairManRole) role;
+    				}
+    			}
     		}
     	}
     	for(PersonAgent r: persons) {
