@@ -1,12 +1,12 @@
 package city.interfaces;
 
-import city.PersonAgent;
+import city.roles.AtHomeRole;
 
 public interface RepairMan 
 {
-	public abstract void fixAppliance(PersonAgent p, String app);
+	public abstract void fixAppliance(AtHomeRole role, String app);
 	
-	public abstract void HereIsPayment(PersonAgent p, double price);
+	public abstract void HereIsPayment(AtHomeRole role, double price);
 	
-	public abstract void butYouOweMeOne(PersonAgent p);
+	public abstract void butYouOweMeOne(AtHomeRole role);
 }

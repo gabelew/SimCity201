@@ -169,7 +169,7 @@ public class GCCookRole extends Role implements Cook
 	}
 
 	public void msgMarketClosed(MarketAgent market) {
-		markets.remove(market);
+		//markets.remove(market);
 		
 	}
 
@@ -290,8 +290,21 @@ public class GCCookRole extends Role implements Cook
 				print("WANT TO ORDER ~~~~~~~~~" + item.getKey() + " " + item.getValue());
 			}
 			marketOrders.add(new MarketOrder(order, markets.get(marketCounter)));
-			markets.get(marketCounter).msgPlaceDeliveryOrder((Cook)this);
-			marketCounter++;
+			
+			//finds a suitable market
+			while(!markets.get(marketCounter).isOpen)
+			{
+				marketCounter++;
+				if(marketCounter == markets.size()+1)
+				{
+					marketCounter = 0;
+					break;
+				}
+			}
+			if(marketCounter < markets.size())
+			{
+				markets.get(marketCounter).msgPlaceDeliveryOrder((Cook)this);
+			}
 		}
 		stateChanged();
 	}

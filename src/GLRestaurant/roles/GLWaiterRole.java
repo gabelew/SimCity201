@@ -100,23 +100,23 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 	
 	public void msgWantToGoOnBreak() { //from gui
-		print("I want to go on a break.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Want to go on break.");
 		WantToGoOnBreak = true;
 		stateChanged();
 	}
 
 	public void msgReturnedFromBreak() {
-		print("Finished break.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Finished break.");
 		((GLHostRole)restaurant.host).msgFinishedBreak(this);
 		stateChanged();
 	}
 	
 	public void msgBreakRequestReviewed(boolean canGoOnBreak) {
 		if (canGoOnBreak) {
-			print("Break request approved.");
+			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Break request approved.");
 			event = agentEvent.goOnBreak;
 		} else {
-			print("Break request denied.");
+			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Break request denied.");
 			event = agentEvent.none;
 			waiterGui.noBreak();
 		}
@@ -178,25 +178,21 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 
 	public void msgAtTable() {//from animation
-		print("msgAtTable received");
 		atTable.release();// = true;
 		stateChanged();
 	}
 	
 	public void msgAtOrigin() {
-		//print("msgAtOrigin received");
 		atOrigin.release();
 		stateChanged();
 	}
 
 	public void msgAtCustomer() {
-		//print("msgAtCustomer received");
 		atCustomer.release();
 		stateChanged();
 	}
 	
 	public void msgAtPlate() {
-		//print("msgAtPlate received");
 		atPlate.release();
 		stateChanged();
 	}
@@ -209,6 +205,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 		if(event == agentEvent.relieveFromDuty) {
 			event = agentEvent.none;
 			myPerson.releavedFromDuty(this);
+			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Finished shift.");
 			restaurant.insideAnimationPanel.removeGui(waiterGui);
 			return true;
 		}
@@ -354,7 +351,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 				// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Do("Taking " + mc.c.getName() + "'s order.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Taking customer " + mc.c.myPerson.getName() + "'s order.");
 		mc.cs = customerState.ordering;
 		mc.c.msgChooseFood();
 	}
@@ -362,7 +359,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	protected abstract void sendOrderToCook(MyCustomer mc);
 	
 	private void getCustomerToReorder(MyCustomer mc) {
-		Do("Letting customer reorder.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Customer " + mc.c.myPerson.getName() + " ordered choice we are out of. Letting them reorder.");
 		mc.cs = customerState.seated;
 		waiterGui.GoToTable(mc.c, mc.t.tableNumber);
 		try {
@@ -386,7 +383,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 			e.printStackTrace();
 		}
 		((GLCookRole)restaurant.cook).msgGotPlate(this, mc.c);
-		Do("Bringing " + mc.c.getName() + " " + choice);
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Gave customer " + mc.c.myPerson.getName() + choice);
 		waiterGui.servingFood(choice);
 		waiterGui.GoToTable(mc.c, mc.t.tableNumber);
 		try {
@@ -404,13 +401,13 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 	
 	private void bringCustomerCheck(MyCustomer mc, Check check) {
-		Do("Giving " + mc.c.getName() + " check.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Gave customer " + mc.c.myPerson.getName() + " check.");
 		mc.c.msgHereIsCheck(check.amount);
 		mc.cs = customerState.checkReceived;
 	}
 	
 	private void clearTable(MyCustomer mc) {
-		Do("Customer leaving.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Customer " + mc.c.myPerson.getName() + " is leaving.");
 		((GLHostRole)restaurant.host).msgTableAvailable(this, mc.c, mc.t.tableNumber);
 		mc.cs = customerState.leftRestaurant;
 		customers.remove(mc);
@@ -423,7 +420,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 	
 	private void leaveWork() {
-		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving work.");
 		waiterGui.DoLeaveRestaurant();
 		restaurant.host.msgDoneWorking(this);
 		try {
@@ -434,7 +431,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 	
 	private void closedLeaving() {
-		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "I am leaving Work.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Restaurant has closed. I am leaving work early.");
 		waiterGui.DoLeaveRestaurant();
 		try {
 			waitingResponse.acquire();
@@ -447,7 +444,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	private void DoSeatCustomer(GLCustomerRole customer, Table table) {
 		//Notice how we print "customer" directly. It's toString method will do it.
 		//Same with "table"
-		print("Seating " + customer + " at " + table);
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Seating customer " + customer.myPerson.getName() + " at table: " + table.tableNumber);
 		waiterGui.GoToTable(customer, table.tableNumber); 
 	}
 	

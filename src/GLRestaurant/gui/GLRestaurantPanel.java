@@ -4,15 +4,9 @@ package GLRestaurant.gui;
 import javax.swing.*;
 
 import city.animationPanels.InsideBuildingPanel;
-import restaurant.Restaurant;
-import city.animationPanels.GLRestaurantAnimationPanel;
 import city.gui.SimCityGui;
-import city.gui.trace.AlertLog;
-import city.gui.trace.AlertTag;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 
 /**
  * Panel in frame that contains all the restaurant information,
@@ -27,8 +21,6 @@ public class GLRestaurantPanel extends JPanel {
 	private static final int NCOLUMNS = 2;
 	private static final int NROWS = 2;
     
-//    private JPanel restLabel = new JPanel();
-    //private ListPanel customerPanel = new ListPanel(this, "Customers");
     private GLRestaurantListPanel waiterPanel = new GLRestaurantListPanel(this, "Waiters");
     private GLRestaurantListPanel customerPanel = new GLRestaurantListPanel(this, "Customers");
 
@@ -37,8 +29,7 @@ public class GLRestaurantPanel extends JPanel {
     private SimCityGui gui;
     private InsideBuildingPanel insideBuildingPanel;
     
-    public GLRestaurantPanel(SimCityGui gui) {
-    	
+    public GLRestaurantPanel(SimCityGui gui) {	
     	this.gui = gui;
 
     	setLayout(new GridLayout(NROWS, NCOLUMNS, REST_PANEL_GAP, REST_PANEL_GAP));
@@ -46,23 +37,7 @@ public class GLRestaurantPanel extends JPanel {
 
         add(waiterPanel);
         add(customerPanel);
-      
-       // add(group);
     }
-    
-//    public void setWorking(String type, String name) {
-//
-//        if (type.equals("Waiters")) {
-//
-//    		for(Restaurant r: gui.getRestaurants()){
-//    	        for (GLHostRole.MyWaiter temp: ((GLHostRole)r.host).waiters) {
-//    	            if (((GLWaiterRole) temp.w).getName() == name){
-//    	            	((GLWaiterRole) temp.w).getGui().setWorking();
-//    	            }
-//    	        }
-//    		}
-//        }
-//    }
     
     public void addWaiterToList(String name){
 		waiterPanel.addPerson(name);
@@ -83,20 +58,5 @@ public class GLRestaurantPanel extends JPanel {
     public InsideBuildingPanel getInsideBuildingPanel(){
     	return insideBuildingPanel;
     }
-    
-//    /**
-//     * Tells the base agents to pause.
-//     */
-//    public void pause() {
-//    	for (Agent a : agents) {
-//    		a.pause();
-//    	}
-//    }
-//    		
-//    public void resume() {
-//    	for (Agent a: agents) {
-//    		a.resume();
-//    	}
-//    }
 
 }

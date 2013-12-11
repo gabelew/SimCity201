@@ -234,8 +234,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 			g2.setColor(Color.GRAY);
 			g.fillRect(30, 115, 14, 20);
 			g2.setColor(Color.GREEN);
-			g.drawRect(30, 115, 14, 20);*/
-			
+			g.drawRect(30, 115, 14, 20);
+			*/
 		synchronized(guis){
 		for(Gui gui : guis) {
 			//if (gui.isPresent()) {
@@ -276,6 +276,11 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 		            }
 	        }
     	}
+
+		for(int j =0; j<4;j++){
+			g2.setColor(color);
+			g.fillRect(97, 68+j*80, 680, 27);
+		}
 		
         //Here is the buildings
         for(int i = ZERO; i<buildings.size(); i++){

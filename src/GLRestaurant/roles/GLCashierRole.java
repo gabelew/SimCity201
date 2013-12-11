@@ -19,6 +19,8 @@ import java.util.concurrent.Semaphore;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.DeliveryManRole;
 import city.roles.Role;
 
@@ -68,9 +70,7 @@ public class GLCashierRole extends Role implements Cashier {
 	}
 	public Restaurant restaurant;
 	public enum checkState {pending, preparing, unpaid, paying, processingPayment, paid, debt};
-//	public enum BillState {pending, paying, debt, paid};
 	public List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
-	//public List<MarketBill> bills = Collections.synchronizedList(new ArrayList<MarketBill>());
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	Map<String, Double> menu = new ConcurrentHashMap<String, Double>();
 	
@@ -144,6 +144,7 @@ public class GLCashierRole extends Role implements Cashier {
 		if(state == State.relieveFromDuty){
 			state = State.none;
 			myPerson.releavedFromDuty(this);
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Finished shift.");
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
 			}
@@ -216,6 +217,7 @@ public class GLCashierRole extends Role implements Cashier {
 		}
 		
 		if(restaurantClosed && bills.isEmpty() && checksPaid) {
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Restaurant is closed. Leaving work early.");
 			state = State.leaving;
 			restaurantClosed = false;
 		}
@@ -229,13 +231,16 @@ public class GLCashierRole extends Role implements Cashier {
 	// Actions
 		
 	private void payBill(Bill billFromDman, Bill billFromCook) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Bill from Delivery Man was $" + billFromDman.bill + ". Invoice from Cook was $" + billFromCook.bill);
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Paid market $" + billFromDman.bill);
 		if(billFromDman.bill == billFromCook.bill){
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Bills match.");
 			bank = bank - billFromDman.bill;
 			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
 			bills.remove(billFromDman);
 			bills.remove(billFromCook);
 		}else{
-			print("We are never ordering from this Market again.");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Bills do not match. We are never ordering from this market again.");
 			bank = bank - billFromDman.bill;
 			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
 			//tell cook to put market on naughty list
@@ -253,23 +258,23 @@ public class GLCashierRole extends Role implements Cashier {
 			bank -= cash;
 			myPerson.businessFunds += cash;
 			myPerson.msgDepositBusinessCash();
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Going to deposit into restaurant account: " + cash);
 		}
 	}
 	
 	private void produceCheck(Check c) {
-		//Do ("Producing check for " + c.c.getName());
 		double previousAmount = 0;
 		synchronized(checks) {
 			for (Check ch : checks) {
 				if(checkState.debt == ch.cs && c.c == ch.c) {
 					previousAmount = ch.amount;
 					ch.cs = checkState.paid;
-					//print (c.c.getName() + " owes us " + previousAmount + ". Added to current bill.");
+					AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " previously owes us " + previousAmount + ". Added to current bill.");
 				}
 			}
 		}
 		double calculatedAmount = menu.get(c.choice) + previousAmount;
-		print("The check comes out to " + calculatedAmount);
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " check comes out to " + calculatedAmount);
 		c.amount = calculatedAmount;
 		GLWaiterRole waiter = (GLWaiterRole)c.w;
 		waiter.msgHereIsCheck(c.c, c.amount);
@@ -277,14 +282,14 @@ public class GLCashierRole extends Role implements Cashier {
 	}
 
 	private void fulfillCheck(Check c) {
-		//Do (c.c.getName() + " paid " + c.paid);
 		if(c.paid < c.amount) {
 			c.amount -= c.paid;
 			bank += c.paid;
 			c.paid = 0;
 			c.cs = checkState.debt;
-			//print(c.c.getName() + " owes us " + c.amount);
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " owes us " + c.amount);
 		} else {
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " paid us " + c.paid);
 			c.cs = checkState.paid;
 			bank += c.paid;
 		}
