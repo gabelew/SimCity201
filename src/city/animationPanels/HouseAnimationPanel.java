@@ -144,4 +144,8 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
     public void addPersonToList(String name, AtHomeRole role){
 		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addHomePersonToList(name, role);
 	}
+
+	public void removePersonFromList(String name, AtHomeRole role) {
+		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).removePersonFromList(name, role);
+	}
 }

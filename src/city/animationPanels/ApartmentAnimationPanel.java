@@ -146,4 +146,8 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
     public void addPersonToList(String name, AtHomeRole role){
 		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addAptPersonToList(name, role);
 	}
+    public void removePersonFromList(String name, AtHomeRole role)
+    {
+    	((AtHomePanel) insideBuildingPanel.guiInteractionPanel).removePersonFromList(name, role);
+    }
 }

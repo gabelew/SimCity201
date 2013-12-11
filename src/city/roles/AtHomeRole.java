@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 import restaurant.test.mock.LoggedEvent;
+import atHome.city.Apartment;
 import atHome.city.AtHomeGui;
+import city.animationPanels.*;
 import city.PersonAgent;
 import city.gui.Gui;
 import city.gui.trace.AlertLog;
@@ -145,6 +147,7 @@ public class AtHomeRole extends Role implements AtHome
 	
 	public void ApplianceFixed(String app, double price)
 	{
+		print("I am: " + myPerson.getName() + " and I Received repair bill for: " + app);
 		for(Appliance a : appliances)
 		{
 			if(a.appliance.equals(app))
@@ -153,6 +156,17 @@ public class AtHomeRole extends Role implements AtHome
 				a.priceToFix = price;
 			}
 		}
+		
+		if(myPerson.myHome instanceof Apartment)
+		{
+			((ApartmentAnimationPanel)myPerson.myHome.insideAnimationPanel).removePersonFromList(myPerson.getName(), this);
+		}
+		else
+		{
+			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).removePersonFromList(myPerson.getName(), this);
+		}
+		
+		stateChanged();
 	}
 	public void msgGoLeaveHome()
 	{
@@ -187,6 +201,7 @@ public class AtHomeRole extends Role implements AtHome
 			myPerson.repairman.butYouOweMeOne(this);
 		}
 		appliances.remove(a);
+		//resets break button
 		
 	}
 	
@@ -345,6 +360,15 @@ public class AtHomeRole extends Role implements AtHome
 			}
 		}
 		
+		for(Appliance a : appliances)
+		{
+			if(a.state == AppState.payRepairman)
+			{
+				PayForRepairs(a);
+				return true;
+			}
+		}
+		
 		if(state == EventState.leavingHome)
 		{
 			LeavingHomeAction();
@@ -361,14 +385,7 @@ public class AtHomeRole extends Role implements AtHome
 			return true;
 		}
 		
-		for(Appliance a : appliances)
-		{
-			if(a.state == AppState.payRepairman)
-			{
-				PayForRepairs(a);
-				return true;
-			}
-		}
+		
 		for(Order o: orders)
 		{
 			if(o.state == OrderState.done)

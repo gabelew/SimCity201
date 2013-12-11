@@ -61,23 +61,23 @@ To view his log, type his name into the Person Filter. Make sure the Person Aler
 
 ###Scenario C: Tests cook, cashier, market interaction
 1. Each restaurant is low on at least one item. When the cook gets to the restaurant, he will order from the closest open market. 
-2. For instance, Restaurant 01 (top level, 1st from left) cook will order 30steaks when he gets to work. The delivery man (maroon person) from the market next door will pick up the order from the shelf and walk outside to his yellow delivery van. The delivery van will drive to the market. The delivery man won’t leave until the bill has been paid. The cashier won’t pay him until he gets the invoice from the cook.  The cashier, delivery man, and cook who are in this scenario are posted below.
+2. For instance, Restaurant 04 (2nd level, 2nd from left) cook will order 50 chicken when he gets to work. The delivery man (maroon person) from the market next door will pick up the order from the shelf and walk outside to his yellow delivery van. The delivery van will drive to the market. The delivery man won’t leave until the bill has been paid. The cashier won’t pay him until he gets the invoice from the cook.  The cashier, delivery man, and cook who are in this scenario are posted below.
 
-deliveryMan01daycar. Put the name into the person filter to see his log. Make sure the Market deliveryMan alert tag is turn on.
+deliveryMan02daycar. Put the name into the person filter to see his log. Make sure the Market deliveryMan alert tag is turn on.
 
 * Received Order
 * Giving order to cook
 * Received payment for order
 
-cook01daypoor. Put the name into the person filter to see his log. Make sure the Restaurant Cook alert tag is turned on.
+cook04day. Put the name into the person filter to see his log. Make sure the Restaurant Cook alert tag is turned on.
 
 * Ordering from market
 * Received order from market
 
-cashier01day. Put the name into the person filter to see his log. Make sure the Restaurant Cashier alert tag is turned on.
+cashier04day. Put the name into the person filter to see his log. Make sure the Restaurant Cashier alert tag is turned on.
 
-* Received bill from Market. Total of bill = 40.0
-* Received invoice from cook. Total price of invoice = 40.0
+* Received bill from Market.
+* Received invoice from cook.
 * Payed bill from market
 	
 ###Scenario E: Shows bus-stop behavior
@@ -101,7 +101,7 @@ visiterhome06LowSteak
 	
 ###Scenario G: Tests market behavior
 1. ***To see more clearly, we recommend closing all the other restaurants.
-2. Market delivery fails if after the cook places the order, the restaurant closes. To do this, after cook01daypoor puts “Ordering from market” in his log, close the first restaurant. The delivery van will go, see it is closed and output “Delivery failed because restaurant closed” 
+2. Market delivery fails if after the cook places the order, the restaurant closes. To do this, after cook04day puts “Ordering from market” in his log, close the fourth restaurant. The delivery van will go, see it is closed and output “Delivery failed because restaurant closed” 
 
 cook01daypoor
 
