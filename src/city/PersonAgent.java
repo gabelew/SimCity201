@@ -321,7 +321,7 @@ public class PersonAgent extends Agent implements Person
 	}
 	
 	public void addRestaurant(Restaurant r) {
-		if(job==null || job.type.toLowerCase().equals("landlord") || job.type.toLowerCase().equals("insurance") || !(job.location.equals(r.location))){
+		if(job==null || job.type.toLowerCase().equals("landlord") || job.type.toLowerCase().equals("repairman") || job.type.toLowerCase().equals("insurance") || !(job.location.equals(r.location))){
 			restaurants.add(r);
 		}
 	}

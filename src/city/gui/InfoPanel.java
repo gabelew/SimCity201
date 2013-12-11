@@ -14,6 +14,7 @@ import city.animationPanels.HouseAnimationPanel;
 import city.PersonAgent;
 import city.roles.BankCustomerRole;
 import city.roles.BankRobberRole;
+import city.roles.RepairManRole;
 import city.roles.Role;
 
 import java.awt.*;
@@ -1147,6 +1148,11 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     			p.job = p.new MyJob("landlord");
     		} else if(name.toLowerCase().contains("insurance")) {
     			p.job = p.new MyJob("insurance");
+    		} else if(name.toLowerCase().contains("repairman")) {
+    			p.job = p.new MyJob("repairman");
+    			RepairManRole rp = new RepairManRole(p);
+    			p.roles.add(rp);
+    			rp.active = true;
     		}
     		
     		
