@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import atHome.city.AtHomePanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.AtHomeRole;
 
 public class HouseAnimationPanel  extends InsideAnimationPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -140,7 +141,7 @@ public class HouseAnimationPanel  extends InsideAnimationPanel implements Action
 	/*
      * For ListView
      */
-    public void addPersonToList(String name){
-		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addHomePersonToList(name);
+    public void addPersonToList(String name, AtHomeRole role){
+		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addHomePersonToList(name, role);
 	}
 }

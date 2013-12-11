@@ -137,14 +137,12 @@ public class AtHomeRole extends Role implements AtHome
 	
 	public void BrokenApplianceMsg(String app)
 	{
-		for(Appliance a : appliances)
-		{
-			if(a.appliance.equals(app))
-			{
-				a.state = AppState.broken;
-			}
-		}
+		print("I have a broken:" + app);
+		Appliance a = new Appliance(app);
+		appliances.add(a);
+		stateChanged();
 	}
+	
 	public void ApplianceFixed(String app, double price)
 	{
 		for(Appliance a : appliances)
@@ -183,15 +181,16 @@ public class AtHomeRole extends Role implements AtHome
 		}
 		else
 		{
-			//repairMan.butYouOweMeOne(myPerson);
+			//myPerson.repairman.butYouOweMeOne(this);
 		}
+		appliances.remove(a);
 		
 	}
 	
 	private void requestFix(Appliance a)
 	{
 		a.state = AppState.repairRequested;
-		//repairMan.fixAppliance(myPerson, a.appliance);
+		//myPerson.repairman.fixAppliance(this, a.appliance);
 	}
 	
 	private void EatIt(final Order o)
@@ -229,14 +228,7 @@ public class AtHomeRole extends Role implements AtHome
 			try { busy.acquire();} 
 			catch (InterruptedException e) {e.printStackTrace();}
 		}
-		//Break the fridge randomly -> V2 Implementation
-		/*
-		int fridgeBroken = (new Random()).nextInt(100)+1;
-		if(fridgeBroken == 66)
-		{
-			appliances.add( new Appliance("fridge") );
-		}
-		*/
+		
 		Food food = findFood.get(o.choice);
 		//Cooks Food if has it on hand
 		//adds to marketOrder if low on food
@@ -308,7 +300,6 @@ public class AtHomeRole extends Role implements AtHome
 			{
 				makeMarketList();
 			}
-			
 			orders.clear();
 		}
 		
@@ -445,7 +436,7 @@ public class AtHomeRole extends Role implements AtHome
 	class Appliance
 	{
 	    String appliance;
-	    AppState state = AppState.working;
+	    AppState state = AppState.broken;
 	    double priceToFix;
 	    public Appliance(String a)
 	    {

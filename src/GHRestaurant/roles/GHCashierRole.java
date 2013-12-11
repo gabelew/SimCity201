@@ -376,5 +376,10 @@ public class GHCashierRole extends Role implements Cashier{
 		atDestination.release();		
 	}
 
+	public void msgRestaurantClosed() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 

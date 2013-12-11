@@ -16,6 +16,7 @@ import atHome.city.AtHomePanel;
 import GCRestaurant.gui.GCRestaurantPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.roles.AtHomeRole;
 
 public class ApartmentAnimationPanel  extends InsideAnimationPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -142,7 +143,7 @@ public class ApartmentAnimationPanel  extends InsideAnimationPanel implements Ac
 	/*
      * For ListView
      */
-    public void addPersonToList(String name){
-		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addAptPersonToList(name);
+    public void addPersonToList(String name, AtHomeRole role){
+		((AtHomePanel) insideBuildingPanel.guiInteractionPanel).addAptPersonToList(name, role);
 	}
 }

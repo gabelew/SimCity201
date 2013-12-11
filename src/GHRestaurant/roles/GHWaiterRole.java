@@ -37,7 +37,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	private Cashier cashier;
 	private Cook cook;
 	enum CustomerState {Waiting, AskedToOrder, Ordered, Reorder, Ready, Done, Idle}
-	enum WaiterState{None,GoingToWork, relieveFromDuty}
+	enum WaiterState{None,GoingToWork, relieveFromDuty, RestaurantClosed}
 	WaiterState wState = WaiterState.None;
 	private Restaurant restaurant;
 	
@@ -161,6 +161,11 @@ public class GHWaiterRole extends Role implements Waiter{
 			stateChanged();
 	 }
 	 
+	 public void msgRestaurantClosed(){
+		 wState = WaiterState.RestaurantClosed;
+		 stateChanged();
+	 }
+	 
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -180,6 +185,13 @@ public class GHWaiterRole extends Role implements Waiter{
 			//restaurant.insideAnimationPanel.removeGui(waitergui);
 			return true;
 		}
+		
+		if(wState == WaiterState.RestaurantClosed){
+			wState = WaiterState.None;
+			leaveClosedRestaurant();
+			return true;
+		}
+		
 		
 		if(BackTW){
 			BackToWork();
@@ -257,6 +269,15 @@ public class GHWaiterRole extends Role implements Waiter{
 
 	// Actions
 	
+	private void leaveClosedRestaurant() {
+		waitergui.LeaveRestaurant();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {	
+		}
+		
+	}
+
 	private void MsgHost() {
 		((GHHostRole) restaurant.host).msgSetWaiter(this);
 	}

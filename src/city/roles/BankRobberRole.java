@@ -133,7 +133,7 @@ public class BankRobberRole extends Role{
 	}
 	
 	private void LeaveBank() {		
-		Do("Leaving bank");
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "Leaving bank.");
 		robberGui.DoLeaveBank();
 		try {
 			waitingResponse.acquire();

@@ -1,6 +1,7 @@
 package EBRestaurant.roles;
 
 import EBRestaurant.gui.EBCustomerGui;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
@@ -247,7 +248,7 @@ public class EBCustomerRole extends Role implements Customer {
 	
 	private void giveOrder(){
 		if(myPerson.cashOnHand<5.99){
-			Do("Everything too expensive. Leaving");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Everything too expensive. Leaving");
 			((EBWaiterRole) waiter).msgLeavingTable(this);
 			state=AgentState.DoingNothing;
 			ebcustomerGui.DoExitRestaurant();
@@ -373,6 +374,7 @@ public class EBCustomerRole extends Role implements Customer {
 			myPerson.cashOnHand=myPerson.cashOnHand-amountOwed;
 			ebcustomerGui.DoGoToCashier();
 			stateChanged();
+			amountOwed=(float) (Math.round(100*amountOwed) / ((double)100));
 			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Paying the cashier "+amountOwed);
 
 		}

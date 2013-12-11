@@ -413,7 +413,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	}
 	
 	private void goOnBreak() {
-		Do("Going on break.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Going on break.");
 		event = agentEvent.onBreak;
 		waiterGui.goOnBreak(); // waiter goes to origin
 	}

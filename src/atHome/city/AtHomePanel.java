@@ -5,6 +5,7 @@ import javax.swing.*;
 import restaurant.interfaces.Host;
 import city.animationPanels.InsideBuildingPanel;
 import city.gui.SimCityGui;
+import city.roles.AtHomeRole;
 import CMRestaurant.gui.CMRestaurantListPanel;
 import agent.Agent;
 
@@ -50,14 +51,14 @@ public class AtHomePanel extends JPanel
 	
 	
 	//adds waiters names to list panel
-	public void addAptPersonToList(String name)
+	public void addAptPersonToList(String name, AtHomeRole role)
 	{
-		aptPanel.addPerson(name);
+		aptPanel.addPerson(name, role);
 	}
 	
-	public void addHomePersonToList(String name)
+	public void addHomePersonToList(String name, AtHomeRole role)
 	{
-		homePanel.addPerson(name);
+		homePanel.addPerson(name, role);
 	}
 	//break functionality
 	

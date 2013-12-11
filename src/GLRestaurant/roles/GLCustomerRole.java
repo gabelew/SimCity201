@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 
 /**
@@ -64,7 +66,7 @@ public class GLCustomerRole extends Role implements Customer{
 	// Messages
 
 	public void gotHungry() {//from animation
-		print("I'm hungry");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "I'm hungry.");
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
@@ -77,7 +79,7 @@ public class GLCustomerRole extends Role implements Customer{
 	public void msgRestaurantFull() {
 		int randomChoice = generator.nextInt(2);
 		if(0 == randomChoice) {
-			print("There are no seats. I am leaving.");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "There are no seats. I am leaving.");
 			event = AgentEvent.tiredOfWaiting;
 		}
 		stateChanged();
@@ -114,7 +116,6 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 	
 	public void msgHereIsReceipt(double paid) {
-		//event = AgentEvent.paid;
 		amountPayable = 0;
 		stateChanged();
 	}
@@ -142,6 +143,7 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 	
 	public void msgOutOfFood(String item) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "I guess I can't order the " + item + ".");
 		removeItemFromMenu(item);
 		stateChanged();
 	}
@@ -234,7 +236,6 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 
 	private void goToRestaurant() {
-		Do("Going to restaurant.");
 		customerGui.DoGoToWait();
 	}
 	
@@ -248,15 +249,14 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 
 	private void SitDown() {
-		Do("Being seated. Going to table.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Being seated. Going to table.");
 		customerGui.DoGoToSeat(seatnumber); //might change to take no parameters but get WaiterGui to tell CustomerGui where to go
 	}
 
 	private void decideOrder() {
-		Do("Deciding on what to order.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Deciding  what to order.");
 		timer.schedule(new TimerTask() {
 			public void run() {
-				//print("Decided order, calling waiter now.");
 				callWaiter();
 			}
 		},
@@ -292,21 +292,21 @@ public class GLCustomerRole extends Role implements Customer{
 				int randomIndex = generator.nextInt(keys.size());
 				choice = keys.get(randomIndex);
 			} else {
-				print("There is nothing I can order.");
+				AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "There is nothing that I can order.");
 				choice = null;
 				event = AgentEvent.paid;
 				state = AgentState.Paying;
 			}		
 		
 		if (choice != null) {
-			Do("Ordering " + choice + ".");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Ordering " + choice);
 			waiter.w.msgHereIsChoice(this, choice);
 			customerGui.ordered(choice);
 		}
 	}
 
 	private void EatFood() {
-		Do("Eating food.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Eating yummy food.");
 		customerGui.eating();
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
@@ -318,24 +318,22 @@ public class GLCustomerRole extends Role implements Customer{
 		//anonymous inner class that has the public method run() in it.
 		timer.schedule(new TimerTask() {
 			public void run() {
-				print("Done eating.");
 				event = AgentEvent.doneEating;
-				//isHungry = false;
 				stateChanged();
 			}
 		},
-		EATINGTIME);//getHungerLevel() * 1000);//how long to wait before running task
+		EATINGTIME);
 	}
 	
 	private void askForCheck() {
-		Do("Asking for check");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Asking for check.");
 		myPerson.hungerLevel = 0;
 		waiter.w.msgEatingDone(this);
 	}
 	
 	private void payCashier() {
 		customerGui.DoGoToCashier();
-		Do("Paying cashier.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Paying cashier.");
 		double amount;
 		if (myPerson.cashOnHand >= amountPayable) {
 			amount = amountPayable;
@@ -347,7 +345,7 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 
 	private void leaveRestaurant() {
-		Do("Leaving restaurant.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Leaving restaurant " + restaurant.type);
 		if(AgentState.Leaving == state && AgentEvent.paid == event)
 			waiter.w.msgIAmLeaving(this);
 		else if(AgentState.Leaving == state && AgentEvent.tiredOfWaiting == event) 
@@ -356,6 +354,7 @@ public class GLCustomerRole extends Role implements Customer{
 	}
 	
 	private void callWaiter() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Ready to order.");
 		waiter.w.msgReadyToOrder(this);
 	}
 
@@ -381,10 +380,6 @@ public class GLCustomerRole extends Role implements Customer{
 	public String toString() {
 		return "customer " + getName();
 	}
-
-//	public void setGui(GLCustomerGui g) {
-//		customerGui = g;
-//	}
 
 	public Gui getGui() {
 		return this.customerGui;
