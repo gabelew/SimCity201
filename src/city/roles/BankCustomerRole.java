@@ -326,10 +326,10 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	private void LeaveBank() {	
+		AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "Leaving bank.");
 		final BankCustomerRole r = this;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				Do("Leaving bank");
 				customerGui.DoLeaveBank();
 				((BankAnimationPanel)bank.insideAnimationPanel).removeCustomerFromList(r.getName());
 				try {
@@ -359,7 +359,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 		}	
 		if(-1 == cashLimit) {
 			AlertLog.getInstance().logMessage(AlertTag.BANK_CUSTOMER, this.getName(), "Insufficient funds to deposit");
-			//print("Insufficient funds to deposit");
 		} else {
 			myPerson.bankTeller.msgDepositMoney(this, t.amount, t.accountType);
 			if("personal".equals(t.accountType)) {
