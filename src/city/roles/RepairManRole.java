@@ -46,8 +46,9 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("stove", new Double(100));
 			
 			repairmanGui = new RepairManGui(this);
-			repairmanDrivingGui = new RepairManDrivingGui(this, gui);
 			this.gui = g;
+			repairmanDrivingGui = new RepairManDrivingGui(this, gui);
+			
 			gui.animationPanel.addGui((Gui)repairmanDrivingGui);//adds driving truck to gui
 		}
 		
