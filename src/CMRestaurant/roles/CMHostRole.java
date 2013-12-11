@@ -13,6 +13,8 @@ import city.PersonAgent;
 import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 
 /**
@@ -371,11 +373,13 @@ public class CMHostRole extends Role implements Host {
 	}
 
 	private void tellCustClosed(MyCustomer c) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, getName(), "Sorry, we are closed.");
 		((CMCustomerRole) c.c).msgRestaurantIsClosed();
 		customers.remove(c);
 	}
 	
 	private void tellCustNoTables(MyCustomer c) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, getName(), "Please, wait for open table.");
 		c.state = cState.waitingAndTold;
 		((CMCustomerRole) c.c).msgWaitForOpenTable();
 	}
@@ -400,12 +404,14 @@ public class CMHostRole extends Role implements Host {
 		w.state = wState.idle;
 		w.w.msgGoOnBreak();
 		((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterOnBreak(((CMWaiterRole) w.w).getName());
-	}
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, getName(), ((CMWaiterRole) w.w).getName() + ", go on break.");
+	}	
 
 	private void dontLetWaiterBreak(MyWaiter w) {
 		w.state = wState.working;
 		w.w.msgDontGoOnBreak();
 		((CMRestaurantAnimationPanel) restaurant.insideAnimationPanel).setWaiterCantBreak(((CMWaiterRole) w.w).getName());
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, getName(), ((CMWaiterRole) w.w).getName() + ", we don't have enough working waiters to break.");
 	}
 	
 	private void assignWaiter(MyCustomer c, Table t)

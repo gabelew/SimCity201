@@ -340,7 +340,8 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 			doGoToEntrance();
 			
 			((CMCustomerRole) c.c).msgFollowMeToTable(((Waiter)this), new Menu());
-			
+
+			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), ((CMCustomerRole) c.c).getName() + " follow me to table.");
 			DoSeatCustomer(c, c.table);
 			
 			try {
@@ -356,6 +357,8 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		doGoToTable(c.table);
 		
 		((CMCustomerRole) c.c).msgWhatWouldYouLike();
+
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), ((CMCustomerRole) c.c).getName() + " waht would you like to order.");
 		c.s = CustomerState.asked;
 		
 		try {
@@ -371,6 +374,8 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		doGoToTable(c.table);
 		c.s = CustomerState.orderServed;
 		((CMCustomerRole) c.c).msgHereIsYourFood();
+
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), ((CMCustomerRole) c.c).getName() + " here is you order.");
 		waiterGui.doneServingOrder();
 		//doGoToCashier();
 		((CMCashierRole) restaurant.cashier).msgProduceCheck(this, c.c, c.choice);
