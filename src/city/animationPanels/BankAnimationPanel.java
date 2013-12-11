@@ -14,7 +14,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
-import CMRestaurant.gui.CMRestaurantPanel;
 import bank.gui.BankCustomerGui;
 import bank.gui.BankPanel;
 import city.gui.Gui;

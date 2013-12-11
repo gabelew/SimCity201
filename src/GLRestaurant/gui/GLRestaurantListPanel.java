@@ -5,6 +5,8 @@ import GLRestaurant.roles.GLHostRole;
 
 import javax.swing.*;
 
+import bank.gui.BankPanel;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -16,20 +18,23 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("serial")
 public class GLRestaurantListPanel extends JPanel implements ActionListener {
-
+	private GLRestaurantPanel restPanel;
+	private JPanel view = new JPanel();
+    private List<JLabel> listItems = new ArrayList<JLabel>();
+	static final int LIST_ITEM_VIEW_GAP = 5;
+    static final int LIST_ITEM_VIEW_X = 180;
+    static final int LIST_ITEM_VIEW_Y = 25;
+    static final int GROUP_BUTTON_X = 150;
+    static final int GROUP_BUTTON_Y = 25;
+    static final int LIST_ITEM_VIEW_OFFSET = 30;
+    static final int LABEL_SIZE_OFFSET = 20;
+    static final int LIST_ITEM_H = 7;
+    static final int BUTTON_PADDING = 40;
     public JScrollPane pane =
             new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    private JPanel view = new JPanel();
-//    private List<JButton> list = new ArrayList<JButton>();
-//    private JButton addPersonB = new JButton("Add");
-//    private JButton pauseB = new JButton("Pause");
-//    private JButton zeroInventoryB = new JButton("NoFood");
-//    private JTextField nameInput = new JTextField();
-    private JCheckBox hungryState;
-    private GLRestaurantPanel restPanel;
-    private String type;
-    private boolean paused = false;
+	private String type;
+	public JTextField typeNameHere = new JTextField();
 
     /**
      * Constructor for ListPanel.  Sets up all the gui
@@ -41,45 +46,10 @@ public class GLRestaurantListPanel extends JPanel implements ActionListener {
         restPanel = rp;
         this.type = type;
 
-        setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
-        JLabel panelType = new JLabel("<html><pre> <u>" + type + "</u><br></pre></html>");
-        
-//        JPanel topPane = new JPanel();
-//        pauseB.addActionListener(this);
-//        zeroInventoryB.addActionListener(this);
-//        topPane.add(pauseB);
-//        topPane.add(zeroInventoryB);
-//        topPane.add(panelType);
-//        add(topPane);
-//        topPane.setMaximumSize(new Dimension(200,2));
-//        
-//        JPanel inputPane = new JPanel();
-//        
-//        addPersonB.addActionListener(this);
-//        add(addPersonB);
-//        addPersonB.setMaximumSize(new Dimension(200,2));
-// 
-//        Dimension maximumSize = new Dimension(200,1);
-//        nameInput.setMaximumSize(maximumSize);
-//        nameInput.addActionListener(this);
-//        inputPane.setLayout(new GridLayout(0,2));
-//        inputPane.add(nameInput);
-//        
-//        hungryState = new JCheckBox();
-//        hungryState.setText("Hungry?");
-//        add(hungryState);
-//        inputPane.add(hungryState);
-//        add(inputPane);
-//        inputPane.setMaximumSize(new Dimension(500,2));
-//        
-//        if(type == "Waiters") {
-//        	hungryState.setVisible(false);
-//        	pauseB.setVisible(false);
-//        } else {
-//        	zeroInventoryB.setVisible(false);
-//        }
-//        
-        view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
+    	setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
+	    add(new JLabel("<html><pre> <u>" + type + "</u><br></pre></html>"));
+	    
+	    view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
         pane.setViewportView(view);
         add(pane);
     }
@@ -89,35 +59,7 @@ public class GLRestaurantListPanel extends JPanel implements ActionListener {
      * Handles the event of the add button being pressed
      */
     public void actionPerformed(ActionEvent e) {
-//        if (e.getSource() == addPersonB) {
-//        	if(!nameInput.getText().isEmpty()) {
-//        		addPerson(nameInput.getText());
-//            	nameInput.setText("");
-//        	}
-//        } else if (e.getSource() == pauseB) {
-//        	if(!paused) {
-//        		System.out.println("Restaurant paused.");
-//        		pauseB.setText("Resume");
-//        		restPanel.pause();
-//        		paused = true;
-//        	} else {
-//        		System.out.println("Restaurant unpaused.");
-//        		pauseB.setText("Pause");
-//        		restPanel.resume();
-//        		paused = false;
-//        	}
-//        } else if (e.getSource() == zeroInventoryB) {
-//        	System.out.println("Cook inventory has been zeroed out.");
-//        	restPanel.emptyCookInventory();
-//        } else {
-//        	// Isn't the second for loop more beautiful?
-//            /*for (int i = 0; i < list.size(); i++) {
-//                JButton temp = list.get(i);*/
-//        	for (JButton temp:list){
-//                if (e.getSource() == temp)
-//                    //restPanel.showInfo(type, temp.getText());
-//            }
-//        }
+
     }
 
     /**
@@ -128,9 +70,59 @@ public class GLRestaurantListPanel extends JPanel implements ActionListener {
      * @param name name of new person
      */
     public void addPerson(String name) {
-        if (name != null) {
-         
-            validate();
-        }
+    	 if (name != null) {
+	            
+	            JPanel addNewCustView = new JPanel();
+
+	            Dimension paneSize = pane.getSize();
+	            
+	        	addNewCustView.setLayout(new BorderLayout(LIST_ITEM_VIEW_GAP, LIST_ITEM_VIEW_GAP));  
+	            Dimension addCustViewSize = new Dimension(paneSize.width - LIST_ITEM_VIEW_OFFSET,
+	                    (int) (paneSize.height / LIST_ITEM_H));
+	            addNewCustView.setPreferredSize(addCustViewSize);
+	            addNewCustView.setMinimumSize(addCustViewSize);
+	            addNewCustView.setMaximumSize(addCustViewSize);
+	            
+	            JLabel label = new JLabel(name);
+	            
+	            label.setBackground(Color.white);
+	            //label.setForeground(Color.black);
+	            Dimension labelSize = new Dimension(paneSize.width - LABEL_SIZE_OFFSET,
+	                    (int) (paneSize.height / LIST_ITEM_H));
+	            label.setPreferredSize(labelSize);
+	            label.setMinimumSize(labelSize);
+	            label.setMaximumSize(labelSize);
+	            listItems.add(label);
+	            
+	            addNewCustView.add(label);
+	            view.add(addNewCustView);
+		 }
+	            validate();
     }
+    
+    public void removePerson(String name) {
+		JPanel removeP = null;
+		for(int i = 0; i < view.getComponentCount();i++){
+			if(((JLabel) ((JPanel) view.getComponent(i)).getComponent(0)).getText().equals(name)){
+				removeP = (JPanel) view.getComponent(i);
+			}
+		}
+		if(removeP != null){
+			view.remove(removeP);
+		}
+		JLabel removeI = null;
+		for(int i = 0; i< listItems.size();i++){
+			if(listItems.get(i).getText().equals(name)){
+				removeI = listItems.get(i);
+			}
+		}
+			
+		if(removeI != null){
+			listItems.remove(removeI);
+		}
+		
+		invalidate();
+		validate();	
+		repaint();
+	}
 }

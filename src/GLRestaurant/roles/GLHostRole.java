@@ -11,6 +11,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import city.PersonAgent;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.animationPanels.GLRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.roles.Role;
@@ -98,6 +99,8 @@ public class GLHostRole extends Role implements Host{
 	
 	public void msgIWantFood(GLCustomerRole cust) {
 		customers.add(new MyCustomer(cust, customerState.waiting));
+		((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addCustomerToList(cust.myPerson.getName()); 
+
 		int seatedCount = 0;
 		for(MyCustomer mc : customers) {
 			if(customerState.seated == mc.cs) {
@@ -115,6 +118,7 @@ public class GLHostRole extends Role implements Host{
 		if(mc != null) {
 			mc.cs = customerState.done;
 			customers.remove(mc.c);
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.myPerson.getName()); 
 		}
 		stateChanged();
 	}
@@ -141,6 +145,7 @@ public class GLHostRole extends Role implements Host{
 		mc.t = null;
 		table.setUnoccupied();
 		customers.remove(mc);
+		((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.myPerson.getName()); 
 		stateChanged();
 	}
 	
@@ -177,7 +182,7 @@ public class GLHostRole extends Role implements Host{
 				}
 			}
 			
-			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((GLWaiterRole)w).getName());
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((GLWaiterRole)w).myPerson.getName());
 			waiters.add(new MyWaiter((GLWaiterRole)w));
 		}
 		
@@ -209,9 +214,9 @@ public class GLHostRole extends Role implements Host{
 		}
 		if(removeW !=null){
 			waiters.remove(removeW);
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((GLWaiterRole)waiter).myPerson.getName());
+
 		}
-		
-		//((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((GLWaiterRole) waiter).getName());
 	}
 
 	/**
