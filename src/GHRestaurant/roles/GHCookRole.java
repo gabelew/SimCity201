@@ -50,10 +50,10 @@ public class GHCookRole extends Role implements Cook {
 		//this.name = name;
 		nextmarket = 0;
 		
-		Inventory.put("steak", new Food("steak",5000));
-		Inventory.put("chicken", new Food("chicken",5000));
-		Inventory.put("salad", new Food("salad",3000));
-		Inventory.put("pizza", new Food("pizza",7000));	
+		Inventory.put("steak", new Food("steak",20000/*7500*/));
+		Inventory.put("chicken", new Food("chicken",20000/*7500*/));
+		Inventory.put("salad", new Food("salad",20000/*4500*/));
+		Inventory.put("pizza", new Food("pizza",20000));	
 		
 		Inventory.get("salad").setAmount(amount);
 

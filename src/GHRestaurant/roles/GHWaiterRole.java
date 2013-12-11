@@ -246,19 +246,19 @@ public class GHWaiterRole extends Role implements Waiter{
 		}
 		
 		for (MyCustomer customer : waitingCustomers) {
-			  if(customer.getState() == CustomerState.Waiting){
-				  SeatCustomer(customer);
-				  	return true;
-			  }
-			}
-		
-		for (MyCustomer customer : waitingCustomers) {
 		  if(customer.getState() == CustomerState.Done){
 			  	TellHost(customer);
 			  	return true;
 		  }
 		}
 		//waitergui.DoLeaveCustomer();
+		
+		for (MyCustomer customer : waitingCustomers) {
+			  if(customer.getState() == CustomerState.Waiting){
+				  SeatCustomer(customer);
+				  	return true;
+			  }
+			}
 
 	}  
 	catch(ConcurrentModificationException cme){
@@ -308,24 +308,27 @@ public class GHWaiterRole extends Role implements Waiter{
 	
 	private void TakeOrder(MyCustomer c){
 		//c.cs = CustomerState.Asked;
-		DoTakeOrder(c);
+		//DoTakeOrder(c);
+		waitergui.DoGoToTable(c.tablenumber);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		c.cs = CustomerState.Idle;
 		((GHCustomerRole) c.customer).msgWhatWouldYouLike();
+		c.cs = CustomerState.Idle;
+
 	  }
 	
-	private void DoTakeOrder(MyCustomer c){
+	/*private void DoTakeOrder(MyCustomer c){
 		print("Going to table ");//+ c.tablenumber + " to take "+ c.customer + "'s order.");
 		waitergui.DoGoToTable(c.tablenumber);
 
-	}
+	}*/
 	
 	private void ReAskToOrder(MyCustomer c){
-		DoTakeOrder(c);
+		//DoTakeOrder(c);
+		waitergui.DoGoToTable(c.tablenumber);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -407,6 +410,7 @@ public class GHWaiterRole extends Role implements Waiter{
 		print("Telling host a table is free");
 		((GHHostRole) restaurant.host).msgLeavingTable(c.customer);
 		c.cs = CustomerState.Idle;
+		waitingCustomers.remove(c);
 	  
 	}
 	  

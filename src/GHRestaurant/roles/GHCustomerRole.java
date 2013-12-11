@@ -94,7 +94,7 @@ public class GHCustomerRole extends Role implements Customer{
 	public void msgWhatWouldYouLike(){
 		print("Received msgWhatWouldYouLike");
 		
-		int c = generator.nextInt(4);
+		int c = generator.nextInt(4);		
 		
 		switch(c){
 		case 0: choice = "steak";
@@ -121,6 +121,7 @@ public class GHCustomerRole extends Role implements Customer{
 		while(true){
 			
 			int c = generator.nextInt(4);
+
 			
 			switch(c){
 			case 0: choice = "steak";
@@ -220,7 +221,7 @@ public class GHCustomerRole extends Role implements Customer{
 			EatFood();
 			return true;
 		}
-
+		
 		if (state == AgentState.Eating && event == AgentEvent.doneEating){
 			state = AgentState.Paying;
 			leaveTable();
@@ -238,6 +239,12 @@ public class GHCustomerRole extends Role implements Customer{
 			LeaveRestaurant();
 			return true;
 		}
+		
+		/*if(waiter != null && choice == null){
+			choice = "steak";
+			return true;
+		}*/
+		
 				
 		return false;
 	}
@@ -252,6 +259,7 @@ public class GHCustomerRole extends Role implements Customer{
 	private void SitDown(int tablenumber) {
 		print("Being seated. Going to table " + tablenumber);
 		customerGui.DoGoToSeat(tablenumber);
+		
 	}
 	
 	private void SignalWaiter(){

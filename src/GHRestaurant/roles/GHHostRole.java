@@ -172,8 +172,11 @@ public class GHHostRole extends Role implements Host{
 		}
 		
 		if(!waitingCustomers.isEmpty()  && !waiters.isEmpty()){
+			nextwaiter = (nextwaiter+1)%waiters.size();	
+
 			for(Table table: tables){
 				if(!table.isOccupied()){
+					//nextwaiter = (nextwaiter+1)%waiters.size();	
 					seatCustomer(waitingCustomers.get(0),table);
 					return true;
 				}
@@ -209,7 +212,7 @@ public class GHHostRole extends Role implements Host{
 		((GHWaiterRole) waiters.get(nextwaiter)).msgSitAtTable(customer, table.tableNumber);
 		table.setOccupant(customer);
 		waitingCustomers.remove(customer);
-		nextwaiter = (nextwaiter+1)%waiters.size();	
+		//nextwaiter = (nextwaiter+1)%waiters.size();	
 	}
 
 	//utilities
