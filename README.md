@@ -235,7 +235,7 @@ SimCity201 Project Repository for CS 201 students
 ###Scenario R
 	Banks are closed on weekends. People avoid banks on the weekends.
 ###Scenario S
-	At time 10 they will all start switching shifts (restaurant 	and markets). They day people will leave, and
+	At time 10 they will all start switching shifts (restaurant and markets). They day people will leave, and
 	night will come. Easiest to verify is waiters. At time 10, go to the first restaurant. Employees should start
 	leaving when a replacement comes in. Time is outputted on the log when person filter is Everyone.
 	
