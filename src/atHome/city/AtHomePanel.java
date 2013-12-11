@@ -61,6 +61,12 @@ public class AtHomePanel extends JPanel
 		homePanel.addPerson(name, role);
 	}
 	//break functionality
+
+	public void removePersonFromList(String name, AtHomeRole role) 
+	{
+		//System.out.println("!@#$%^&*(");
+		homePanel.notBrokenAnymore(role);
+	}
 	
 
 }

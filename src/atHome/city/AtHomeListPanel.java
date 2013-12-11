@@ -147,7 +147,7 @@ public class AtHomeListPanel extends JPanel implements ActionListener
             newstateCB.setName(name);
             newstateCB.addActionListener(this);
             
-            listItems.add(new ListItem(label, newstateCB));
+            listItems.add(new ListItem(label, newstateCB, role));
             addNewCustView.add(label);
             view.add(addNewCustView);
             
@@ -159,10 +159,11 @@ public class AtHomeListPanel extends JPanel implements ActionListener
 	{
 		JLabel label;
 		JCheckBox stateCB;
-		
-		ListItem(JLabel label, JCheckBox c)
+		AtHomeRole role;
+		ListItem(JLabel label, JCheckBox c, AtHomeRole role)
 		{
 			this.label = label;
+			this.role = role;
 			stateCB = c;
 		}
 	}
@@ -176,9 +177,9 @@ public class AtHomeListPanel extends JPanel implements ActionListener
 			}
 		}
 	}
-	public void notBrokenAnymore(String name) {
+	public void notBrokenAnymore(AtHomeRole role) {
 		for (ListItem temp:listItems){
-			if(temp.stateCB.getName() == name)
+			if(temp.role == role)
 			{
 				temp.stateCB.setText("Break Appliance?");
                 temp.stateCB.setEnabled(true);
