@@ -364,19 +364,18 @@ public class PersonAgent extends Agent implements Person
  * BANKING MESSAGES START
  ***************************/
 	public void msgTransferSuccessful(PersonAgent recipient, double amount, String purpose) {
-		//print(recipient.getName() + " received: $" + amount + " for " + purpose);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Transfer successful. Sent $" + amount + " for " + purpose + " to: " + recipient.getName());	
 	}
 	public void msgTransferFailure(PersonAgent recipient, double amount, String purpose) {
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);
-		//print("Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Insufficient funds for transfer to: " + recipient.getName() + " for: $" + amount + " for " + purpose);	
 	}
+	
 	public void msgTransferCompleted(PersonAgent sender, double amount, String purpose) {
-		//print("Received $" + amount + " from: " + sender.getName() + " for: " + purpose);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Transfer completed. Received funds from: " + sender.getName() + " for: $" + amount + " for " + purpose);	
 	}
 	
 	public void msgHereIsBalance(double amount, String accountType) {
     	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Balance is $" + amount + " for: " + accountType);
-		//print("Balance is $" + amount + " for: " + accountType);
 	}
 	
 	public void msgDoneAtBank() {

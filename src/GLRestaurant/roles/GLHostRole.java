@@ -8,6 +8,8 @@ import java.util.concurrent.Semaphore;
 import city.PersonAgent;
 import city.animationPanels.GLRestaurantAnimationPanel;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
@@ -108,6 +110,7 @@ public class GLHostRole extends Role implements Host{
 	}
 	
 	public void msgIAmLeaving(GLCustomerRole c) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Customer " + c.myPerson.getName() + " leaving early.");
 		MyCustomer mc = findCustomer(c);
 		if(mc != null) {
 			mc.cs = customerState.done;
@@ -133,7 +136,7 @@ public class GLHostRole extends Role implements Host{
 		MyCustomer mc = findCustomer(c); 
 		MyWaiter mw = findWaiter(w);
 		Table table = findTable(tableNum);
-		Do("Table " + table.tableNumber + " now available.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Table " + table.tableNumber + " now available.");
 		mc.cs = customerState.done;
 		mw.customers--;
 		mc.t = null;
@@ -219,6 +222,7 @@ public class GLHostRole extends Role implements Host{
 		if(state == State.relieveFromDuty){
 			state = State.none;
 			myPerson.releavedFromDuty(this);
+			AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Finished shift.");
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
 			}
@@ -288,7 +292,7 @@ public class GLHostRole extends Role implements Host{
 	}
 	
 	private void askEmployeesToLeave() {
-		print("WHAT IS HAPPENING?!");
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Notifying employees to leave.");
 		synchronized(waiters) {
 			for(MyWaiter mw : waiters) {
 				mw.w.msgRestaurantClosed();
@@ -316,12 +320,13 @@ public class GLHostRole extends Role implements Host{
 					mc.t = t;
 					t.setOccupant(mc.c);
 					mc.cs = customerState.seated;
+					AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Assigning table " + t.tableNumber + " to customer " + mc.c.myPerson.getName());
 				}
 			}
 	}
 	
 	private void ReviewBreakRequest(MyWaiter mw) {
-		Do("Reviewing break request from " + mw.w.getName());
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Reviewing break request from: " + mw.w.myPerson.getName());
 		mw.ws = waiterState.serving;
 		boolean answer = false;
 		int waitersOnBreak = 0;
@@ -452,12 +457,14 @@ public class GLHostRole extends Role implements Host{
 
 	@Override
 	public void msgCloseRestaurant() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Closing restaurant.");
 		closeRestaurant = true;
 		stateChanged();
 	}
 
 	@Override
 	public void msgOpenRestaurant() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "No longer closing restaurant.");
 		state = State.none;
 		closeRestaurant = false;
 		stateChanged();
