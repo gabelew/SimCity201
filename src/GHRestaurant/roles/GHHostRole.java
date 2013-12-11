@@ -79,9 +79,11 @@ public class GHHostRole extends Role implements Host{
 	}
 	
 	public void msgSetWaiter(Waiter wait){
+		if(closeRestaurant == false){
 		waiters.add(wait);
 		print("msgGoingToWork");
 		stateChanged();
+		}
 	}
 
 	public void msgLeavingTable(Customer cust) {
@@ -169,7 +171,7 @@ public class GHHostRole extends Role implements Host{
 			return true;
 		}
 		
-		if(!waitingCustomers.isEmpty()  && !waiters.isEmpty()){// && ((GHCashierRole) restaurant.cashier).getgui().getYPos() <= 30){
+		if(!waitingCustomers.isEmpty()  && !waiters.isEmpty()){
 			for(Table table: tables){
 				if(!table.isOccupied()){
 					seatCustomer(waitingCustomers.get(0),table);
@@ -188,11 +190,11 @@ public class GHHostRole extends Role implements Host{
 	// Actions
 
 	private void askEmployeesToLeave() {
+		((GHCookRole) restaurant.cook).msgRestaurantClosed();
+		((GHCashierRole) restaurant.cashier).msgRestaurantClosed();
 		for(Waiter w : waiters){
 			((GHWaiterRole) w).msgRestaurantClosed();
 		}
-		((GHCookRole) restaurant.cook).msgRestaurantClosed();
-		((GHCashierRole) restaurant.cashier).msgRestaurantClosed();
 		waiters.removeAll(waiters);
 		state = State.leaving;
 		//closeRestaurant = false;

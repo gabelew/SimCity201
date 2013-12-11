@@ -209,12 +209,12 @@ public class GHWaiterRole extends Role implements Waiter{
 			return true;
 		}
 		
-		for (MyCustomer customer : waitingCustomers) {
+		/*for (MyCustomer customer : waitingCustomers) {
 		  if(customer.getState() == CustomerState.Waiting){
 			  SeatCustomer(customer);
 			  	return true;
 		  }
-		}
+		}*/
 		
 		
 		for (MyCustomer customer : waitingCustomers) {
@@ -244,6 +244,13 @@ public class GHWaiterRole extends Role implements Waiter{
 			  	return true;
 		  }
 		}
+		
+		for (MyCustomer customer : waitingCustomers) {
+			  if(customer.getState() == CustomerState.Waiting){
+				  SeatCustomer(customer);
+				  	return true;
+			  }
+			}
 		
 		for (MyCustomer customer : waitingCustomers) {
 		  if(customer.getState() == CustomerState.Done){
@@ -312,7 +319,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	  }
 	
 	private void DoTakeOrder(MyCustomer c){
-		//print("Going to table "+ c.tablenumber + " to take "+ c.customer + "'s order.");
+		print("Going to table ");//+ c.tablenumber + " to take "+ c.customer + "'s order.");
 		waitergui.DoGoToTable(c.tablenumber);
 
 	}

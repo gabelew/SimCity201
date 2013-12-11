@@ -377,8 +377,8 @@ public class GHCashierRole extends Role implements Cashier{
 	}
 
 	public void msgRestaurantClosed() {
-		// TODO Auto-generated method stub
-		
+		state = State.leaving;
+		stateChanged();
 	}
 
 }
