@@ -493,6 +493,7 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 
 	public void msgClosed() {
 		restaurantClosed=true;
+		stateChanged();
 	}
 }
 

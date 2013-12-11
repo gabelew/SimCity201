@@ -73,6 +73,10 @@ public class EBHostRole extends Role implements Host {
 		return name;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	// Messages
 	public void goesToWork(){
 		hostState=state.goToWork;
@@ -153,7 +157,7 @@ public class EBHostRole extends Role implements Host {
             If so seat him at the table.
 		 */
 		try{
-			if(waitingCustomers.size()==0&&restaurantClosed&&hostState==state.closed){
+			if(waitingCustomers.size()==0&&restaurantClosed&&(hostState!=state.none&&hostState!=state.leaveWork)){
 				int tableNum=0;
 				for (Table table : tables) {
 					if (!table.isOccupied()) {
@@ -379,12 +383,5 @@ public class EBHostRole extends Role implements Host {
 		stateChanged();
 	}
 	
-	/*public void pauseIt(){
-		pause();
-	}
-	
-	public void resumeIt(){
-		resume();
-	}*/
 }
 

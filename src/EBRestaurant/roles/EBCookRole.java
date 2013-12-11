@@ -402,6 +402,7 @@ public class EBCookRole extends Role implements Cook {
 
 	public void msgClosed() {
 		restaurantClosed=true;
+		stateChanged();
 	}
 
 }
