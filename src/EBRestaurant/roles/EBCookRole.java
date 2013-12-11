@@ -259,7 +259,7 @@ public class EBCookRole extends Role implements Cook {
 		}, CHECK_STAND_TIME);
 	}
 	private void CookIt(Order O){
-		Do("Received order for table "+ O.tableNumber);
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Received order for table "+O.tableNumber);
 		if (Inventory.get(O.choice)==0)
 		{
 			((EBWaiterRole) O.w).msgOutOfOrder(O.choice, O.tableNumber);
@@ -268,7 +268,7 @@ public class EBCookRole extends Role implements Cook {
 		else
 		{
 			Inventory.put(O.choice, (Inventory.get(O.choice)-1));//remove one from Inventory
-			Do(O.choice+" amount="+ Inventory.get(O.choice));
+			AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), O.choice+" amount="+ Inventory.get(O.choice));
 			timer.schedule(new MyTimerTask(O), hm.get(O.choice));
 			O.S=state.cooking;
 			cookgui.setCooking(O.choice,O.tableNumber);

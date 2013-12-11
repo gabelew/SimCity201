@@ -101,6 +101,7 @@ public class EBCashierRole extends Role implements Cashier {
 				bank=bank+amount;
 			}
 		}
+		amount= (Math.round(100*amount) / ((double)100));
 		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Received payment of "+amount+" for table "+tableNumber);
 	}
 	
@@ -109,14 +110,12 @@ public class EBCashierRole extends Role implements Cashier {
 			for(customer c:Customers){
 				if(c.cust==cust){
 					c.owed=c.owed+(float)amount;
-					Do("Tab: "+c.owed);
 					exists=true;
 				}
 			}
 			if (!exists)
 			{
 				Customers.add(new customer(cust,(float)amount));
-				Do("Tab: "+amount);
 			}
 
 	}
@@ -215,7 +214,6 @@ public class EBCashierRole extends Role implements Cashier {
 		}
 	}
 	private void createCheck(String choice,int tableNumber,Waiter waiter){
-		Do("Here is check for table "+tableNumber);
 		((EBWaiterRole) waiter).msgCheckCreated(menu.hm.get(choice),tableNumber);
 	}
 	
