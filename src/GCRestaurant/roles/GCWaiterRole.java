@@ -536,6 +536,19 @@ public abstract class GCWaiterRole extends Role implements Waiter{
 			this.choice = "";
 		}
 		
+		//for unit testing
+		MyCustomer(Customer customer)
+		{
+			this.c = customer;
+			this.state = CustomerState.Waiting;
+			this.choice = "";
+		}
+		
+	}
+	//method for unit testing
+	public MyCustomer makeCustomer(Customer customer)
+	{
+		return (new MyCustomer(customer));
 	}
 	
 }
