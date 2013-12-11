@@ -54,6 +54,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 	private BufferedImage fidgeImg = null;
 	private BufferedImage grillRightImg = null;
 	private BufferedImage platingTableImg = null;
+    private BufferedImage orderingStandImg = null;
 
 	public GLRestaurantAnimationPanel(SimCityGui simCityGui){
 		this.simCityGui = simCityGui;
@@ -69,6 +70,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 		    ImageIO.read(new File(path.toString() + "grill.png"));
 		    grillRightImg = ImageIO.read(new File(path.toString() + "grill2.png"));
 		    platingTableImg = ImageIO.read(new File(path.toString() + "platingTable.png"));
+		    orderingStandImg = ImageIO.read(new File(path.toString() + "orderingstand.png"));
 		} catch (IOException e) {
 		}
 		
@@ -124,7 +126,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
 		g.drawImage(kitchenCounterImg, 500, 120, null);
 		g.drawImage(grillRightImg, 560,120, null);
 		g.drawImage(fidgeImg, 630, 160, null);
-		g.drawImage(hostStandImg, 475, 180, null);
+		g.drawImage(orderingStandImg, 475, 180, null);
 		
         //draw Register Stand
     	g.drawImage(registerImg, 70, 200, null);
