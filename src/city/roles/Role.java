@@ -22,7 +22,11 @@ public abstract class Role
 	}
 
 	public String getName() {
-		return myPerson.getName();
+		if(myPerson != null){
+			return myPerson.getName();
+		}else{
+			return "Empty Role";
+		}
 	}
 	public PersonAgent getPerson(){
 		return myPerson;
