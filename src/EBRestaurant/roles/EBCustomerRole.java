@@ -405,21 +405,12 @@ public class EBCustomerRole extends Role implements Customer {
 	}
 
 	// Accessors, etc.
-
-	public String getName() {
-		return name;
-	}
-	
 	public int getHungerLevel() {
 		return hungerLevel;
 	}
 
 	public void setHungerLevel(int hungerLevel) {
 		this.hungerLevel = hungerLevel;
-	}
-
-	public String toString() {
-		return "customer " + getName();
 	}
 
 	public void setGui(EBCustomerGui g) {

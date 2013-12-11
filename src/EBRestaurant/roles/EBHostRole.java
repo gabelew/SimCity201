@@ -73,10 +73,6 @@ public class EBHostRole extends Role implements Host {
 		return name;
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	// Messages
 	public void goesToWork(){
 		hostState=state.goToWork;

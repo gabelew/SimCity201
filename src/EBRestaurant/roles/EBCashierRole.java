@@ -79,9 +79,6 @@ public class EBCashierRole extends Role implements Cashier {
 		payNumber=0;
 	}
 	
-	public String getName() {
-		return name;
-	}
 	// Messages
 	
 	public void msgHereIsCheck(Waiter w,String choice, int tableNumber)
