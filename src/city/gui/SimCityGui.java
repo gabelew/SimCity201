@@ -1,7 +1,6 @@
 package city.gui;
 
 import restaurant.Restaurant;
-import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
 
@@ -21,6 +20,7 @@ import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
+import CMRestaurant.roles.CMRevolvingStandMonitor;
 import CMRestaurant.roles.CMSharedWaiterRole;
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBCashierGui;
@@ -173,7 +173,9 @@ public class SimCityGui extends JFrame implements ActionListener {
         infoPanel.setMaximumSize(infoDim);
 
         topPanel.add(animationPanel, BorderLayout.CENTER);
-        topPanel.add(infoPanel, BorderLayout.WEST);
+        if(!testing){
+        	topPanel.add(infoPanel, BorderLayout.WEST);
+        }
         add(topPanel, BorderLayout.CENTER);
         
         
@@ -630,7 +632,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((GHCookRole)r.cook).setRestaurant(r);
 	        	GHCookGui ccg = new GHCookGui(((GHCookRole)r.cook));
 	        	((GHCookRole)r.cook).setGui(ccg);
-	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
+	        	CMRevolvingStandMonitor revolvingStand = new CMRevolvingStandMonitor();
 	        	//((GHCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
@@ -728,7 +730,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((CMCookRole)r.cook).setRestaurant(r);
 	        	CMCookGui ccg = new CMCookGui(((CMCookRole)r.cook));
 	        	((CMCookRole)r.cook).setGui(ccg);
-	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
+	        	CMRevolvingStandMonitor revolvingStand = new CMRevolvingStandMonitor();
 	        	((CMCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 

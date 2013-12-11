@@ -3,9 +3,9 @@ package market.test.mock;
 import java.util.List;
 import java.util.Map;
 
+import CMRestaurant.roles.CMRoleOrder;
 import city.MarketAgent;
 import city.PersonAgent;
-import restaurant.RoleOrder;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -41,7 +41,7 @@ public class MockCook extends Mock implements Cook {
 		log.add(new LoggedEvent("Received msgHereIsOrder from waiter."));
 	}
 	
-	public void msgFoodDone(RoleOrder o){
+	public void msgFoodDone(CMRoleOrder o){
 		log.add(new LoggedEvent("Received msgFoodDone."));
 	}
 	
@@ -57,7 +57,7 @@ public class MockCook extends Mock implements Cook {
 		log.add(new LoggedEvent("Received msgAnimationFinishedWaiterPickedUpFood."));
 	}
 	
-	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o){
+	public void msgAnimationFinishedPutFoodOnPickUpTable(CMRoleOrder o){
 		log.add(new LoggedEvent("Received msgAnimationFinishedPutFoodOnPickUpTable."));
 	}
 	

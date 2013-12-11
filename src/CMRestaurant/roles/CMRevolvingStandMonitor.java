@@ -1,22 +1,22 @@
-package restaurant;
+package CMRestaurant.roles;
 
 import java.util.Vector;
 
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 
-public class RevolvingStandMonitor extends Object{
+public class CMRevolvingStandMonitor extends Object{
 	private final int N_MAX_COUNT = 5;
 	private final int WAIT_TIME = 5000;
 	private int count = 0;
-	private Vector<RoleOrder> orders;
+	private Vector<CMRoleOrder> orders;
 	
 	
-	public RevolvingStandMonitor() {
-		orders = new Vector<RoleOrder>();
+	public CMRevolvingStandMonitor() {
+		orders = new Vector<CMRoleOrder>();
 	}
 	
-	synchronized public void insert(RoleOrder order) {
+	synchronized public void insert(CMRoleOrder order) {
 		while (isFull()) {
 			try {
 				AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, "Revolving Stand", "Full, waiting");
@@ -32,8 +32,8 @@ public class RevolvingStandMonitor extends Object{
 		}
 	}
 	
-	synchronized public RoleOrder remove() {
-		RoleOrder order;
+	synchronized public CMRoleOrder remove() {
+		CMRoleOrder order;
 		while(isEmpty()) {
 			try {
 				wait(WAIT_TIME);
@@ -48,12 +48,12 @@ public class RevolvingStandMonitor extends Object{
 		return order;
 	}
 	
-	private void insertOrder(RoleOrder order) {
+	private void insertOrder(CMRoleOrder order) {
 		orders.addElement(order);
 	}
 	
-	private RoleOrder removeOrder() {
-		RoleOrder order = (RoleOrder) orders.firstElement();
+	private CMRoleOrder removeOrder() {
+		CMRoleOrder order = (CMRoleOrder) orders.firstElement();
 		orders.removeElementAt(0);
 		return order;
 	}

@@ -2,13 +2,10 @@ package restaurant.interfaces;
 
 import java.util.List;
 import java.util.Map;
-
 import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
-import restaurant.RoleOrder;
-import city.roles.DeliveryManRole;
 
 /**
  * A sample Cashier interface built to unit test a CashierAgent.

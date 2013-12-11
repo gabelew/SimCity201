@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import restaurant.RoleOrder;
+import CMRestaurant.roles.CMRoleOrder;
 import restaurant.gui.FoodIcon;
 import city.PersonAgent;
 import city.gui.Gui;

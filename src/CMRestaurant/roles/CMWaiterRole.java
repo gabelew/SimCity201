@@ -12,7 +12,6 @@ import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
-import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -28,7 +27,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	AgentEvent event = AgentEvent.none;
 	Timer timer = new Timer();
 	private final int THIRTY_SECONDS = 30000;
-	protected RevolvingStandMonitor revolvingStand;
+	protected CMRevolvingStandMonitor revolvingStand;
 	public boolean haveNotRecentlyCheckedStand = false;
 	public boolean testingRevolvingMonitor = false;
 	public EventLog log = new EventLog();

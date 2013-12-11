@@ -60,7 +60,7 @@ public class PersonAgentBusLeftTest extends TestCase{
 		simCityGui.animationPanel.addGui(pgui2);
 		
 		person.testing = true;
-		person.addAtHomeRole();
+		//person.addAtHomeRole();
 		
 		for(MarketAgent m: simCityGui.getMarkets()){
 			person.addMarket(m);

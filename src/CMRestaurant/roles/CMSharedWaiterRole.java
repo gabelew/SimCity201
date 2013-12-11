@@ -3,7 +3,6 @@ package CMRestaurant.roles;
 import java.util.TimerTask;
 
 import restaurant.Restaurant;
-import restaurant.RoleOrder;
 import restaurant.test.mock.LoggedEvent;
 import city.PersonAgent;
 import city.gui.trace.AlertLog;
@@ -26,7 +25,7 @@ public class CMSharedWaiterRole extends CMWaiterRole{
 		}
 		if(!revolvingStand.isFull()) {
 			log.add(new LoggedEvent("Check revoliving stand and put in order"));
-			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
+			revolvingStand.insert(new CMRoleOrder(this, c.choice, c.table));
 			c.s = CustomerState.orderPlaced;
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Inserting order into revolving stand");
 			if(waiterGui!=null){

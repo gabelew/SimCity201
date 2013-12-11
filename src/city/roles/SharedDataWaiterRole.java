@@ -7,11 +7,11 @@ import CMRestaurant.gui.CMWaiterGui;
 import CMRestaurant.roles.CMCashierRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
+import CMRestaurant.roles.CMRevolvingStandMonitor;
+import CMRestaurant.roles.CMRoleOrder;
 import city.PersonAgent;
 import city.gui.Gui;
 import restaurant.Restaurant;
-import restaurant.RevolvingStandMonitor;
-import restaurant.RoleOrder;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
 
@@ -25,7 +25,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		orderReady, servingOrder, orderServed, needsCheck, hasCheck, leaving, outOfOrder};
 	public enum AgentEvent {none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak, relieveFromDuty};
 	AgentEvent event = AgentEvent.none;
-	private RevolvingStandMonitor revolvingStand;
+	private CMRevolvingStandMonitor revolvingStand;
 	public boolean testingRevolvingMonitor = false;
 	
 	public class MyCustomer{
@@ -341,7 +341,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		if(revolvingStand.getCount() < 5) {
 			c.s = CustomerState.orderPlaced;
 			print("\t\t Inserting order into revolving stand");
-			revolvingStand.insert(new RoleOrder(this, c.choice, c.table));
+			revolvingStand.insert(new CMRoleOrder(this, c.choice, c.table));
 			if(!testingRevolvingMonitor) {
 				waiterGui.placedOrder();
 			}
@@ -452,7 +452,7 @@ public class SharedDataWaiterRole extends Role implements Waiter{
 		}
 	}
 	
-	public void setRevolvingStand(RevolvingStandMonitor r) {
+	public void setRevolvingStand(CMRevolvingStandMonitor r) {
 		this.revolvingStand = r;
 	}
 

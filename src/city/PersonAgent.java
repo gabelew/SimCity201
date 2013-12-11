@@ -318,14 +318,15 @@ public class PersonAgent extends Agent implements Person
 		ahGui.setPresent(false);
 		if(!testing){
 			myHome.insideAnimationPanel.addGui(ahGui);
-		}
-		if(myHome instanceof Apartment)
-		{
-			((ApartmentAnimationPanel)myHome.insideAnimationPanel).addPersonToList(name, role);
-		}
-		else
-		{
-			((HouseAnimationPanel)myHome.insideAnimationPanel).addPersonToList(name, role);
+
+			if(myHome instanceof Apartment)
+			{
+				((ApartmentAnimationPanel)myHome.insideAnimationPanel).addPersonToList(name, role);
+			}
+			else
+			{
+				((HouseAnimationPanel)myHome.insideAnimationPanel).addPersonToList(name, role);
+			}
 		}
 	}
 /***********************

@@ -1,15 +1,15 @@
-package restaurant;
+package CMRestaurant.roles;
 
 import CMRestaurant.roles.CMCookRole.OrderState;
 import restaurant.interfaces.Waiter;
 
-public class RoleOrder{
+public class CMRoleOrder{
 	public Waiter waiter;
 	public String choice;
 	public int table;
 	public OrderState state;
 	
-	public RoleOrder(Waiter w, String c, int t){
+	public CMRoleOrder(Waiter w, String c, int t){
 		waiter = w;
 		choice = c;
 		table = t;

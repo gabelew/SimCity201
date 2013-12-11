@@ -4,11 +4,11 @@ import java.util.Timer;
 
 import junit.framework.TestCase;
 import restaurant.Restaurant;
-import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Waiter.Menu;
 import restaurant.test.mock.MockCustomer;
 import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
+import CMRestaurant.roles.CMRevolvingStandMonitor;
 import CMRestaurant.roles.CMSharedWaiterRole;
 import CMRestaurant.roles.CMWaiterRole;
 import CMRestaurant.roles.CMWaiterRole.CustomerState;
@@ -17,7 +17,7 @@ import city.PersonAgent;
 public class CMSharedAndNormalWaiterAndRevolingStandTest  extends TestCase{
 	CMWaiterRole waiterShared;
 	CMWaiterRole waiterNormal;
-	RevolvingStandMonitor revolvingStand;
+	CMRevolvingStandMonitor revolvingStand;
 	CMCookRole cook;
 	PersonAgent person;
 	MockCustomer customer;
@@ -32,7 +32,7 @@ public class CMSharedAndNormalWaiterAndRevolingStandTest  extends TestCase{
 	public void setUp() throws Exception{
 		super.setUp();		
 		person = new PersonAgent("Alan", 500, 500);
-		revolvingStand = new RevolvingStandMonitor();
+		revolvingStand = new CMRevolvingStandMonitor();
 		cook = new CMCookRole();
 		cook.setRevolvingStand(revolvingStand);
 		timer = new Timer();

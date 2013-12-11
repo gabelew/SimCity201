@@ -35,7 +35,7 @@ public class PersonAgentTest extends TestCase{
 	
 	BankBuilding bankBuilding = new BankBuilding(new Point(337,68));
 	
-	SimCityGui simCityGui= new SimCityGui();
+	SimCityGui simCityGui= new SimCityGui(true);
 	
 	
 	Residence h;
