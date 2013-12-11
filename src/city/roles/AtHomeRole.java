@@ -175,13 +175,16 @@ public class AtHomeRole extends Role implements AtHome
 	private void PayForRepairs(Appliance a)
 	{
 		a.state = AppState.working;
-		if(myPerson.cashOnHand >= a.priceToFix)
+		if(true || myPerson.cashOnHand >= a.priceToFix)
 		{
-			myPerson.cashOnHand -= a.priceToFix;
+			print("paid repairman, $" + a.priceToFix);
+			myPerson.bankTeller.msgTransferFunds(myPerson, myPerson.repairman.myPerson,
+					a.priceToFix, "personal", "personal", "repairs");
+			myPerson.repairman.HereIsPayment(this);
 		}
 		else
 		{
-			//myPerson.repairman.butYouOweMeOne(this);
+			myPerson.repairman.butYouOweMeOne(this);
 		}
 		appliances.remove(a);
 		
@@ -190,7 +193,7 @@ public class AtHomeRole extends Role implements AtHome
 	private void requestFix(Appliance a)
 	{
 		a.state = AppState.repairRequested;
-		//myPerson.repairman.fixAppliance(this, a.appliance);
+		myPerson.repairman.fixAppliance(this, a.appliance);
 	}
 	
 	private void EatIt(final Order o)
@@ -333,6 +336,15 @@ public class AtHomeRole extends Role implements AtHome
  ********************/
 	public boolean pickAndExecuteAnAction() 
 	{
+		for(Appliance a : appliances)
+		{
+			if(a.state == AppState.broken)
+			{
+				requestFix(a);
+				return true;
+			}
+		}
+		
 		if(state == EventState.leavingHome)
 		{
 			LeavingHomeAction();
@@ -348,14 +360,7 @@ public class AtHomeRole extends Role implements AtHome
 			ImOutOfFood();
 			return true;
 		}
-		for(Appliance a : appliances)
-		{
-			if(a.state == AppState.broken)
-			{
-				requestFix(a);
-				return true;
-			}
-		}
+		
 		for(Appliance a : appliances)
 		{
 			if(a.state == AppState.payRepairman)

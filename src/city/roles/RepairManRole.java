@@ -39,6 +39,8 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("fridge", new Double(150));
 			pricingMap.put("sink", new Double(85));
 			pricingMap.put("stove", new Double(100));
+			
+			repairmanGui = new RepairManGui(this);
 		}
 		
 		public void setGui(Gui gui) 
@@ -60,11 +62,12 @@ public class RepairManRole extends Role implements RepairMan
 		{
 			print("!@#$ I have a job to do");
 			jobs.add(new Job(role,app,role.myPerson.myHome.location));
+			myPerson.msgStartRepairJob();
 			stateChanged();
 		}
 		
 		//Customer bank transfers money over
-		public void HereIsPayment(AtHomeRole role, double price)
+		public void HereIsPayment(AtHomeRole role)
 		{
 			for(Job j : jobs)
 			{
@@ -96,26 +99,37 @@ public class RepairManRole extends Role implements RepairMan
  ********************/
 	public void StartJob(final Job j)
 	{
+		/*
+		//myPerson.msgStartRepairJob();
 		//goes to customer location
+		print("leaving home");
 		repairmanGui.leaveHome();
 		try { driving.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
 		//drives to customer location
+		print("driving to customer");
 		repairmanDrivingGui.DoGoFix(j.location);
 		try { driving.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
 		//enters customer home
+		print("at customer home");
 		repairmanGui.goToCustomer();
 		try { driving.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}
+		catch (InterruptedException e) {e.printStackTrace();}*/
+		j.state = JobState.inProgess;
 		
 		timer.schedule(new TimerTask() {
 			public void run() 
 			{
-				print("!@#$%^& sent bill, wire me the money");
+				print(j.person.myPerson.getName() + " I sent the bill, wire me the money");
 				j.state = JobState.awaitingPayment;
 				j.person.ApplianceFixed(j.appliance, pricingMap.get(j.appliance).doubleValue());
-				stateChanged();
+				/*
+				//leaves
+				repairmanDrivingGui.DoGoBack();
+				try { driving.acquire();} 
+				catch (InterruptedException e) {e.printStackTrace();}
+				*/
 			}
 		},
 		FIXTIME);
@@ -124,13 +138,16 @@ public class RepairManRole extends Role implements RepairMan
 	
 	public void ProcessPayment(Job j)
 	{
+		print("done with job for, " + j.person.myPerson.getName());
 		jobs.remove(j);
 	}
 	
 /*********************
  ***** Animation Methods
  ********************/
-	public void msgActionDone() {
+	
+	public void msgActionDone() 
+	{
 		driving.release();
 	}
 	
@@ -139,14 +156,6 @@ public class RepairManRole extends Role implements RepairMan
  ********************/
 	public boolean pickAndExecuteAnAction() 
 	{
-		for(Job j : jobs)
-		{
-			if(j.state == JobState.requested)
-			{
-				StartJob(j);
-				return true;
-			}
-		}
 		
 		for(Job j : jobs)
 		{
@@ -156,6 +165,16 @@ public class RepairManRole extends Role implements RepairMan
 				return true;
 			}
 		}
+		
+		for(Job j : jobs)
+		{
+			if(j.state == JobState.requested)
+			{
+				StartJob(j);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	

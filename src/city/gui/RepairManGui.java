@@ -21,18 +21,18 @@ public class RepairManGui implements Gui
 	
 	private int xPos, yPos;
 	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
-	public SimCityGui gui;
 	private enum state{waiting, backToHome, atCustomerHome, goingToCustomer};
 	state workingState;
 	
 	static final int xHomeLoc = 0;
 	static final int yHomeLoc = 0;
-	static final int CUST_START_POS = -40;
+	static final int xSTART_POS = -40;
+	static final int ySTART_POS = 200;
 	static final int xWAITING_START = 90;
 	static final int yWAITING_START = 190;
 	enum Command {none, goToCustomer, leaving};
 	Command command = Command.none;
-	public RepairManGui(RepairManRole Role,SimCityGui gui) 
+	public RepairManGui(RepairManRole Role) 
 	{
 		try 
 		{
@@ -42,7 +42,6 @@ public class RepairManGui implements Gui
 			
 		}
 		role = Role;
-		this.gui=gui;
 	}
 	
 	public void updatePosition() 
@@ -63,6 +62,8 @@ public class RepairManGui implements Gui
 			
 			if(xPos == xDestination && yPos == yDestination && command == Command.leaving)
 			{
+				command = Command.none;
+				role.msgActionDone();
 				isPresent = false;
 			}
 		
@@ -83,30 +84,16 @@ public class RepairManGui implements Gui
 		isPresent = p;
 	}
 	
-	public void DoGoPutOnTruck(){
-		xDestination=CUST_START_POS;
-		yDestination=CUST_START_POS;
-	}
-	
-	public void DoGoBack(){
-		xDestination = xHomeLoc;
-		yDestination = yHomeLoc;
-		workingState = state.backToHome;
-	}
-	
-	public void DoGoFix(Point Locations)
+	public void leaveHome() 
 	{
-		xDestination=(int)Math.round(Locations.getX());
-		yDestination=(int)Math.round(Locations.getY());
-		workingState= state.goingToCustomer;
-	}
-
-	public void leaveHome() {
-		// TODO Auto-generated method stub
+		xDestination = ySTART_POS;
+		yDestination = xSTART_POS;
+		command = Command.leaving;
 		
 	}
 
-	public void goToCustomer() {
+	public void goToCustomer() 
+	{
 		// TODO Auto-generated method stub
 		
 	}
