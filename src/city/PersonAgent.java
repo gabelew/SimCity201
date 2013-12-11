@@ -461,7 +461,7 @@ public class PersonAgent extends Agent implements Person
 					if(t == Task.goToBankNow)
 						inList = true;
 				}
-				if(!inList){
+				if(!inList && state != State.goingToBank && state != State.banking){
 					taskList.add(Task.goToBankNow);
 				}
 			}
@@ -691,10 +691,10 @@ public class PersonAgent extends Agent implements Person
 		boolean inList = false;
 		if(cashOnHand < 100.00 && (!"Saturday".equals(dayOfWeek) && !"Sunday".equals(dayOfWeek))){
 			for(Task t: taskList){
-				if(t == Task.goToBank)
+				if(t == Task.goToBank || t == Task.goToBankNow)
 					inList = true;
 			}
-			if(!inList){
+			if(!inList && state != State.goingToBank && state != State.banking){
 				taskList.add(Task.goToBank);
 			}
 		}
@@ -1381,7 +1381,7 @@ public class PersonAgent extends Agent implements Person
 	    	return;
 	    }
 	    
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to bank 0" + banks.indexOf(b));
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to bank 0" + (banks.indexOf(b)+1));
 	    destination = b.location;
 	    
 	    if(car == true || destination.y == personGui.yPos){
