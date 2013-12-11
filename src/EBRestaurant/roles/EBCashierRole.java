@@ -65,7 +65,7 @@ public class EBCashierRole extends Role implements Cashier {
 		}
 	}
 	public enum payState{receivedBill,paying,lastTime,owes,paid};
-	boolean receivedInvoice;
+	boolean receivedInvoice=false;
 	
 	HashMap<String,Integer>Inventory=new HashMap<String,Integer>();
 	HashMap<String,Integer> hm=new HashMap<String,Integer>();
@@ -205,10 +205,12 @@ public class EBCashierRole extends Role implements Cashier {
 		}
 		else
 		{
+			receivedInvoice=false;
 			p.pState=payState.paid;
 			p.delivery.msgHereIsPayment(p.amount, this);
 			bank=bank-p.amount;
 			Payments.remove(p);
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Payed market: "+p.amount);
 		}
 	}
 	private void createCheck(String choice,int tableNumber,Waiter waiter){
@@ -236,7 +238,6 @@ public class EBCashierRole extends Role implements Cashier {
 
 	}
 	
-	@Override
 	public void msgHereIsBill(DeliveryMan DMR, double bill) {
 		boolean exists=false;
 		for(payment p:Payments){

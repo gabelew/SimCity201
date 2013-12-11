@@ -221,7 +221,7 @@ public class EBCookRole extends Role implements Cook {
 							ordered=true;
 						}
 					}
-					if(ordered){
+					if(ordered&&((EBCashierRole)restaurant.cashier).myPerson != null){
 						putOrder=true;
 						orderIt(marketorder,numMarket);
 						return true;
@@ -345,6 +345,7 @@ public class EBCookRole extends Role implements Cook {
 
 		}
 		putOrder=false;
+		stateChanged();
 	}
 
 	public void msgIncompleteOrder(DeliveryMan deliveryMan, List<String> outOf) {
