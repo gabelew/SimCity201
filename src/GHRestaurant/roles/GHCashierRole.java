@@ -244,9 +244,8 @@ public class GHCashierRole extends Role implements Cashier{
 	private void PayingBill(Check c){
 		print("Check being payed by " + c.customer);
 		
-		if(((GHCustomerRole) c.customer).getMoney() >= c.cost){
-			double temp = ((GHCustomerRole) c.customer).getMoney() - c.cost;
-			((GHCustomerRole) c.customer).setMoney(temp);
+		if(((GHCustomerRole) c.customer).myPerson.cashOnHand >= c.cost){
+			((GHCustomerRole) c.customer).myPerson.cashOnHand -= c.cost;
 			RestaurantMoney+=c.cost;
 			print("Checked payed by " + c.customer);
 			checks.remove(c);
