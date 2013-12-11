@@ -1,12 +1,18 @@
 package city.roles;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import city.PersonAgent;
+import city.PersonAgent.Location;
 import city.gui.Gui;
+import city.gui.RepairManDrivingGui;
 import city.gui.RepairManGui;
 import city.interfaces.RepairMan;
 
@@ -17,8 +23,14 @@ public class RepairManRole extends Role implements RepairMan
  ********************/
 		List<Job> jobs = new ArrayList<Job>();
 		Map<String, Double> pricingMap = new HashMap<String, Double>();
-		enum JobState {none, requested, inProgess, awaitingPayment}
+		enum JobState {none, requested, inProgess, awaitingPayment, paid}
+		
+		//animation stuff
+		RepairManDrivingGui repairmanDrivingGui;
 		RepairManGui repairmanGui;
+		private Semaphore driving = new Semaphore(0,true);
+		private Timer timer = new Timer();
+		final int FIXTIME = 2000;
 		
 		//default constructor
 		public RepairManRole(PersonAgent p)
@@ -27,48 +39,48 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("fridge", new Double(150));
 			pricingMap.put("sink", new Double(85));
 			pricingMap.put("stove", new Double(100));
-			pricingMap.put("tv", new Double(75));
 		}
 		
 		public void setGui(Gui gui) 
 		{
-			this.repairmanGui = (RepairManGui) gui;
+			//this.repairmanGui = (RepairManDrivingGui) gui;
 		}
 		public Gui getGui() 
 		{
-			return repairmanGui;
+			return null;//repairmanGui;
 		}
 
-		public void msgAnimationAtCustomer() {
-			// TODO Auto-generated method stub
-			
-		}
+		
 /*********************
  ***** MESSAGES
  ********************/
-		public void fixAppliance(PersonAgent p, String app)
+		
+		//adds a new order to fix
+		public void fixAppliance(AtHomeRole role, String app)
 		{
-			jobs.add(new Job(p,app));
+			jobs.add(new Job(role,app,role.myPerson.myHome.location));
 		}
 		
-		public void HereIsPayment(PersonAgent p, double price)
+		//Customer bank transfers money over
+		public void HereIsPayment(AtHomeRole role, double price)
 		{
-			myPerson.cashOnHand += price;
 			for(Job j : jobs)
 			{
-				if(j.person.equals(p))
+				if(j.person.equals(role))
 				{
-					jobs.remove(j);
+					j.state = JobState.paid;
 					break;
 				}
 			}
 		}
-		public void butYouOweMeOne(PersonAgent p)
+		
+		//Lets it slide, person doesn't pay
+		public void butYouOweMeOne(AtHomeRole role)
 		{
 			myPerson.print("Only because you're the only reason I passed 201");
 			for(Job j : jobs)
 			{
-				if(j.person.equals(p))
+				if(j.person.equals(role))
 				{
 					jobs.remove(j);
 					break;
@@ -78,12 +90,46 @@ public class RepairManRole extends Role implements RepairMan
 /*********************
  ***** ACTIONS
  ********************/
-	public void StartJob(Job j)
+	public void StartJob(final Job j)
 	{
-		//DoGoToHouse();
-		//DoFixApp(j.appliance);
-		j.person.ApplianceFixed(j.appliance, pricingMap.get(j.appliance).doubleValue());
+		//goes to customer location
+		repairmanGui.leaveHome();
+		try { driving.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		//drives to customer location
+		repairmanDrivingGui.DoGoFix(j.location);
+		try { driving.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		//enters customer home
+		repairmanGui.goToCustomer();
+		try { driving.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		
+		timer.schedule(new TimerTask() {
+			public void run() 
+			{
+				print("!@#$%^& sent bill, wire me the money");
+				j.state = JobState.awaitingPayment;
+				j.person.ApplianceFixed(j.appliance, pricingMap.get(j.appliance).doubleValue());
+				stateChanged();
+			}
+		},
+		FIXTIME);
+		
 	}
+	
+	public void ProcessPayment(Job j)
+	{
+		jobs.remove(j);
+	}
+	
+/*********************
+ ***** Animation Methods
+ ********************/
+	public void msgActionDone() {
+		driving.release();
+	}
+	
 /*********************
  ***** SCHEDULER
  ********************/
@@ -94,6 +140,16 @@ public class RepairManRole extends Role implements RepairMan
 			if(j.state == JobState.requested)
 			{
 				StartJob(j);
+				return true;
+			}
+		}
+		
+		for(Job j : jobs)
+		{
+			if(j.state == JobState.paid)
+			{
+				ProcessPayment(j);
+				return true;
 			}
 		}
 		return false;
@@ -104,12 +160,14 @@ public class RepairManRole extends Role implements RepairMan
  *****************/
 	class Job
 	{
-		PersonAgent person;
+		AtHomeRole person;
+		Point location;
 		String appliance;
 		JobState state = JobState.requested;
-		public Job(PersonAgent p, String app)
+		public Job(AtHomeRole r, String app, Point loc)
 		{
-			this.person = p;
+			this.location = loc;
+			this.person = r;
 			this.appliance = app;
 		}
 	}

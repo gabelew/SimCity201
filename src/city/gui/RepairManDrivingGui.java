@@ -12,11 +12,14 @@ import javax.imageio.ImageIO;
 import city.gui.Gui;
 import city.roles.RepairManRole;
 
-public class RepairManGui implements Gui
+public class RepairManDrivingGui implements Gui
 {
 	private RepairManRole role = null;
 	private boolean isPresent = false;
 	
+	private static BufferedImage vanRightImg = null;
+	private static BufferedImage vanBackImg = null;
+	private static BufferedImage vanFrontImg = null;
 	private static BufferedImage repairmanImg = null;
 	
 	private int xPos, yPos;
@@ -30,13 +33,20 @@ public class RepairManGui implements Gui
 	static final int CUST_START_POS = -40;
 	static final int xWAITING_START = 90;
 	static final int yWAITING_START = 190;
+	private boolean driving = false;
+	
+	enum DrivingDirection {up,down,right};
 	enum Command {none, goToCustomer, leaving};
+	DrivingDirection drivingDirection = DrivingDirection.right;
 	Command command = Command.none;
-	public RepairManGui(RepairManRole Role,SimCityGui gui) 
+	public RepairManDrivingGui(RepairManRole Role,SimCityGui gui) 
 	{
 		try 
 		{
 			StringBuilder path = new StringBuilder("imgs/");
+			vanRightImg = ImageIO.read(new File(path.toString() + "RepairVanRight.png"));
+			vanBackImg = ImageIO.read(new File(path.toString() + "RepairVanBack.png"));
+			vanFrontImg = ImageIO.read(new File(path.toString() + "RepairVanFront.png"));
 			repairmanImg = ImageIO.read(new File(path.toString() + "repairman.png"));
 		} catch(IOException e) {
 			
@@ -71,7 +81,14 @@ public class RepairManGui implements Gui
 	
 	public void draw(Graphics2D g)
 	{
-		g.drawImage(repairmanImg, xPos, yPos, null);
+		if(this.drivingDirection == DrivingDirection.right)
+			g.drawImage(vanRightImg, xPos, yPos, null);
+		else if(this.drivingDirection == DrivingDirection.down)
+			g.drawImage(vanFrontImg, xPos, yPos, null);
+		else if(this.drivingDirection == DrivingDirection.up)
+			g.drawImage(vanBackImg, xPos, yPos, null);
+		else
+			g.drawImage(repairmanImg, xPos, yPos, null);
 	}
 
 	
@@ -99,15 +116,5 @@ public class RepairManGui implements Gui
 		xDestination=(int)Math.round(Locations.getX());
 		yDestination=(int)Math.round(Locations.getY());
 		workingState= state.goingToCustomer;
-	}
-
-	public void leaveHome() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void goToCustomer() {
-		// TODO Auto-generated method stub
-		
 	}
 }

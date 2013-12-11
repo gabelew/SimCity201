@@ -31,7 +31,6 @@ public class AtHomeListPanel extends JPanel implements ActionListener
     
     private JCheckBox setStateCB;
     private List<ListItem> listItems = new ArrayList<ListItem>();
-    private Host host;
 
     static final int LIST_ITEM_VIEW_GAP = 5;
     static final int LIST_ITEM_VIEW_X = 180;
@@ -89,10 +88,10 @@ public class AtHomeListPanel extends JPanel implements ActionListener
             {
     			if(temp.stateCB.getText().equals("Break Appliance?"))
 	               {
-	               	temp.stateCB.setText("On Break");
+	               	temp.stateCB.setText("has broken app");
 	               	temp.stateCB.setEnabled(false);
 	               	temp.stateCB.setSelected(true);
-	               	((GCHostRole)host).msgCanIBreak(temp.stateCB.getName());
+	               	//((GCHostRole)host).msgCanIBreak(temp.stateCB.getName());
 	               }
     		}
         }	
