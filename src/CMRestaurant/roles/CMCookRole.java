@@ -8,6 +8,8 @@ import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.RevolvingStandMonitor;
@@ -184,6 +186,7 @@ public class CMCookRole extends Role implements Cook {
 	}
 	public void msgHereIsOrder(Waiter w, String choice, int table)
 	{
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Recieved order from normal waiter.");
 		log.add(new LoggedEvent("Recieved msgHereIsOrder"));
 		orders.add(new RoleOrder(w, choice, table));
 		stateChanged();
@@ -205,6 +208,7 @@ public class CMCookRole extends Role implements Cook {
 		}
 	}
 	public void msgHereIsOrderFromMarket(DeliveryMan DMR,Map<String,Integer>choices, double amountOwed){
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Recieved order from market.");
 		synchronized(marketOrders){
 		for (MarketOrder order:marketOrders){
 			if(order.deliveryMan==DMR){
@@ -230,52 +234,6 @@ public class CMCookRole extends Role implements Cook {
 			}
 		}
 	}
-	/*public void msgHereIsPrice(double amountOwed,DeliveryManRole DMR){
-		for (MarketOrder order:marketOrders){
-			if(order.deliveryMan==DMR){
-				order.price=amountOwed;
-				order.marketState=marketOrderState.paying;
-			}
-		}
-	}*/
-	
-	/*public void msgDelivering(MarketAgent m, List<MarketAgent.MyFood> orderList) {
-		MyMarket mm = findMarket(m);
-		for(MarketAgent.MyFood f: orderList){
-			print("\t Recieved from "+ m.getName()+ "\tChoice:"+ f.getChoice()+"\tAmount: " + f.getAmount());
-			if(mm.foodInventoryMap.get(f.getChoice().toLowerCase()) != InventoryState.OUTOFCHOICE){
-				mm.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.POSSIBLE);
-			}
-			Food food = findFood(f.getChoice());
-			food.amount = food.amount + f.getAmount();
-			food.os = OrderingState.none;
-		}
-		
-		stateChanged();
-	}*
-
-	public void msgOutOfOrder(MarketAgent m, List<MarketAgent.MyFood> orderList) {
-		MyMarket mm = findMarket(m);
-		
-		boolean reorder = false;
-		
-		for(MarketAgent.MyFood f: orderList){
-			mm.foodInventoryMap.put(f.getChoice().toLowerCase(), InventoryState.OUTOFCHOICE);
-			Food food = findFood(f.getChoice());
-			
-			if( (food.amount + f.getAmount()) <= food.low){
-				reorder = true;
-				food.os = OrderingState.order;
-			}
-		}
-		
-		if(reorder){
-			reorder = false;
-			orderFromMarket = true;
-		}
-		
-		stateChanged();
-	}*/
 	
 	public void msgIncompleteOrder(DeliveryMan m,List<String> outOf){
 		boolean reorder=false;
@@ -523,6 +481,7 @@ public class CMCookRole extends Role implements Cook {
 	
 	private void plateIt(RoleOrder o) {
 		DoPlating(o);
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Plating order.");
 		log.add(new LoggedEvent("Plating order."));
 		try {
 			waitingResponse.acquire();
@@ -609,6 +568,8 @@ public class CMCookRole extends Role implements Cook {
 
 
 	private void scheduleCook(final RoleOrder o){
+
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Cooking order.");
 		timer.schedule(new TimerTask() {
 			public void run() {
 				msgFoodDone(o);
@@ -652,6 +613,7 @@ public class CMCookRole extends Role implements Cook {
 	}
 	
 	private void placingMarketOrder(MarketOrder mOrder){
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Ordering from market.");
 		mOrder.deliveryMan.msgHereIsOrder(mOrder.Choices);
 	}
 	

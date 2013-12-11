@@ -16,6 +16,8 @@ import java.util.concurrent.Semaphore;
 import CMRestaurant.gui.CMCustomerGui;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 
 /**
@@ -153,12 +155,12 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 	public void msgOutOfOrder(String c) {
 		MENUINDEXEND--;
-
+		
 		myMenu.remove(c);
 		
 		if(MENUINDEXEND < 0)
 		{
-			//print("There is no more food that I can afford!");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "There is no more food that I can afford!");
 			state = AgentState.WaitigForTable;
 			event = AgentEvent.leavingEarly;
 		}
@@ -339,6 +341,7 @@ public class CMCustomerRole extends Role implements Customer {
 		if(myMenu.menuItems.isEmpty()){
 			state = AgentState.WaitigForTable;
 			event = AgentEvent.leavingEarly;
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Everything is too expensive. I'm out of here.");	
 		}
 		else{
 			timer.schedule(new TimerTask() {
@@ -358,6 +361,7 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 	
 	private void giveOrder(){
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "I want to order " + choice);
 		((CMWaiterRole) waiter).msgHereIsMyOrder(this, choice);
 		customerGui.doneOrderingFood();
 	}
@@ -365,6 +369,7 @@ public class CMCustomerRole extends Role implements Customer {
 	private void eatFood() {
 		customerGui.foodIsHere(choice);
 		Do("Eating Food");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Eating Food");
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
 		//When that time elapses, it will call back to the run routine
@@ -427,10 +432,6 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 
 	// Accessors, etc.
-	public String getName() {
-		return myPerson.getName();
-	}
-
 	public String toString() {
 		return "customer " + getName();
 	}

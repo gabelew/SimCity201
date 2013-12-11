@@ -8,6 +8,8 @@ import CMRestaurant.roles.CMCookRole.State;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.DeliveryManRole;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -108,6 +110,7 @@ public class CMCashierRole extends Role implements Cashier {
 	{
 		orders.add(new Order(w, c, choice, OrderState.requested));
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), "Received msgProduceCheck from waiter. Choice = "+ choice);
 		log.add(new LoggedEvent("Received msgProduceCheck from waiter. Choice = "+ choice));
 	}
 	
@@ -288,16 +291,7 @@ public class CMCashierRole extends Role implements Cashier {
 
 
 	//Actions
-	/*private void payBill(Bill b) {
-		log.add(new LoggedEvent("Performed payBill. new bank balance, "+ (bank - b.bill)
-				+ ", = bank " + bank + ", - b.bill, "+ b.bill));
-		
-		bank = bank - b.bill;
-		b.market.msgPayment(this, b.bill);
-		bills.remove(b);
-		print("payed bill");
-	}
-	*/
+
 	
 	private void DepositBusinessCash() {
 		double cash = bank - 1500;
@@ -311,13 +305,15 @@ public class CMCashierRole extends Role implements Cashier {
 	}
 	
 	private void payBill(Bill billFromDman, Bill invoiceFromCook){
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), "Payed bill from market.");
+		
 		if(billFromDman.bill == invoiceFromCook.bill){
 			bank = bank - billFromDman.bill;
 			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
 			bills.remove(billFromDman);
 			bills.remove(invoiceFromCook);
 		}else{
-			print("We are never ordering from this Market again.");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), "We are never ordering from this Market again.");
 			bank = bank - billFromDman.bill;
 			billFromDman.deliveryMan.msgHereIsPayment(billFromDman.bill, this);
 			//tell cook to put market on naughty list
@@ -342,7 +338,7 @@ public class CMCashierRole extends Role implements Cashier {
 			}
 			
 			o.state = OrderState.inDebt;
-			//print("You can pay us on your next visit");
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), "You can pay us on your next visit");
 			((CMCustomerRole) o.customer).msgPayMeLater();
 		}else{
 			bank += o.check;
@@ -373,6 +369,7 @@ public class CMCashierRole extends Role implements Cashier {
 		o.state = OrderState.awaitingPayment;
 		((CMWaiterRole) o.waiter).msgHereIsCheck(o.customer, o.check);
 		log.add(new LoggedEvent("Performed giveWaiter. Total of check = "+ o.check));
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), ((CMWaiterRole) o.waiter).getName() + "here is check. Total of check = "+ o.check);
 	}
 
 	public void setRestaurant(Restaurant r) {
