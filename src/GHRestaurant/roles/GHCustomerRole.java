@@ -168,6 +168,12 @@ public class GHCustomerRole extends Role implements Customer{
 		stateChanged();
 	}
 	
+	public void msgRestaurantClosed(){
+		state = AgentState.Leaving;
+		event = AgentEvent.doneLeaving;
+		stateChanged();
+	}
+	
 	public void msgAnimationFinishedGoToCashier(){
 		//from animation
 		event = AgentEvent.atCashier;
@@ -294,6 +300,7 @@ public class GHCustomerRole extends Role implements Customer{
 	
 	private void LeaveRestaurant() {
 		print("Leaving Restaurant");
+		customerGui.DoExitRestaurant();
 		myPerson.msgDoneEatingAtRestaurant();
 		restaurant.insideAnimationPanel.removeGui(customerGui);
 	}

@@ -1,6 +1,7 @@
 package GHRestaurant.roles;
 
 import GHRestaurant.gui.GHHostGui;
+import GLRestaurant.roles.GLHostRole.customerState;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
@@ -41,6 +42,7 @@ public class GHHostRole extends Role implements Host{
 	
 	private enum State {goToWork, leaving, releaveFromDuty, none, working}
 	private State state;
+	private boolean closeRestaurant = false;
 
 	public GHHostRole() {
 		super();
@@ -149,6 +151,22 @@ public class GHHostRole extends Role implements Host{
 			return true;
 		}
 		
+		if(closeRestaurant && !waitingCustomers.isEmpty()) {
+			print("fffff");
+			synchronized(waitingCustomers) {
+				for(Customer mc : waitingCustomers) {
+						askCustomerToLeave(mc);
+						return true;
+					//}
+				}
+			}
+		} 
+		
+		/*if(closeRestaurant && customers.isEmpty()) {
+			print("2 got called dawg!!");
+			askEmployeesToLeave();
+			return true;
+		}*/
 		
 		if(!waitingCustomers.isEmpty()  && !waiters.isEmpty()){// && ((GHCashierRole) restaurant.cashier).getgui().getYPos() <= 30){
 			for(Table table: tables){
@@ -167,6 +185,11 @@ public class GHHostRole extends Role implements Host{
 	}
 
 	// Actions
+
+	private void askCustomerToLeave(Customer mc) {
+		((GHCustomerRole) mc).msgRestaurantClosed();
+		waitingCustomers.remove(mc);
+	}
 
 	private void seatCustomer(Customer customer, Table table) {
 		((GHWaiterRole) waiters.get(nextwaiter)).msgSitAtTable(customer, table.tableNumber);
@@ -264,14 +287,15 @@ public class GHHostRole extends Role implements Host{
 
 	@Override
 	public void msgCloseRestaurant() {
-		// TODO Auto-generated method stub
-		
+		closeRestaurant = true;
+		stateChanged();		
 	}
 
 	@Override
 	public void msgOpenRestaurant() {
-		// TODO Auto-generated method stub
-		
+		state = State.none;
+		closeRestaurant = false;
+		stateChanged();		
 	}
 
 	public void msgAnimationHasLeftRestaurant() {
