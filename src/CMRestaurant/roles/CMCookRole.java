@@ -2,6 +2,7 @@ package CMRestaurant.roles;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+
 import CMRestaurant.gui.CMCookGui;
 import market.interfaces.DeliveryMan;
 import city.MarketAgent;
@@ -11,6 +12,8 @@ import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
+import restaurant.RoleOrder;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
 import restaurant.test.mock.EventLog;
@@ -18,7 +21,7 @@ import restaurant.test.mock.LoggedEvent;
 
 public class CMCookRole extends Role implements Cook {
 	
-	public List<CMRoleOrder> orders = Collections.synchronizedList(new ArrayList<CMRoleOrder>());
+	public List<RoleOrder> orders = Collections.synchronizedList(new ArrayList<RoleOrder>());
 	public List<Food> foods = Collections.synchronizedList(new ArrayList<Food>());
 	public List<MyMarket> markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	public List<MarketOrder>marketOrders=Collections.synchronizedList(new ArrayList<MarketOrder>());
@@ -27,7 +30,7 @@ public class CMCookRole extends Role implements Cook {
 	PersonAgent replacementPerson = null;
 	Timer timer = new Timer();
 	boolean orderFromMarket = true;
-	private CMRevolvingStandMonitor revolvingStand;
+	private RevolvingStandMonitor revolvingStand;
 	public boolean checkStand;
 	public CMCookGui cookGui = null;
 	public EventLog log = new EventLog();
@@ -185,10 +188,10 @@ public class CMCookRole extends Role implements Cook {
 	{
 		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Recieved order from normal waiter.");
 		log.add(new LoggedEvent("Recieved msgHereIsOrder"));
-		orders.add(new CMRoleOrder(w, choice, table));
+		orders.add(new RoleOrder(w, choice, table));
 		stateChanged();
 	}
-	public void msgFoodDone(CMRoleOrder o)
+	public void msgFoodDone(RoleOrder o)
 	{
 		o.state = OrderState.DONE;
 		stateChanged();
@@ -300,7 +303,7 @@ public class CMCookRole extends Role implements Cook {
 		//From animation
 		pickUpTableItems--;
 		synchronized(orders){
-			for(CMRoleOrder order:orders){
+			for(RoleOrder order:orders){
 				if(order.state == OrderState.BURNING){
 					order.state = OrderState.DONE;
 				}
@@ -308,13 +311,13 @@ public class CMCookRole extends Role implements Cook {
 		}
 		stateChanged();
 	}
-	public void msgAnimationFinishedPutFoodOnPickUpTable(CMRoleOrder o) {
+	public void msgAnimationFinishedPutFoodOnPickUpTable(RoleOrder o) {
 		//From animation
 
 		if(o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken")){
 			grillItems--;
 			synchronized(orders){
-				for(CMRoleOrder order:orders){
+				for(RoleOrder order:orders){
 					if(order.state == OrderState.QUEUED && (o.choice.equalsIgnoreCase("steak") || o.choice.equalsIgnoreCase("chicken") )){
 						order.state = OrderState.PENDING;
 					}
@@ -324,7 +327,7 @@ public class CMCookRole extends Role implements Cook {
 			counterItems--;
 			
 			synchronized(orders){
-				for(CMRoleOrder order:orders){
+				for(RoleOrder order:orders){
 					if(order.state == OrderState.QUEUED && (o.choice.equalsIgnoreCase("salad") || o.choice.equalsIgnoreCase("cookie"))){
 						order.state = OrderState.PENDING;
 					}
@@ -338,7 +341,7 @@ public class CMCookRole extends Role implements Cook {
 		
 		if(state == State.wantsOffWork){
 			boolean canGetOffWork = true;
-			for (CMRoleOrder o : orders)
+			for (RoleOrder o : orders)
 			{
 				if(o.state != OrderState.PENDING)
 				{
@@ -407,9 +410,9 @@ public class CMCookRole extends Role implements Cook {
 			}
 		}
 		
-		CMRoleOrder temp = null;
+		RoleOrder temp = null;
 		synchronized(orders){
-			for (CMRoleOrder o : orders)
+			for (RoleOrder o : orders)
 			{
 				if(o.state == OrderState.DONE && temp == null)
 				{
@@ -424,7 +427,7 @@ public class CMCookRole extends Role implements Cook {
 		
 		synchronized(orders){
 			if(state == State.working){
-				for (CMRoleOrder o : orders)
+				for (RoleOrder o : orders)
 				{
 					if(o.state == OrderState.PENDING && temp == null)
 					{
@@ -461,7 +464,7 @@ public class CMCookRole extends Role implements Cook {
 			log.add(new LoggedEvent("Checked Revolving Stand and it was empty."));
 		}
 		while(!revolvingStand.isEmpty()) {
-			CMRoleOrder order = revolvingStand.remove();
+			RoleOrder order = revolvingStand.remove();
 			if(order != null) {
 				orders.add(order);
 			}
@@ -476,7 +479,7 @@ public class CMCookRole extends Role implements Cook {
 		
 	}
 	
-	private void plateIt(CMRoleOrder o) {
+	private void plateIt(RoleOrder o) {
 		DoPlating(o);
 		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Plating order.");
 		log.add(new LoggedEvent("Plating order."));
@@ -491,7 +494,7 @@ public class CMCookRole extends Role implements Cook {
 		}
 	}
 
-	private void cookIt(CMRoleOrder o)
+	private void cookIt(RoleOrder o)
 	{
 		log.add(new LoggedEvent("Cooking order."));
 		DoGoToFidge();
@@ -542,13 +545,13 @@ public class CMCookRole extends Role implements Cook {
 			
 		}
 	}
-	private void DoCooking(CMRoleOrder o) {
+	private void DoCooking(RoleOrder o) {
 		cookGui.DoCookFood(o);
 		
 	}
 
 
-	private void DoPlating(CMRoleOrder o) {
+	private void DoPlating(RoleOrder o) {
 		if(pickUpTableItems < 8){
 			cookGui.DoPlateFood(o);	
 			pickUpTableItems++;
@@ -564,7 +567,7 @@ public class CMCookRole extends Role implements Cook {
 	}
 
 
-	private void scheduleCook(final CMRoleOrder o){
+	private void scheduleCook(final RoleOrder o){
 
 		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, getName(), "Cooking order.");
 		timer.schedule(new TimerTask() {
@@ -691,10 +694,10 @@ public class CMCookRole extends Role implements Cook {
 		
 	}
 	
-	public void setRevolvingStand(CMRevolvingStandMonitor r) {
+	public void setRevolvingStand(RevolvingStandMonitor r) {
 		this.revolvingStand = r;
 	}
-	public CMRevolvingStandMonitor getRevolvingStand(){
+	public RevolvingStandMonitor getRevolvingStand(){
 		return revolvingStand;
 	}
 

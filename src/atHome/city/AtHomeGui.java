@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-
-import CMRestaurant.roles.CMRoleOrder;
 import restaurant.gui.FoodIcon;
 import city.PersonAgent;
 import city.gui.Gui;

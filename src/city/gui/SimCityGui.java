@@ -1,6 +1,7 @@
 package city.gui;
 
 import restaurant.Restaurant;
+import restaurant.RevolvingStandMonitor;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
 
@@ -20,7 +21,6 @@ import CMRestaurant.roles.CMCookRole;
 import CMRestaurant.roles.CMCustomerRole;
 import CMRestaurant.roles.CMHostRole;
 import CMRestaurant.roles.CMNormalWaiterRole;
-import CMRestaurant.roles.CMRevolvingStandMonitor;
 import CMRestaurant.roles.CMSharedWaiterRole;
 import EBRestaurant.gui.EBAnimationPanel;
 import EBRestaurant.gui.EBCashierGui;
@@ -632,7 +632,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((GHCookRole)r.cook).setRestaurant(r);
 	        	GHCookGui ccg = new GHCookGui(((GHCookRole)r.cook));
 	        	((GHCookRole)r.cook).setGui(ccg);
-	        	CMRevolvingStandMonitor revolvingStand = new CMRevolvingStandMonitor();
+	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
 	        	//((GHCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
@@ -730,7 +730,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((CMCookRole)r.cook).setRestaurant(r);
 	        	CMCookGui ccg = new CMCookGui(((CMCookRole)r.cook));
 	        	((CMCookRole)r.cook).setGui(ccg);
-	        	CMRevolvingStandMonitor revolvingStand = new CMRevolvingStandMonitor();
+	        	RevolvingStandMonitor revolvingStand = new RevolvingStandMonitor();
 	        	((CMCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 
@@ -983,7 +983,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 			if(p.getName().toLowerCase().contains("shared")){
 				return new CMSharedWaiterRole(p, r);
 			}else{
-				return new CMNormalWaiterRole(p, r);
+				return new CMSharedWaiterRole(p, r);
 			}
 		}if(r.waiterRole.equalsIgnoreCase("RestaurantEBWaiterRole")){
 			if(p.getName().toLowerCase().contains("shared")){

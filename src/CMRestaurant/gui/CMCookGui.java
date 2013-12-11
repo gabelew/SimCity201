@@ -16,9 +16,9 @@ import javax.imageio.ImageIO;
 
 import CMRestaurant.gui.CMHostGui.Command;
 import CMRestaurant.roles.CMCookRole;
-import CMRestaurant.roles.CMRoleOrder;
 import city.gui.Gui;
 import city.gui.SimCityGui;
+import restaurant.RoleOrder;
 import restaurant.gui.FoodIcon;
 import restaurant.interfaces.Waiter;
 
@@ -47,7 +47,7 @@ public class CMCookGui implements Gui  {
 		FoodIcon food;
 		Point point;
 		//Order order;
-		CMRoleOrder order;
+		RoleOrder order;
 		FoodState state;
 		public int cookingSpot = -1;
 		public int pickUpSpot = -1;
@@ -64,7 +64,7 @@ public class CMCookGui implements Gui  {
 			}
 		}*/
 		
-		MyFood(FoodIcon f, Point p, CMRoleOrder o){
+		MyFood(FoodIcon f, Point p, RoleOrder o){
 			this.food = f;
 			this.point = p;
 			this.order = o;
@@ -272,7 +272,7 @@ public class CMCookGui implements Gui  {
 		
 	}
 	*/
-	public void DoCookFood(CMRoleOrder order) {
+	public void DoCookFood(RoleOrder order) {
 		// Grab food from fidge(already at fidge
 		// if burger,steak,chicken put on grill and set timer
 		// if salad or cookie, put on right
@@ -375,7 +375,7 @@ public class CMCookGui implements Gui  {
 		}
 	}*/
 	
-	public void DoPlateFood(CMRoleOrder o){
+	public void DoPlateFood(RoleOrder o){
 		MyFood f = findMyFood(o);
 
 		if(f.order.choice.equalsIgnoreCase("steak") || f.order.choice.equalsIgnoreCase("chicken") || f.order.choice.equalsIgnoreCase("burger")){
@@ -403,7 +403,7 @@ public class CMCookGui implements Gui  {
 		return null;
 	}
 	*/
-	private MyFood findMyFood(CMRoleOrder o) {
+	private MyFood findMyFood(RoleOrder o) {
 
 		synchronized(foods){
 			for(MyFood f: foods){
