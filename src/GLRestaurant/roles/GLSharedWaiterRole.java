@@ -28,14 +28,17 @@ public class GLSharedWaiterRole extends GLWaiterRole{
 			}
 		}
 		if(!revolvingStand.isFull()) {
+			log.add(new LoggedEvent("Put order into the revolving stand."));
 			revolvingStand.insert(new WaiterOrder(this, mc.choice, mc.c));
 			mc.cs = customerState.waitingForFood;
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Inserting order into revolving stand");
 		
 		} else {
+			log.add(new LoggedEvent("Revolving stand is full. Try again later."));
 			AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "The revolving stand is full. I'll try again later.");
 		}
-		waiterGui.DoLeaveCustomer();
+		if(waiterGui!=null)
+			waiterGui.DoLeaveCustomer();
 	}
 
 }

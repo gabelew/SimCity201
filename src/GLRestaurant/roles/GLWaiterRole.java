@@ -8,6 +8,7 @@ import GLRestaurant.gui.GLWaiterGui;
 import restaurant.Restaurant;
 import restaurant.interfaces.Customer;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.EventLog;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,18 +27,23 @@ import city.roles.Role;
 public abstract class GLWaiterRole extends Role implements Waiter{
 	//Notice that we implement customers using ArrayList, but type it
 	//with List semantics.
-	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
+	public List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
-	protected class MyCustomer {
+	public class MyCustomer {
 		GLCustomerRole c;
-		customerState cs;
+		public customerState cs;
 		Table t;
 		String choice;
 		int platex;
 		int platey;
-		MyCustomer(GLCustomerRole cust, int tableNum, customerState state) {
+		public MyCustomer(GLCustomerRole cust, int tableNum, customerState state) {
 			this.c = cust;
 			this.t = new Table(tableNum);
+			this.cs = state;
+		}
+		public MyCustomer(GLCustomerRole cust, customerState state, String choice) {
+			this.c = cust;
+			this.choice = choice;
 			this.cs = state;
 		}
 	}
@@ -73,6 +79,7 @@ public abstract class GLWaiterRole extends Role implements Waiter{
 	private final double SALADPRICE = 5.99;
 	private final double COOKIEPRICE = 8.99;
 	private boolean restaurantClosed = false;
+	public EventLog log = new EventLog();
 	
 	/**
 	 * Constructor for WaiterAgent class.

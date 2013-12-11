@@ -20,6 +20,7 @@ import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cook;
 import restaurant.interfaces.Waiter;
+import restaurant.test.mock.EventLog;
 import restaurant.test.mock.LoggedEvent;
 
 /**
@@ -42,7 +43,8 @@ public class GLCookRole extends Role implements Cook{
 	PersonAgent replacementPerson = null;
 	private Semaphore waitingResponse = new Semaphore(0,true);
 	boolean marketsAreStocked = true;
-	
+	public EventLog log = new EventLog();
+
 	private int orderNum = 1;
 	public Restaurant restaurant;
 	Timer timer = new Timer();
@@ -146,6 +148,7 @@ public class GLCookRole extends Role implements Cook{
 	}
 
 	public void msgHereIsOrder(GLWaiterRole w, String choice, GLCustomerRole c) {
+		log.add(new LoggedEvent("Received msgHereIsOrder."));
 		if(foods.get(choice).amount > 0) {
 			orders.add(new WaiterOrder(w, choice, c, orderState.pending, orderNum++));
 			foods.get(choice).amount--;
@@ -176,7 +179,7 @@ public class GLCookRole extends Role implements Cook{
 	 */
 	public boolean pickAndExecuteAnAction() {
 		
-		if(!firstRestock) {
+		if(!firstRestock && cookGui!=null) {
 			firstRestock = true;
 			currentMarket = markets.get(0);
 		}
@@ -303,7 +306,8 @@ public class GLCookRole extends Role implements Cook{
 	
 	private void cookIt(final WaiterOrder o) {
 		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Cooking " + o.choice + " for " + o.c.getName());
-		cookGui.cook(o.choice, o.orderNum);
+		if(cookGui!=null)
+			cookGui.cook(o.choice, o.orderNum);
 		timer.schedule(new TimerTask() {
 			public void run() {
 				foodDone(o);
@@ -360,11 +364,11 @@ public class GLCookRole extends Role implements Cook{
 	}
 	
 	public void checkRevolvingStand() {
-//		if(!revolvingStand.isEmpty()){
-//			log.add(new LoggedEvent("Checked Revolving Stand and it had orders in it."));
-//		}else{
-//			log.add(new LoggedEvent("Checked Revolving Stand and it was empty."));
-//		}
+		if(!revolvingStand.isEmpty()){
+			log.add(new LoggedEvent("Revolving stand has orders in it."));
+		}else{
+			log.add(new LoggedEvent("Revolving stand is empty."));
+		}
 		while(!revolvingStand.isEmpty()) {
 			WaiterOrder order = revolvingStand.remove();
 			order.orderNum = orderNum++;

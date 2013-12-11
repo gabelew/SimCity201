@@ -18,9 +18,11 @@ public class GLNormalWaiterRole extends GLWaiterRole{
 	}
 	
 	protected void sendOrderToCook(MyCustomer mc) {
+		log.add(new LoggedEvent("Electronically sent order to cook."));
 		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Electronically sent " + mc.c.getName() + "'s order to cook.");	
 		mc.cs = customerState.waitingForFood;
 		((GLCookRole)restaurant.cook).msgHereIsOrder(this, mc.choice, mc.c);
-		waiterGui.DoLeaveCustomer();
+		if(waiterGui != null)
+			waiterGui.DoLeaveCustomer();
 	}
 }
