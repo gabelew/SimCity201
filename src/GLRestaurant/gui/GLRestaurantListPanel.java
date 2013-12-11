@@ -1,11 +1,7 @@
 package GLRestaurant.gui;
 
-import GLRestaurant.roles.GLCustomerRole;
-import GLRestaurant.roles.GLHostRole;
 
 import javax.swing.*;
-
-import bank.gui.BankPanel;
 
 import java.awt.*;
 import java.awt.event.*;

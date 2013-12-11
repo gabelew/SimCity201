@@ -1,16 +1,8 @@
 package city.animationPanels;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import GLRestaurant.gui.GLCashierGui;
-import GLRestaurant.gui.GLCookGui;
-import GLRestaurant.gui.GLCustomerGui;
-import GLRestaurant.gui.GLWaiterGui;
 import GLRestaurant.gui.GLRestaurantPanel;
-import GLRestaurant.roles.GLHostRole;
-import restaurant.Restaurant;
-import restaurant.gui.Table;
+
 import city.gui.Gui;
 import city.gui.SimCityGui;
 
@@ -26,8 +18,6 @@ import java.util.concurrent.Semaphore;
 
 @SuppressWarnings("serial")
 public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements ActionListener{
-
-    private List<Table> tables = new ArrayList<Table>();
 
 	public List<Semaphore> waitingSeatsWaiter = new ArrayList<Semaphore>();
 	public List<Semaphore> waitingSeats = new ArrayList<Semaphore>();
@@ -126,12 +116,7 @@ public class GLRestaurantAnimationPanel extends InsideAnimationPanel implements 
         g.drawImage(chairImg, TABLE1X+CHAIR_OFFSET, TABLEY, null);
         g.drawImage(chairImg, TABLE2X+CHAIR_OFFSET, TABLEY, null);
         g.drawImage(chairImg, TABLE3X+CHAIR_OFFSET, TABLEY, null);
-        
-        
-        
-
-        
-        
+       
 		//draw Host Stand
     	g.drawImage(hostStandImg, 50, 89, null);
 

@@ -1,17 +1,11 @@
 package GLRestaurant.roles;
 
-import agent.Agent;
-import CMRestaurant.roles.CMWaiterRole;
-import CMRestaurant.roles.CMHostRole.MyWaiter;
-import CMRestaurant.roles.CMHostRole.wState;
 import GLRestaurant.gui.GLHostGui;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import city.PersonAgent;
-import city.animationPanels.CMRestaurantAnimationPanel;
 import city.animationPanels.GLRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.roles.Role;
@@ -150,7 +144,6 @@ public class GLHostRole extends Role implements Host{
 	}
 	
 	public void msgCookHasRestocked() {
-		Do("Cook has completed first restock. Customers can now be seated.");
 		firstRestock = true;
 		stateChanged();
 	}
@@ -247,7 +240,6 @@ public class GLHostRole extends Role implements Host{
 		}
 		
 		if(closeRestaurant && customers.size() > 0) {
-			print("1 got claled dawg");
 			synchronized(customers) {
 				for(MyCustomer mc : customers) {
 					if (mc.cs == customerState.waiting) {
@@ -259,7 +251,6 @@ public class GLHostRole extends Role implements Host{
 		} 
 		
 		if(closeRestaurant && customers.isEmpty()) {
-			print("2 got called dawg!!");
 			askEmployeesToLeave();
 			return true;
 		}
@@ -315,7 +306,6 @@ public class GLHostRole extends Role implements Host{
 	 * Find an empty table and tell waiter to seat a waiting customer
 	 */
 	private void AssignCustomerToTable(MyCustomer mc) {
-		//if(firstRestock) {
 			MyWaiter mw = findWaiter();
 			if (mw != null) {
 				Table t = findOpenTable();
@@ -328,7 +318,6 @@ public class GLHostRole extends Role implements Host{
 					mc.cs = customerState.seated;
 				}
 			}
-		//}
 	}
 	
 	private void ReviewBreakRequest(MyWaiter mw) {
