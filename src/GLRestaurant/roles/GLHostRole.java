@@ -114,7 +114,7 @@ public class GLHostRole extends Role implements Host{
 		MyCustomer mc = findCustomer(c);
 		if(mc != null) {
 			mc.cs = customerState.done;
-			customers.remove(mc.c);
+			customers.remove(mc);
 			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.getName()); 
 		}
 		stateChanged();
@@ -250,8 +250,10 @@ public class GLHostRole extends Role implements Host{
 						askCustomerToLeave(mc);
 						return true;
 					}
+					AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Customer state: " + mc.cs.toString());
 				}
 			}
+			AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Customers: " + customers.size());
 		} 
 		
 		if(closeRestaurant && customers.isEmpty()) {
