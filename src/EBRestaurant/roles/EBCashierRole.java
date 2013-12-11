@@ -23,7 +23,6 @@ public class EBCashierRole extends Role implements Cashier {
 	public double bank = 5000;
 	public Restaurant restaurant;
 	PersonAgent replacementPerson = null;
-	private String name;
 	private boolean exists;
 	private EBMenu menu=new EBMenu();
 	private int payNumber;
@@ -86,7 +85,6 @@ public class EBCashierRole extends Role implements Cashier {
 		Checks.add(new Check(w,choice, tableNumber, state.created));
 		stateChanged();
 		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Creating check for table "+tableNumber);
-
 	}
 	
 	public void msgPaying(double amount, int tableNumber,boolean payInFull){

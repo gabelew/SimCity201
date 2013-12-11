@@ -283,6 +283,7 @@ public class EBCookRole extends Role implements Cook {
 	}
 	
 	private void giveInvoice(marketOrder order){
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Gave invoice to cashier");
 		((EBCashierRole)restaurant.cashier).msgHereIsInvoice(order.amountOwed,order.delivery);
 		marketOrders.remove(order);
 	}

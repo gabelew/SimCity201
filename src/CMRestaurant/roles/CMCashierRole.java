@@ -141,6 +141,7 @@ public class CMCashierRole extends Role implements Cashier {
 	}
 
 	public void msgHereIsInvoice(double price,DeliveryMan DMR) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), "Received Invoice from cook. Total price of invoice = "+price);
 		bills.add(new Bill(DMR,price,BillState.informed));
 		stateChanged();
 	}
@@ -148,6 +149,7 @@ public class CMCashierRole extends Role implements Cashier {
 	@Override
 	public void msgHereIsBill(DeliveryMan DM, double bill) {
 		bills.add( new Bill(DM, bill, BillState.requested));
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, getName(), "Received bill from market. Total of bill = "+bill);
 		log.add(new LoggedEvent("Received msgHereIsBill from market. Total of Bill = "+ bill));
 		stateChanged();	
 	}
