@@ -3,6 +3,7 @@ package city.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import agent.Agent;
 import CMRestaurant.gui.CMCustomerGui;
 import CMRestaurant.gui.CMWaiterGui;
 import city.BusAgent;
@@ -103,12 +104,7 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
     public class GridSpot{
     	public Semaphore spot = new Semaphore(1,true);
     	public boolean stopSign = false;
-    	GridSpot(){
-    		
-    	}
-    	GridSpot(boolean ss){
-    		stopSign = ss;
-    	}
+    	public Agent owner = null;
     }
     
 	public AnimationPanel(SimCityGui gui){
@@ -216,8 +212,8 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	        	g2.fillRect(802+30+20, 25+80*(i)+30, 20, SIDEWALK_WIDTH);
 	        }
 
-/*
-	    	
+
+	    	/*
 	    	for(int i = 0;i< 45;i++){
 	    		for(int j =0; j<4;j++){
 	    			g2.setColor(Color.CYAN);
@@ -242,8 +238,18 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 	    			}
 	    		}
 	    		
-	    	}*/
-	    	
+	    	}
+
+			g2.setColor(Color.GRAY);
+			g.fillRect(826, 115, 14, 20);
+			g2.setColor(Color.GREEN);
+			g.drawRect(826, 115, 14, 20);
+
+			g2.setColor(Color.GRAY);
+			g.fillRect(30, 115, 14, 20);
+			g2.setColor(Color.GREEN);
+			g.drawRect(30, 115, 14, 20);*/
+			
 		synchronized(guis){
 		for(Gui gui : guis) {
 			//if (gui.isPresent()) {

@@ -71,6 +71,7 @@ public class PersonAgent extends Agent implements Person
 	public boolean isManager = false;
 	public boolean isEvil = false;
 	public PersonAgent landlord;
+	public PersonAgent insurance;
 	
 	public String name;
 	public boolean car = false;
@@ -92,7 +93,9 @@ public class PersonAgent extends Agent implements Person
 	public double cashOnHand = 0, businessFunds = 0;
 	public BankAccount personalAccount = null;
 	public BankAccount businessAccount = null;
-	
+	private boolean justFixedCar = false;
+	Timer timer = new Timer();
+
 	public SimCityGui simCityGui; 
 	
 	private static final int halfScreen = 417;
@@ -318,7 +321,7 @@ public class PersonAgent extends Agent implements Person
 	}
 	
 	public void addRestaurant(Restaurant r) {
-		if(job==null || job.type.toLowerCase().equals("landlord") || !(job.location.equals(r.location))){
+		if(job==null || job.type.toLowerCase().equals("landlord") || job.type.toLowerCase().equals("insurance") || !(job.location.equals(r.location))){
 			restaurants.add(r);
 		}
 	}
@@ -1011,8 +1014,6 @@ public class PersonAgent extends Agent implements Person
     	else if(job.type.equalsIgnoreCase("waiter") || job.type.equalsIgnoreCase("host") || job.type.equalsIgnoreCase("cook")
     			|| job.type.equalsIgnoreCase("cashier")){
     		Restaurant r = findRestaurant(destination);
-    		//TODO: add isEmpty method to restaurant
-	    	/*if(r.isOpen && r.isEmpty()){*/
 	    		if(job.type.equalsIgnoreCase("waiter")){
 	    			Role role = (Role) SimCityGui.waiterFactory(this, r);
 	            	role.setGui(SimCityGui.waiterGuiFactory(r, (Role) role));
@@ -1074,8 +1075,6 @@ public class PersonAgent extends Agent implements Person
 	    	}*/
     	}else if(job.type.equalsIgnoreCase("clerk") || job.type.equalsIgnoreCase("deliveryMan")){
     		MarketAgent ma = findMarket(destination);
-    		//TODO: add isEmpty method to market
-    		/*if(ma.isOpen && ma.isEmpty()){*/
     		if(job.type.equalsIgnoreCase("clerk")){
 		    		ClerkRole role = new ClerkRole();
 		    		role.Market = ma;
@@ -1492,5 +1491,19 @@ public class PersonAgent extends Agent implements Person
 		personGui = g;
 		
 	}
+	
+	public void msgYourCrashedPayInsurance() {
+		if(!justFixedCar){
+			justFixedCar = true;
+			AlertLog.getInstance().logMessage(AlertTag.PERSON, getName(), "I crashed, now I must fix my car.");
+			bankTeller.msgTransferFunds(this, insurance, 25.00, "personal", "personal", "for car crash");
+			timer.schedule(new TimerTask() {
+				public void run() {
+					justFixedCar=false;
+				}
+			}, 
+			700);
+		}
 
+	}
 }

@@ -401,21 +401,27 @@ public class SimCityGui extends JFrame implements ActionListener {
     	infoPanel.getPersonPanel().addPerson("deliveryMan04nightcar");
     	infoPanel.getPersonPanel().addPerson("deliveryMan05nightcar");
     	infoPanel.getPersonPanel().addPerson("deliveryMan06nightcar");
+    	infoPanel.getPersonPanel().addPerson("insurancecarhome");
     	
 
     }
     
     private void setLandlordForRenters() {
     	PersonAgent landlord = null;
+    	PersonAgent insurance = null;
     	for(PersonAgent p: persons) {
     		if(p.job!= null && p.job.type.equals("landlord")) {
     			landlord = p;
+    		}
+    		if(p.job!= null && p.job.type.equals("insurance")) {
+    			insurance = p;
     		}
     	}
     	for(PersonAgent r: persons) {
     		if(r.isRenter) {
     			r.landlord = landlord;
     		}
+    		r.insurance = insurance;
     	}
     }
     

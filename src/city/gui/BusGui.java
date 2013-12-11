@@ -6,10 +6,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import city.PersonAgent;
+
+
+
+
 
 import javax.imageio.ImageIO;
 
 import city.BusAgent;
+import city.gui.AnimationPanel.GridSpot;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 
 public class BusGui implements Gui{
 	
@@ -67,7 +75,149 @@ public class BusGui implements Gui{
 	
 	@Override
 	public void updatePosition() {
-		
+		boolean canKeepMoving = true;
+
+		Point point = new Point(817,115);
+			if(type == 'F' && yPos>=115-35 && yPos<=115+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
+					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 1");
+					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*0-37){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+			if(type == 'F' && yPos==115+80*0+22){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			
+			point = new Point(817,115+80*1);
+			if(type == 'F' && yPos>=115+80*1-35 && yPos<=115+80*1+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
+					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 2");
+					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*1-37){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+			if(type == 'F' && yPos==115+80*1+22){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			
+			
+			point = new Point(817,115+80*2);
+			if(type == 'F' && yPos>=115+80*2-35 && yPos<=115+80*1+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
+				//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 3");
+				((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*2-37){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+			if(type == 'F' && yPos==115+80*2+22){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			
+			point = new Point(817,115+80*3);
+			if(type == 'F' && yPos>=115+80*3-35 && yPos<=115+80*1+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
+				//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 4");
+				((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*3-37){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+			if(type == 'F' && yPos==115+80*3+22){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			
+			point = new Point(17,115+80*0);
+			if(type == 'B' && yPos>=115-35 && yPos<=115+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
+					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 1");
+					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(type == 'B' && yPos==115+80*0-37){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'B' && yPos==115+80*0+22){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+			
+			point = new Point(17,115+80*1);
+			if(type == 'B' && yPos>=115+80*1-35 && yPos<=115+80*1+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
+					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 2");
+					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(type == 'B' && yPos==115+80*1-37){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'B' && yPos==115+80*1+22){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+
+			
+			point = new Point(17,115+80*2);
+			if(type == 'B' && yPos>=115+80*2-35 && yPos<=115+80*2+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
+					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 3");
+					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(type == 'B' && yPos==115+80*2-37){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'B' && yPos==115+80*2+22){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+			
+			point = new Point(17,115+80*3);
+			if(type == 'B' && yPos>=115+80*3-35 && yPos<=115+80*3+20 
+					&& gui.animationPanel.gridMap.get(point).owner!=null
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
+					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
+					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 4");
+					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
+			}
+			if(type == 'B' && yPos==115+80*3-37){
+				if(gui.animationPanel.gridMap.get(point).spot.availablePermits()==0){
+					gui.animationPanel.gridMap.get(point).spot.release();
+				}
+			}
+			if(PersonAgent.randInt(0, 480)!=0 && type == 'B' && yPos==115+80*3+22){
+				canKeepMoving = gui.animationPanel.gridMap.get(point).spot.tryAcquire();
+			}
+
+			
+			if(canKeepMoving)
 			if (yPos != yDestination && type == 'F' && yPos < 420){
 				yPos++;
 			}else if (yPos != yDestination && type == 'B' && yPos > -50){

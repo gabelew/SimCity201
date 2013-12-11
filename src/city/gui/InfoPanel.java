@@ -1145,6 +1145,8 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     			}
     		} else if(name.toLowerCase().contains("landlord")) {
     			p.job = p.new MyJob("landlord");
+    		} else if(name.toLowerCase().contains("insurance")) {
+    			p.job = p.new MyJob("insurance");
     		}
     		
     		

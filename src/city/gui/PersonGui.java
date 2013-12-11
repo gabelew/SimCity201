@@ -93,7 +93,7 @@ public class PersonGui implements Gui{
 	    				GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(i*20 - 23,115+j*80));
 	    				canKeepMoving = gridSpot.spot.tryAcquire();
 	    				if(canKeepMoving && gridSpot.stopSign==true){
-	    					
+	    					gridSpot.owner = agent;
 	    					timer.schedule(new TimerTask() {
 	    						public void run() {
 	    							atStopSign=true;
@@ -114,6 +114,7 @@ public class PersonGui implements Gui{
 	    				GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(i*20 - 23,115+j*80));
 	    				
 	    				if(gridSpot.spot.availablePermits()==0){
+	    					gridSpot.owner=null;
 	    					gridSpot.spot.release();
 	    				}
 	    			}
@@ -127,6 +128,7 @@ public class PersonGui implements Gui{
 	    					GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(i*20 +97, 95+j*80));
 		    				canKeepMoving = gridSpot.spot.tryAcquire();
 		    				if(canKeepMoving){
+		    					gridSpot.owner = agent;
 		    					leavingBuilding = true;	
 		    					xPos+=20;
 		    				}
@@ -142,6 +144,7 @@ public class PersonGui implements Gui{
 				if(gridSpot!=null){
 					if(gridSpot.spot.availablePermits()==0){
 	    				leavingBuilding = false;
+    					gridSpot.owner=null;
     					gridSpot.spot.release();    					
     				}
 				}	
@@ -173,12 +176,14 @@ public class PersonGui implements Gui{
 					GridSpot gridSpot = gui.animationPanel.gridMap.get(new Point(xPos+20,yPos));
     				if(gridSpot!=null){
     					if(gridSpot.spot.availablePermits()==0){
+	    					gridSpot.owner=null;
 	    					gridSpot.spot.release();
 	    				}
     				}
     				gridSpot = gui.animationPanel.gridMap.get(new Point(xPos-20,yPos));
     				if(gridSpot!=null){
     					if(gridSpot.spot.availablePermits()==0){
+	    					gridSpot.owner=null;
 	    					gridSpot.spot.release();
 	    				}
     				}
@@ -324,4 +329,5 @@ public class PersonGui implements Gui{
 		yDestination = agent.myHome.location.y;		
 		command = Command.walkingHome;
 	}
+
 }
