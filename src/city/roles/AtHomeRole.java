@@ -175,7 +175,7 @@ public class AtHomeRole extends Role implements AtHome
 	private void PayForRepairs(Appliance a)
 	{
 		a.state = AppState.working;
-		if(true || myPerson.cashOnHand >= a.priceToFix)
+		if(myPerson.cashOnHand >= a.priceToFix)
 		{
 			print("paid repairman, $" + a.priceToFix);
 			myPerson.bankTeller.msgTransferFunds(myPerson, myPerson.repairman.myPerson,
