@@ -163,11 +163,11 @@ public class GHHostRole extends Role implements Host{
 			return true;
 		} 
 		
-		/*if(closeRestaurant && customers.isEmpty()) {
-			print("2 got called dawg!!");
+		if(closeRestaurant && waitingCustomers.isEmpty()) {
+			print("gggggggggggggg");
 			askEmployeesToLeave();
 			return true;
-		}*/
+		}
 		
 		if(!waitingCustomers.isEmpty()  && !waiters.isEmpty()){// && ((GHCashierRole) restaurant.cashier).getgui().getYPos() <= 30){
 			for(Table table: tables){
@@ -186,6 +186,17 @@ public class GHHostRole extends Role implements Host{
 	}
 
 	// Actions
+
+	private void askEmployeesToLeave() {
+		for(Waiter w : waiters){
+			((GHWaiterRole) w).msgRestaurantClosed();
+		}
+		((GHCookRole) restaurant.cook).msgRestaurantClosed();
+		((GHCashierRole) restaurant.cashier).msgRestaurantClosed();
+		waiters.removeAll(waiters);
+		state = State.leaving;
+		closeRestaurant = false;
+	}
 
 	private void askCustomerToLeave(Customer mc) {
 		((GHCustomerRole) mc).msgRestaurantClosed();

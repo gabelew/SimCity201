@@ -61,7 +61,10 @@ public class GHWaiterGui implements Gui {
            else if(xPos == xDestination && yPos == yDestination
            		&& (xDestination == xCook) && (yDestination == yCook)) {
                ((GHWaiterRole) role).msgAtTable();
-        }
+        } else if(xPos == xDestination && yPos == yDestination)
+        			if(command == Command.LeaveRestaurant){
+        				role.msgLeftTheRestaurant();
+        			}
     }
 
     public void draw(Graphics2D g) {
@@ -116,6 +119,12 @@ public class GHWaiterGui implements Gui {
         yDestination = 20;
 
     }
+    
+    public void LeaveRestaurant() {
+        xDestination = -20;
+        yDestination = -20;		
+        command = Command.LeaveRestaurant;
+	}
 
     public int getXPos() {
         return xPos;
@@ -124,4 +133,5 @@ public class GHWaiterGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
 }

@@ -469,5 +469,10 @@ public class GHCookRole extends Role implements Cook {
 		OrderFromMarket();
 		stateChanged();
 	}
+
+	public void msgRestaurantClosed() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
