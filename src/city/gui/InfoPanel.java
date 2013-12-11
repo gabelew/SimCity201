@@ -1148,7 +1148,7 @@ public class InfoPanel extends JPanel implements KeyListener,ActionListener {
     			p.job = p.new MyJob("insurance");
     		} else if(name.toLowerCase().contains("repairman")) {
     			p.job = p.new MyJob("repairman");
-    			RepairManRole rp = new RepairManRole(p);
+    			RepairManRole rp = new RepairManRole(p,gui);
     			p.roles.add(rp);
     			rp.active = true;
     		}

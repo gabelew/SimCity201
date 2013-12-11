@@ -26,7 +26,7 @@ public class RepairManGui implements Gui
 	
 	static final int xHomeLoc = 0;
 	static final int yHomeLoc = 0;
-	static final int xSTART_POS = -40;
+	static final int xSTART_POS = 40;
 	static final int ySTART_POS = 200;
 	static final int xWAITING_START = 90;
 	static final int yWAITING_START = 190;
@@ -38,10 +38,9 @@ public class RepairManGui implements Gui
 		{
 			StringBuilder path = new StringBuilder("imgs/");
 			repairmanImg = ImageIO.read(new File(path.toString() + "repairman.png"));
-		} catch(IOException e) {
-			
-		}
-		role = Role;
+		} 
+		catch(IOException e) {}
+		this.role = Role;
 	}
 	
 	public void updatePosition() 
