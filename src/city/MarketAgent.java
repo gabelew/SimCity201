@@ -5,6 +5,8 @@ import java.util.*;
 
 import agent.Agent;
 import city.animationPanels.InsideAnimationPanel;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.DeliveryManRole.Order;
 import market.gui.MarketPanel;
 import market.interfaces.Clerk;
@@ -146,7 +148,6 @@ public void msgDeliveryDone(DeliveryMan D){
 				de.deliveryState=state.offWork;
 			else{
 				de.deliveryState=state.free;
-				print("Back at the market");
 			}
 		}
 	}
@@ -194,7 +195,6 @@ public boolean pickAndExecuteAnAction() {
 				for (Order o:failedOrders){
 					for(Restaurant r:insideAnimationPanel.simCityGui.getRestaurants()){
 						if(r.cook==o.cook){
-							print("ccc");
 							if(r.isOpen){
 								giveToDelivery(d,o);
 								return true;
@@ -239,7 +239,6 @@ private void giveToClerk(clerk c,MyCustomer MC){
 	MyCustomers.remove(MC);
 }
 private void tellClerkToLeave(clerk c) {
-	print("clerk please leave");
 	c.clerk.msgMarketClosed();
 	clerks.remove(c);
 }

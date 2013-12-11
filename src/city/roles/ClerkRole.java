@@ -15,6 +15,8 @@ import market.gui.ClerkGui;
 import market.interfaces.*;
 import city.MarketAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 
 /**
  * Restaurant customer agent.
@@ -54,6 +56,8 @@ public class ClerkRole extends Role implements Clerk {
 		Market=m;
 		o.s=(orderState.askedForOrder);
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_CLERK, this.getName(), "Got customer");
+
 		stateChanged();
 	}
 	
@@ -61,12 +65,16 @@ public class ClerkRole extends Role implements Clerk {
 		o.Choices=choice;
 		o.s=orderState.waiting;
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_CLERK, this.getName(), "Customer placed order");
+
 	}
 	
 	public void msgHereIsPayment(double money){
 		if(money==o.amountOwed)
 			o.s=orderState.payed;
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_CLERK, this.getName(), "Received payment from customer");
+
 	}
 	
 	public void msgDoneWithShift(){
@@ -163,6 +171,8 @@ public class ClerkRole extends Role implements Clerk {
 		}
 		MCR.msgHereIsOrder(o.Choices,o.outOf);
 		o.s=orderState.done;
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_CLERK, this.getName(), "Gave order to customer");
+
 	}
 	
 	private void orderDone(){

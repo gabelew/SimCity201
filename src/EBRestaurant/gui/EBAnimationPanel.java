@@ -1,13 +1,7 @@
 package EBRestaurant.gui;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
-import CMRestaurant.gui.CMCashierGui;
-import CMRestaurant.gui.CMCookGui;
-import CMRestaurant.gui.CMCustomerGui;
-import CMRestaurant.gui.CMRestaurantPanel;
-import CMRestaurant.gui.CMWaiterGui;
 import city.animationPanels.InsideAnimationPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
@@ -15,7 +9,6 @@ import city.gui.SimCityGui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,14 +21,12 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
     private final int Rect1Y=100;
     private final int Rect2Y=200;
     private final int Rect3Y=300;
-    private final int RectWH=45;
     private final int RectPos=0;
     private Dimension bufferSize;
     private List<Gui> guis = new ArrayList<Gui>();
     
     private BufferedImage kitchenCounterImg = null;
 	private BufferedImage tableImg = null;
-	private BufferedImage chairImg = null;
 	private BufferedImage hostStandImg = null;
 	private BufferedImage registerImg = null;
 	private BufferedImage fidgeImg = null;
@@ -48,7 +39,6 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
 			StringBuilder path = new StringBuilder("imgs/");
 		    kitchenCounterImg = ImageIO.read(new File(path.toString() + "kitchen.png"));
 		    tableImg = ImageIO.read(new File(path.toString() + "table.png"));
-		    chairImg = ImageIO.read(new File(path.toString() + "customer_chair_v1.png"));
 		    hostStandImg = ImageIO.read(new File(path.toString() + "host_stand.png"));
 		    registerImg = ImageIO.read(new File(path.toString() + "register.png"));
 		    fidgeImg = ImageIO.read(new File(path.toString() + "fidge.png"));
@@ -96,8 +86,6 @@ public class EBAnimationPanel extends InsideAnimationPanel implements ActionList
         for(int i = 0; i<4; i++){
   			g.drawImage(platingTableImg, 300+17*i, 280+8*i, null);
       	}
-        //g2.fillRect(300, 230, 20, 100);
-        //g2.fillRect(300, 200, 80, 20);
         synchronized(getGuis()){
         for(Gui gui : getGuis()) {
         	if(!(gui instanceof EBCustomerGui || gui instanceof EBWaiterGui))

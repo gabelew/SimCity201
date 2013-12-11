@@ -13,12 +13,8 @@ import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 /**
- * Restaurant Host Agent
+ * EB Restaurant Host Role
  */
-//We only have 2 types of agents in this prototype. A customer and an agent that
-//does all the rest. Rather than calling the other agent a waiter, we called him
-//the HostAgent. A Host is the manager of a restaurant who sees that all
-//is proceeded as he wishes.
 public class EBHostRole extends Role implements Host {
 	public Restaurant restaurant;
 	private boolean restaurantClosed=false;

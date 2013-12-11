@@ -16,12 +16,8 @@ import restaurant.interfaces.*;
 import restaurant.test.mock.EventLog;
 
 /**
- * Restaurant Waiter Agent
+ * EB Restaurant Waiter Role
  */
-//We only have 2 types of agents in this prototype. A customer and an agent that
-//does all the rest. Rather than calling the other agent a waiter, we called him
-//the WaiterAgent. A W is the manager of a restaurant who sees that all
-//is proceeded as he wishes.
 public abstract class EBWaiterRole extends Role implements Waiter {
 	static final int NTABLES = 3;//a global for the number of tables.
 	public Restaurant restaurant;
@@ -51,8 +47,6 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	public enum customerState{waiting,seated,readyToOrder,asked,ordered,reOrder,waitForFood,foodReady,giveFood,eating,wantBill,gaveBill,done};
 	public enum wState{none, gotToWork, goingToAskForBreak, askedToBreak, goingOnBreak, onBreak,leaving, relieveFromDuty};
 	wState waiterState;
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented
 	private String outOf;
 	private Semaphore atTable = new Semaphore(0,true);
 	private Semaphore atCook = new Semaphore(0,true);
@@ -76,6 +70,8 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 	public void msgSeatCustomer(Customer Customer, int tableNumber){
 		Customers.add(new MyCustomer(Customer, tableNumber,customerState.waiting));
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Seating customer");
+
 	}
 	
 	public void msgReadyToOrder(Customer cust) {
@@ -249,7 +245,6 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 				{
 					if(cust.S == customerState.ordered)
 					{
-						print("test");
 						giveOrderToCook(cust);
 						return true;
 					}
@@ -316,6 +311,8 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			}
 		}
 		c.S=customerState.giveFood;
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Pick up food from cook");
+
 	}
 	
 	private void leaveWork() {
@@ -373,6 +370,8 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			e.printStackTrace();
 		}
 		}
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "Taking customer's order");
+
 	}
 	
 	private void goReTakeOrder(MyCustomer mc,String outOf){
@@ -391,12 +390,6 @@ public abstract class EBWaiterRole extends Role implements Waiter {
 			e.printStackTrace();
 		}
 	}
-	
-	/*private void giveOrderToCook(MyCustomer mc){
-		mc.S=customerState.waitForFood;
-		((EBCookRole) restaurant.cook).msgHereIsOrder(mc.choice, mc.tableNumber,this);
-		waiterGui.DoLeaveCustomer();
-	}*/
 	
 	protected abstract void giveOrderToCook(MyCustomer c);
 	

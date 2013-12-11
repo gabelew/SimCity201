@@ -75,7 +75,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		o.s=orderState.askedForOrder;
 		stateChanged();
 		log.add(new LoggedEvent("Received msgTakeCustomer from Market."));
-		AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Received order");
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Received order");
 	}
 	
 	public void msgTryAgain(Order order, MarketAgent marketAgent) {
@@ -85,7 +85,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 					Market=marketAgent;
 					o=order;
 					o.s=orderState.ordered;
-					AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Restaurant opened. Trying to deliver again");
+					AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Restaurant opened. Trying to deliver again");
 					stateChanged();
 				}
 				else{
@@ -106,7 +106,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 		cashier=ca;
 		o.s=orderState.payed;
 		stateChanged();
-		AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Received payment for order");
+		AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Received payment for order");
 	}
 	
 	public void msgDoneWithShift(){
@@ -239,7 +239,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 				if(R.isOpen){
 					(o.cook).msgHereIsOrderFromMarket((DeliveryMan) this,o.Choices,o.amountOwed);
 					o.s=orderState.waitingForPayment;
-					AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Giving order to cook");
+					AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Giving order to cook");
 				}
 				else{
 					Order tempOrder=new Order(null);
@@ -249,7 +249,7 @@ public class DeliveryManRole extends Role implements DeliveryMan{
 					tempOrder.outOf=o.outOf;
 					Market.failedOrders.add(tempOrder);
 					o.s=orderState.payed;
-					AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Delivery failed because restaurant closed");
+					AlertLog.getInstance().logMessage(AlertTag.MARKET_DELIVERYMAN, this.getName(), "Delivery failed because restaurant closed");
 				}
 			}
 		}

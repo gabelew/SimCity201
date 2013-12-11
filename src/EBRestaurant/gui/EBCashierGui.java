@@ -18,7 +18,6 @@ public class EBCashierGui implements Gui {
     private boolean isPresent = true;
     private int xPos = -40, yPos = -40;//default cashier position
     private int xDestination = -40, yDestination = -40;//default start position
-    private final int xChange = 20;
     public String choice1="";
     public String choice2="";
     public String choice3="";

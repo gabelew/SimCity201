@@ -16,18 +16,13 @@ import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 /**
- * Restaurant Cook Agent
+ * EB Restaurant Cook Role
  */
-//We only have 2 types of agents in this prototype. A customer and an agent that
-//does all the rest. Rather than calling the other agent a waiter, we called him
-//the HostAgent. A Host is the manager of a restaurant who sees that all
-//is proceeded as he wishes.
 public class EBCookRole extends Role implements Cook {
 	public Restaurant restaurant;
 	public boolean testingMonitor=false;
 	PersonAgent replacementPerson = null;
 	private boolean restaurantClosed=false;
-	private String name;
 	private EBCookGui cookgui=null;
 	public List<Order>Orders=Collections.synchronizedList(new ArrayList<Order>());
 	private Semaphore atDest = new Semaphore(0,true);
@@ -100,6 +95,8 @@ public class EBCookRole extends Role implements Cook {
 	{
 		Orders.add(new Order(waiter, choice, tableNumber, state.pending));
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Got order from waiter for table "+tableNumber);
+
 	}
 	
 	public void msgAnimationTakingFood(int tableNumber){
@@ -108,7 +105,7 @@ public class EBCookRole extends Role implements Cook {
 	
 	public void msgRefillOrder(int amount, String choice){
 		Inventory.put(choice, (Inventory.get(choice)+amount));
-		Do(choice+" refilled to "+Inventory.get(choice));
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Refilled "+choice+" to"+amount);
 		putOrder=false;
 		stateChanged();
 	}
@@ -302,28 +299,21 @@ public class EBCookRole extends Role implements Cook {
 			}
 		}
 		marketOrders.add(new marketOrder(orders,states.waiting,markets.get(numMarket).market));
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Ordering from market");
+
 		markets.get(numMarket).market.msgPlaceDeliveryOrder(this);
 	}
 	
 	private void doneCooking(Order O){
 		((EBWaiterRole) O.w).msgOrderIsReady(O.choice, O.tableNumber);
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Cooking is done for table "+O.tableNumber);
 		Orders.remove(O);
 	}
-
-	
-	/*public void pauseIt(){
-		pause();
-	}
-	
-	public void resumeIt(){
-		resume();
-	}*/
 
 	public void setGui(EBCookGui g) {
 		cookgui = g;
 	}
 
-	@Override
 	public void msgCanIHelpYou(DeliveryMan DM, MarketAgent M) {
 		for(marketOrder m:marketOrders){
 			if(m.market==M){
@@ -350,6 +340,8 @@ public class EBCookRole extends Role implements Cook {
 		}
 		for(String key:choices.keySet()){
 			Inventory.put(key, choices.get(key));
+			AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Refilled "+key+" to"+choices.get(key));
+
 		}
 		putOrder=false;
 	}

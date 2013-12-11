@@ -1,13 +1,13 @@
 package EBRestaurant.roles;
 
 import java.util.*;
-import java.lang.Object;
-import java.text.NumberFormat;
 
 import EBRestaurant.gui.EBCashierGui;
 import market.interfaces.DeliveryMan;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.DeliveryManRole;
 import city.roles.Role;
 import restaurant.Restaurant;
@@ -16,16 +16,11 @@ import restaurant.interfaces.Waiter;
 import restaurant.interfaces.Customer;
 import restaurant.test.mock.EventLog;
 /**
- * Restaurant Cook Agent
+ * EB Restaurant Cashier Role
  */
-//We only have 2 types of agents in this prototype. A customer and an agent that
-//does all the rest. Rather than calling the other agent a waiter, we called him
-//the HostAgent. A Host is the manager of a restaurant who sees that all
-//is proceeded as he wishes.
+
 public class EBCashierRole extends Role implements Cashier {
-	//public EventLog log;
 	public double bank = 5000;
-	private boolean restaurantClosed=false;
 	public Restaurant restaurant;
 	PersonAgent replacementPerson = null;
 	private String name;
@@ -93,13 +88,15 @@ public class EBCashierRole extends Role implements Cashier {
 	{
 		Checks.add(new Check(w,choice, tableNumber, state.created));
 		stateChanged();
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Creating check for table "+tableNumber);
+
 	}
 	
 	public void msgPaying(double amount, int tableNumber,boolean payInFull){
 		for (Check c: Checks){
 			if (c.tableNumber==tableNumber){
 				if(payInFull){
-				c	.S=state.paid;
+					c.S=state.paid;
 				}
 				else{
 					c.S=state.waiting;
@@ -107,6 +104,7 @@ public class EBCashierRole extends Role implements Cashier {
 				bank=bank+amount;
 			}
 		}
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Received payment of "+amount+" for table "+tableNumber);
 	}
 	
 	public void msgAddToTab(double amount,Customer cust){
@@ -128,7 +126,7 @@ public class EBCashierRole extends Role implements Cashier {
 	
 	public void msgHereIsInvoice(double amount,DeliveryMan DM){
 		receivedInvoice=true;
-		print("Got Invoice");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Received invoice from cook");
 		stateChanged();
 	}
 	
@@ -140,7 +138,6 @@ public class EBCashierRole extends Role implements Cashier {
 		try{
 			if(cashierState == CashState.releaveFromDuty){
 				cashierState = CashState.none;
-				print("cashier left");
 				myPerson.releavedFromDuty(this);
 				if(replacementPerson != null){
 					replacementPerson.waitingResponse.release();
@@ -242,17 +239,10 @@ public class EBCashierRole extends Role implements Cashier {
 			myPerson.businessFunds += cash;
 			myPerson.msgDepositBusinessCash();
 		}
-	}
-	
-	
-	/*public void pauseIt(){
-		pause();
-	}
-	
-	public void resumeIt(){
-		resume();
-	}*/
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Depositing business cash");
 
+	}
+	
 	@Override
 	public void msgHereIsBill(DeliveryMan DMR, double bill) {
 		boolean exists=false;
@@ -270,7 +260,7 @@ public class EBCashierRole extends Role implements Cashier {
 		if(!exists){
 			Payments.add(new payment(bill,DMR,payState.receivedBill,payNumber));	
 		}
-		print("Got Bill");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Received Bill from Delivery Man");
 		stateChanged();
 	}
 

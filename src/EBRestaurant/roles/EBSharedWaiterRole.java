@@ -4,7 +4,6 @@ import java.util.TimerTask;
 
 import EBRestaurant.roles.EBCookRole;
 import EBRestaurant.roles.EBCookRole.state;
-import EBRestaurant.roles.EBWaiterRole.customerState;
 import restaurant.Restaurant;
 import restaurant.test.mock.LoggedEvent;
 import city.PersonAgent;
@@ -23,7 +22,6 @@ public class EBSharedWaiterRole extends EBWaiterRole{
 	
 	@Override
 	protected void giveOrderToCook(MyCustomer c) {
-		//c.S=customerState.asked;
 		if(!revolvingStand.isFull()) {
 			c.S=customerState.waitForFood;
 			log.add(new LoggedEvent("Inserting order"));

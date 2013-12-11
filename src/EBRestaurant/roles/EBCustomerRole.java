@@ -1,21 +1,20 @@
 package EBRestaurant.roles;
 
 import EBRestaurant.gui.EBCustomerGui;
-import GLRestaurant.roles.GLHostRole;
-
-import java.text.NumberFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
 
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.*;
 
 /**
- * Restaurant customer agent.
+ * EB Restaurant customer role.
  */
 public class EBCustomerRole extends Role implements Customer {
 	private String name;
@@ -25,14 +24,11 @@ public class EBCustomerRole extends Role implements Customer {
 	Timer timer = new Timer();
 	private EBCustomerGui ebcustomerGui;
 	public String choice;
-	// agent correspondents
-	private Host host;
 	private Waiter waiter;
 	private int eatTime=5000;
 	private float amountOwed;
 	Random generator;
 	private String outOf;
-	private Cashier cashier;
 	private int leaving;
 	private int waitY;
 	private boolean responsible;
@@ -230,11 +226,12 @@ public class EBCustomerRole extends Role implements Customer {
 	private void readyToOrder(){
 		timer.schedule(new TimerTask() {
 			public void run() {
-				print("Ready to order");
 				Order();
 			}
 		},
 		5000);
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Ready to Order");
+
 	}
 
 	private void Order(){
@@ -336,13 +333,13 @@ public class EBCustomerRole extends Role implements Customer {
 		//anonymous inner class that has the public method run() in it.
 		timer.schedule(new TimerTask() {
 			public void run() {
-				print("Done eating");
 				//isHungry = false;
 				event = AgentEvent.doneEating;
 				stateChanged();
 			}
 		},
 		eatTime);
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Done Eating");
 	}
 	
 	private void shouldLeave(){
@@ -353,6 +350,8 @@ public class EBCustomerRole extends Role implements Customer {
 			state=AgentState.payed;
 			((EBHostRole)restaurant.host).msgLeavingRestaurant(this);
 			stateChanged();
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Leaving early; restaurant full");
+
 		}
 		else{
 			((EBHostRole) restaurant.host).msgStaying(this);
@@ -370,11 +369,12 @@ public class EBCustomerRole extends Role implements Customer {
 		((EBWaiterRole) waiter).msgLeavingTable(this);
 		if (myPerson.cashOnHand>amountOwed)
 		{
-			Do("I owe "+amountOwed);
 			((EBCashierRole) restaurant.cashier).msgPaying(amountOwed, tableNumber,true);
 			myPerson.cashOnHand=myPerson.cashOnHand-amountOwed;
 			ebcustomerGui.DoGoToCashier();
 			stateChanged();
+			AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, this.getName(), "Paying the cashier "+amountOwed);
+
 		}
 		else
 		{
@@ -416,8 +416,6 @@ public class EBCustomerRole extends Role implements Customer {
 
 	public void setHungerLevel(int hungerLevel) {
 		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
 	}
 
 	public String toString() {
@@ -432,17 +430,6 @@ public class EBCustomerRole extends Role implements Customer {
 		return ebcustomerGui;
 	}
 	
-	public void setCashier(Cashier c){
-		cashier=c;
-	}
-	/*public void pauseIt(){
-		pause();
-	}
-	
-	public void resumeIt(){
-		resume();
-	}*/
-
 	@Override
 	public void setGui(Gui g) {
 		ebcustomerGui = (EBCustomerGui) g;
