@@ -133,9 +133,13 @@ SimCity201 Project Repository for CS 201 students
       ....... "I'm going to work"
       ....... "I'm at work"
       
+###Scenario A
      
-     
-	
+	Pick a day, and Press Start! 
+	All workers go to their workplaces (if open) and start to work. 
+	visiterhome06LowSteak eats at home, then walks to the bank, market, and restaurant. To view his log, type his 		name into the Person Filter. Make sure the Person Alert Tag is turned on. He is in the sixth home (the first 		row, 6th from the left). His name appears in the panel in his home.
+	Each intersection has a two way stop (both streets are one way). 
+
 ###Participation from each Member
   + Chad Martin: CardLayout, Person Agent, Person Agent tests, City Animation Panel, Add tables, Gui Interaction Panel, photoshopping of images, interaction diagrams
   + Gabriel Lew: Bank Agent, Bank Customer Role, Bank tests, Bank Animation, Manager employees payment behavior in Person Agent, landlord renter in person agent, general structure of wiki and images
