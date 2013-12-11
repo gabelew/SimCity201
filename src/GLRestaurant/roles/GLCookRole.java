@@ -302,7 +302,7 @@ public class GLCookRole extends Role implements Cook{
 	}
 	
 	private void cookIt(final WaiterOrder o) {
-		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Cooking " + o.choice + " for " + o.c.myPerson.getName());
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Cooking " + o.choice + " for " + o.c.getName());
 		cookGui.cook(o.choice, o.orderNum);
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -314,7 +314,7 @@ public class GLCookRole extends Role implements Cook{
 	
 	private void plateIt(WaiterOrder o) {
 		cookGui.finCook(o.orderNum);
-		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Plating " + o.choice + " for " + o.c.myPerson.getName());
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Plating " + o.choice + " for " + o.c.getName());
 		o.s = orderState.finished;
 		cookGui.plate(o.choice, o.orderNum);
 		o.w.msgOrderDone(o.c, o.choice, cookGui.getPlateX(o.orderNum), cookGui.getPlateY(o.orderNum));
@@ -370,7 +370,7 @@ public class GLCookRole extends Role implements Cook{
 			order.orderNum = orderNum++;
 			if(order != null) {
 				orders.add(order);
-				AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Grabbed order for " + order.c.myPerson.getName() + " from stand.");
+				AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Grabbed order for " + order.c.getName() + " from stand.");
 			}
 		}
 			checkStand = false;

@@ -95,7 +95,7 @@ public class GLHostRole extends Role implements Host{
 	
 	public void msgIWantFood(GLCustomerRole cust) {
 		customers.add(new MyCustomer(cust, customerState.waiting));
-		((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addCustomerToList(cust.myPerson.getName()); 
+		((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addCustomerToList(cust.getName()); 
 
 		int seatedCount = 0;
 		for(MyCustomer mc : customers) {
@@ -110,12 +110,12 @@ public class GLHostRole extends Role implements Host{
 	}
 	
 	public void msgIAmLeaving(GLCustomerRole c) {
-		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Customer " + c.myPerson.getName() + " leaving early.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Customer " + c.getName() + " leaving early.");
 		MyCustomer mc = findCustomer(c);
 		if(mc != null) {
 			mc.cs = customerState.done;
 			customers.remove(mc.c);
-			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.myPerson.getName()); 
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.getName()); 
 		}
 		stateChanged();
 	}
@@ -142,7 +142,7 @@ public class GLHostRole extends Role implements Host{
 		mc.t = null;
 		table.setUnoccupied();
 		customers.remove(mc);
-		((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.myPerson.getName()); 
+		((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeCustomerFromList(c.getName()); 
 		stateChanged();
 	}
 	
@@ -178,7 +178,7 @@ public class GLHostRole extends Role implements Host{
 				}
 			}
 			
-			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((GLWaiterRole)w).myPerson.getName());
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).addWaiterToList(((GLWaiterRole)w).getName());
 			waiters.add(new MyWaiter((GLWaiterRole)w));
 		}
 		
@@ -210,7 +210,7 @@ public class GLHostRole extends Role implements Host{
 		}
 		if(removeW !=null){
 			waiters.remove(removeW);
-			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((GLWaiterRole)waiter).myPerson.getName());
+			((GLRestaurantAnimationPanel) restaurant.insideAnimationPanel).removeWaiterFromList(((GLWaiterRole)waiter).getName());
 
 		}
 	}
@@ -320,13 +320,13 @@ public class GLHostRole extends Role implements Host{
 					mc.t = t;
 					t.setOccupant(mc.c);
 					mc.cs = customerState.seated;
-					AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Assigning table " + t.tableNumber + " to customer " + mc.c.myPerson.getName());
+					AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Assigning table " + t.tableNumber + " to customer " + mc.c.getName());
 				}
 			}
 	}
 	
 	private void ReviewBreakRequest(MyWaiter mw) {
-		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Reviewing break request from: " + mw.w.myPerson.getName());
+		AlertLog.getInstance().logMessage(AlertTag.REST_HOST, this.getName(), "Reviewing break request from: " + mw.w.getName());
 		mw.ws = waiterState.serving;
 		boolean answer = false;
 		int waitersOnBreak = 0;

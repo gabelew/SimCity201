@@ -308,7 +308,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	//Actions
 	private void EnterBank() {
 		customerGui.DoEnterBank();
-		((BankAnimationPanel)bank.insideAnimationPanel).addCustomerToList(this.myPerson.getName());
+		((BankAnimationPanel)bank.insideAnimationPanel).addCustomerToList(this.getName());
 		try {
 			waitingResponse.acquire();
 		} catch(InterruptedException e) {
@@ -331,7 +331,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 			public void run() {
 				Do("Leaving bank");
 				customerGui.DoLeaveBank();
-				((BankAnimationPanel)bank.insideAnimationPanel).removeCustomerFromList(r.myPerson.getName());
+				((BankAnimationPanel)bank.insideAnimationPanel).removeCustomerFromList(r.getName());
 				try {
 					waitingResponse.acquire();
 				} catch(InterruptedException e) {

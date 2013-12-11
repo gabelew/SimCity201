@@ -269,12 +269,12 @@ public class GLCashierRole extends Role implements Cashier {
 				if(checkState.debt == ch.cs && c.c == ch.c) {
 					previousAmount = ch.amount;
 					ch.cs = checkState.paid;
-					AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " previously owes us " + previousAmount + ". Added to current bill.");
+					AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).getName() + " previously owes us " + previousAmount + ". Added to current bill.");
 				}
 			}
 		}
 		double calculatedAmount = menu.get(c.choice) + previousAmount;
-		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " check comes out to " + calculatedAmount);
+		AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).getName() + " check comes out to " + calculatedAmount);
 		c.amount = calculatedAmount;
 		GLWaiterRole waiter = (GLWaiterRole)c.w;
 		waiter.msgHereIsCheck(c.c, c.amount);
@@ -287,9 +287,9 @@ public class GLCashierRole extends Role implements Cashier {
 			bank += c.paid;
 			c.paid = 0;
 			c.cs = checkState.debt;
-			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " owes us " + c.amount);
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).getName() + " owes us " + c.amount);
 		} else {
-			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).myPerson.getName() + " paid us " + c.paid);
+			AlertLog.getInstance().logMessage(AlertTag.REST_CASHIER, this.getName(), "Customer " + ((GLCustomerRole)c.c).getName() + " paid us " + c.paid);
 			c.cs = checkState.paid;
 			bank += c.paid;
 		}
