@@ -81,6 +81,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 	}
 
 	public void msgHereIsMyOrder(Customer c, String choice){
+		AlertLog.getInstance().logMessage(AlertTag.REST_WAITER, this.getName(), "msgHereIsMyOrder ");
 		MyCustomer mc = findCustomer(c);
 		mc.choice = choice;
 		mc.s = CustomerState.ordered;
@@ -211,6 +212,8 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		}
 		try{
 			if(revolvingStand == null || haveNotRecentlyCheckedStand){
+
+				AlertLog.getInstance().logDebug(AlertTag.REST_WAITER, this.getName(), "revolvingStand == null || haveNotRecentlyCheckedStand ");
 				for (MyCustomer c : customers)
 				{
 					if(c.s == CustomerState.ordered)
@@ -366,6 +369,7 @@ public abstract class CMWaiterRole extends Role implements Waiter{
 		} catch (InterruptedException e) {
 			
 		}
+		c.s = CustomerState.ordered;
 	}
 
 	protected abstract void putInOrder(MyCustomer c);
