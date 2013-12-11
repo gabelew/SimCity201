@@ -19,19 +19,15 @@ public class RepairManGui implements Gui
 	
 	private static BufferedImage repairmanImg = null;
 	
-	private int xPos = 40;
-	private int yPos = 200;
+	private int xPos = 0;
+	private int yPos = 0;
 	private int xDestination = 0;
 	private int yDestination = 0;
 	private enum state{waiting, backToHome, atCustomerHome, goingToCustomer};
 	state workingState;
 	
-	static final int xHomeLoc = 0;
-	static final int yHomeLoc = 0;
-	static final int xSTART_POS = 40;
+	static final int xSTART_POS = -20;
 	static final int ySTART_POS = 200;
-	static final int xWAITING_START = -20;
-	static final int yWAITING_START = -20;
 	enum Command {none, goToCustomer, leaving};
 	Command command = Command.none;
 	public RepairManGui(RepairManRole Role) 
@@ -44,6 +40,10 @@ public class RepairManGui implements Gui
 		catch(IOException e) {}
 		this.role = Role;
 		
+		this.xPos = xSTART_POS;
+		this.yPos = ySTART_POS;
+		this.xDestination = xSTART_POS;
+		this.yDestination = ySTART_POS;
 	}
 	
 	public void updatePosition() 
@@ -62,16 +62,14 @@ public class RepairManGui implements Gui
 			{
 				command = Command.none;
 				role.msgActionDone();
-				System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			}
 			
 			if(xPos == xDestination && yPos == yDestination && command == Command.leaving)
 			{
 				command = Command.none;
 				role.msgActionDone();
-				System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-				xDestination = 100;
-				yDestination = 200;
+				xPos = xSTART_POS;
+				yPos = ySTART_POS;
 				isPresent = false;
 			}
 		
@@ -99,10 +97,10 @@ public class RepairManGui implements Gui
 		command = Command.leaving;
 	}
 
-	public void goToCustomer() 
+	public void goToCustomer(int xdest, int ydest) 
 	{
-		xDestination = 200;
-		yDestination = 200;
+		xDestination = xdest;
+		yDestination = ydest;
 		command = Command.goToCustomer;
 		isPresent = true;
 		

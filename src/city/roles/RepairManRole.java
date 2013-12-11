@@ -8,12 +8,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
-
-import atHome.city.Apartment;
 import city.PersonAgent;
-import city.PersonAgent.Location;
-import city.animationPanels.ApartmentAnimationPanel;
-import city.animationPanels.HouseAnimationPanel;
 import city.gui.Gui;
 import city.gui.RepairManDrivingGui;
 import city.gui.RepairManGui;
@@ -46,8 +41,9 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("stove", new Double(100));
 			
 			repairmanGui = new RepairManGui(this);
-			repairmanDrivingGui = new RepairManDrivingGui(this, gui);
 			this.gui = g;
+			repairmanDrivingGui = new RepairManDrivingGui(this, gui);
+			
 			gui.animationPanel.addGui((Gui)repairmanDrivingGui);//adds driving truck to gui
 		}
 		
@@ -107,13 +103,9 @@ public class RepairManRole extends Role implements RepairMan
  ********************/
 	public void StartJob(final Job j)
 	{
-		//*
 		//goes to customer location
 		print("leaving home");
 		addGuiForJob(j);
-		repairmanGui.leaveHome();
-		try { driving.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}
 		//drives to customer location
 		print("driving to customer");
 		repairmanDrivingGui.DoGoFix(j.location);
@@ -121,31 +113,38 @@ public class RepairManRole extends Role implements RepairMan
 		catch (InterruptedException e) {e.printStackTrace();}
 		//enters customer home
 		print("at customer home");
-		repairmanGui.goToCustomer();
+		repairmanGui.goToCustomer(j.person.gui.xHomePosition, j.person.gui.yHomePosition);
 		try { driving.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
+		
+		//waits a little to fix item
+		j.state = JobState.inProgess;
+		timer.schedule(new TimerTask() {
+			public void run() 
+			{
+				driving.release();
+			} 
+		},FIXTIME);
+		try { driving.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		
+		//leaves customer home
 		print("leaving customer home");
 		repairmanGui.leaveHome();
 		try { driving.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
-		j.state = JobState.inProgess;
 		
-		timer.schedule(new TimerTask() {
-			public void run() 
-			{
-				print(j.person.myPerson.getName() + " I sent the bill, wire me the money");
-				j.state = JobState.awaitingPayment;
-				j.person.ApplianceFixed(j.appliance, pricingMap.get(j.appliance).doubleValue());
+		//sends customer bill
+		print(j.person.myPerson.getName() + " I sent the bill, wire me the money");
+		j.state = JobState.awaitingPayment;
+		j.person.ApplianceFixed(j.appliance, pricingMap.get(j.appliance).doubleValue());
 				
-				//leaves
-				repairmanDrivingGui.DoGoBack();
-				try { driving.acquire();} 
-				catch (InterruptedException e) {e.printStackTrace();}
+		//leaves
+		repairmanDrivingGui.DoGoBack();
+		try { driving.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		removeGuiForJob(j);
 				
-			}
-		},
-		FIXTIME);
-		
 	}
 	
 	public void ProcessPayment(Job j)
@@ -160,26 +159,11 @@ public class RepairManRole extends Role implements RepairMan
 	
 	public void addGuiForJob(Job jb)
 	{
-		myPerson.myHome.insideAnimationPanel.addGui(repairmanGui);/*
-		if(jb.person.myPerson.myHome instanceof Apartment)
-		{
-			((ApartmentAnimationPanel)
-		}
-		else
-		{
-			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).addGui(repairmanGui);
-		}*/
+		jb.person.myPerson.myHome.insideAnimationPanel.addGui(repairmanGui);
 	}
 	public void removeGuiForJob(Job jb)
 	{
-		if(jb.person.myPerson.myHome instanceof Apartment)
-		{
-			((ApartmentAnimationPanel)myPerson.myHome.insideAnimationPanel).removeGui(repairmanGui);
-		}
-		else
-		{
-			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).removeGui(repairmanGui);
-		}
+		jb.person.myPerson.myHome.insideAnimationPanel.removeGui(repairmanGui);
 	}
 	public void msgActionDone() 
 	{
