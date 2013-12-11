@@ -129,6 +129,14 @@ Vehicles stop at the stop signs. People don’t cross the street, they are safe 
 To change inventories in markets, open a market, and type in all of the amounts you want to change them to. Will update that markets inventory only.
 Add people in the city on the city view by typing in a name and pressing add. Name hacks are stated above.
 
+###Scenario M: Runtime Behavior
+1. We have a grid of semaphores for the city view
+2. Animation does not freeze
+3. No known error exceptions
+4. Agents don't bump into buildings. Within buildings, agents may move over objects. They know parkour.
+5. Moving objects move on appropriate venues. Cars only move on roads and people only on crosswalks. They do not cross the streets.
+6. All vehicles (buses and cars) stop at intersections.
+
 ###Scenario O: Bank Robbery
 1. Turn on Person Alert Tag and type into filter crook01car
 2. Start SimCity with Saturday.
