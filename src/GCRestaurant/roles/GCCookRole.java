@@ -31,7 +31,7 @@ public class GCCookRole extends Role implements Cook
 	private Map<String, Food> foods= new HashMap<String, Food>();
 	
 	public enum OrderState{pending, cooking, done, served}
-	private List<GCOrder> orders = Collections.synchronizedList(new ArrayList<GCOrder>());
+	public List<GCOrder> orders = Collections.synchronizedList(new ArrayList<GCOrder>());
 	private List<Food> foodList = new ArrayList<Food>();
 	private List<MarketAgent> markets = new ArrayList<MarketAgent>();
 	private List<MarketOrder> marketOrders = new ArrayList<MarketOrder>();
@@ -47,6 +47,7 @@ public class GCCookRole extends Role implements Cook
 	Restaurant restaurant;
 	public GCRevolvingStandMonitor orderStand;
 	public boolean checkOrderStand = true;
+	public boolean unitTesting = false;
 
 	public GCCookRole() {
 		super();
@@ -198,6 +199,10 @@ public class GCCookRole extends Role implements Cook
 	// (1) Cooks order
 	private void CookItAction(GCOrder o)
 	{
+		if(unitTesting)
+		{
+			OrderDone(o);
+		}
 		//print(o.choice  + " " + o.food.amount);
 		if(state == CookState.free)
 		{
@@ -292,6 +297,7 @@ public class GCCookRole extends Role implements Cook
 			marketOrders.add(new MarketOrder(order, markets.get(marketCounter)));
 			
 			//finds a suitable market
+			/*
 			while(!markets.get(marketCounter).isOpen)
 			{
 				marketCounter++;
@@ -303,8 +309,10 @@ public class GCCookRole extends Role implements Cook
 			}
 			if(marketCounter < markets.size())
 			{
-				markets.get(marketCounter).msgPlaceDeliveryOrder((Cook)this);
-			}
+				
+			}*/
+			
+			markets.get(marketCounter).msgPlaceDeliveryOrder((Cook)this);
 		}
 		stateChanged();
 	}
@@ -326,10 +334,12 @@ public class GCCookRole extends Role implements Cook
 	//(7) checks order stand
 	private void checkOrderStandAction()
 	{
-		cookGui.checkOrderStand();
-		try { busy.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}
-		
+		if(!unitTesting)
+		{
+			cookGui.checkOrderStand();
+			try { busy.acquire();} 
+			catch (InterruptedException e) {e.printStackTrace();}
+		}
 		if(!orderStand.isEmpty())
 		{
 			print("Orderstand has orders in it!");

@@ -492,7 +492,7 @@ public class SimCityGui extends JFrame implements ActionListener {
         for(int i =0; i<buildings.size(); i++){
         	
         	BuildingIcon b = buildings.get(i);
-        	if(b.type.equals("restaurant") && i==10){
+        	if(b.type.equals("restaurant") && i==27){
         		EBRestaurantPanel restPanel = new EBRestaurantPanel(this);
 	            InsideAnimationPanel restaurantAnimationPanel = new EBAnimationPanel(this);
 	        	
@@ -588,7 +588,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	        	((GLCookRole)r.cook).setRevolvingStand(revolvingStand);
 	        	restaurantAnimationPanel.addGui(ccg);
 	        	
-        	}else if(b.type.equals("restaurant") && i==27){
+        	}else if(b.type.equals("restaurant") && i==10){
         		GHRestaurantPanel restPanel = new GHRestaurantPanel(this);
 	            InsideAnimationPanel restaurantAnimationPanel = new GHAnimationPanel(this);
 	        	

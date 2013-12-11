@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-
 import city.gui.Gui;
 import city.roles.RepairManRole;
 
@@ -48,16 +47,35 @@ public class RepairManGui implements Gui
 	
 	public void updatePosition() 
 	{
-		//System.out.println(xPos+ " " + yPos + " TARGET >> "+ xDestination + " "+ yDestination);
+		
+		if(command == Command.leaving)
+		{	
 			if (yPos < yDestination)
 				yPos++;
 			else if (yPos > yDestination)
 				yPos--;
+			if(yPos == yDestination)
+			{
+				if (xPos < xDestination)
+					xPos++;
+				else if (xPos > xDestination)
+					xPos--;
+			}
+		}
+		else
+		{
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
 				xPos--;
-			
+			if(xPos == xDestination)
+			{
+				if (yPos < yDestination)
+					yPos++;
+				else if (yPos > yDestination)
+					yPos--;
+			}
+		}
 			if(xPos == xDestination && yPos == yDestination && command == Command.goToCustomer)
 			{
 				command = Command.none;
@@ -92,8 +110,8 @@ public class RepairManGui implements Gui
 	
 	public void leaveHome() 
 	{
-		xDestination = ySTART_POS;
-		yDestination = xSTART_POS;
+		xDestination = xSTART_POS;
+		yDestination = ySTART_POS;
 		command = Command.leaving;
 	}
 

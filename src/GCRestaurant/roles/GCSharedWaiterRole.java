@@ -11,18 +11,22 @@ import city.gui.trace.AlertTag;
 public class GCSharedWaiterRole extends GCWaiterRole 
 {
 	private final int CHECK_STAND_TIME = 4000;
+	public boolean unitTesting = false;
 	public GCSharedWaiterRole(PersonAgent p, Restaurant r)
 	{
 		super(p, r);
 	}
 	
-	protected void HereIsOrderCookAction(MyCustomer c)
+	public void HereIsOrderCookAction(MyCustomer c)
 	{
 		print("Entering order on computer");
 		//animation details
-		waiterGui.checkOrderStand();
-		try {busy.acquire();} 
-		catch (InterruptedException e) { e.printStackTrace();}
+		if(!unitTesting)
+		{
+			waiterGui.checkOrderStand();
+			try {busy.acquire();} 
+			catch (InterruptedException e) { e.printStackTrace();}
+		}
 		
 		//sends msg to cook
 		if(!orderStand.isFull())
