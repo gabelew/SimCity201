@@ -14,6 +14,7 @@ import city.PersonAgent.Location;
 import city.gui.Gui;
 import city.gui.RepairManDrivingGui;
 import city.gui.RepairManGui;
+import city.gui.SimCityGui;
 import city.interfaces.RepairMan;
 
 public class RepairManRole extends Role implements RepairMan
@@ -24,6 +25,7 @@ public class RepairManRole extends Role implements RepairMan
 		List<Job> jobs = new ArrayList<Job>();
 		Map<String, Double> pricingMap = new HashMap<String, Double>();
 		enum JobState {none, requested, inProgess, awaitingPayment, paid}
+		public SimCityGui gui;
 		
 		//animation stuff
 		RepairManDrivingGui repairmanDrivingGui;
@@ -33,7 +35,7 @@ public class RepairManRole extends Role implements RepairMan
 		final int FIXTIME = 2000;
 		
 		//default constructor
-		public RepairManRole(PersonAgent p)
+		public RepairManRole(PersonAgent p, SimCityGui g)
 		{
 			super(p);
 			pricingMap.put("fridge", new Double(150));
@@ -41,6 +43,7 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("stove", new Double(100));
 			
 			repairmanGui = new RepairManGui(this);
+			this.gui = g;
 		}
 		
 		public void setGui(Gui gui) 
@@ -49,7 +52,7 @@ public class RepairManRole extends Role implements RepairMan
 		}
 		public Gui getGui() 
 		{
-			return null;//repairmanGui;
+			return repairmanGui;
 		}
 
 		
@@ -99,7 +102,7 @@ public class RepairManRole extends Role implements RepairMan
  ********************/
 	public void StartJob(final Job j)
 	{
-		/*
+		//*
 		//myPerson.msgStartRepairJob();
 		//goes to customer location
 		print("leaving home");
@@ -115,7 +118,7 @@ public class RepairManRole extends Role implements RepairMan
 		print("at customer home");
 		repairmanGui.goToCustomer();
 		try { driving.acquire();} 
-		catch (InterruptedException e) {e.printStackTrace();}*/
+		catch (InterruptedException e) {e.printStackTrace();}
 		j.state = JobState.inProgess;
 		
 		timer.schedule(new TimerTask() {
