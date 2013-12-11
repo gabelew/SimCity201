@@ -1,5 +1,6 @@
 package GHRestaurant.roles;
 
+import CMRestaurant.roles.CMWaiterRole.AgentEvent;
 import GHRestaurant.gui.GHWaiterGui;
 import agent.Agent;
 import restaurant.Restaurant;
@@ -36,7 +37,7 @@ public class GHWaiterRole extends Role implements Waiter{
 	private Cashier cashier;
 	private Cook cook;
 	enum CustomerState {Waiting, AskedToOrder, Ordered, Reorder, Ready, Done, Idle}
-	enum WaiterState{None,GoingToWork}
+	enum WaiterState{None,GoingToWork, relieveFromDuty}
 	WaiterState wState = WaiterState.None;
 	private Restaurant restaurant;
 	
@@ -172,6 +173,13 @@ public class GHWaiterRole extends Role implements Waiter{
 		 */
 		
 	try{
+		
+		if(wState == WaiterState.relieveFromDuty){
+			wState = WaiterState.None;
+			myPerson.releavedFromDuty(this);
+			//restaurant.insideAnimationPanel.removeGui(waitergui);
+			return true;
+		}
 		
 		if(BackTW){
 			BackToWork();
@@ -470,8 +478,9 @@ public class GHWaiterRole extends Role implements Waiter{
 
 	@Override
 	public void msgLeftTheRestaurant() {
-		// TODO Auto-generated method stub
-		
+		atDestination.release();
+		wState = WaiterState.relieveFromDuty;
+		stateChanged();		
 	}
 
 	@Override
