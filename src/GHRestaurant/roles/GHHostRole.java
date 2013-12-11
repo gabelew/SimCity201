@@ -152,14 +152,15 @@ public class GHHostRole extends Role implements Host{
 		}
 		
 		if(closeRestaurant && !waitingCustomers.isEmpty()) {
-			print("fffff");
+			//print("fffff");
 			synchronized(waitingCustomers) {
 				for(Customer mc : waitingCustomers) {
 						askCustomerToLeave(mc);
-						return true;
+						//return true;
 					//}
 				}
 			}
+			return true;
 		} 
 		
 		/*if(closeRestaurant && customers.isEmpty()) {

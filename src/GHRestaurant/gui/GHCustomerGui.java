@@ -103,8 +103,8 @@ public class GHCustomerGui implements Gui{
 	}
 
 	public void DoExitRestaurant() {
-		xDestination = -40;
-		yDestination = -40;
+		xDestination = -20;
+		yDestination = -20;
 		command = Command.LeaveRestaurant;
 	}
 }
