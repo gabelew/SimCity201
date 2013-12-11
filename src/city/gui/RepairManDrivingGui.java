@@ -17,18 +17,18 @@ public class RepairManDrivingGui implements Gui
 	
 	public SimCityGui gui;
 	private RepairManRole role = null;
-	private boolean isPresent = false;
+	private boolean isPresent = true;
 	
 	private static BufferedImage vanRightImg = null;
 	private static BufferedImage vanBackImg = null;
 	private static BufferedImage vanFrontImg = null;
 	
-	private int xPos, yPos;
-	private int xDestination = xWAITING_START, yDestination = yWAITING_START;
-	
-	
-	static final int xHomeLoc = 0;
-	static final int yHomeLoc = 0;
+	private int xPos = 40;
+	private int yPos = 40;
+	private int xDestination = 0;
+	private int yDestination = 0;
+	static int xHomeLoc = 0;
+	static int yHomeLoc = 0;
 	static final int CUST_START_POS = -40;
 	static final int xWAITING_START = 90;
 	static final int yWAITING_START = 190;
@@ -49,11 +49,18 @@ public class RepairManDrivingGui implements Gui
 		catch(IOException e) {}
 		role = Role;
 		this.gui=gui;
-		//xHomeLoc = ;
+		
+		xHomeLoc = role.myPerson.myHome.location.x;
+		yHomeLoc = role.myPerson.myHome.location.y;
+		xPos = xHomeLoc;
+		yPos = yHomeLoc;
+		xDestination = xHomeLoc;
+		yDestination = yHomeLoc;
 	}
 	
 	public void updatePosition() 
 	{
+		//System.out.println(xPos+ " " + yPos + " TARGET >> "+ xDestination + " "+ yDestination);
 			if (yPos < yDestination)
 				yPos++;
 			else if (yPos > yDestination)
@@ -66,12 +73,14 @@ public class RepairManDrivingGui implements Gui
 			if(xPos == xDestination && yPos == yDestination && command == Command.goToCustomer)
 			{
 				command = Command.none;
+				role.msgActionDone();
 				isPresent = false;
 			}
 			
 			if(xPos == xDestination && yPos == yDestination && command == Command.backToHome)
 			{
 				command = Command.none;
+				role.msgActionDone();
 				isPresent = false;
 			}
 		
@@ -107,8 +116,10 @@ public class RepairManDrivingGui implements Gui
 	
 	public void DoGoFix(Point Locations)
 	{
+		
 		xDestination=(int)Math.round(Locations.getX());
 		yDestination=(int)Math.round(Locations.getY());
+		System.out.println("!@#$%^" + xDestination + " " + yDestination);
 		command = Command.goToCustomer;
 		isPresent = true;
 	}

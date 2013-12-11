@@ -289,6 +289,10 @@ public class AnimationPanel extends JPanel implements ActionListener, MouseListe
 
     }
     
+    public void addGui(Gui g)
+    {
+    	guis.add(g);
+    }
 	public void addGui(PersonGui gui) {
         guis.add(gui);
 	}

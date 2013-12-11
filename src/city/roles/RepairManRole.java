@@ -9,8 +9,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import atHome.city.Apartment;
 import city.PersonAgent;
 import city.PersonAgent.Location;
+import city.animationPanels.ApartmentAnimationPanel;
+import city.animationPanels.HouseAnimationPanel;
 import city.gui.Gui;
 import city.gui.RepairManDrivingGui;
 import city.gui.RepairManGui;
@@ -43,7 +46,9 @@ public class RepairManRole extends Role implements RepairMan
 			pricingMap.put("stove", new Double(100));
 			
 			repairmanGui = new RepairManGui(this);
+			repairmanDrivingGui = new RepairManDrivingGui(this, gui);
 			this.gui = g;
+			gui.animationPanel.addGui((Gui)repairmanDrivingGui);//adds driving truck to gui
 		}
 		
 		public void setGui(Gui gui) 
@@ -103,9 +108,9 @@ public class RepairManRole extends Role implements RepairMan
 	public void StartJob(final Job j)
 	{
 		//*
-		//myPerson.msgStartRepairJob();
 		//goes to customer location
 		print("leaving home");
+		addGuiForJob(j);
 		repairmanGui.leaveHome();
 		try { driving.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
@@ -119,6 +124,10 @@ public class RepairManRole extends Role implements RepairMan
 		repairmanGui.goToCustomer();
 		try { driving.acquire();} 
 		catch (InterruptedException e) {e.printStackTrace();}
+		print("leaving customer home");
+		repairmanGui.leaveHome();
+		try { driving.acquire();} 
+		catch (InterruptedException e) {e.printStackTrace();}
 		j.state = JobState.inProgess;
 		
 		timer.schedule(new TimerTask() {
@@ -127,12 +136,12 @@ public class RepairManRole extends Role implements RepairMan
 				print(j.person.myPerson.getName() + " I sent the bill, wire me the money");
 				j.state = JobState.awaitingPayment;
 				j.person.ApplianceFixed(j.appliance, pricingMap.get(j.appliance).doubleValue());
-				/*
+				
 				//leaves
 				repairmanDrivingGui.DoGoBack();
 				try { driving.acquire();} 
 				catch (InterruptedException e) {e.printStackTrace();}
-				*/
+				
 			}
 		},
 		FIXTIME);
@@ -149,6 +158,29 @@ public class RepairManRole extends Role implements RepairMan
  ***** Animation Methods
  ********************/
 	
+	public void addGuiForJob(Job jb)
+	{
+		myPerson.myHome.insideAnimationPanel.addGui(repairmanGui);/*
+		if(jb.person.myPerson.myHome instanceof Apartment)
+		{
+			((ApartmentAnimationPanel)
+		}
+		else
+		{
+			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).addGui(repairmanGui);
+		}*/
+	}
+	public void removeGuiForJob(Job jb)
+	{
+		if(jb.person.myPerson.myHome instanceof Apartment)
+		{
+			((ApartmentAnimationPanel)myPerson.myHome.insideAnimationPanel).removeGui(repairmanGui);
+		}
+		else
+		{
+			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).removeGui(repairmanGui);
+		}
+	}
 	public void msgActionDone() 
 	{
 		driving.release();

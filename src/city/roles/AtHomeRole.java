@@ -30,7 +30,7 @@ public class AtHomeRole extends Role implements AtHome
 	enum OrderState {pending, cooking, done, eating}
 	public EventState state = EventState.none;
 	private Semaphore busy = new Semaphore(0,true);
-	static final int EATING_TIME = 5000;
+	static final int EATING_TIME = 3000;
 	static final int COOKTIME = 1000;
 	public boolean testing = false;
 	boolean NoMoreFood = false;
