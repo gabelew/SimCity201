@@ -275,7 +275,6 @@ public class GHWaiterRole extends Role implements Waiter{
 			atDestination.acquire();
 		} catch (InterruptedException e) {	
 		}
-		
 	}
 
 	private void MsgHost() {

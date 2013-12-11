@@ -195,7 +195,7 @@ public class GHHostRole extends Role implements Host{
 		((GHCashierRole) restaurant.cashier).msgRestaurantClosed();
 		waiters.removeAll(waiters);
 		state = State.leaving;
-		closeRestaurant = false;
+		//closeRestaurant = false;
 	}
 
 	private void askCustomerToLeave(Customer mc) {

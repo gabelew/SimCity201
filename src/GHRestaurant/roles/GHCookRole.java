@@ -207,7 +207,7 @@ public class GHCookRole extends Role implements Cook {
 		
 		if(state == State.leaving){
 			state = State.none;
-			cookGui.DoLeaveRestaurant();
+			cookgui.DoLeaveRestaurant();
 			try {
 				atDestination.acquire();
 			} catch (InterruptedException e) {
@@ -471,8 +471,8 @@ public class GHCookRole extends Role implements Cook {
 	}
 
 	public void msgRestaurantClosed() {
-		// TODO Auto-generated method stub
-		
+		state = State.leaving;
+		stateChanged();
 	}
 }
 
