@@ -19,13 +19,6 @@ SimCity201 Project Repository for CS 201 students
 | Weekly Meeting 1    | Thurs. 07:30pm to 10:00pm  | GFS114      |
 | Weekly Meeting 2    | Fri. 06:00pm to 10:00pm  | KAP150      |
 
-###Instructions
-  + Move imgs directory to root of project, if not there import into eclipse so that imgs folder appears under root directory
-  + Table, if not in use, can be moved using drag and drop.
-  + A table is not in use if label is green  
-  + A table is in use if label is red
-  + Tables cannot be placed on top of each other
-  + Tables can only be placed in valid area show by darker grey area when moving tables
 
 ###Useful Testing Hacks
   + If a person's name contains "poor", the person will have 50 cash on hand and 200 in bank account
