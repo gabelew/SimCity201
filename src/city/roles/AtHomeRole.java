@@ -43,7 +43,7 @@ public class AtHomeRole extends Role implements AtHome
 	public List<String> choices = new ArrayList<String>();
 	Timer timer = new Timer(); //Timer for Cooking Food
 	public PersonAgent myPerson = null;//PersonAgent that has this role
-	AtHomeGui gui;
+	public AtHomeGui gui;
 	public AtHomeRole(PersonAgent p, int foodAmount) 
 	{
 		super(p);

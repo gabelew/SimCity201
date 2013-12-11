@@ -18,6 +18,7 @@ public class BankTest extends TestCase{
 		customer = new MockBankCustomer("Whitney");	
 		customer2 = new MockBankCustomer("Tony");
 		bank = new BankAgent("BankOfSimCity");
+		bank.testing = true;
 	}	
 
 	public void testOneCustomerOpenAccountAndCheckBalance() {

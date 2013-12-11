@@ -29,8 +29,8 @@ public class AtHomeGui implements Gui{
 	private int xDestination, yDestination;
 	private int xStartPos = -20;
 	private int yStartPos = 200;
-	private int xHomePosition = 20;
-	private int yHomePosition = 30;
+	public int xHomePosition = 20;
+	public int yHomePosition = 30;
 	private int xFRIDGE_POSITION = 0;
 	private int yFRIDGE_POSITION = 0;
 	private int xGRILL_POSITION = 0;

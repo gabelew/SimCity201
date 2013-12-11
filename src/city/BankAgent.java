@@ -86,6 +86,7 @@ public class BankAgent extends Agent implements Bank{
 	public double fundsAvailable = 50000.0;
 	final double customerLoanMax = 500;
 	final double businessLoanMax = 1000;
+	public boolean testing = false;
 
 	/**
 	 * Constructor
@@ -318,7 +319,8 @@ public class BankAgent extends Agent implements Bank{
 		if(-1 == owedBalance) {
 			t.customer.owed = 0;
 		}
-		AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Received loan payment from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
+		if(!testing)
+			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Received loan payment from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
 		transactions.remove(t);
 	}
@@ -334,7 +336,8 @@ public class BankAgent extends Agent implements Bank{
 		if(-1 == owedBalance) {
 			t.customer.owed = 0;
 		}
-		AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Received loan payment from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
+		if(!testing)
+			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Received loan payment from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		t.customer.accountHolder.msgLoanPaid(t.amount, t.customer.accountType);
 		transactions.remove(t);
 	}
@@ -351,7 +354,8 @@ public class BankAgent extends Agent implements Bank{
 		int bankLimit = Double.compare(fundsAvailable, t.amount);
 		if(-1 == loanLimit || -1 == bankLimit) {
 			t.customer.accountHolder.msgLoanDenied(t.amount, t.customer.accountType);
-			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Denied loan request from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
+			if(!testing)
+				AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Denied loan request from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		} else{
 			
 			t.customer.owed += t.amount;
@@ -359,7 +363,8 @@ public class BankAgent extends Agent implements Bank{
 			fundsAvailable -= t.amount;
 			fundsAvailable = (Math.round(100*fundsAvailable) / ((double)100));
 			t.customer.accountHolder.msgLoanApproved(t.customer.owed, t.customer.accountType);
-			AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Approved loan request from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
+			if(!testing)
+				AlertLog.getInstance().logMessage(AlertTag.BANK_SYSTEM, this.getName(), "Approved loan request from " + ((BankCustomerRole)t.customer.accountHolder).getName() + " for $" + t.amount);
 		}
 		transactions.remove(t);
 	}
