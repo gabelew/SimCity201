@@ -367,10 +367,6 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 				}
 			}
         }
-
-		/*if ((e.getKeyCode() == KeyEvent.VK_D) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            markets.get(0).msgTossEverythingButCookies();
-        }*/
 		
 		if ((e.getKeyCode() == KeyEvent.VK_F) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
 
@@ -381,36 +377,6 @@ public class CMRestaurantPanel extends JPanel implements KeyListener {
 			}
         }
 
-		/*if ((e.getKeyCode() == KeyEvent.VK_W) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-			
-			for(MarketAgent m: markets){
-				System.out.println("\nMarket Inventory: " + m.getName());
-				for(MarketAgent.MyFood f: m.foods){
-					String mstate = null;
-					for(CookAgent.MyMarket mm: cook.markets){
-						if(mm.getMarket() == m)
-						{
-							mstate = mm.foodInventoryMap.get(f.getChoice()).toString();
-						}
-					}
-					System.out.print("\t" + f.getChoice() + " " + f.getAmount() + " "+ mstate + "\t");
-				}
-				System.out.println(" ");
-			}
-        }*/
-
-		if ((e.getKeyCode() == KeyEvent.VK_E) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-				System.out.println("Cook Inventory: ");
-				for(Restaurant r: gui.getRestaurants()){
-					if(r.insideAnimationPanel == insideBuildingPanel.insideAnimationPanel){
-						for(Food f: ((CMCookRole)r.cook).foods){
-							System.out.print("\t" + f.getChoice() + "\t" + f.getAmount() + "\t");
-						}
-					}
-				}
-				
-				System.out.println(" ");
-        }
 		
 	}
 

@@ -80,8 +80,6 @@ public class PersonGui implements Gui{
 				yPos--;
 			else if(xPos != xDestination){
 				yPos++;
-			}else if(xPos != xDestination && yPos != yDestination){
-				System.out.println("person stuck");
 			}
 		}else {//if(agent.car==true){
 			this.isPresent = true;
@@ -193,8 +191,6 @@ public class PersonGui implements Gui{
 				else if(xPos != xDestination){
 					drivingDirection = DrivingDirection.down;
 					yPos++;
-				}else{
-					System.out.println("car stuck");
 				}
 			}
 		}

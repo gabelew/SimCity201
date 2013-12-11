@@ -126,7 +126,6 @@ public class CMCustomerGui implements Gui{
 			}
 			else if (command==Command.LeaveRestaurant) {
 				role.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
 				//gui.setCustomerEnabled(agent);
 				command=Command.noCommand;
@@ -225,7 +224,6 @@ public class CMCustomerGui implements Gui{
 	}
 	
 	public void DoEnterRestaurant() {
-		System.out.println("chad im here");
 		xDestination = xWAITING_AREA;
 		yDestination = yWAITING_AREA;
 		command = Command.GoToHost;

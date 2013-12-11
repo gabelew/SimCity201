@@ -82,7 +82,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
-					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 1");
 					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 
@@ -100,7 +99,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
-					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 2");
 					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*1-37){
@@ -118,7 +116,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
-				//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 3");
 				((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*2-37){
@@ -135,7 +132,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 796
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 840){
-				//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at 4");
 				((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(PersonAgent.randInt(0, 480)!=0 && type == 'F' && yPos==115+80*3-37){
@@ -152,7 +148,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
-					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 1");
 					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(type == 'B' && yPos==115+80*0-37){
@@ -169,7 +164,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
-					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 2");
 					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(type == 'B' && yPos==115+80*1-37){
@@ -187,7 +181,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
-					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 3");
 					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(type == 'B' && yPos==115+80*2-37){
@@ -204,7 +197,6 @@ public class BusGui implements Gui{
 					&& gui.animationPanel.gridMap.get(point).owner!=null
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos >= 5
 					&& ((PersonAgent) gui.animationPanel.gridMap.get(point).owner).getGui().xPos <= 44){
-					//AlertLog.getInstance().logError(AlertTag.BANK_SYSTEM, "BUS COLL", "Collision at left 4");
 					((PersonAgent) gui.animationPanel.gridMap.get(point).owner).msgYourCrashedPayInsurance();
 			}
 			if(type == 'B' && yPos==115+80*3-37){

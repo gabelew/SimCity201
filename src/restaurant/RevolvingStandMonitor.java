@@ -36,7 +36,6 @@ public class RevolvingStandMonitor extends Object{
 		RoleOrder order;
 		while(isEmpty()) {
 			try {
-				System.out.println("Empty, waiting");
 				wait(WAIT_TIME);
 			} catch (InterruptedException ex) {}
 		}
@@ -44,7 +43,6 @@ public class RevolvingStandMonitor extends Object{
 		order = removeOrder();
 		count--;
 		if(count == N_MAX_COUNT-1) {
-			System.out.println("Not full, notify");
 			notify();
 		}
 		return order;
