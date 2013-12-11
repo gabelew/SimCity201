@@ -303,7 +303,7 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 	
 	private void LeaveEarly() {
-		Do("Leaving Early.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Leaving Early");
 		if(waiter != null)
 		{
 			((CMWaiterRole) waiter).msgDoneEatingAndLeaving(this);
@@ -320,7 +320,7 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 	
 	private void SitDown() {
-		Do("Being seated. Going to table");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Being seated. Going to table");
 		customerGui.DoGoToSeat();
 	}
 
@@ -386,6 +386,7 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 
 	private void leaveTable() {
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), 	"Done eating, " + choice);
 		customerGui.doneEatingFood();
 		((CMWaiterRole) waiter).msgDoneEatingAndLeaving(this);
 		waiter = null;
@@ -402,13 +403,13 @@ public class CMCustomerRole extends Role implements Customer {
 	}
 	
 	private void leaveRestaurant() {
-		Do("Leaving.");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Leaving.");
 		recievedCheck = false;
 		customerGui.DoExitRestaurant(); // animation Stub
 	}
 	
 	private void DoGoToRestaurant() {
-		Do("Going to restaurant");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Going to restaurant");
 		customerGui.DoEnterRestaurant();
 		try {
 			waitingResponse.acquire();
@@ -417,7 +418,7 @@ public class CMCustomerRole extends Role implements Customer {
 		}
 	}
 	private void doGoToCashier() {
-		Do("Going to Cashier");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Going to Cashier");
 		customerGui.doGoToCashier();
 		try {
 			waitingResponse.acquire();
@@ -426,7 +427,7 @@ public class CMCustomerRole extends Role implements Customer {
 		}
 	}
 	private void DoWaitForTable(){
-		Do("Waiting to be seatted");
+		AlertLog.getInstance().logMessage(AlertTag.REST_CUSTOMER, getName(), "Waiting to be seatted");
 		customerGui.DoWaitForTable();
 	}
 

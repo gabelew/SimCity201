@@ -1261,7 +1261,7 @@ public class PersonAgent extends Agent implements Person
 	    	restaurantNumber = randInt(0,openRestaurants.size() - 1);
 	    }
     	mr = openRestaurants.get(restaurantNumber);
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant 0"+restaurantNumber);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to restaurant 0"+ (restaurantNumber+1));
     	
     	destination = mr.location;
     	if(car == true || destination.y == personGui.yPos){
@@ -1305,7 +1305,7 @@ public class PersonAgent extends Agent implements Person
     private void goToRobBank() {
     	state = State.goingToRobBank;
     	BankBuilding b  = banks.get(randInt(0, banks.size()));
-    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to rob bank 0" + banks.indexOf(b));
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to rob bank 0" + (banks.indexOf(b)+1));
 	    destination = b.location;
 	    
 	    if(car == true || destination.y == personGui.yPos){
@@ -1323,7 +1323,6 @@ public class PersonAgent extends Agent implements Person
     }
     
     private void goToBank() {
-    	//print("I'm going to bank");
     	state = State.goingToBank;
 	    BankBuilding b  = chooseClosestBank();
 	    
@@ -1407,7 +1406,7 @@ public class PersonAgent extends Agent implements Person
     	state = State.goingToMarket;
 	    MarketAgent m  = chooseClosestMarket();
     	if(m!=null){
-	    AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market 0"+markets.indexOf(m));
+	    AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "I'm going to market 0"+ (markets.indexOf(m)+1));
 	    destination = m.location; 
 	    if(car == true || destination.y == personGui.yPos){
     		personGui.DoWalkTo(destination);
