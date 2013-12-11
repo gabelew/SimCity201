@@ -63,8 +63,8 @@ public class PersonAgent extends Agent implements Person
 	public Bank bankTeller;
 	
 	//Various States
-	public enum Task {goToMarket, goEatFood, goToWork, goToRobBank, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood};
-	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome, goingToRobBank };
+	public enum Task {goToMarket, goEatFood, goToWork, goToRobBank, goToBank, goToBankNow, doPayRent, doPayEmployees, offWorkBreak, onWorkBreak, goToHomeWithFood, goDoRepairs};
+	public enum State { doingNothing, goingOutToEat, goingHomeToEat, eating, goingToWork, working, goingToMarket, shopping, goingToBank, banking, onWorkBreak, offWorkBreak, inHome, leavingHome, goingToRobBank, doingRepairs };
 	public enum Location { AtHome, AtWork, AtMarket, AtBank, InCity, AtRestaurant};
 	public enum TransportState { none, GoingToBus, WaitingForBus, OnBus, GettingOffBus, GettingOnBus};
 	public boolean isRenter = false;
@@ -638,7 +638,26 @@ public class PersonAgent extends Agent implements Person
 			//send the ApplianceFixedMsg()
 		}
 	}
-	
+	public void msgHasFinishedRepairs(){
+		location = Location.InCity;
+		state = State.doingNothing;
+		stateChanged();
+
+		log.add(new LoggedEvent("Received msgHasFinishedRepairs from repairman Role."));
+	}
+	public void msgStartRepairJob(){
+		boolean inList = false;
+		for(Task t: taskList){
+				if(t == Task.goDoRepairs)
+					inList = true;
+		}
+		if(!inList){
+				taskList.add(Task.goDoRepairs);
+		}
+		stateChanged();
+
+		log.add(new LoggedEvent("Received msgHasFinishedRepairs from repairman Role."));
+	}
 	//Role to Itself to get food
 	public void msgGetFoodFromMarket(Map<String,Integer> toOrderFromMarket)
 	{
@@ -755,6 +774,18 @@ public class PersonAgent extends Agent implements Person
         	
         	if(temp != null){
         		goToRobBank();
+        		taskList.remove(temp);
+        		return true;
+        	}
+        	
+        	for(Task t:taskList){
+        		if(t == Task.goDoRepairs){
+        			temp = t;
+        		}
+        	}
+        	
+        	if(temp != null){
+        		goDoRepairs();
         		taskList.remove(temp);
         		return true;
         	}
@@ -905,11 +936,18 @@ public class PersonAgent extends Agent implements Person
 
 
 
+
+
 /********************************************************
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  *                     ACTIONS 
  *>>>>>>>>>>>>>>>>                <<<<<<<<<<<<<<<<<<<<<<
  ******************^^^^^^^^^^^^^^^^*********************/
+    
+    private void goDoRepairs() {
+		location = Location.InCity;
+		state = State.doingRepairs;
+    }
     
     private void getOffBus() {
 		log.add(new LoggedEvent("preforming get off Bus"));
