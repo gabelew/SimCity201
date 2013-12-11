@@ -10,10 +10,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
+import CMRestaurant.gui.CMRestaurantPanel;
 import bank.gui.BankCustomerGui;
+import bank.gui.BankPanel;
 import city.gui.Gui;
 import city.gui.SimCityGui;
 
@@ -74,6 +77,14 @@ public class BankAnimationPanel extends InsideAnimationPanel implements ActionLi
 			repaint();  //Will have paintComponent called
 		
 	}
+	
+	public void addCustomerToList(String name){
+		((BankPanel) insideBuildingPanel.guiInteractionPanel).addCustomerToList(name);
+	}
+	public void removeCustomerFromList(String name){
+		((BankPanel) insideBuildingPanel.guiInteractionPanel).removeCustomerFromList(name);
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;

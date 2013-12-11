@@ -773,7 +773,7 @@ public class SimCityGui extends JFrame implements ActionListener {
             	
 	    	}else if(b.type.equals("bank")){
 	            
-	        	BankPanel bankPanel = new BankPanel();
+	        	BankPanel bankPanel = new BankPanel(this);
 	            InsideAnimationPanel bankAnimationPanel = new BankAnimationPanel(this);
 	        	
 	            Dimension restDim = new Dimension(WINDOWX,REST_PANEL_Y);
@@ -782,6 +782,7 @@ public class SimCityGui extends JFrame implements ActionListener {
 	            bankPanel.setMaximumSize(restDim);
 	
 	        	InsideBuildingPanel bp = new InsideBuildingPanel(b, i, this,bankAnimationPanel, bankPanel);
+	        	bankPanel.setInsideBuildingPanel(bp);
 	        	bankAnimationPanel.setInsideBuildingPanel(bp);
 	        	b.setInsideBuildingPanel(bp);
 	        	buildingsPanel.add(bp, "" + i);

@@ -7,11 +7,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 
 import restaurant.test.mock.LoggedEvent;
+import CMRestaurant.roles.CMWaiterRole;
 import bank.BankBuilding;
 import bank.gui.BankCustomerGui;
 import city.BankAgent;
 import city.BankAgent.BankAccount;
 import city.PersonAgent;
+import city.animationPanels.BankAnimationPanel;
+import city.animationPanels.CMRestaurantAnimationPanel;
 import city.gui.Gui;
 import city.gui.trace.AlertLog;
 import city.gui.trace.AlertTag;
@@ -311,6 +314,7 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	//Actions
 	private void EnterBank() {
 		customerGui.DoEnterBank();
+		((BankAnimationPanel)bank.insideAnimationPanel).addCustomerToList(this.myPerson.getName());
 		try {
 			waitingResponse.acquire();
 		} catch(InterruptedException e) {
@@ -328,10 +332,12 @@ public class BankCustomerRole extends Role implements BankCustomer{
 	}
 	
 	private void LeaveBank() {	
+		final BankCustomerRole r = this;
 		timer.schedule(new TimerTask() {
 			public void run() {
 				Do("Leaving bank");
 				customerGui.DoLeaveBank();
+				((BankAnimationPanel)bank.insideAnimationPanel).removeCustomerFromList(r.myPerson.getName());
 				try {
 					waitingResponse.acquire();
 				} catch(InterruptedException e) {
@@ -340,7 +346,6 @@ public class BankCustomerRole extends Role implements BankCustomer{
 				myPerson.msgDoneAtBank();
 			}
 		}, AT_ATM_TIME);
-		
 	}
 	
 	private void CheckBalance(Task t) {
