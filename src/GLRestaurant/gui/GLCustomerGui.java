@@ -125,9 +125,6 @@ public class GLCustomerGui implements Gui{
 			}
 			else if (command==Command.LeaveRestaurant) {
 				role.msgAnimationFinishedLeaveRestaurant();
-				//System.out.println("about to call gui.setCustomerEnabled(agent);");
-				isHungry = false;
-				//gui.setCustomerEnabled(agent);
 			} else if (command == Command.GoToWait){ 
 				if(waitingSeatNumber >= 0)
 					state = State.sitting;

@@ -31,7 +31,6 @@ public class GLWaiterGui implements Gui {
     static final int xWAITING_OVERFLOW_POS = 245;
     static final int yWAITING_OVERFLOW_POS = 345;
 	private final int OFFSCREEN_POSITION = -20;
-	//private int ORIGINALX, ORIGINALY;
 	private static BufferedImage waiterImg = null;
 	private int platex, platey;
 	private boolean isPresent = false;
@@ -72,19 +71,6 @@ public class GLWaiterGui implements Gui {
         		seatMap.put(j+i*2, new Point(i*WAITINGSEATS_X_GAP+WAITINGSEATS_X_START, j*WAITINGSEATS_Y_GAP+WAITINGSEATS_Y_START));
         }
     }
-    
-//    public GLWaiterGui(GLWaiterRole w, int x, int y){ 
-//		this.role = w;
-//		ORIGINALX = x;
-//		ORIGINALY = y;
-//		xPos = -40;
-//		yPos = -40;
-//		xDestination = ORIGINALX;
-//		yDestination = ORIGINALY;
-//		tableMap.put(1, TableOne);
-//        tableMap.put(2, TableTwo);
-//        tableMap.put(3, TableThree);
-//	}
     
     public void DoGoToRevolvingStand() {
     	xDestination = 460;
@@ -127,8 +113,6 @@ public class GLWaiterGui implements Gui {
             yPos--;
         if (xDestination == xPos && yDestination == yPos) {
          
-//        	if (((TableOne.x + 20 == xDestination) || (TableTwo.x + 20 == xDestination) || (TableThree.x + 20 == xDestination)) 
-//        	&& ((TableOne.y - 20 == yDestination) || (TableTwo.y - 20 == yDestination) || (TableThree.y - 20 == yDestination))) {        		
         	if(Command.IfAtTable == command){
         		((GLWaiterRole)role).msgAtTable();
         	} else if (Command.onBreak == command) {

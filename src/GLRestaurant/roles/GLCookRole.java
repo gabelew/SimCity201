@@ -14,6 +14,8 @@ import market.interfaces.DeliveryMan;
 import city.MarketAgent;
 import city.PersonAgent;
 import city.gui.Gui;
+import city.gui.trace.AlertLog;
+import city.gui.trace.AlertTag;
 import city.roles.Role;
 import restaurant.Restaurant;
 import restaurant.interfaces.Cook;
@@ -197,6 +199,7 @@ public class GLCookRole extends Role implements Cook{
 		if(state == State.relieveFromDuty){
 			state = State.none;
 			myPerson.releavedFromDuty(this);
+			AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Finished shift.");
 			if(replacementPerson != null){
 				replacementPerson.waitingResponse.release();
 			}
@@ -292,14 +295,14 @@ public class GLCookRole extends Role implements Cook{
 	}
 	
 	private void tellWaiter(WaiterOrder o) {
-		Do("Out of " + o.choice);
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Ran out of " + o.choice);
 		o.s = orderState.finished;
 		o.w.msgOutOfFood(o.c, o.choice);
 		orderFoodFromMarket();
 	}
 	
 	private void cookIt(final WaiterOrder o) {
-		Do ("Cooking " + o.choice);
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Cooking " + o.choice + " for " + o.c.myPerson.getName());
 		cookGui.cook(o.choice, o.orderNum);
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -311,7 +314,7 @@ public class GLCookRole extends Role implements Cook{
 	
 	private void plateIt(WaiterOrder o) {
 		cookGui.finCook(o.orderNum);
-		Do ("Plating " + o.choice);
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Plating " + o.choice + " for " + o.c.myPerson.getName());
 		o.s = orderState.finished;
 		cookGui.plate(o.choice, o.orderNum);
 		o.w.msgOrderDone(o.c, o.choice, cookGui.getPlateX(o.orderNum), cookGui.getPlateY(o.orderNum));
@@ -333,6 +336,7 @@ public class GLCookRole extends Role implements Cook{
 				}
 			}
 			if(orderNeeded) {
+				AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Sent order request to " + currentMarket.m.getName());
 				marketOrders.add(new MarketOrder(foodsToOrder, currentMarket.m, marketOrderState.waiting));
 				currentMarket.m.msgPlaceDeliveryOrder((Cook) this);
 			}
@@ -366,6 +370,7 @@ public class GLCookRole extends Role implements Cook{
 			order.orderNum = orderNum++;
 			if(order != null) {
 				orders.add(order);
+				AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Grabbed order for " + order.c.myPerson.getName() + " from stand.");
 			}
 		}
 			checkStand = false;
@@ -379,6 +384,7 @@ public class GLCookRole extends Role implements Cook{
 	}
 	
 	private void placeOrder(MarketOrder mOrder) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Sent order to delivery man.");
 		mOrder.deliveryMan.msgHereIsOrder(mOrder.Choices);
 	}
 
@@ -442,6 +448,7 @@ public class GLCookRole extends Role implements Cook{
 			Food food = findFood(key);
 			food.amount = food.amount + choices.get(key);
 		}
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Received order from delivery man.");
 		
 	}
 
@@ -469,6 +476,7 @@ public class GLCookRole extends Role implements Cook{
 
 	@Override
 	public void msgMarketClosed(MarketAgent market) {
+		AlertLog.getInstance().logMessage(AlertTag.REST_COOK, this.getName(), "Market closed. Ordering from another market.");
 		changeMarket();
 		orderFoodFromMarket();
 		stateChanged();

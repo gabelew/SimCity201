@@ -34,14 +34,14 @@ public class BankRobberRole extends Role{
 	}
 	
 	public void msgHackSuccessful(double amountStolen){
-		print("SUCCESS!!! YOU STOLE " + amountStolen);
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Hack succeeded! Stole $" + amountStolen);
 		state = GuiState.DoneRobbing;
 		myPerson.cashOnHand += amountStolen;
 		stateChanged();
 	}
 	
 	public void msgHackDefended() {
-		print("FAILURE!");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "Hack failed against bank's defense algorithms. Trying next ATM.");
 		state = GuiState.InBank;
 		stateChanged();
 	}
@@ -54,7 +54,7 @@ public class BankRobberRole extends Role{
 	}
 	
 	public void msgNoMoreATMS() {
-		print("No more atms to rob!");
+    	AlertLog.getInstance().logMessage(AlertTag.PERSON, this.getName(), "No more ATMS to rob. Running away from bank.");
 		waitingResponse.release();
 		state = GuiState.LeavingBank;
 		stateChanged();
