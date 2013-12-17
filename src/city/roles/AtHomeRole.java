@@ -159,11 +159,11 @@ public class AtHomeRole extends Role implements AtHome
 		
 		if(myPerson.myHome instanceof Apartment)
 		{
-			((ApartmentAnimationPanel)myPerson.myHome.insideAnimationPanel).removePersonFromList(myPerson.getName(), this);
+			((ApartmentAnimationPanel)myPerson.myHome.insideAnimationPanel).removePersonFromList(myPerson.getName(), AtHomeRole.this);
 		}
 		else
 		{
-			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).removePersonFromList(myPerson.getName(), this);
+			((HouseAnimationPanel)myPerson.myHome.insideAnimationPanel).removePersonFromList(myPerson.getName(), AtHomeRole.this);
 		}
 		
 		stateChanged();

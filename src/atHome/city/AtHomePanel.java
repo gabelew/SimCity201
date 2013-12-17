@@ -64,7 +64,7 @@ public class AtHomePanel extends JPanel
 
 	public void removePersonFromList(String name, AtHomeRole role) 
 	{
-		//System.out.println("!@#$%^&*(");
+		aptPanel.notBrokenAnymore(role);
 		homePanel.notBrokenAnymore(role);
 	}
 	

@@ -178,12 +178,16 @@ public class AtHomeListPanel extends JPanel implements ActionListener
 		}
 	}
 	public void notBrokenAnymore(AtHomeRole role) {
-		for (ListItem temp:listItems){
-			if(temp.role == role)
+		for (ListItem temp:listItems)
+		{
+			//System.out.println("!@#$%^&*()");
+			if(role.myPerson.getName().equals(temp.label.getText()))
 			{
 				temp.stateCB.setText("Break Appliance?");
                 temp.stateCB.setEnabled(true);
                 temp.stateCB.setSelected(false);
+                
+                validate();
 			}
 		
 		}
