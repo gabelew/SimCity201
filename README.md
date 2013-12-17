@@ -1,24 +1,16 @@
 Team 09
 ======
 
-SimCity201 Project Repository for CS 201 students
+Fall 2013 SimCity201 Project Repository
 
 ####Team Members
-| No. | Name |       USC Email       |                GitHub Username                |      Lecture Section      | USC ID |
-| :-: | :--------------------------- | :-------------------- | :-------------------------------------------- | :------------- | :---------- |
-|  1  | Gabriel Lew    | gabelew@usc.edu      | @[gabelew](https://github.com/gabelew)    | MW 4:00pm | 3356317145|
-|  2  | Chad Martin    | chadmart@usc.edu       | @[chadmart](https://github.com/chadmart)        | MW 4:00pm  | 5493785402|
-|  3  | Emily Bernstein | ebernste@usc.edu   | @[theemilyjane](https://github.com/theemilyjane)   |   MW 12:00pm  |5445682605|
-|  4  | Gerson Hernandez | gersonh@usc.edu   | @[Gersonh](https://github.com/Gersonh)        |  MW 4:00pm   | 5994912227|
-|  5  | Garland Chen    | garlandc@usc.edu    | @[garland106](https://github.com/garland106)  |MW 4:00pm|7276634816|
-
-####Team Meetings
-|       Meeting       |           Time           |      Location      |
-| :------------------ | :----------------------- | :----------------- |
-| Lab                 | Tues. 04:00pm             | SAL 123           |
-| Weekly Meeting 1    | Thurs. 07:30pm to 10:00pm  | GFS114      |
-| Weekly Meeting 2    | Fri. 06:00pm to 10:00pm  | KAP150      |
-
+| No. | Name |       USC Email       |                GitHub Username                |    
+| :-: | :--------------------------- | :-------------------- | :-------------------------------------------- | 
+|  1  | Gabriel Lew    | gabelew@usc.edu      | @[gabelew](https://github.com/gabelew)    | 
+|  2  | Chad Martin    | chadmart@usc.edu       | @[chadmart](https://github.com/chadmart)        | 
+|  3  | Emily Bernstein | ebernste@usc.edu   | @[theemilyjane](https://github.com/theemilyjane)   | 
+|  4  | Gerson Hernandez | gersonh@usc.edu   | @[Gersonh](https://github.com/Gersonh)        | 
+|  5  | Garland Chen    | garlandc@usc.edu    | @[garland106](https://github.com/garland106)  |
 
 ###Useful Testing Hacks
   + If a person's name contains "poor", the person will have 50 cash on hand and 200 in bank account
